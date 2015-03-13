@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE HTML PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no" />
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+	<meta content="telephone=no" name="format-detection" />
+	<title>要跑</title>
+	<link href="css/public.css" rel="stylesheet" type="text/css" />
+	<link rel="stylesheet" media="screen and (-webkit-device-pixel-ratio:1.5)" href="css/mdpi.css" />
+	<link rel="stylesheet" media="screen and (-webkit-device-pixel-ratio:2.0)" href="css/hdpi.css" />
+	<style type="text/css">
+		.bottom-btn{
+			position:absolute;
+			bottom:0px;
+			display:none;
+			width:100%;
+		}
+		#wrapper {
+			position: absolute;
+			z-index: 1;
+			top: 45px;
+			bottom: 123px;
+			left: 0;
+			width: 100%;
+			overflow: hidden;
+		}
+
+		#scroller {
+			position: absolute;
+			z-index: 1;
+			-webkit-tap-highlight-color: rgba(0,0,0,0);
+			width: 100%;
+			-webkit-transform: translateZ(0);
+			-moz-transform: translateZ(0);
+			-ms-transform: translateZ(0);
+			-o-transform: translateZ(0);
+			transform: translateZ(0);
+			-webkit-touch-callout: none;
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+			-webkit-text-size-adjust: none;
+			-moz-text-size-adjust: none;
+			-ms-text-size-adjust: none;
+			-o-text-size-adjust: none;
+			text-size-adjust: none;
+		}
+	</style>
+</head>
+<body>
+	<div class="header">
+		<div id="backBtn" class="tbtn-l"></div>
+		<div id="playName" class="header_text">2014要跑24小时接力赛</div>
+	</div>
+	
+	<div id="wrapper">
+		<div id="scroller">
+			<ul id="memberList" class="teamlist">
+				<!--
+				<li>
+					<span class="baton">接力棒</span>
+					<span class="leader">领队</span>
+					<div class="head-img"><img src="images/head-img.jpg" alt="" width="36" height="36"></div>
+					<p>刘备-（人名或是昵称）</p>
+				</li>
+				-->
+			</ul>
+		</div>
+	</div>
+
+	<!--以下代码要固定到页面最低部-->
+	<div id="groupStatus" class="bottom-btn">
+		<ul class="h-btn">
+			<li id="updatePwdBtn">修改加入密码</li>
+		</ul>
+		<ul id="memberSetupBtn" class="h-btn">
+			<li id="delete">从队中移除跑友</li>
+			<li id="select">选择第一棒</li>
+		</ul>
+		<ul class="h-btn red-btn">
+			<li id="disbandBtn">解散跑队</li>
+		</ul>
+	</div>
+	<!--选择第一棒状态-->
+	<div id="isbatonStatus" class="bottom-btn">
+		<ul class="h-btn">
+			<li id="selectFirstBtn">选择第一棒</li>
+		</ul>
+	<div>
+
+	<script type="text/javascript" src="libs/iscroll5.js"></script>
+	<script type="text/javascript" src="libs/zepto.js"></script>
+	<script type="text/javascript" src="libs/gmu.js"></script>
+	<script type="text/javascript" src="libs/base.js"></script>
+	<script type="text/javascript" src="js/team_member.js"></script>
+	<script type="text/javascript" src="libs/login.js"></script>
+</body>
+</html>

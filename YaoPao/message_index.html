@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE HTML PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no" />
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+	<meta content="telephone=no" name="format-detection" />
+	<title>要跑</title>
+	<link href="css/public.css" rel="stylesheet" type="text/css" />
+	<link rel="stylesheet" media="screen and (-webkit-device-pixel-ratio:1.5)" href="css/mdpi.css" />
+	<link rel="stylesheet" media="screen and (-webkit-device-pixel-ratio:2.0)" href="css/hdpi.css" />
+
+	<style type="text/css">
+		#pageBtn{
+			background: #E4E2E2;
+			width: 100%;
+			height: 55px;
+			text-align: center;
+			line-height: 55px;
+			font-weight: 700;
+		}
+		#pageBtn .curr{
+			background: #C0B9B9;
+		}
+		#wrapper {
+			position: absolute;
+			z-index: 1;
+			top: 45px;
+			bottom: 0px;
+			left: 0;
+			width: 100%;
+			overflow: hidden;
+		}
+
+		#scroller {
+			position: absolute;
+			z-index: 1;
+			-webkit-tap-highlight-color: rgba(0,0,0,0);
+			width: 100%;
+			-webkit-transform: translateZ(0);
+			-moz-transform: translateZ(0);
+			-ms-transform: translateZ(0);
+			-o-transform: translateZ(0);
+			transform: translateZ(0);
+			-webkit-touch-callout: none;
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+			-webkit-text-size-adjust: none;
+			-moz-text-size-adjust: none;
+			-ms-text-size-adjust: none;
+			-o-text-size-adjust: none;
+			text-size-adjust: none;
+		}
+	</style>
+</head>
+<body>
+	<div class="header">
+		<div id="backBtn" class="tbtn-l"></div>
+		<div class="header_text">系统消息</div>
+	</div>
+
+	<div id="wrapper">
+		<div id="scroller">
+			<ul id="messageList" class="xtlist">
+				<!--
+				<li>
+					<h3>系统消息的内容，过长的内容，过长的内容，过长的内容，过长加</h3>
+					<p>2014-8-10 15:49</p>
+					<span class="jt">右箭头</span>
+				</li>
+				<li class="curr">
+					<h3>按时间排序</h3>
+					<p>2014-8-10 15:49</p>
+					<span class="jt">右箭头</span>
+				</li>
+				<li class="w">
+					<h3>未读消息状态底色不同</h3>
+					<p>2014-8-10 15:49</p>
+					<span class="jt">右箭头</span>
+				</li>
+				<li>
+					<h3>未读消息状态底色不同</h3>
+					<p>2014-8-10 15:49</p>
+					<span class="jt">右箭头</span>
+				</li>
+				-->
+			</ul>
+			<div id="pageBtn" style="display:none;">点击加载下一页</div>
+		</div>
+	</div>
+
+	<script type="text/javascript" src="libs/iscroll.js"></script>
+	<script type="text/javascript" src="libs/zepto.js"></script>
+	<script type="text/javascript" src="libs/gmu.js"></script>
+	<script type="text/javascript" src="libs/base.js"></script>
+	<script type="text/javascript" src="js/message_index.js"></script>
+	<script type="text/javascript" src="libs/login.js"></script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+﻿/*==========-webkit-device-pixel-ratio:2.0)==================*/
+/*@media screen and (-webkit-device-pixel-ratio:2.0) {*/
+/*-----------------------------------------public style----------------------------------------*/
+.tbtn-l, .tbtn-r { background: url(../images/dpi2/register-icon.png) no-repeat 14px 12px; background-size: 26px 158px; }
+/*-------------a.html style---------------*/
+.leader { background: url(../images/dpi2/register-icon.png) no-repeat left -90px; background-size: 26px 158px; }
+.baton { background: url(../images/dpi2/register-icon.png) no-repeat left -116px; background-size: 26px 158px; }
+.indicator > li { background:url(../images/dpi2/register-icon.png) no-repeat -16px bottom; background-size: 26px 158px; }
+.indicator > li.active { background-position: left bottom; }
+.removem li.curr_d { background:url(../images/dpi2/dui.png) no-repeat 97% center; background-size: 20px 14px; }
+.removem li.curr { background:#eee url(../images/dpi2/dui.png) no-repeat 97% center; background-size: 20px 14px; }
+.inputDiv { background:url(../images/dpi2/pw.png) no-repeat 10px center; background-size: 20px 20px; }
+.inputDiv.c_team { background: url(../images/dpi2/text.png) no-repeat 10px center; background-size: 20px 20px; }
+select.set { background: #ffffff url(../per_img/dpi2/sanjiao.png) no-repeat right center; background-size: 22px 8px; }
+.jt { background:url(../images/dpi2/common_arrow_right.png) no-repeat 0 0; background-size:10px 32px; }
+.suo { background:url(../images/dpi2/pw1.png) no-repeat 0 0; }
+/*----------8.30-----------*/
+.guidelist li h3 span {background:url(../images/dpi2/ybg.png) no-repeat center;background-size:30px 30px; }
+/*----------9.1-----------*/
+.uslogo {background:url(../images/dpi2/about-us.png) no-repeat center;background-size:104px 157px;}
+/*-------------loading Cancel btn start-------------*/
+.loadimg span { background:url(../images/dpi2/ld.png) no-repeat center top; background-size:20px 60px; }
+.loadqx { background:url(../images/dpi2/ld.png) no-repeat 20px -30px; background-size:20px 60px; }
+/*}*/

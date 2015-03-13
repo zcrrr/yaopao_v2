@@ -1,0 +1,64 @@
+//
+//  Prefix header
+//
+//  The contents of this file are implicitly included at the beginning of every source file.
+//
+
+#import <Availability.h>
+
+
+#ifndef __IPHONE_5_0
+#warning "This project uses features only available in iOS SDK 5.0 and later."
+#endif
+
+#ifdef __OBJC__
+    #import <UIKit/UIKit.h>
+    #import <Foundation/Foundation.h>
+    #import "CNAppDelegate.h"
+    #import "CNPersistenceHandler.h"
+#endif
+
+#define ClIENT_VERSION @"1.0.6"
+#define ENDPOINTS kApp.mainurl
+//#define ENDPOINTS @"http://182.92.97.144:8080/"
+#define IOS7OFFSIZE (IOS7?20:0)
+#define IOS7 ![[[UIDevice currentDevice] systemVersion] hasPrefix:@"6"]
+#define iPhone5 ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(640, 1136), [[UIScreen mainScreen] currentMode].size) : NO)
+#define kApp [CNAppDelegate getApplicationDelegate]
+#define kVoiceTimeInterval 5
+#define kMatchReportInterval 30
+#define kLapLength [kApp.geosHandler returnClaimedLength]
+#define kTrackName @"LongWan"
+#define kStartTime @"2014-10-18 15:00:00"
+#define kDuringMinute 24*60
+#define kBoundary1 10
+#define kBoundary2 60
+//#define SIMULATORTEST
+
+
+#define TAG_VERIFY_CODE 1
+#define TAG_REGISTER_PHONE 2
+#define TAG_LOGIN_PHONE 3
+#define TAG_AUTO_LOGIN 4
+#define TAG_UPDATE_USERINFO 5
+#define TAG_FIND_PWD_VCODE 6
+#define TAG_FIND_PWD 7
+#define TAG_UPDATE_AVATAR 8
+#define TAG_MATCH_UPLOAD 9
+#define TAG_MATCH_ONEKM 10
+#define TAG_SIMPLE_TEAM_INFO 11
+#define TAG_MATCH_STATE 12
+#define TAG_TRANSMIT_RELAY 13
+#define TAG_MATCH_LIST_INFO 14
+#define TAG_END_MATCH 15
+#define TAG_CONFIRM_TRANSMIT 16
+#define TAG_LIST_PERSONAL 17
+#define TAG_CANCELTRANSMIT 18
+#define TAG_CHECK_SERVER_TIME 19
+
+#define TAG_IS_SERVER_NEW 20
+#define TAG_DELETE_RECORD 21
+#define TAG_CLOUD_DATA 22
+#define TAG_UPLOAD_RECORD 23
+#define TAG_DOWNLAOD_RECORD 24
+#define TAG_DOWNLOAD_ONE_FILE 25

@@ -1,0 +1,160 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE HTML PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no" />
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+	<meta content="telephone=no" name="format-detection" />
+	<title>要跑</title>
+	<link href="css/public.css" rel="stylesheet" type="text/css" />
+	<link rel="stylesheet" media="screen and (-webkit-device-pixel-ratio:1.5)" href="css/mdpi.css" />
+	<link rel="stylesheet" media="screen and (-webkit-device-pixel-ratio:2.0)" href="css/hdpi.css" />
+	<style type="text/css">
+		html {
+			-ms-touch-action: none;
+		}
+		body{
+			overflow: hidden;
+		}
+		#viewport {
+			position: relative;
+			width: 100%;
+			height: 178px;
+			margin:0 auto;
+			overflow:hidden;
+		}
+
+		/*
+		#scroller {
+			z-index: 1;
+			width: 960px;
+			height: 178px;
+			-webkit-transform: translateZ(0);
+			-moz-transform: translateZ(0);
+			-ms-transform: translateZ(0);
+			-o-transform: translateZ(0);
+			transform: translateZ(0);
+			-webkit-touch-callout: none;
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+			-webkit-text-size-adjust: none;
+			-moz-text-size-adjust: none;
+			-ms-text-size-adjust: none;
+			-o-text-size-adjust: none;
+			text-size-adjust: none;
+		}
+		
+
+		.slide {
+			width: 320px;
+			height: 178px;
+			text-align:center;
+			float: left;
+		}
+		
+		.scroller{
+			width:320px;
+		}
+		*/
+		.view {
+			position: relative;
+			width: 100%;
+			height:500px;
+			margin:0 auto;
+			display: none;
+		}
+	</style>
+</head>
+<body>
+	<div class="header">
+		<div id="backBtn" class="tbtn-l"></div>
+		<div class="header_text">2014要跑24小时接力赛</div>
+	</div>
+	
+	<div id="viewport">
+		<iframe frameborder="0" width="100%" height="100%" src="http://image.yaopao.net/html/2014_longwan_24hours/team_img.html"></iframe>
+	</div>
+	<!-- 横向轮播结构
+	<div id="viewport">
+		<div id="wrapper">
+			<div id="scroller">
+			</div>
+		</div>
+	</div>
+	<div class="m_s">
+		<div class="m_scroll_bar">
+			<ul class="indicator" id="indicator">
+				<li class="active"></li><li></li><li></li>
+			</ul>
+		</div>
+	</div>
+	 -->
+
+	<!-- 比赛倒计时/进行时 -->
+	<div id="playTimeDiv" class="d-time">
+		距比赛还有：<span>0</span><s>天</s><span>0</span><s>时</s><span>0</span><s>分</s><span>0</span><s>秒</s>
+	</div>
+
+	<!--比赛状态说明 -->
+	<p id="playStatus" class="p_prompt" style="display:none;"></p>
+	
+	<!--比赛距离-->
+	<div id="distanceDiv" style="padding-bottom:10px;display:none;">
+	</div>
+	
+	<ul id="teamList" class="teamlist" style="display:none;">
+		
+	</ul>
+	
+	<!--第三方网页显示-->
+	<div id="thirdWeb" class="view">
+		<!--http://image.yaopao.net/html/2014_longwan_24hours/team_text.html-->
+		<iframe frameborder="0" width="100%" height="100%" src="http://image.yaopao.net/html/2014_longwan_24hours/team_text.html"></iframe>
+	</div>
+	
+	<!-- 未组队显示创建/加入跑队
+	<ul id="addTeam" class="teamlist login-btn" style="display:none;">
+		<li>
+			<div class="head-img"><img src="images/head-img.jpg" alt="" width="36" height="36"></div>
+			<p>
+				<span>用户昵称</span>
+			</p>
+		</li>
+		<li id="addTeamBtn">创建/加入跑队</li>
+	</ul>
+	-->
+	<!-- 跑队设置 
+	<ul id="setupTeam" class="teamlist login-btn" style="display:none;">
+		<li>
+			<div class="head-img"><img src="images/head-img.jpg" alt="" width="36" height="36"></div>
+			<p>
+				<span>用户昵称</span>
+				<span>所属跑队名称</span>
+			</p>
+		</li>
+		<li id="teamSetupBtn" >跑队设置</li>
+	</ul>
+	-->
+	<!-- 未组队显示用户昵称,跑队名称 
+	<ul id="showTeam" class="teamlist" style="display:none;">
+		<li>
+			<span class="baton">接力棒</span>
+			<div class="head-img"><img src="images/head-img.jpg" alt="" width="36" height="36"></div>
+			<p>
+				<span>用户昵称</span>
+				<span>所属跑队名称</span>
+			</p>
+		</li>
+	</ul>
+	-->
+
+	<script type="text/javascript" src="libs/iscroll5.js"></script>
+	<script type="text/javascript" src="libs/zepto.js"></script>
+	<script type="text/javascript" src="libs/gmu.js"></script>
+	<script type="text/javascript" src="libs/base.js"></script>
+	<script type="text/javascript" src="js/team_index.js"></script>
+	<script type="text/javascript" src="libs/login.js"></script>
+</body>
+</html>

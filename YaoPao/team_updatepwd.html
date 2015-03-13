@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE HTML PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no" />
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+	<meta content="telephone=no" name="format-detection" />
+	<title>要跑</title>
+	<link href="css/public.css" rel="stylesheet" type="text/css" />
+	<link rel="stylesheet" media="screen and (-webkit-device-pixel-ratio:1.5)" href="css/mdpi.css" />
+	<link rel="stylesheet" media="screen and (-webkit-device-pixel-ratio:2.0)" href="css/hdpi.css" />
+</head>
+<body>
+	<div class="header">
+		<div id="backBtn" class="tbtn-l"></div>
+		<div class="header_text">退出跑队</div>
+	</div>
+
+	<p class="prompt margin-t">
+		如果您想创建一个私人跑队，只邀请亲朋好友加入的话，那您可以在下面设置一个“加入密码”。跑友加入跑队时，需要输入该密码。<br />
+		如果您想创建一个公众跑队，允许所有跑友加入跑队的话，在下面“加入密码”处留空即可。
+	</p>
+
+	<div class="inputDiv"><input id="oldPwd" type="text" class="myinput" placeholder="原密码，如果未设置则留空" /></div>
+	<div class="inputDiv"><input id="newPwd" type="text" class="myinput" placeholder="新密码，6-16位字母或数字" /></div>
+
+	<ul class="h-btn margin-t2">
+		<li id="updatePwdBtn" >修改密码</li>
+	</ul>
+	
+	<script type="text/javascript" src="libs/iscroll5.js"></script>
+	<script type="text/javascript" src="libs/zepto.js"></script>
+	<script type="text/javascript" src="libs/gmu.js"></script>
+	<script type="text/javascript" src="libs/base.js"></script>
+	<script type="text/javascript" src="js/team_updatepwd.js"></script>
+	<script type="text/javascript" src="libs/login.js"></script>
+</body>
+</html>
