@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6250" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CNRunMoodViewController">
@@ -79,10 +79,9 @@
                     <rect key="frame" x="130" y="120" width="60" height="60"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
-                    <state key="normal" backgroundImage="button_photo.png">
+                    <state key="normal">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
-                    <state key="highlighted" backgroundImage="button_photo_h.png"/>
                     <connections>
                         <action selector="button_photo_clicked:" destination="-1" eventType="touchUpInside" id="93y-jh-h8y"/>
                     </connections>
@@ -256,8 +255,6 @@
         </view>
     </objects>
     <resources>
-        <image name="button_photo.png" width="160" height="160"/>
-        <image name="button_photo_h.png" width="200" height="200"/>
         <image name="edit.png" width="80" height="80"/>
         <image name="mood1.png" width="160" height="160"/>
         <image name="mood2.png" width="160" height="160"/>

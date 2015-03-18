@@ -21,4 +21,6 @@
 + (NSString*)getMatchStage;
 + (NSString*)getYearMonth:(long long)timestamp;
 + (BOOL)canNetWork;
++ (NSMutableDictionary*)getRunSetting;
++ (NSMutableDictionary*)getPersonalSummary;
 @end

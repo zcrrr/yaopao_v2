@@ -64,7 +64,7 @@ static const CGFloat gradientDimAlpha = 0.5;
         
         _label = [[MBSliderLabel alloc] initWithFrame:CGRectMake((self.bounds.size.width-180.0)/2.0+50.0, (self.bounds.size.height-30.0)/2.0, 180.0, 30.0)];
         _label.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
-        _label.textColor = [UIColor blackColor];
+        _label.textColor = [UIColor whiteColor];
         _label.textAlignment = NSTextAlignmentCenter;
         _label.backgroundColor = [UIColor clearColor];
         _label.font = [UIFont systemFontOfSize:24];
@@ -83,7 +83,7 @@ static const CGFloat gradientDimAlpha = 0.5;
         _slider.center = ctr;
         _slider.backgroundColor = [UIColor clearColor];
 //        UIImage *thumbImage = [self thumbWithColor:[UIColor colorWithRed:200.0/255.0 green:200.0/255.0 blue:200.0/255.0 alpha:1.0]];
-        UIImage *thumbImage = [UIImage imageNamed:@"arrow_right.png"];
+        UIImage *thumbImage = [UIImage imageNamed:@"arrow_slider.png"];
         [_slider setThumbImage:thumbImage forState:UIControlStateNormal];
 
         UIImage *clearImage = [self clearPixel];

@@ -43,10 +43,15 @@
 #import <GoogleMaps/GoogleMaps.h>
 #import "CNCloudRecord.h"
 #import "Reachability.h"
+#import "HomeViewController.h"
+#import "RecordViewController.h"
+#import "MatchViewController.h"
+#import "CNSettingViewController.h"
 
 
 @implementation CNAppDelegate
-@synthesize navigationController;
+@synthesize navVCList;
+@synthesize currentSelect;
 @synthesize networkHandler;
 @synthesize voiceHandler;
 @synthesize runManager;
@@ -192,7 +197,6 @@
     [ShareSDK importWeChatClass:[WXApi class]];
     [ShareSDK importQQClass:[QQApiInterface class]
             tencentOAuthCls:[TencentOAuth class]];
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     [self initVar];
     //自动登录一下
     NSString* filePath = [CNPersistenceHandler getDocument:@"userinfo.plist"];
@@ -215,18 +219,22 @@
         if([CNUtil canNetWork]){
             [kApp.cloudManager synTimeWithServer];
         }
-        
     }
-    CNMainViewController* mainVC = [[CNMainViewController alloc]init];
-    self.navigationController = [[UINavigationController alloc] initWithRootViewController:mainVC];
-    self.window.rootViewController = self.navigationController;
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    UINavigationController* nav1 = [[UINavigationController alloc]initWithRootViewController:[[HomeViewController alloc]init]];
+    UINavigationController* nav2 = [[UINavigationController alloc]initWithRootViewController:[[RecordViewController alloc]init]];
+    UINavigationController* nav3 = [[UINavigationController alloc]initWithRootViewController:[[MatchViewController alloc]init]];
+    UINavigationController* nav4 = [[UINavigationController alloc]initWithRootViewController:[[CNSettingViewController alloc]init]];
+    self.navVCList = [[NSMutableArray alloc]initWithObjects:nav1,nav2,nav3,nav4,nil];
+    self.window.rootViewController = [self.navVCList objectAtIndex:0];
     [self.window makeKeyAndVisible];
     //屏幕长亮
     [[ UIApplication sharedApplication] setIdleTimerDisabled:YES ] ;
-//    [self lookup];
     return YES;
 }
-							
+- (void)showTab:(int)index{
+    self.window.rootViewController = [self.navVCList objectAtIndex:index];
+}
 - (void)applicationWillResignActive:(UIApplication *)application
 {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -531,34 +539,34 @@
     }
 }
 + (void)ForceGoMatchPage:(NSString*)target{
-    if([target isEqualToString:@"countdown"]){//倒计时
-        CNMatchCountDownViewController* matchCountdownVC = [[CNMatchCountDownViewController alloc]init];
-        long long nowTimeSecond = [CNUtil getNowTimeDelta];
-        matchCountdownVC.startSecond = (int)(kApp.match_start_timestamp - nowTimeSecond);
-        kApp.navigationController = [[UINavigationController alloc] initWithRootViewController:matchCountdownVC];
-        kApp.window.rootViewController = kApp.navigationController;
-    }else if([target isEqualToString:@"matchWatch"]){//看比赛
-        CNGroupInfoViewController* groupInfoVC = [[CNGroupInfoViewController alloc]init];
-        kApp.navigationController = [[UINavigationController alloc] initWithRootViewController:groupInfoVC];
-        kApp.window.rootViewController = kApp.navigationController;
-    }else if([target isEqualToString:@"matchRun_normal"]){//比赛跑步，正常进
-        CNMatchMainViewController* matchMainVC = [[CNMatchMainViewController alloc]init];
-        kApp.navigationController = [[UINavigationController alloc] initWithRootViewController:matchMainVC];
-        kApp.window.rootViewController = kApp.navigationController;
-    }else if([target isEqualToString:@"matchRun_crash"]){//比赛跑步，崩溃进入
-        CNMatchMainRecomeViewController* matchMainVC = [[CNMatchMainRecomeViewController alloc]init];
-        kApp.navigationController = [[UINavigationController alloc] initWithRootViewController:matchMainVC];
-        kApp.window.rootViewController = kApp.navigationController;
-    }else if([target isEqualToString:@"finish"]){//结束比赛
-        CNFinishViewController* finishVC = [[CNFinishViewController alloc]init];
-        kApp.navigationController = [[UINavigationController alloc] initWithRootViewController:finishVC];
-        kApp.window.rootViewController = kApp.navigationController;
-    }else if([target isEqualToString:@"finishTeam"]){//结束整队比赛
-        kApp.isbaton = 0;
-        CNFinishTeamMatchViewController* finishVC = [[CNFinishTeamMatchViewController alloc]init];
-        kApp.navigationController = [[UINavigationController alloc] initWithRootViewController:finishVC];
-        kApp.window.rootViewController = kApp.navigationController;
-    }
+//    if([target isEqualToString:@"countdown"]){//倒计时
+//        CNMatchCountDownViewController* matchCountdownVC = [[CNMatchCountDownViewController alloc]init];
+//        long long nowTimeSecond = [CNUtil getNowTimeDelta];
+//        matchCountdownVC.startSecond = (int)(kApp.match_start_timestamp - nowTimeSecond);
+//        kApp.navigationController = [[UINavigationController alloc] initWithRootViewController:matchCountdownVC];
+//        kApp.window.rootViewController = kApp.navigationController;
+//    }else if([target isEqualToString:@"matchWatch"]){//看比赛
+//        CNGroupInfoViewController* groupInfoVC = [[CNGroupInfoViewController alloc]init];
+//        kApp.navigationController = [[UINavigationController alloc] initWithRootViewController:groupInfoVC];
+//        kApp.window.rootViewController = kApp.navigationController;
+//    }else if([target isEqualToString:@"matchRun_normal"]){//比赛跑步，正常进
+//        CNMatchMainViewController* matchMainVC = [[CNMatchMainViewController alloc]init];
+//        kApp.navigationController = [[UINavigationController alloc] initWithRootViewController:matchMainVC];
+//        kApp.window.rootViewController = kApp.navigationController;
+//    }else if([target isEqualToString:@"matchRun_crash"]){//比赛跑步，崩溃进入
+//        CNMatchMainRecomeViewController* matchMainVC = [[CNMatchMainRecomeViewController alloc]init];
+//        kApp.navigationController = [[UINavigationController alloc] initWithRootViewController:matchMainVC];
+//        kApp.window.rootViewController = kApp.navigationController;
+//    }else if([target isEqualToString:@"finish"]){//结束比赛
+//        CNFinishViewController* finishVC = [[CNFinishViewController alloc]init];
+//        kApp.navigationController = [[UINavigationController alloc] initWithRootViewController:finishVC];
+//        kApp.window.rootViewController = kApp.navigationController;
+//    }else if([target isEqualToString:@"finishTeam"]){//结束整队比赛
+//        kApp.isbaton = 0;
+//        CNFinishTeamMatchViewController* finishVC = [[CNFinishTeamMatchViewController alloc]init];
+//        kApp.navigationController = [[UINavigationController alloc] initWithRootViewController:finishVC];
+//        kApp.window.rootViewController = kApp.navigationController;
+//    }
 }
 + (void)saveMatchToRecord{
     //计算一下获得的积分：

@@ -68,7 +68,7 @@
     if(isInTakeOverZone != -1){
         [self.navigationController popViewControllerAnimated:NO];
         CNGiveRelayViewController* relayVC = [[CNGiveRelayViewController alloc]init];
-        [kApp.navigationController pushViewController:relayVC animated:YES];
+        [[kApp.navVCList objectAtIndex:kApp.currentSelect] pushViewController:relayVC animated:YES];
     }
 }
 - (void)didReceiveMemoryWarning

@@ -15,6 +15,7 @@
 #import "CNUtil.h"
 #import "CNVoiceHandler.h"
 #import "CNRunManager.h"
+#import "ColorValue.h"
 #define kIntervalMap 2
 
 @interface CNRunMapViewController ()
@@ -34,17 +35,11 @@
     }
     return self;
 }
-- (void)button_blue_down:(id)sender{
-    ((UIButton*)sender).backgroundColor = [UIColor colorWithRed:0 green:88.0/255.0 blue:142.0/255.0 alpha:1];
-}
-- (void)button_green_down:(id)sender{
-    ((UIButton*)sender).backgroundColor = [UIColor colorWithRed:111.0/255.0 green:150.0/255.0 blue:26.0/255.0 alpha:1];
-}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self.button_reset addTarget:self action:@selector(button_blue_down:) forControlEvents:UIControlEventTouchDown];
-    [self.button_complete addTarget:self action:@selector(button_green_down:) forControlEvents:UIControlEventTouchDown];
+    [self.button_reset fillColor:kClear :[UIColor colorWithRed:17.0/255.0 green:17.0/255.0 blue:17.0/255.0 alpha:1] :kWhite :kWhite];
+    [self.button_complete fillColor:kClear :[UIColor colorWithRed:17.0/255.0 green:17.0/255.0 blue:17.0/255.0 alpha:1] :kWhite :kWhite];
     // Do any additional setup after loading the view from its nib.
     NSString* NOTIFICATION_GPS = @"gps";
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(setGPSImage) name:NOTIFICATION_GPS object:nil];
@@ -70,8 +65,6 @@
     [self drawRunTrack];
     [self setGPSImage];
     self.timer_map = [NSTimer scheduledTimerWithTimeInterval:kIntervalMap target:self selector:@selector(drawIncrementLine) userInfo:nil repeats:YES];
-    
-//    [self performSelector:@selector(setFollow) withObject:nil afterDelay:1];
 }
 - (void)viewWillDisappear:(BOOL)animated{
     [self.timer_map invalidate];
@@ -106,11 +99,13 @@
         case 1:
         {
             self.view_bottom_slider.hidden = NO;
+            self.view_bottom_bar.hidden = YES;
             break;
         }
         case 2:
         {
             self.view_bottom_slider.hidden = YES;
+            self.view_bottom_bar.hidden = NO;
             break;
         }
         default:
@@ -121,48 +116,6 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-- (IBAction)button_clicked:(id)sender {
-    switch ([sender tag]) {
-        case 0:
-            self.mapView.userTrackingMode = MAUserTrackingModeFollow;
-            break;
-        case 1:
-        {
-            self.mapView.showsUserLocation = NO;
-            [self.navigationController popViewControllerAnimated:YES];
-            break;
-        }
-        default:
-            break;
-    }
-}
-
-- (IBAction)button_control_clicked:(id)sender {
-    switch ([sender tag]) {
-        case 0:
-        {
-            NSLog(@"完成");
-            self.button_complete.backgroundColor = [UIColor colorWithRed:143.0/255.0 green:195.0/255.0 blue:31.0/255.0 alpha:1];
-//            UIAlertView* alert =[[UIAlertView alloc] initWithTitle:nil message:@"你已经完成这次的运动了吗" delegate:self cancelButtonTitle:@"是的，完成了" otherButtonTitles:@"不，还没完成", nil];
-//            [alert show];
-            UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:@"你已经完成这次的运动了吗?" delegate:self cancelButtonTitle:@"不，还没完成" destructiveButtonTitle:nil otherButtonTitles:@"是的，完成了", nil];
-            [actionSheet showInView:self.view];
-            break;
-        }
-        case 1:
-        {
-            self.button_reset.backgroundColor = [UIColor colorWithRed:0 green:123.0/255.0 blue:199.0/255.0 alpha:1];
-            [kApp.voiceHandler voiceOfapp:@"run_continue" :nil];
-            [kApp.runManager changeRunStatus:1];
-            self.view_bottom_slider.hidden = NO;
-            NSLog(@"恢复");
-            break;
-        }
-        default:
-            break;
-    }
 }
 - (void)drawRunTrack{
     int j = 0;
@@ -313,11 +266,11 @@ updatingLocation:(BOOL)updatingLocation
     NSLog(@"滑动");
     [kApp.runManager changeRunStatus:2];
     self.view_bottom_slider.hidden = YES;
+    self.view_bottom_bar.hidden = NO;
 }
 
 - (void)setGPSImage{
-    NSString* imageName = [NSString stringWithFormat:@"gps%i.png",kApp.gpsSignal];
-    self.image_gps.image = [UIImage imageNamed:imageName];
+    
 }
 #pragma -mark actionSheet delegate
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
@@ -347,5 +300,42 @@ updatingLocation:(BOOL)updatingLocation
         default:
             break;
     }
+}
+- (IBAction)button_clicked:(id)sender {
+    switch ([sender tag]) {
+        case 0:
+        {
+            self.mapView.userTrackingMode = MAUserTrackingModeFollow;
+            break;
+            
+        }
+        case 1:
+        {
+            self.mapView.showsUserLocation = NO;
+            [self.navigationController popViewControllerAnimated:YES];
+            break;
+        }
+        case 2:
+        {
+            NSLog(@"完成");
+            self.button_complete.backgroundColor = [UIColor colorWithRed:143.0/255.0 green:195.0/255.0 blue:31.0/255.0 alpha:1];
+            UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:@"你已经完成这次的运动了吗?" delegate:self cancelButtonTitle:@"不，还没完成" destructiveButtonTitle:nil otherButtonTitles:@"是的，完成了", nil];
+            [actionSheet showInView:self.view];
+            break;
+        }
+        case 3:
+        {
+            self.button_reset.backgroundColor = [UIColor colorWithRed:0 green:123.0/255.0 blue:199.0/255.0 alpha:1];
+            [kApp.voiceHandler voiceOfapp:@"run_continue" :nil];
+            [kApp.runManager changeRunStatus:1];
+            self.view_bottom_slider.hidden = NO;
+            self.view_bottom_bar.hidden = YES;
+            NSLog(@"恢复");
+            break;
+        }
+        default:
+            break;
+    }
+    
 }
 @end

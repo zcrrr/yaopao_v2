@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FirstLevelViewController.h"
 
-@interface CNSettingViewController : UIViewController
+@interface CNSettingViewController : FirstLevelViewController
 - (IBAction)button_back_clicked:(id)sender;
 - (IBAction)button_list_clicked:(id)sender;
 @property (strong, nonatomic) IBOutlet UIButton *button_back;

@@ -115,5 +115,67 @@
         return YES;
     }
 }
++ (NSMutableDictionary*)getRunSetting{
+    NSString* filePath = [CNPersistenceHandler getDocument:@"runSetting.plist"];
+    NSMutableDictionary* runSettingDic = [NSMutableDictionary dictionaryWithContentsOfFile:filePath];
+    if(runSettingDic == nil){
+        runSettingDic = [[NSMutableDictionary alloc]init];
+        [runSettingDic setObject:@"2" forKey:@"targetType"];
+        [runSettingDic setObject:@"5" forKey:@"distance"];
+        [runSettingDic setObject:@"30" forKey:@"time"];
+        [runSettingDic setObject:@"1" forKey:@"howToMove"];
+        [runSettingDic setObject:@"1" forKey:@"countdown"];
+        [runSettingDic setObject:@"1" forKey:@"voice"];
+    }
+    int targetType = [[runSettingDic objectForKey:@"targetType"]intValue];
+    switch (targetType) {
+        case 1:
+            [runSettingDic setObject:@"自由" forKey:@"targetDes"];
+            [runSettingDic setObject:@"0" forKey:@"targetValue"];
+            break;
+        case 2:
+            [runSettingDic setObject:[NSString stringWithFormat:@"%@km",[runSettingDic objectForKey:@"distance"]] forKey:@"targetDes"];
+            [runSettingDic setObject:[NSString stringWithFormat:@"%i",[[runSettingDic objectForKey:@"distance"] intValue]*1000] forKey:@"targetValue"];
+            break;
+        case 3:
+        {
+            int second = [[runSettingDic objectForKey:@"time"]intValue]*60;
+            NSString* timestr = [CNUtil duringTimeStringFromSecond:second];
+            [runSettingDic setObject:timestr forKey:@"targetDes"];
+            [runSettingDic setObject:[NSString stringWithFormat:@"%i",[[runSettingDic objectForKey:@"time"]intValue]*60*1000] forKey:@"targetValue"];
+            break;
+        }
+        default:
+            break;
+    }
+    int howToMove = [[runSettingDic objectForKey:@"howToMove"]intValue];
+    switch (howToMove) {
+        case 1:
+            [runSettingDic setObject:@"跑步" forKey:@"typeDes"];
+            break;
+        case 2:
+            [runSettingDic setObject:@"步行" forKey:@"typeDes"];
+            break;
+        case 3:
+            [runSettingDic setObject:@"自行车骑行" forKey:@"typeDes"];
+            break;
+            
+        default:
+            break;
+    }
+    return runSettingDic;
+}
++ (NSMutableDictionary*)getPersonalSummary{
+    NSString* filePath_record = [CNPersistenceHandler getDocument:@"all_record.plist"];
+    NSMutableDictionary* record_dic = [NSMutableDictionary dictionaryWithContentsOfFile:filePath_record];
+    if(record_dic == nil){
+        record_dic = [[NSMutableDictionary alloc]init];
+        [record_dic setObject:@"0" forKey:@"total_distance"];
+        [record_dic setObject:@"0" forKey:@"total_count"];
+        [record_dic setObject:@"0" forKey:@"total_time"];
+        [record_dic setObject:@"0" forKey:@"total_score"];
+    }
+    return record_dic;
+}
 
 @end

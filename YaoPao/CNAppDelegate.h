@@ -18,7 +18,8 @@
 @interface CNAppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
-@property (strong, nonatomic) UINavigationController* navigationController;
+@property (strong, nonatomic) NSMutableArray* navVCList;
+@property (assign, nonatomic) int currentSelect;
 @property (strong, nonatomic) CNNetworkHandler* networkHandler;
 @property (nonatomic, strong) CNLocationHandler* locationHandler;
 @property (strong ,nonatomic) CNVoiceHandler* voiceHandler;
@@ -60,6 +61,7 @@
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
 + (CNAppDelegate*)getApplicationDelegate;
+- (void)showTab:(int)index;
 
 
 //-----------------------------------------比赛------------------------------------------

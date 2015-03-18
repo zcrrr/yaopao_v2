@@ -31,6 +31,7 @@
 
 - (void)viewDidLoad
 {
+    self.selectIndex = 3;
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     [self.button_back addTarget:self action:@selector(button_blue_down:) forControlEvents:UIControlEventTouchDown];

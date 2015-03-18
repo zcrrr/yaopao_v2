@@ -113,7 +113,7 @@
         [self showAlert:@"用户在其他手机登录，请重新登录"];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"loginDone" object:nil];
         CNLoginPhoneViewController* loginVC = [[CNLoginPhoneViewController alloc]init];
-        [kApp.navigationController pushViewController:loginVC animated:YES];
+        [[kApp.navVCList objectAtIndex:kApp.currentSelect] pushViewController:loginVC animated:YES];
         [self user_logout];
         return;
     }
@@ -951,7 +951,7 @@
         [self showAlert:@"用户在其他手机登录，请重新登录"];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"loginDone" object:nil];
         CNLoginPhoneViewController* loginVC = [[CNLoginPhoneViewController alloc]init];
-        [kApp.navigationController pushViewController:loginVC animated:YES];
+        [[kApp.navVCList objectAtIndex:kApp.currentSelect] pushViewController:loginVC animated:YES];
         kApp.cloudManager.stepDes = @"用户在其他手机登录，请重新登录";
         [self user_logout];
 //        return;
