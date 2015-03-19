@@ -255,18 +255,18 @@
         </view>
     </objects>
     <resources>
-        <image name="edit.png" width="80" height="80"/>
-        <image name="mood1.png" width="160" height="160"/>
-        <image name="mood2.png" width="160" height="160"/>
-        <image name="mood3.png" width="160" height="160"/>
-        <image name="mood4.png" width="160" height="160"/>
-        <image name="mood5.png" width="160" height="160"/>
-        <image name="photo_bg.png" width="1280" height="800"/>
-        <image name="way1.png" width="160" height="160"/>
-        <image name="way2.png" width="160" height="160"/>
-        <image name="way3.png" width="160" height="160"/>
-        <image name="way4.png" width="160" height="160"/>
-        <image name="way5.png" width="160" height="160"/>
+        <image name="edit.png" width="68" height="68"/>
+        <image name="mood1.png" width="54" height="54"/>
+        <image name="mood2.png" width="54" height="54"/>
+        <image name="mood3.png" width="54" height="54"/>
+        <image name="mood4.png" width="54" height="54"/>
+        <image name="mood5.png" width="54" height="54"/>
+        <image name="photo_bg.png" width="100" height="159"/>
+        <image name="way1.png" width="54" height="54"/>
+        <image name="way2.png" width="54" height="54"/>
+        <image name="way3.png" width="54" height="54"/>
+        <image name="way4.png" width="54" height="54"/>
+        <image name="way5.png" width="54" height="54"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

@@ -14,7 +14,7 @@
 #import "CNRunMapViewController.h"
 #import "CNRunMapGoogleViewController.h"
 #import "Toast+UIView.h"
-#import "CNRunMoodViewController.h"
+#import "FeelingViewController.h"
 #import "UIImage+Rescale.h"
 #import "CNOverlayViewController.h"
 #import "CircleView.h"
@@ -247,7 +247,7 @@
                 [voice_params setObject:[NSString stringWithFormat:@"%i",kApp.runManager.distance] forKey:@"distance"];
                 [voice_params setObject:[NSString stringWithFormat:@"%i",[kApp.runManager during]/1000] forKey:@"second"];
                 [kApp.voiceHandler voiceOfapp:@"run_complete" :voice_params];
-                CNRunMoodViewController* moodVC = [[CNRunMoodViewController alloc]init];
+                FeelingViewController* moodVC = [[FeelingViewController alloc]init];
                 [self.navigationController pushViewController:moodVC animated:YES];
             }
             break;
@@ -482,7 +482,7 @@
     self.cameraPicker.cameraOverlayView = self.overlayVC.view;
     [self presentViewController:self.cameraPicker animated:YES completion:^{
         self.overlayVC.cameraPicker = self.cameraPicker;
-        self.overlayVC.cameraPicker.delegate = overlayVC;
+        self.overlayVC.cameraPicker.delegate = self.overlayVC;
     }];
 }
 @end

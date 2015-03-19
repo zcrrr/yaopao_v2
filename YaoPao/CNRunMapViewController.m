@@ -8,7 +8,7 @@
 
 #import "CNRunMapViewController.h"
 #import "CNGPSPoint.h"
-#import "CNRunMoodViewController.h"
+#import "FeelingViewController.h"
 #import "CNEncryption.h"
 #import "CNMainViewController.h"
 #import "Toast+UIView.h"
@@ -292,7 +292,7 @@ updatingLocation:(BOOL)updatingLocation
                 [voice_params setObject:[NSString stringWithFormat:@"%i",kApp.runManager.distance] forKey:@"distance"];
                 [voice_params setObject:[NSString stringWithFormat:@"%i",[kApp.runManager during]/1000] forKey:@"second"];
                 [kApp.voiceHandler voiceOfapp:@"run_complete" :voice_params];
-                CNRunMoodViewController* moodVC = [[CNRunMoodViewController alloc]init];
+                FeelingViewController* moodVC = [[FeelingViewController alloc]init];
                 [self.navigationController pushViewController:moodVC animated:YES];
             }
             break;

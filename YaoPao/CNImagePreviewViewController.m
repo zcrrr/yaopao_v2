@@ -67,7 +67,7 @@ NSMutableArray* imageArray;
     }else{
         msg = @"保存图片成功" ;
     }
-    [kApp.window makeToast:msg];
+    [kApp.window makeToast:msg duration:1 position:nil];
     [self.navigationController popViewControllerAnimated:YES];
 }
 @end

@@ -18,6 +18,7 @@
 #import "RunningViewController.h"
 #import "CNRunManager.h"
 #import "CNLocationHandler.h"
+#import "FeelingViewController.h"
 
 @interface HomeViewController ()
 
@@ -173,6 +174,8 @@
         case 0:
         {
             NSLog(@"同步");
+            FeelingViewController* feelingVC = [[FeelingViewController alloc]init];
+            [self.navigationController pushViewController:feelingVC animated:YES];
             break;
         }
         case 1:
