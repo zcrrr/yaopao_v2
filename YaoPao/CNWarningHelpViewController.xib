@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" variant="6xAndEarlier" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" variant="6xAndEarlier" propertyAccessControl="none">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CNWarningHelpViewController">
             <connections>
-                <outlet property="button_back" destination="6iO-Ht-GPW" id="3s0-E6-ZjB"/>
+                <outlet property="button_back" destination="Tjx-dE-S1U" id="UST-JN-Qx6"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
                 <outlet property="webview" destination="jH0-h7-HvV" id="VlX-FK-PdQ"/>
             </connections>
@@ -16,35 +17,32 @@
             <rect key="frame" x="0.0" y="20" width="320" height="548"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" id="r9l-rF-C4B">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="40"/>
+                <view contentMode="scaleToFill" id="dsg-ad-acS">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="55"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="帮助" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ZKF-G5-jqq">
-                            <rect key="frame" x="142" y="9" width="36" height="22"/>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Tjx-dE-S1U">
+                            <rect key="frame" x="9" y="27" width="13" height="21"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                            <state key="normal" backgroundImage="back_v2.png">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="button_back_clicked:" destination="-1" eventType="touchUpInside" id="1Hi-GK-lt0"/>
+                            </connections>
+                        </button>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="帮助" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="qeB-pu-UsT">
+                            <rect key="frame" x="87" y="20" width="146" height="35"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="6iO-Ht-GPW">
-                            <rect key="frame" x="0.0" y="0.0" width="40" height="40"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                            <state key="normal" title="返回">
-                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            </state>
-                            <connections>
-                                <action selector="button_back_clicked:" destination="-1" eventType="touchUpInside" id="XD1-W8-ckO"/>
-                            </connections>
-                        </button>
                     </subviews>
-                    <color key="backgroundColor" red="0.0" green="0.4823529412" blue="0.78039215689999997" alpha="1" colorSpace="calibratedRGB"/>
-                    <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
+                    <color key="backgroundColor" red="0.21960784310000001" green="0.21176470589999999" blue="0.27450980390000002" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
                 <webView contentMode="scaleToFill" id="jH0-h7-HvV">
-                    <rect key="frame" x="0.0" y="40" width="320" height="508"/>
+                    <rect key="frame" x="0.0" y="55" width="320" height="493"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
@@ -53,6 +51,9 @@
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
         </view>
     </objects>
+    <resources>
+        <image name="back_v2.png" width="48" height="68"/>
+    </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

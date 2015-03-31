@@ -10,7 +10,6 @@
 
 @interface CNServiceViewController : UIViewController
 @property (strong, nonatomic) IBOutlet UIWebView *webview;
-@property (strong, nonatomic) IBOutlet UIButton *button_back;
 - (IBAction)button_back_clicked:(id)sender;
 
 @end

@@ -67,6 +67,7 @@
     }
     self.gpsTime = [CNUtil getNowTimeDelta];
     if(kApp.isKnowCountry == NO){
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"weather" object:nil];
         kApp.isInChina = [CNTestGEOS isInChina:newLocation.coordinate.longitude :newLocation.coordinate.latitude];
         kApp.isKnowCountry = YES;
         NSLog(@"是否在中国：%d",kApp.isInChina);

@@ -18,7 +18,7 @@
     #import "CNPersistenceHandler.h"
 #endif
 
-#define ClIENT_VERSION @"1.0.6"
+#define ClIENT_VERSION @"2.0.0"
 #define ENDPOINTS kApp.mainurl
 //#define ENDPOINTS @"http://182.92.97.144:8080/"
 #define IOS7OFFSIZE (IOS7?20:0)
@@ -56,9 +56,12 @@
 #define TAG_CANCELTRANSMIT 18
 #define TAG_CHECK_SERVER_TIME 19
 
+
 #define TAG_IS_SERVER_NEW 20
 #define TAG_DELETE_RECORD 21
 #define TAG_CLOUD_DATA 22
 #define TAG_UPLOAD_RECORD 23
 #define TAG_DOWNLAOD_RECORD 24
 #define TAG_DOWNLOAD_ONE_FILE 25
+
+#define TAG_WEATHER 26

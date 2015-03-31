@@ -9,6 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "FirstLevelViewController.h"
 
-@interface MatchViewController : FirstLevelViewController
+@interface MatchViewController : FirstLevelViewController<UIWebViewDelegate>
+@property (weak, nonatomic) IBOutlet UIWebView *webview;
+@property (strong, nonatomic) IBOutlet UIActivityIndicatorView *indicator;
+@property (strong, nonatomic) IBOutlet UIImageView *loadingImage;
 
 @end

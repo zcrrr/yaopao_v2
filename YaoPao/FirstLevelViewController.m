@@ -48,7 +48,7 @@
             label = [[UILabel alloc]initWithFrame:CGRectMake(100, 31, 40, 8)];
         }
         if(self.selectIndex == i){
-            [label setTextColor:[UIColor colorWithRed:140.0/255.0 green:198.0/255.0 blue:62.0/255.0 alpha:1]];
+            [label setTextColor:[UIColor colorWithRed:44.0/255.0 green:157.0/255.0 blue:219.0/255.0 alpha:1]];
         }else{
             [label setTextColor:[UIColor colorWithRed:146.0/255.0 green:146.0/255.0 blue:146.0/255.0 alpha:1]];
         }
@@ -66,6 +66,9 @@
         [bottomBar addSubview:button];
         offsize += 80;
     }
+    UIView* view_line = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 0.5)];
+    view_line.backgroundColor = [UIColor colorWithRed:35.0/255.0 green:34.0/255.0 blue:43.0/255.0 alpha:1];
+    [bottomBar addSubview:view_line];
 }
 - (void)buttonClicked:(id)sender{
     int tag = (int)[sender tag];

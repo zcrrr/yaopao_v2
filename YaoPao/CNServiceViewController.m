@@ -27,16 +27,12 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    [self.button_back addTarget:self action:@selector(button_blue_down:) forControlEvents:UIControlEventTouchDown];
     NSString* path = [[[NSBundle mainBundle]bundlePath] stringByAppendingPathComponent:@"term_of_service.html"];
     NSURL* url = [NSURL fileURLWithPath:path];
     NSURLRequest* request = [NSURLRequest requestWithURL:url];
     self.webview.scalesPageToFit = YES;
     [self.webview setBackgroundColor:[UIColor clearColor]];
     [self.webview loadRequest:request];
-}
-- (void)button_blue_down:(id)sender{
-    ((UIButton*)sender).backgroundColor = [UIColor colorWithRed:0 green:88.0/255.0 blue:142.0/255.0 alpha:1];
 }
 - (void)didReceiveMemoryWarning
 {
@@ -45,7 +41,6 @@
 }
 
 - (IBAction)button_back_clicked:(id)sender {
-    self.button_back.backgroundColor = [UIColor clearColor];
     [self.navigationController popViewControllerAnimated:YES];
 }
 @end

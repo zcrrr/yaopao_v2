@@ -21,6 +21,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    self.indicator.hidden = YES;
+    self.button_takephoto.hidden = NO;
+    if(!iPhone5){//4、4s
+        self.button_cancel.frame = CGRectMake(33, 11, 35, 35);
+        self.button_takephoto.frame = CGRectMake(128, 1, 55, 55);
+        self.indicator.frame = CGRectMake(145, 18, 20, 20);
+    }
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -43,6 +50,9 @@
             [self.cameraPicker dismissViewControllerAnimated:YES completion:nil];
             break;
         case 1:
+            self.indicator.hidden = NO;
+            self.button_takephoto.hidden = YES;
+            [self.indicator startAnimating];
             [self.cameraPicker takePicture];
             break;
         default:
@@ -63,6 +73,10 @@
         self.imagePreviewVC = [[CNImagePreviewViewController alloc]init];
     }
     self.imagePreviewVC.image = imageScaled;
+    self.indicator.hidden = YES;
+    self.button_takephoto.hidden = NO;
+    [self.indicator stopAnimating];
+    self.imagePreviewVC.cameraPicker = self.cameraPicker;
     [self.cameraPicker pushViewController:self.imagePreviewVC animated:YES];
 }
 @end

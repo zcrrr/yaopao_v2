@@ -14,6 +14,7 @@
 @property (strong, nonatomic) IBOutlet UIButton *button_back;
 
 - (IBAction)button_back_clicked:(id)sender;
+@property (weak, nonatomic) IBOutlet UIView *view_pop;
 
 
 @end

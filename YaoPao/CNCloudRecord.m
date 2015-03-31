@@ -304,7 +304,11 @@
                 [self.fileArray addObject:[NSString stringWithFormat:@"%i,%@,3,%@",i,runclass.clientBinaryFilePath,runclass.rid]];//记录index_二进制文件路径_文件类型_rid
             }
             if([runclass.serverImagePaths isEqualToString:@""] && ![runclass.clientImagePaths isEqualToString:@""]){
-                [self.fileArray addObject:[NSString stringWithFormat:@"%i,%@,2,%@",i,runclass.clientImagePaths,runclass.rid]];//记录index_二进制文件路径_文件类型
+                NSArray* imagePaths = [runclass.clientImagePaths componentsSeparatedByString:@"|"];
+                for(int j=0;j<[imagePaths count];j++){
+                    [self.fileArray addObject:[NSString stringWithFormat:@"%i,%@,2,%@",i,[imagePaths objectAtIndex:j],runclass.rid]];//记录index_二进制文件路径_文件类型
+                }
+                
             }
             if([runclass.generateTime intValue] == 0){//当时离线保存
                 runclass.generateTime = [NSNumber numberWithLongLong:([CNUtil getNowTime1000]+kApp.cloudManager.deltaMiliSecond)];
@@ -447,8 +451,16 @@
     int type = [[tempArray objectAtIndex:2]intValue];
     RunClass* runclass = [self.addRecordArray objectAtIndex:index];
     if(type == 2){
-        runclass.serverImagePaths = [resultDic objectForKey:@"serverImagePaths"];
-        runclass.serverImagePathsSmall = [resultDic objectForKey:@"serverImagePathsSmall"];
+        if([runclass.serverImagePaths isEqualToString:@""]){
+            runclass.serverImagePaths = [resultDic objectForKey:@"serverImagePaths"];
+        }else{
+            runclass.serverImagePaths = [NSString stringWithFormat:@"%@|%@",runclass.serverImagePaths,[resultDic objectForKey:@"serverImagePaths"]];
+        }
+        if([runclass.serverImagePathsSmall isEqualToString:@""]){
+            runclass.serverImagePathsSmall = [resultDic objectForKey:@"serverImagePathsSmall"];
+        }else{
+            runclass.serverImagePathsSmall = [NSString stringWithFormat:@"%@|%@",runclass.serverImagePathsSmall,[resultDic objectForKey:@"serverImagePathsSmall"]];
+        }
     }else if(type == 3){
         runclass.serverBinaryFilePath = [resultDic objectForKey:@"serverBinaryFilePath"];
     }
@@ -572,10 +584,17 @@
             [self.fileArray addObject:[NSString stringWithFormat:@"%i,%@,%@,3",[self.downLoadRecordArray count]-1,runClass.rid,runClass.serverBinaryFilePath]];
         }
         if(![runClass.serverImagePaths isEqualToString:@""]){
-            [self.fileArray addObject:[NSString stringWithFormat:@"%i,%@,%@,21",[self.downLoadRecordArray count]-1,runClass.rid,runClass.serverImagePaths]];
+            NSArray* imagePaths = [runClass.serverImagePaths componentsSeparatedByString:@"|"];
+            for(int j=0;j<[imagePaths count];j++){
+                [self.fileArray addObject:[NSString stringWithFormat:@"%i,%@,%@,21",[self.downLoadRecordArray count]-1,runClass.rid,[imagePaths objectAtIndex:j]]];
+            }
         }
         if(![runClass.serverImagePathsSmall isEqualToString:@""]){
-            [self.fileArray addObject:[NSString stringWithFormat:@"%i,%@,%@,22",[self.downLoadRecordArray count]-1,runClass.rid,runClass.serverImagePathsSmall]];
+            NSArray* imagePaths = [runClass.serverImagePathsSmall componentsSeparatedByString:@"|"];
+            for(int j=0;j<[imagePaths count];j++){
+                [self.fileArray addObject:[NSString stringWithFormat:@"%i,%@,%@,22",[self.downLoadRecordArray count]-1,runClass.rid,[imagePaths objectAtIndex:j]]];
+            }
+            
         }
     }
     self.fileCount = [self.fileArray count];
@@ -622,14 +641,33 @@
     RunClass* runClass = [self.downLoadRecordArray objectAtIndex:index];
     if(type == 21){//大图
         //大图
-        NSString *bigImageFile = [NSString stringWithFormat:@"%@/%lli_big.jpg",path,time];
+        int hasCount = [[runClass.clientImagePaths componentsSeparatedByString:@"|"] count];
+        if([runClass.clientImagePaths isEqualToString:@""]){
+            hasCount = 0;
+        }
+        NSString *bigImageFile = [NSString stringWithFormat:@"%@/%lli_%i_big.jpg",path,time,hasCount];
         [data writeToFile:bigImageFile atomically:YES];
-        runClass.clientImagePaths = [NSString stringWithFormat:@"%@/%lli_big.jpg",[CNUtil getYearMonth:time],time];
+        NSString* thisImagePath = [NSString stringWithFormat:@"%@/%lli_%i_big.jpg",[CNUtil getYearMonth:time],time,hasCount];
+        if([runClass.clientImagePaths isEqualToString:@""]){
+            runClass.clientImagePaths = thisImagePath;
+        }else{
+            runClass.clientImagePaths = [NSString stringWithFormat:@"%@|%@",runClass.clientImagePaths,thisImagePath];
+        }
+        
     }else if(type == 22){
         //小图
-        NSString *smallImageFile = [NSString stringWithFormat:@"%@/%lli_small.jpg",path,time];
-        [data writeToFile:smallImageFile atomically:YES];
-        runClass.clientImagePathsSmall = [NSString stringWithFormat:@"%@/%lli_small.jpg",[CNUtil getYearMonth:time],time];
+        int hasCount = [[runClass.clientImagePathsSmall componentsSeparatedByString:@"|"] count];
+        if([runClass.clientImagePathsSmall isEqualToString:@""]){
+            hasCount = 0;
+        }
+        NSString *bigImageFile = [NSString stringWithFormat:@"%@/%lli_%i_small.jpg",path,time,hasCount];
+        [data writeToFile:bigImageFile atomically:YES];
+        NSString* thisImagePath = [NSString stringWithFormat:@"%@/%lli_%i_small.jpg",[CNUtil getYearMonth:time],time,hasCount];
+        if([runClass.clientImagePathsSmall isEqualToString:@""]){
+            runClass.clientImagePathsSmall = thisImagePath;
+        }else{
+            runClass.clientImagePathsSmall = [NSString stringWithFormat:@"%@|%@",runClass.clientImagePathsSmall,thisImagePath];
+        }
     }else if(type == 3){
         //二进制文件
         NSString *binarayFile = [NSString stringWithFormat:@"%@/%lli.yaopao",path,time];

@@ -47,6 +47,8 @@
 #import "RecordViewController.h"
 #import "MatchViewController.h"
 #import "CNSettingViewController.h"
+#import <AdobeCreativeSDKImage/AdobeCreativeSDKImage.h>
+#import <AdobeCreativeSDKFoundation/AdobeCreativeSDKFoundation.h>
 
 
 @implementation CNAppDelegate
@@ -131,11 +133,20 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.gpsLevel = 1;
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     //如果是第一次升级安装，删除所有的记录
     [CNCloudRecord deleteAllRecordWhenFirstInstall];
     //google map
     [GMSServices provideAPIKey:@"AIzaSyCyYR5Ih3xP0rpYMaF1qAsInxFyqvaCJIY"];
+    //高德地图
     
+//    [MAMapServices sharedServices].apiKey =@"0f3dad31deac3acd29ce27c3c2a265f2";
+    //inhouse
+    [MAMapServices sharedServices].apiKey =@"e46925db02f9c24a1323a8b900e56346";
+    //adobe creative
+    NSString* const CreativeSDKClientId = @"b8ae54f2e0084b789790003fda5127e1";
+    NSString* const CreativeSDKClientSecret = @"581b3dc8-5946-491e-88e4-ce258e94c5f4";
+    [[AdobeUXAuthManager sharedManager] setAuthenticationParametersWithClientID:CreativeSDKClientId withClientSecret:CreativeSDKClientSecret];
     //设置时区
     [NSTimeZone setDefaultTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"GMT+0800"]];
     
@@ -157,7 +168,7 @@
     self.showad = [MobClick getConfigParams:@"showad"];
     NSLog(@"self.showad is %@",self.showad);
     if (self.showad == nil || ([NSNull null] == (NSNull *)self.showad)) {
-        self.showad = @"1.0.6,1";
+        self.showad = @"2.0.0,1";
     }
 //#ifdef SIMULATORTEST
 //
@@ -230,6 +241,9 @@
     [self.window makeKeyAndVisible];
     //屏幕长亮
     [[ UIApplication sharedApplication] setIdleTimerDisabled:YES ] ;
+    
+    
+
     return YES;
 }
 - (void)showTab:(int)index{
@@ -357,7 +371,6 @@
     kApp.geosHandler = [[CNTestGEOS alloc]init];
     [kApp.geosHandler initFromFile:kTrackName];
     self.avatarDic = [[NSMutableDictionary alloc]init];
-    [MAMapServices sharedServices].apiKey =@"0f3dad31deac3acd29ce27c3c2a265f2";
 }
 + (CNAppDelegate*)getApplicationDelegate{
     return (CNAppDelegate*)[[UIApplication sharedApplication] delegate];
@@ -422,6 +435,7 @@
 + (void)popupWarningGPSWeak{
     CNWarningGPSWeakViewController* warningVC = [[CNWarningGPSWeakViewController alloc]init];
     warningVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    warningVC.modalPresentationStyle=UIModalPresentationOverCurrentContext;
     UIViewController* rootViewController =  [[UIApplication sharedApplication] keyWindow].rootViewController;
     rootViewController.modalPresentationStyle = UIModalPresentationCurrentContext;
     [rootViewController presentViewController:warningVC animated:YES completion:^(void){NSLog(@"pop");}];

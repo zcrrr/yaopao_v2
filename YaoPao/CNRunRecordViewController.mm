@@ -77,7 +77,7 @@
     
     [self refreshData];
 }
-- (void)refreshData{
+- (void)refreshTop{
     NSString* filePath_record = [CNPersistenceHandler getDocument:@"all_record.plist"];
     NSMutableDictionary* record_dic = [NSMutableDictionary dictionaryWithContentsOfFile:filePath_record];
     if(record_dic == nil){
@@ -93,6 +93,9 @@
     int total_second = [[record_dic objectForKey:@"total_time"]intValue];
     [self setTimeNumImage:total_second];
     self.recordList = [[NSMutableArray alloc]init];
+}
+- (void)refreshData{
+    [self refreshTop];
     self.page = 0;
     [self lookup];
 }
@@ -412,6 +415,7 @@
         
         [self.recordList removeObjectAtIndex:row];
         [self.tableview deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        [self refreshTop];
     }
 }
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{

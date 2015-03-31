@@ -8,6 +8,8 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FeelingViewController">
             <connections>
                 <outlet property="button_delete" destination="UBW-qT-91U" id="6GK-hG-V3S"/>
+                <outlet property="button_deleteImage" destination="05v-j9-iAe" id="fZc-VS-VKj"/>
+                <outlet property="button_edit" destination="Hwb-1g-82Z" id="Xyo-Kg-q0W"/>
                 <outlet property="button_left" destination="iKO-TX-cFr" id="He5-hn-Kg1"/>
                 <outlet property="button_mood1" destination="a2p-kd-OiK" id="Vwt-WO-Whb"/>
                 <outlet property="button_mood2" destination="vMF-cL-gQz" id="BmL-8e-xFz"/>
@@ -21,11 +23,17 @@
                 <outlet property="button_way3" destination="v3s-Bd-mpD" id="A3X-q8-eym"/>
                 <outlet property="button_way4" destination="RXf-p6-Jcr" id="dO7-WA-y08"/>
                 <outlet property="button_way5" destination="9Ns-EJ-r3d" id="MpP-R6-H0O"/>
+                <outlet property="imageview_nophoto" destination="kb3-QC-I99" id="4z3-G9-jPe"/>
+                <outlet property="imageview_page" destination="VYb-Ne-Yqo" id="crS-b4-9iE"/>
                 <outlet property="label_title" destination="pOc-Aa-ZAA" id="YFG-m6-ddJ"/>
                 <outlet property="label_whichpage" destination="OsN-XS-s7x" id="wjX-20-ej1"/>
                 <outlet property="scrollview" destination="VHo-wx-Lsp" id="euN-LM-qwV"/>
                 <outlet property="textfield" destination="2eh-w3-Apf" id="fUq-bn-QWY"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+                <outlet property="view_bottom" destination="CjU-9u-WOa" id="HXg-sB-bX6"/>
+                <outlet property="view_middle" destination="q6P-1J-CIl" id="N8c-xB-1Kp"/>
+                <outlet property="view_part1" destination="V87-8Y-Uzs" id="paD-x9-fQC"/>
+                <outlet property="view_part2" destination="1o6-y8-jhV" id="WPC-Ct-4e1"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -35,7 +43,7 @@
             <subviews>
                 <view contentMode="scaleToFill" id="gin-Nu-DRS">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="55"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="UBW-qT-91U" customClass="CNCustomButton">
                             <rect key="frame" x="8" y="22" width="32" height="32"/>
@@ -69,12 +77,16 @@
                     </subviews>
                     <color key="backgroundColor" red="0.094117647058823528" green="0.094117647058823528" blue="0.094117647058823528" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bg_nophoto.png" id="kb3-QC-I99">
+                    <rect key="frame" x="0.0" y="55" width="320" height="320"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                </imageView>
                 <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="VHo-wx-Lsp">
-                    <rect key="frame" x="0.0" y="55" width="320" height="238"/>
+                    <rect key="frame" x="0.0" y="55" width="320" height="320"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </scrollView>
                 <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="iKO-TX-cFr">
-                    <rect key="frame" x="0.0" y="153" width="22" height="43"/>
+                    <rect key="frame" x="0.0" y="193" width="22" height="43"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <state key="normal" backgroundImage="scroll_left.png">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -85,7 +97,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="A2F-el-8oZ">
-                    <rect key="frame" x="298" y="153" width="22" height="43"/>
+                    <rect key="frame" x="298" y="193" width="22" height="43"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <state key="normal" backgroundImage="scroll_right.png">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -96,18 +108,18 @@
                     </connections>
                 </button>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="show_page.png" id="VYb-Ne-Yqo">
-                    <rect key="frame" x="135" y="260" width="51" height="17"/>
+                    <rect key="frame" x="135" y="342" width="51" height="17"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1/10" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="OsN-XS-s7x">
-                    <rect key="frame" x="135" y="260" width="51" height="17"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0/0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="OsN-XS-s7x">
+                    <rect key="frame" x="135" y="342" width="51" height="17"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <view contentMode="scaleToFill" id="q6P-1J-CIl">
-                    <rect key="frame" x="0.0" y="293" width="320" height="43"/>
+                    <rect key="frame" x="0.0" y="375" width="320" height="43"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <view contentMode="scaleToFill" id="VoI-et-1PO">
@@ -157,7 +169,7 @@
                     <color key="backgroundColor" red="0.094117647058823528" green="0.094117647058823528" blue="0.094117647058823528" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
                 <view contentMode="scaleToFill" id="V87-8Y-Uzs">
-                    <rect key="frame" x="0.0" y="344" width="320" height="47"/>
+                    <rect key="frame" x="0.0" y="426" width="320" height="47"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="心情" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="dXY-n9-SHg">
@@ -170,7 +182,7 @@
                         <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="a2p-kd-OiK">
                             <rect key="frame" x="54" y="12" width="23" height="23"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" image="mood1.png">
+                            <state key="normal" backgroundImage="mood1.png">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
@@ -180,7 +192,7 @@
                         <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="vMF-cL-gQz">
                             <rect key="frame" x="96" y="12" width="23" height="23"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" image="mood2.png">
+                            <state key="normal" backgroundImage="mood2.png">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
@@ -190,7 +202,7 @@
                         <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="U0l-L3-Qu3">
                             <rect key="frame" x="138" y="12" width="23" height="23"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" image="mood3.png">
+                            <state key="normal" backgroundImage="mood3.png">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
@@ -200,7 +212,7 @@
                         <button opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="uIe-Qq-sNY">
                             <rect key="frame" x="180" y="12" width="23" height="23"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" image="mood4.png">
+                            <state key="normal" backgroundImage="mood4.png">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
@@ -210,7 +222,7 @@
                         <button opaque="NO" tag="5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="G2D-P5-EoO">
                             <rect key="frame" x="222" y="12" width="23" height="23"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" image="mood5.png">
+                            <state key="normal" backgroundImage="mood5.png">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
@@ -221,7 +233,7 @@
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </view>
                 <view contentMode="scaleToFill" id="1o6-y8-jhV">
-                    <rect key="frame" x="0.0" y="392" width="320" height="47"/>
+                    <rect key="frame" x="0.0" y="474" width="320" height="47"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="跑道" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="IRd-0N-qUO">
@@ -234,7 +246,7 @@
                         <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="SuQ-b5-WAp">
                             <rect key="frame" x="54" y="12" width="23" height="23"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" image="way1.png">
+                            <state key="normal" backgroundImage="way1.png">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
@@ -244,7 +256,7 @@
                         <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="iLO-c7-7Qb">
                             <rect key="frame" x="96" y="12" width="23" height="23"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" image="way2.png">
+                            <state key="normal" backgroundImage="way2.png">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
@@ -254,7 +266,7 @@
                         <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="v3s-Bd-mpD">
                             <rect key="frame" x="138" y="12" width="23" height="23"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" image="way3.png">
+                            <state key="normal" backgroundImage="way3.png">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
@@ -264,7 +276,7 @@
                         <button opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="RXf-p6-Jcr">
                             <rect key="frame" x="180" y="12" width="23" height="23"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" image="way4.png">
+                            <state key="normal" backgroundImage="way4.png">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
@@ -274,7 +286,7 @@
                         <button opaque="NO" tag="5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="9Ns-EJ-r3d">
                             <rect key="frame" x="222" y="12" width="23" height="23"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" image="way5.png">
+                            <state key="normal" backgroundImage="way5.png">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
@@ -285,14 +297,14 @@
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </view>
                 <view contentMode="scaleToFill" id="CjU-9u-WOa">
-                    <rect key="frame" x="0.0" y="447" width="320" height="47"/>
+                    <rect key="frame" x="0.0" y="522" width="320" height="40"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="说说这次运动感觉怎么样？" minimumFontSize="17" id="2eh-w3-Apf">
-                            <rect key="frame" x="0.0" y="0.0" width="320" height="47"/>
+                            <rect key="frame" x="10" y="0.0" width="310" height="40"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                            <textInputTraits key="textInputTraits"/>
+                            <textInputTraits key="textInputTraits" returnKeyType="done"/>
                         </textField>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -303,6 +315,7 @@
         </view>
     </objects>
     <resources>
+        <image name="bg_nophoto.png" width="750" height="750"/>
         <image name="delete.png" width="68" height="68"/>
         <image name="delete_on.png" width="68" height="68"/>
         <image name="edit.png" width="68" height="68"/>

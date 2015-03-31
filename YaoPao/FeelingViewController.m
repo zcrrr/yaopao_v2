@@ -17,6 +17,9 @@
 #import "CNGPSPoint.h"
 #import "BinaryIOManager.h"
 #import "CNShareViewController.h"
+#import <AdobeCreativeSDKImage/AdobeCreativeSDKImage.h>
+#import "UIImage+Rescale.h"
+#import "WaterMarkViewController.h"
 
 @interface FeelingViewController ()
 
@@ -25,6 +28,7 @@
 @implementation FeelingViewController
 @synthesize currentpage;
 @synthesize overlayVC;
+@synthesize editorController;
 extern NSMutableArray* imageArray;
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -38,12 +42,25 @@ extern NSMutableArray* imageArray;
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"M月d日"];
     NSString* strDate2 = [dateFormatter stringFromDate:date];
-    NSMutableDictionary* settingDic = [CNUtil getRunSetting];
+    NSMutableDictionary* settingDic = [CNUtil getRunSettingWhole];
     self.label_title.text = [NSString stringWithFormat:@"%@的%@",strDate2,[settingDic objectForKey:@"typeDes"]];
     self.scrollview.delegate = self;
     self.scrollview.showsHorizontalScrollIndicator=NO; //不显示水平滑动线
     self.scrollview.showsVerticalScrollIndicator=NO;//不显示垂直滑动线
     self.scrollview.pagingEnabled=YES;
+    if(!iPhone5){//4、4s
+        self.view_part1.frame = CGRectMake(0, 336, 320, 47);
+        self.view_part2.frame = CGRectMake(0, 384, 320, 47);
+        self.view_bottom.frame = CGRectMake(0, 432, 320, 40);
+        
+        self.imageview_nophoto.frame = CGRectMake(0, 55, 320, 238);
+        self.scrollview.frame = CGRectMake(0, 55, 320, 238);
+        self.button_left.frame = CGRectMake(0, 153, 22, 43);
+        self.button_right.frame = CGRectMake(298, 153, 22, 43);
+        self.imageview_page.frame = CGRectMake(135, 260, 51, 17);
+        self.label_whichpage.frame = CGRectMake(135, 260, 51, 17);
+        self.view_middle.frame = CGRectMake(0, 293, 320, 43);
+    }
 }
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
@@ -55,10 +72,10 @@ extern NSMutableArray* imageArray;
         [iv removeFromSuperview];
     }
     //根据currentpage和imageArray显示
-    self.scrollview.contentSize = CGSizeMake(320*[imageArray count], 238);
+    self.scrollview.contentSize = CGSizeMake(320*[imageArray count], 320);
     for (int i = 0; i < [imageArray count] ; i++){
-        UIImageView* imageview = [[UIImageView alloc]initWithFrame:CGRectMake(i*320, 0, 320, 238)];
-        imageview.contentMode = UIViewContentModeScaleToFill;
+        UIImageView* imageview = [[UIImageView alloc]initWithFrame:CGRectMake(i*320, 0, 320, 320)];
+        imageview.contentMode = UIViewContentModeScaleAspectFill;
         imageview.image = (UIImage*)[imageArray objectAtIndex:i];
         [self.scrollview addSubview:imageview];
     }
@@ -77,7 +94,17 @@ extern NSMutableArray* imageArray;
     if([imageArray count] == 0){//如果一张照片都没拍
         self.button_left.hidden = YES;
         self.button_right.hidden = YES;
+        self.imageview_page.hidden = YES;
+        self.label_whichpage.hidden = YES;
+        self.button_deleteImage.enabled = NO;
+        self.button_edit.enabled = NO;
         return;
+    }
+    if(self.imageview_page.hidden == YES){
+        self.imageview_page.hidden = NO;
+        self.label_whichpage.hidden = NO;
+        self.button_deleteImage.enabled = YES;
+        self.button_edit.enabled = YES;
     }
     if([imageArray count] == 1){
         self.button_left.hidden = YES;
@@ -164,6 +191,7 @@ extern NSMutableArray* imageArray;
         }
         case 6:
         {
+            [self displayEditorForImage:[imageArray objectAtIndex:self.currentpage]];
             NSLog(@"美化");
             break;
         }
@@ -183,35 +211,82 @@ extern NSMutableArray* imageArray;
         self.overlayVC.cameraPicker.delegate = self.overlayVC;
     }];
 }
+- (void)displayEditorForImage:(UIImage *)imageToEdit
+{
+    float image_width = imageToEdit.size.width;
+    float image_height = imageToEdit.size.height;
+    NSLog(@"image_width is %f",image_width);
+    NSLog(@"image_height is %f",image_height);
+    [AdobeImageEditorCustomization setToolOrder:@[kAdobeImageEditorOrientation,kAdobeImageEditorColorAdjust,kAdobeImageEditorLightingAdjust,kAdobeImageEditorEffects]];//菜单
+    self.editorController = [[AdobeUXImageEditorViewController alloc] initWithImage:imageToEdit];
+    [self.editorController setDelegate:self];
+    [self presentViewController:self.editorController animated:YES completion:nil];
+}
+- (void)photoEditor:(AdobeUXImageEditorViewController *)editor finishedWithImage:(UIImage *)image
+{
+    // Handle the result image here
+    NSLog(@"done");
+    float image_width = image.size.width;
+    float image_height = image.size.height;
+    NSLog(@"image_width is %f",image_width);
+    NSLog(@"image_height is %f",image_height);
+    [self.editorController dismissViewControllerAnimated:NO completion:nil];
+    WaterMarkViewController* waterVC = [[WaterMarkViewController alloc]init];
+    waterVC.delegate_addWater = self;
+    waterVC.image_datasource = image;
+    [self.navigationController pushViewController:waterVC animated:YES];
+}
+- (void)addWaterDidSuccess:(UIImage *)image{
+    [imageArray removeObjectAtIndex:self.currentpage];
+    [imageArray insertObject:image atIndex:self.currentpage];
+}
+- (void)photoEditorCanceled:(AdobeUXImageEditorViewController *)editor
+{
+    // Handle cancellation here
+    NSLog(@"cancel");
+    [self.editorController dismissViewControllerAnimated:YES completion:nil];
+    
+    
+}
+- (void)image: (UIImage *) image didFinishSavingWithError: (NSError *) error contextInfo: (void *) contextInfo{
+    NSString *msg = nil ;
+    if(error != NULL){
+        msg = @"保存图片失败" ;
+    }else{
+        msg = @"保存图片成功" ;
+    }
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:msg delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+    [alert show];
+    
+}
 - (IBAction)button_mood_clicked:(id)sender {
     NSLog(@"mood %i",(int)[sender tag]);
     [self resetMoodButtonStatus];
     int tag = (int)[sender tag];
-    [(UIButton*)sender setBackgroundImage:[UIImage imageNamed:@"mood_way_on.png"] forState:UIControlStateNormal];
+    [(UIButton*)sender setBackgroundImage:[UIImage imageNamed:[NSString stringWithFormat:@"mood%i_h.png",tag]] forState:UIControlStateNormal];
     kApp.runManager.feeling = tag;
-    
 }
 
 - (IBAction)button_way_clicked:(id)sender {
     NSLog(@"way %i",(int)[sender tag]);
     [self resetWayButtonStatus];
     int tag = (int)[sender tag];
-    [(UIButton*)sender setBackgroundImage:[UIImage imageNamed:@"mood_way_on.png"] forState:UIControlStateNormal];
+    [(UIButton*)sender setBackgroundImage:[UIImage imageNamed:[NSString stringWithFormat:@"way%i_h.png",tag]] forState:UIControlStateNormal];
     kApp.runManager.runway = tag;
 }
 - (void)resetMoodButtonStatus{
-    [self.button_mood1 setBackgroundImage:nil forState:UIControlStateNormal];
-    [self.button_mood2 setBackgroundImage:nil forState:UIControlStateNormal];
-    [self.button_mood3 setBackgroundImage:nil forState:UIControlStateNormal];
-    [self.button_mood4 setBackgroundImage:nil forState:UIControlStateNormal];
-    [self.button_mood5 setBackgroundImage:nil forState:UIControlStateNormal];
+    [self.button_mood1 setBackgroundImage:[UIImage imageNamed:@"mood1.png"] forState:UIControlStateNormal];
+    [self.button_mood2 setBackgroundImage:[UIImage imageNamed:@"mood2.png"] forState:UIControlStateNormal];
+    [self.button_mood3 setBackgroundImage:[UIImage imageNamed:@"mood3.png"] forState:UIControlStateNormal];
+    [self.button_mood4 setBackgroundImage:[UIImage imageNamed:@"mood4.png"] forState:UIControlStateNormal];
+    [self.button_mood5 setBackgroundImage:[UIImage imageNamed:@"mood5.png"] forState:UIControlStateNormal];
 }
 - (void)resetWayButtonStatus{
-    [self.button_way1 setBackgroundImage:nil forState:UIControlStateNormal];
-    [self.button_way2 setBackgroundImage:nil forState:UIControlStateNormal];
-    [self.button_way3 setBackgroundImage:nil forState:UIControlStateNormal];
-    [self.button_way4 setBackgroundImage:nil forState:UIControlStateNormal];
-    [self.button_way5 setBackgroundImage:nil forState:UIControlStateNormal];
+    [self.button_way1 setBackgroundImage:[UIImage imageNamed:@"way1.png"] forState:UIControlStateNormal];
+    [self.button_way2 setBackgroundImage:[UIImage imageNamed:@"way2.png"] forState:UIControlStateNormal];
+    [self.button_way3 setBackgroundImage:[UIImage imageNamed:@"way3.png"] forState:UIControlStateNormal];
+    [self.button_way4 setBackgroundImage:[UIImage imageNamed:@"way4.png"] forState:UIControlStateNormal];
+    [self.button_way5 setBackgroundImage:[UIImage imageNamed:@"way5.png"] forState:UIControlStateNormal];
 }
 - (void)saveRun{
     long long nowTime = [CNUtil getNowTime1000];
@@ -280,7 +355,7 @@ extern NSMutableArray* imageArray;
     if([imageArray count] > 0){
         NSLog(@"有图片");
         NSMutableString* clientImagePaths = [NSMutableString stringWithString:@""];
-//        NSMutableString* clientImagePathsSmall = [NSMutableString stringWithString:@""];
+        NSMutableString* clientImagePathsSmall = [NSMutableString stringWithString:@""];
         
         for(int i = 0;i<[imageArray count];i++){
             NSString *filePath_big = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"/%lli_%i_big.jpg",nowTime,i]];   // 保存文件的名称
@@ -288,12 +363,21 @@ extern NSMutableArray* imageArray;
             NSLog(@"filePath_big is %@",filePath_big);
             NSLog(@"filePath_small is %@",filePath_small);
             [UIImagePNGRepresentation((UIImage*)[imageArray objectAtIndex:i]) writeToFile: filePath_big atomically:YES];
-            [clientImagePaths appendString:[NSString stringWithFormat:@"%@/%lli_%i_big.jpg",[CNUtil getYearMonth:nowTime/1000],nowTime,i]];
-//            [UIImagePNGRepresentation(self.image_small) writeToFile: filePath_small atomically:YES]
-//            [clientImagePathsSmall appendString:[NSString stringWithFormat:@"%@/%lli_%i_small.jpg",[CNUtil getYearMonth:nowTime/1000],nowTime,i];
+            [clientImagePaths appendString:[NSString stringWithFormat:@"%@/%lli_%i_big.jpg|",[CNUtil getYearMonth:nowTime/1000],nowTime,i]];
+            UIImage* image_small = [(UIImage*)[imageArray objectAtIndex:i] rescaleImageToSize:CGSizeMake(120, 120)];
+            [UIImagePNGRepresentation(image_small) writeToFile: filePath_small atomically:YES];
+            [clientImagePathsSmall appendString:[NSString stringWithFormat:@"%@/%lli_%i_small.jpg|",[CNUtil getYearMonth:nowTime/1000],nowTime,i]];
         }
+        if([clientImagePaths hasSuffix:@"|"]){
+            clientImagePaths = [NSMutableString stringWithString:[clientImagePaths substringToIndex:clientImagePaths.length - 1]];
+        }
+        if([clientImagePathsSmall hasSuffix:@"|"]){
+            clientImagePathsSmall = [NSMutableString stringWithString:[clientImagePathsSmall substringToIndex:clientImagePathsSmall.length - 1]];
+        }
+        NSLog(@"clientImagePaths is %@",clientImagePaths);
+        NSLog(@"clientImagePathsSmall is %@",clientImagePathsSmall);
         runClass.clientImagePaths = clientImagePaths;
-        runClass.clientImagePathsSmall = @"";
+        runClass.clientImagePathsSmall = clientImagePathsSmall;
         runClass.serverImagePaths = @"";
         runClass.serverImagePathsSmall = @"";
     }else{

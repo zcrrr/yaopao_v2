@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "RunClass.h"
 #import <MAMapKit/MAMapKit.h>
+@class CNCustomButton;
 @interface CNRecordMapViewController : UIViewController<MAMapViewDelegate>
 @property (nonatomic, strong) MAMapView *mapView;
 @property (nonatomic, strong) MAPolyline* polyline_back;
@@ -28,6 +29,6 @@
 
 @property (strong, nonatomic) IBOutlet UIImageView *image_type;
 @property (strong, nonatomic) IBOutlet UIView *view_map_container;
-@property (strong, nonatomic) IBOutlet UIButton *button_back;
+@property (strong, nonatomic) IBOutlet CNCustomButton *button_back;
 
 @end

@@ -18,13 +18,19 @@
 #import "RunningViewController.h"
 #import "CNRunManager.h"
 #import "CNLocationHandler.h"
-#import "FeelingViewController.h"
+#import "CNShareViewController.h"
+#import "CNLoginPhoneViewController.h"
+#import "CNUserinfoViewController.h"
+#import "WaterMarkViewController.h"
+#import "CNVCodeViewController.h"
 
 @interface HomeViewController ()
 
 @end
 
 @implementation HomeViewController
+NSString* weatherCode;
+NSString* dayOrNight;
 
 - (void)viewDidLoad {
     self.selectIndex = 0;
@@ -34,6 +40,7 @@
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(loginDone) name:@"loginDone" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(initData) name:@"REFRESH" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(setGPSImage) name:@"gps" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(tellWeather) name:@"weather" object:nil];
     [self setGPSImage];
     if(kApp.isLogin == 2){//正在登录
         [self displayLoading];
@@ -43,9 +50,86 @@
             [self.navigationController pushViewController:vcodeVC animated:YES];
         }
     }
+    self.view_line_verticle.frame = CGRectMake(160, 267, 0.5, 160);
+    self.view_line_horizontal1.frame = CGRectMake(0, 347, 320, 0.5);
+    self.view_line_horizontal2.frame = CGRectMake(0, 427, 320, 0.5);
+    if(!iPhone5){//4、4s
+        CGRect frame_new1 = self.view_part1.frame;
+        frame_new1.size = CGSizeMake(160, 50);
+        self.view_part1.frame = frame_new1;
+        
+        CGRect frame_new2 = self.view_part2.frame;
+        frame_new2.size = CGSizeMake(160, 50);
+        self.view_part2.frame = frame_new2;
+        
+        CGRect frame_new3 = self.view_part3.frame;
+        frame_new3.origin = CGPointMake(0, 317);
+        frame_new3.size = CGSizeMake(160, 50);
+        self.view_part3.frame = frame_new3;
+        
+        CGRect frame_new4 = self.view_part4.frame;
+        frame_new4.origin = CGPointMake(160, 317);
+        frame_new4.size = CGSizeMake(160, 50);
+        self.view_part4.frame = frame_new4;
+        
+        self.view_line_verticle.frame = CGRectMake(160, 267, 0.5, 100);
+        self.view_line_horizontal1.frame = CGRectMake(0, 317, 320, 0.5);
+        self.view_line_horizontal2.frame = CGRectMake(0, 367, 320, 0.5);
+        self.button_running.frame = CGRectMake(52, 382, 217, 42);
+        
+        self.imageview_part1.frame = CGRectMake(9, 3, 40, 40);
+        self.imageview_part2.frame = CGRectMake(9, 3, 40, 40);
+        self.imageview_part3.frame = CGRectMake(9, 3, 40, 40);
+    }
+}
+
+- (void)tellWeather{
+    //请求天气
+    self.weather_progress.hidden = NO;
+    [self.weather_progress startAnimating];
+    kApp.networkHandler.delegate_weather = self;
+    [kApp.networkHandler doRequest_weather:kApp.locationHandler.userLocation_lon :kApp.locationHandler.userLocation_lat];
+}
+- (void)weatherDidFailed:(NSString *)mes{
+    self.weather_progress.hidden = YES;
+    [self.weather_progress stopAnimating];
+}
+- (void)weatherDidSuccess:(NSDictionary *)resultDic{
+    self.weather_progress.hidden = YES;
+    [self.weather_progress stopAnimating];
+    NSDictionary* weatherData = [resultDic objectForKey:@"data"];
+    self.label_temp.text = [NSString stringWithFormat:@"%@%@",[weatherData objectForKey:@"weather"],[weatherData objectForKey:@"temp"]];
+    if(self.label_temp.text.length >= 8){
+        [self.label_temp setFont:[UIFont systemFontOfSize:13]];
+    }
+    NSString* pmlevel = [weatherData objectForKey:@"aq"];
+    NSString* pmvalue = [NSString stringWithFormat:@"(%@)",[weatherData objectForKey:@"pm25"]];
+    self.label_pmLevel.text = [NSString stringWithFormat:@"%@%@",pmlevel,pmvalue];
+    weatherCode = [weatherData objectForKey:@"weatherCode"];
+    dayOrNight = [CNUtil dayOrNight];
+    NSString* imageName = [NSString stringWithFormat:@"weather_icon_%@_%@.png",dayOrNight,weatherCode];
+    self.imageview_weather.image = [UIImage imageNamed:imageName];
 }
 - (void)setGPSImage{
-    self.label_gps.text = [NSString stringWithFormat:@"%i",kApp.gpsSignal];
+    NSString* gpsDes = @"";
+    switch (kApp.gpsSignal) {
+        case 1:
+            gpsDes = @"很差";
+            break;
+        case 2:
+            gpsDes = @"偏弱";
+            break;
+        case 3:
+            gpsDes = @"良好";
+            break;
+        case 4:
+            gpsDes = @"非常好";
+            break;
+            
+        default:
+            break;
+    }
+    self.label_gps.text = gpsDes;
 }
 - (void)loginDone{
     [self hideLoading];
@@ -70,15 +154,16 @@
     [self initData];
 }
 - (void)initUI{
-    NSMutableDictionary* settingDic = [CNUtil getRunSetting];
+    NSMutableDictionary* settingDic = [CNUtil getRunSettingWhole];
     self.label_target_type.text = [NSString stringWithFormat:@"%@ %@",[settingDic objectForKey:@"targetDes"],[settingDic objectForKey:@"typeDes"]];
+    self.image_avatar.layer.cornerRadius = self.image_avatar.bounds.size.width/2;
+    self.image_avatar.layer.masksToBounds = YES;
     if(kApp.userInfoDic != nil){//已经登录状态
         NSString* nickname = [kApp.userInfoDic objectForKey:@"nickname"];
         nickname = (nickname == nil ? [kApp.userInfoDic objectForKey:@"phone"] : nickname);
         self.label_username.text = nickname;
         NSString* signature = [kApp.userInfoDic objectForKey:@"signature"];
         signature = ((signature == nil || [signature isEqualToString:@""])? @"什么都没写" : signature);
-        self.button_go_login.hidden = YES;
         NSString* imgpath = [kApp.userInfoDic objectForKey:@"imgpath"];
         if(imgpath != nil){
             //显示头像
@@ -100,7 +185,6 @@
     }else{//未登录状态
         self.image_avatar.image = [UIImage imageNamed:@"avatar_default.png"];
         self.label_username.text = @"未登录";
-        self.button_go_login.hidden = NO;
     }
 }
 #pragma -mark ASIHttpRequest delegate
@@ -173,14 +257,25 @@
     switch ([sender tag]) {
         case 0:
         {
+//            CNVCodeViewController* testVC = [[CNVCodeViewController alloc]init];
+//            [self.navigationController pushViewController:testVC animated:YES];
+//            [CNAppDelegate popupWarningBackground];
             NSLog(@"同步");
-            FeelingViewController* feelingVC = [[FeelingViewController alloc]init];
-            [self.navigationController pushViewController:feelingVC animated:YES];
+            [CNAppDelegate popupWarningCloud];
+            
             break;
         }
         case 1:
         {
             NSLog(@"登录");
+            if(kApp.isLogin == 0){
+                CNLoginPhoneViewController* loginVC = [[CNLoginPhoneViewController alloc]init];
+                [self.navigationController pushViewController:loginVC animated:YES];
+            }else{
+                CNUserinfoViewController* userInfoVC = [[CNUserinfoViewController alloc]init];
+                userInfoVC.from = @"home";
+                [self.navigationController pushViewController:userInfoVC animated:YES];
+            }
             break;
         }
         case 2:
@@ -196,7 +291,13 @@
             if ([self prepareRun]) {
                 kApp.isRunning = 1;
                 kApp.gpsLevel = 4;
-                NSMutableDictionary* settingDic = [CNUtil getRunSetting];
+                NSMutableDictionary* settingDic = [CNUtil getRunSettingWhole];
+                int voice = [[settingDic objectForKey:@"voice"]intValue];
+                if(voice == 0){
+                    kApp.voiceOn = 0;
+                }else{
+                    kApp.voiceOn = 1;
+                }
                 //初始化runManager
                 kApp.runManager = [[CNRunManager alloc]initWithSecond:2];
                 kApp.runManager.howToMove = [[settingDic objectForKey:@"howToMove"]intValue];
@@ -219,6 +320,15 @@
         default:
             break;
     }
+}
+
+- (IBAction)button_logout:(id)sender {
+    kApp.isLogin = 0;
+    kApp.userInfoDic = nil;
+    kApp.imageData = nil;
+    NSString* filePath = [CNPersistenceHandler getDocument:@"userinfo.plist"];
+    [CNPersistenceHandler DeleteSingleFile:filePath];
+    [self initUI];
 }
 - (BOOL)prepareRun{
     //测试代码

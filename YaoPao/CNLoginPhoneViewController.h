@@ -9,11 +9,13 @@
 #import <UIKit/UIKit.h>
 #import "CNNetworkHandler.h"
 #import "SectionsViewController.h"
+@class CNCustomButton;
 
 @interface CNLoginPhoneViewController : UIViewController<UITextFieldDelegate,loginPhoneDelegate,SecondViewControllerDelegate>
 @property (strong, nonatomic) NSTimer* timer;
 @property (assign, nonatomic) int count;
 @property (assign, nonatomic) int agree;
+@property (strong, nonatomic) NSString* areaCode;
 @property (assign, nonatomic) BOOL isVerify;
 @property (strong, nonatomic) IBOutlet UITextField *textfield_phone;
 @property (strong, nonatomic) IBOutlet UITextField *textfield_pwd;
@@ -24,7 +26,7 @@
 @property (strong, nonatomic) IBOutlet UIButton *button_login;
 @property (strong, nonatomic) IBOutlet UIButton *button_vcode;
 @property (strong, nonatomic) IBOutlet UIButton *button_goFindPwdPage;
-@property (strong, nonatomic) IBOutlet UIButton *button_goRegister;
+@property (strong, nonatomic) IBOutlet CNCustomButton *button_goRegister;
 
 
 
@@ -32,13 +34,12 @@
 @property (strong, nonatomic) IBOutlet UIImageView *loadingImage;
 
 @property (strong, nonatomic) IBOutlet UILabel *label_country;
-@property (strong, nonatomic) IBOutlet UILabel *label_countryandarea;
 @property (strong, nonatomic) IBOutlet UIButton *button_country;
-@property (strong, nonatomic) IBOutlet UILabel *label_code;
 - (IBAction)button_clicked:(id)sender;
 @property (strong, nonatomic) IBOutlet UIButton *button_checkbox;
 - (IBAction)button_checkbox_clicked:(id)sender;
 
+@property (weak, nonatomic) IBOutlet UIView *view_country;
 
 - (IBAction)view_touched:(id)sender;
 

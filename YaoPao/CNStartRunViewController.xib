@@ -222,10 +222,10 @@
         </view>
     </objects>
     <resources>
-        <image name="countdown.png" width="160" height="160"/>
+        <image name="countdown.png" width="80" height="80"/>
         <image name="runtype_ride.png" width="110" height="110"/>
         <image name="target_dis.png" width="160" height="160"/>
-        <image name="voice.png" width="160" height="160"/>
+        <image name="voice.png" width="80" height="80"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

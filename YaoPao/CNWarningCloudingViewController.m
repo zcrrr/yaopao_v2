@@ -22,8 +22,11 @@
     // Do any additional setup after loading the view from its nib.
     [self.button_back addTarget:self action:@selector(button_green_down:) forControlEvents:UIControlEventTouchDown];
     [self.view setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.5]];
-    
+    CGAffineTransform transform = CGAffineTransformMakeScale(1.0f, 2.0f);
+    self.progress.transform = transform;
     [self.progress setProgress:0];
+    
+    self.view_pop.layer.cornerRadius = 4;
 }
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
@@ -66,7 +69,7 @@
         self.label_step.text = kApp.cloudManager.stepDes;
         NSLog(@"stepDes is %@",kApp.cloudManager.stepDes);
         if([kApp.cloudManager.stepDes isEqualToString:@"同步完毕！"]){
-            [self performSelector:@selector(button_back_clicked:) withObject:nil afterDelay:2];
+            [self performSelector:@selector(button_back_clicked:) withObject:nil afterDelay:1.3];
         }else if([kApp.cloudManager.stepDes isEqualToString:@"请先登录"]||[kApp.cloudManager.stepDes isEqualToString:@"用户在其他手机登录，请重新登录"]){
             [self button_back_clicked:nil];
         }

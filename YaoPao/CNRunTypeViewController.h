@@ -18,6 +18,9 @@
 - (IBAction)button_choose_clicked:(id)sender;
 @property (strong, nonatomic) IBOutlet UIButton *button_back;
 
+@property (weak, nonatomic) IBOutlet UIView *view_line1;
+@property (weak, nonatomic) IBOutlet UIView *view_line2;
+@property (weak, nonatomic) IBOutlet UIView *view_line3;
 
 
 - (IBAction)button_back_clicked:(id)sender;

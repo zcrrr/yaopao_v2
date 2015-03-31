@@ -7,6 +7,9 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CNOverlayViewController">
             <connections>
+                <outlet property="button_cancel" destination="2u1-I4-g2y" id="rv5-72-i7R"/>
+                <outlet property="button_takephoto" destination="utS-6y-CF0" id="Vtu-Le-Eus"/>
+                <outlet property="indicator" destination="Esz-CW-VWf" id="s6L-Nq-EmX"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -18,36 +21,11 @@
                 <view contentMode="scaleToFill" id="WWo-dA-Bvi">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="60"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                    <subviews>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="GPS" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="jGq-b4-aol">
-                            <rect key="frame" x="11" y="35" width="26" height="15"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                            <nil key="highlightedColor"/>
-                        </label>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sig_green.png" id="sbW-1c-qrU">
-                            <rect key="frame" x="39" y="40" width="5" height="5"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        </imageView>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sig_green.png" id="e0c-yY-YD4">
-                            <rect key="frame" x="46" y="40" width="5" height="5"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        </imageView>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sig_green.png" id="nBp-QO-xNb">
-                            <rect key="frame" x="53" y="40" width="5" height="5"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        </imageView>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sig_green.png" id="kLF-u4-2I5">
-                            <rect key="frame" x="60" y="40" width="5" height="5"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        </imageView>
-                    </subviews>
                     <color key="backgroundColor" red="0.094117647058823528" green="0.094117647058823528" blue="0.094117647058823528" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
                 <view contentMode="scaleToFill" id="0x2-nh-Kc4">
                     <rect key="frame" x="0.0" y="423" width="320" height="145"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="2u1-I4-g2y">
                             <rect key="frame" x="33" y="52" width="41" height="41"/>
@@ -73,6 +51,10 @@
                                 <action selector="button_clicked:" destination="-1" eventType="touchUpInside" id="pLm-36-tLj"/>
                             </connections>
                         </button>
+                        <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="white" id="Esz-CW-VWf">
+                            <rect key="frame" x="150" y="63" width="20" height="20"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        </activityIndicatorView>
                     </subviews>
                     <color key="backgroundColor" red="0.094117647060000004" green="0.094117647060000004" blue="0.094117647060000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
@@ -84,7 +66,6 @@
     <resources>
         <image name="cancel_photo.png" width="96" height="96"/>
         <image name="cancel_photo_on.png" width="96" height="96"/>
-        <image name="sig_green.png" width="12" height="12"/>
         <image name="take_photo1.png" width="154" height="154"/>
         <image name="take_photo1_on.png" width="154" height="154"/>
     </resources>

@@ -32,6 +32,20 @@
     NSString *strDate = [dateFormatter stringFromDate:date];
     return strDate;
 }
++ (NSString*)getTimeFromTimestamp_ymd:(long long)timestamp{
+    NSDate *date = [NSDate dateWithTimeIntervalSince1970:timestamp];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy/MM/dd"];
+    NSString *strDate = [dateFormatter stringFromDate:date];
+    return strDate;
+}
++ (NSString*)getTimeFromTimestamp_ms:(long long)timestamp{
+    NSDate *date = [NSDate dateWithTimeIntervalSince1970:timestamp];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"HH:mm"];
+    NSString *strDate = [dateFormatter stringFromDate:date];
+    return strDate;
+}
 + (NSString*)dateStringFromTimeStamp:(long long)timestamp{
     NSDate *date = [NSDate dateWithTimeIntervalSince1970:timestamp];
     NSDateComponents *componets = [[NSCalendar autoupdatingCurrentCalendar] components:NSWeekdayCalendarUnit fromDate:date];
@@ -73,7 +87,12 @@
     int hour = duringSecond/3600;
     int minute = (duringSecond-hour*3600)/60;
     int second = duringSecond%60;
-    return [NSString stringWithFormat:@"%02d:%02d:%02d",hour,minute,second];
+    if(hour > 0){
+        return [NSString stringWithFormat:@"%02d:%02d:%02d",hour,minute,second];
+    }else{
+        return [NSString stringWithFormat:@"%02d:%02d",minute,second];
+    }
+    
 }
 + (NSString*)pspeedStringFromSecond:(int)second{
     if(second < 0){
@@ -127,15 +146,22 @@
         [runSettingDic setObject:@"1" forKey:@"countdown"];
         [runSettingDic setObject:@"1" forKey:@"voice"];
     }
+    return runSettingDic;
+}
+//可以得到targetType、targetDes、targetValue、typeDes、countdown、voice
++ (NSMutableDictionary*)getRunSettingWhole{
+    NSMutableDictionary* runSettingDic = [self getRunSetting];
     int targetType = [[runSettingDic objectForKey:@"targetType"]intValue];
     switch (targetType) {
         case 1:
             [runSettingDic setObject:@"自由" forKey:@"targetDes"];
             [runSettingDic setObject:@"0" forKey:@"targetValue"];
+            [runSettingDic setObject:@"targetType1.png" forKey:@"typeImageName"];
             break;
         case 2:
             [runSettingDic setObject:[NSString stringWithFormat:@"%@km",[runSettingDic objectForKey:@"distance"]] forKey:@"targetDes"];
             [runSettingDic setObject:[NSString stringWithFormat:@"%i",[[runSettingDic objectForKey:@"distance"] intValue]*1000] forKey:@"targetValue"];
+            [runSettingDic setObject:@"targetType2.png" forKey:@"typeImageName"];
             break;
         case 3:
         {
@@ -143,6 +169,7 @@
             NSString* timestr = [CNUtil duringTimeStringFromSecond:second];
             [runSettingDic setObject:timestr forKey:@"targetDes"];
             [runSettingDic setObject:[NSString stringWithFormat:@"%i",[[runSettingDic objectForKey:@"time"]intValue]*60*1000] forKey:@"targetValue"];
+            [runSettingDic setObject:@"targetType3.png" forKey:@"typeImageName"];
             break;
         }
         default:
@@ -152,12 +179,15 @@
     switch (howToMove) {
         case 1:
             [runSettingDic setObject:@"跑步" forKey:@"typeDes"];
+            [runSettingDic setObject:@"howToMove1.png" forKey:@"htmImageName"];
             break;
         case 2:
             [runSettingDic setObject:@"步行" forKey:@"typeDes"];
+            [runSettingDic setObject:@"howToMove2.png" forKey:@"htmImageName"];
             break;
         case 3:
             [runSettingDic setObject:@"自行车骑行" forKey:@"typeDes"];
+            [runSettingDic setObject:@"howToMove3.png" forKey:@"htmImageName"];
             break;
             
         default:
@@ -176,6 +206,18 @@
         [record_dic setObject:@"0" forKey:@"total_score"];
     }
     return record_dic;
+}
++ (NSString*)dayOrNight{
+    NSDate *date = [NSDate dateWithTimeIntervalSince1970:[self getNowTime]];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"HH"];
+    NSString *strDate = [dateFormatter stringFromDate:date];
+    int hour = [strDate intValue];
+    if(hour >= 6 && hour <= 18){
+        return @"d";
+    }else{
+        return @"n";
+    }
 }
 
 @end

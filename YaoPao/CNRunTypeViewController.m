@@ -24,13 +24,18 @@
     }
     return self;
 }
-
+- (void)changeLineOne:(UIView*)line{
+    CGRect frame_new = line.frame;
+    frame_new.size = CGSizeMake(frame_new.size.width, 0.5);
+    line.frame = frame_new;
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    
-    [self.button_back addTarget:self action:@selector(button_blue_down:) forControlEvents:UIControlEventTouchDown];
+    [self changeLineOne:self.view_line1];
+    [self changeLineOne:self.view_line2];
+    [self changeLineOne:self.view_line3];
     NSString* filePath = [CNPersistenceHandler getDocument:@"runSetting.plist"];
     self.runSettingDic = [NSMutableDictionary dictionaryWithContentsOfFile:filePath];
     if(self.runSettingDic == nil){
@@ -44,9 +49,6 @@
     }
     int type = [[runSettingDic objectForKey:@"howToMove"]intValue];
     [self selectType:type];
-}
-- (void)button_blue_down:(id)sender{
-    ((UIButton*)sender).backgroundColor = [UIColor colorWithRed:0 green:88.0/255.0 blue:142.0/255.0 alpha:1];
 }
 - (void)didReceiveMemoryWarning
 {

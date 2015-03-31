@@ -350,6 +350,15 @@
             }
             break;
         }
+        case TAG_WEATHER:
+        {
+            if(isSuccess){
+                [self.delegate_weather weatherDidSuccess:result];
+            }else{
+                [self.delegate_weather weatherDidFailed:desc];
+            }
+            break;
+        }
         
         default:
             break;
@@ -459,6 +468,11 @@
         case TAG_IS_SERVER_NEW:
         {
             [self.delegate_isServerNew isServerNewDidFailed:@""];
+            break;
+        }
+        case TAG_WEATHER:
+        {
+            [self.delegate_weather weatherDidFailed:@""];
             break;
         }
         
@@ -881,6 +895,19 @@
     [self.downloadOneFileRequest setDownloadProgressDelegate:self];
     NSLog(@"下载文件url:%@",str_url);
     [self.downloadOneFileRequest startAsynchronous];
+}
+- (void)doRequest_weather:(double)lon :(double)lat{
+    NSString* str_url = [NSString stringWithFormat:@"http://appservice.yaopao.net/WeatherService/getWeather?lat=%f&lon=%f",lat,lon];
+    NSURL* url = [NSURL URLWithString:str_url];
+    self.weatherRequest =  [ASIHTTPRequest requestWithURL:url];
+    self.weatherRequest.tag = TAG_WEATHER;
+    [self.weatherRequest setNumberOfTimesToRetryOnTimeout:3];
+    [self.weatherRequest setTimeOutSeconds:15];
+    [self.weatherRequest addRequestHeader:@"X-PID" value:kApp.pid];
+    [self.weatherRequest addRequestHeader:@"ua" value:kApp.ua];
+    NSLog(@"天气url:%@",str_url);
+    NSLog(@"天气:参数lon:%f,lat:%f",lon,lat);
+    [[self networkQueue]addOperation:self.weatherRequest];
 }
 - (void)showAlert:(NSString*) content{
     UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:content delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];

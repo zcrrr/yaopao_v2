@@ -7,6 +7,8 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CNImagePreviewViewController">
             <connections>
+                <outlet property="button_rePhoto" destination="5jX-1b-c1E" id="90p-zH-EIK"/>
+                <outlet property="button_save" destination="o5W-hg-GJ1" id="aja-Op-YND"/>
                 <outlet property="imageview" destination="Iz4-jw-BuM" id="0QC-CH-GOh"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -21,7 +23,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="hw8-B0-Kvh">
-                            <rect key="frame" x="9" y="27" width="13" height="21"/>
+                            <rect key="frame" x="6" y="23" width="21" height="29"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" backgroundImage="back_v2.png">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -42,9 +44,9 @@
                 </view>
                 <view contentMode="scaleToFill" id="Y02-xq-5cW">
                     <rect key="frame" x="0.0" y="411" width="320" height="158"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="5jX-1b-c1E">
+                        <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="5jX-1b-c1E">
                             <rect key="frame" x="33" y="58" width="41" height="41"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
@@ -57,7 +59,7 @@
                                 <action selector="button_clicked:" destination="-1" eventType="touchUpInside" id="BSN-3L-C59"/>
                             </connections>
                         </button>
-                        <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="o5W-hg-GJ1">
+                        <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="o5W-hg-GJ1">
                             <rect key="frame" x="246" y="58" width="41" height="41"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
@@ -83,7 +85,7 @@
         </view>
     </objects>
     <resources>
-        <image name="back_v2.png" width="30" height="48"/>
+        <image name="back_v2.png" width="48" height="68"/>
         <image name="cancel_photo.png" width="96" height="96"/>
         <image name="cancel_photo_on.png" width="96" height="96"/>
     </resources>

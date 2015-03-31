@@ -12,6 +12,9 @@
 @interface CNOverlayViewController : UIViewController<UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 @property (strong, nonatomic) UIImagePickerController* cameraPicker;
 @property (strong, nonatomic) CNImagePreviewViewController* imagePreviewVC;
+@property (weak, nonatomic) IBOutlet UIButton *button_takephoto;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *indicator;
 - (IBAction)button_clicked:(id)sender;
+@property (weak, nonatomic) IBOutlet UIButton *button_cancel;
 
 @end

@@ -15,10 +15,16 @@
 
 @implementation CNImagePreviewViewController
 NSMutableArray* imageArray;
+@synthesize cameraPicker;
+@synthesize image;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    if(!iPhone5){//4、4s
+        self.button_rePhoto.frame = CGRectMake(33, 14, 41, 41);
+        self.button_save.frame = CGRectMake(246, 14, 41, 41);
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -28,6 +34,10 @@ NSMutableArray* imageArray;
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     self.imageview.image = self.image;
+    float image_width = self.image.size.width;
+    float image_height = self.image.size.height;
+    NSLog(@"image_width is %f",image_width);
+    NSLog(@"image_height is %f",image_height);
 }
 /*
 #pragma mark - Navigation
@@ -43,10 +53,15 @@ NSMutableArray* imageArray;
     switch ([sender tag]) {
         case 0:
         {
-            [self.navigationController popViewControllerAnimated:YES];
+            [self.cameraPicker dismissViewControllerAnimated:YES completion:nil];
             break;
         }
         case 1:
+        {
+            [self.navigationController popViewControllerAnimated:YES];
+            break;
+        }
+        case 2:
         {
             UIImageWriteToSavedPhotosAlbum(self.image, self, @selector(image:didFinishSavingWithError:contextInfo:), NULL);
             extern NSMutableArray* imageArray;
@@ -56,6 +71,7 @@ NSMutableArray* imageArray;
             [imageArray addObject:self.image];
             break;
         }
+            
         default:
             break;
     }
@@ -68,6 +84,6 @@ NSMutableArray* imageArray;
         msg = @"保存图片成功" ;
     }
     [kApp.window makeToast:msg duration:1 position:nil];
-    [self.navigationController popViewControllerAnimated:YES];
+    [self.cameraPicker dismissViewControllerAnimated:YES completion:nil];
 }
 @end

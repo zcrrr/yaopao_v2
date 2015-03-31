@@ -9,10 +9,12 @@
 #import <UIKit/UIKit.h>
 #import "RunClass.h"
 #import <MAMapKit/MAMapKit.h>
+@class CNCustomButton;
 
-@interface CNRecordDetailViewController : UIViewController<MAMapViewDelegate,UITextFieldDelegate>
+@interface CNRecordDetailViewController : UIViewController<MAMapViewDelegate,UITextFieldDelegate,UIScrollViewDelegate>
 
 @property (nonatomic, strong) MAMapView *mapView;
+@property (assign, nonatomic) int currentpage;
 @property (strong ,nonatomic) RunClass* oneRun;
 @property (strong, nonatomic) IBOutlet UILabel *label_title;
 - (IBAction)button_back_clicked:(id)sender;
@@ -34,7 +36,11 @@
 @property (strong, nonatomic) IBOutlet UIImageView *image_way;
 @property (strong, nonatomic) IBOutlet UILabel *label_feel;
 - (IBAction)button_gotoMap_clicked:(id)sender;
-@property (strong, nonatomic) IBOutlet UIButton *button_back;
-@property (strong, nonatomic) IBOutlet UIButton *button_share;
+@property (strong, nonatomic) IBOutlet CNCustomButton *button_back;
+@property (strong, nonatomic) IBOutlet CNCustomButton *button_share;
+@property (weak, nonatomic) IBOutlet UIButton *button_left;
+@property (weak, nonatomic) IBOutlet UIButton *button_right;
+- (IBAction)button_left_clicked:(id)sender;
+- (IBAction)button_right_clicked:(id)sender;
 
 @end

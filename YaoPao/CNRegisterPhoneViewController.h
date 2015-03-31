@@ -13,6 +13,7 @@
 @property (strong, nonatomic) NSTimer* timer;
 @property (assign, nonatomic) int count;
 @property (assign, nonatomic) BOOL isVerify;
+@property (strong, nonatomic) NSString* areaCode;
 @property (assign, nonatomic) int agree;
 @property (strong, nonatomic) IBOutlet UITextField *textfield_phone;
 @property (strong, nonatomic) IBOutlet UITextField *textfield_pwd;
@@ -20,13 +21,11 @@
 @property (strong, nonatomic) IBOutlet UIButton *button_back;
 @property (strong, nonatomic) IBOutlet UIButton *button_vcode;
 @property (strong, nonatomic) IBOutlet UIButton *button_reg;
-@property (strong, nonatomic) IBOutlet UIButton *button_goLogin;
-@property (strong, nonatomic) IBOutlet UILabel *label_goLogin;
-@property (strong, nonatomic) IBOutlet UILabel *label_code;
+@property (strong, nonatomic) IBOutlet UILabel *label_country;
 
 @property (strong, nonatomic) IBOutlet UIActivityIndicatorView *indicator;
-@property (strong, nonatomic) IBOutlet UILabel *label_countryandarea;
-@property (strong, nonatomic) IBOutlet UILabel *label_country;
+@property (weak, nonatomic) IBOutlet UIView *view_country;
+
 @property (strong, nonatomic) IBOutlet UIButton *button_country;
 @property (strong, nonatomic) IBOutlet UIImageView *loadingImage;
 - (IBAction)view_touched:(id)sender;

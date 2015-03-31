@@ -24,6 +24,7 @@
 @synthesize timer;
 @synthesize count;
 @synthesize isVerify;
+@synthesize areaCode;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -42,11 +43,11 @@
     self.textfield_phone.delegate = self;
     self.textfield_vcode.delegate = self;
     self.agree = 1;
-    [self.button_back addTarget:self action:@selector(button_blue_down:) forControlEvents:UIControlEventTouchDown];
-    [self.button_reg addTarget:self action:@selector(button_green_down:) forControlEvents:UIControlEventTouchDown];
-    [self.button_vcode addTarget:self action:@selector(button_green_down:) forControlEvents:UIControlEventTouchDown];
-    [self.button_country addTarget:self action:@selector(button_white_down:) forControlEvents:UIControlEventTouchDown];
-    
+    [self.button_country addTarget:self action:@selector(changeViewColor:) forControlEvents:UIControlEventTouchDown];
+    self.areaCode = @"86";
+}
+- (void)changeViewColor:(id)sender{
+    self.view_country.backgroundColor = [UIColor lightGrayColor];
 }
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
@@ -63,16 +64,7 @@
     [super viewWillDisappear:animated];
     [kApp removeObserver:self forKeyPath:@"vcodeSecond"];
 }
-- (void)button_blue_down:(id)sender{
-    ((UIButton*)sender).backgroundColor = [UIColor colorWithRed:0 green:88.0/255.0 blue:142.0/255.0 alpha:1];
-}
-- (void)button_green_down:(id)sender{
-    ((UIButton*)sender).backgroundColor = [UIColor colorWithRed:111.0/255.0 green:150.0/255.0 blue:26.0/255.0 alpha:1];
-}
-- (void)button_white_down:(id)sender{
-    self.label_country.backgroundColor = [UIColor colorWithRed:229.0/255.0 green:229.0/255.0 blue:229.0/255.0 alpha:1];
-    self.label_countryandarea.backgroundColor = [UIColor colorWithRed:229.0/255.0 green:229.0/255.0 blue:229.0/255.0 alpha:1];
-}
+
 
 - (void)didReceiveMemoryWarning
 {
@@ -93,29 +85,21 @@
 - (IBAction)button_checkbox_clicked:(id)sender {
     if(self.agree == 0){
         self.agree = 1;
-        [self.button_checkbox setBackgroundImage:[UIImage imageNamed:@"checkbox_selected.png"] forState:UIControlStateNormal];
+        [self.button_checkbox setBackgroundImage:[UIImage imageNamed:@"check.png"] forState:UIControlStateNormal];
     }else{
         self.agree = 0;
-        [self.button_checkbox setBackgroundImage:[UIImage imageNamed:@"checkbox.png"] forState:UIControlStateNormal];
+        [self.button_checkbox setBackgroundImage:[UIImage imageNamed:@"uncheck.png"] forState:UIControlStateNormal];
     }
 }
 - (void)countdown{
-//    [self.button_vcode setTitle:[NSString stringWithFormat:@"%i",self.count] forState:UIControlStateNormal];
-//    self.count -- ;
-//    if(self.count == 0){
-//        [self.timer invalidate];
-//        [self.button_vcode setTitle:@"获取验证码" forState:UIControlStateNormal];
-//        self.button_vcode.userInteractionEnabled = YES;
-//    }
     kApp.vcodeSecond -- ;
     if(kApp.vcodeSecond == 0){
         [kApp.vcodeTimer invalidate];
     }
 }
 - (void)getVCode{
-    NSString* str2=[self.label_code.text stringByReplacingOccurrencesOfString:@"+" withString:@""];
-    NSLog(@"code is %@",str2);
-    [SMS_SDK getVerifyCodeByPhoneNumber:self.textfield_phone.text AndZone:str2 result:^(enum SMS_GetVerifyCodeResponseState state) {
+    NSLog(@"code is %@",self.areaCode);
+    [SMS_SDK getVerifyCodeByPhoneNumber:self.textfield_phone.text AndZone:self.areaCode result:^(enum SMS_GetVerifyCodeResponseState state) {
         [self hideLoading];
         if (1==state) {
             NSLog(@"block 获取验证码成功");
@@ -173,14 +157,12 @@
 - (IBAction)button_clicked:(id)sender {
     switch ([sender tag]) {
         case 0:{
-            self.button_back.backgroundColor = [UIColor clearColor];
             [self.navigationController popViewControllerAnimated:YES];
             break;
         }
         case 1:
         {
             //获取验证码
-            self.button_vcode.backgroundColor = [UIColor colorWithRed:143.0/255.0 green:195.0/255.0 blue:31.0/255.0 alpha:1];
             if ([self checkPhoneNO]) {
                 NSLog(@"获取验证码");
 //                [kApp.networkHandler doRequest_verifyCode:self.textfield_phone.text];
@@ -192,7 +174,6 @@
         case 2:
         {
             [self resignAllText];
-            self.button_reg.backgroundColor = [UIColor colorWithRed:143.0/255.0 green:195.0/255.0 blue:31.0/255.0 alpha:1];
             if([self checkPhoneNO]){
                 if([self checkPwd]){
                     if ([self checkVcode]) {
@@ -221,12 +202,6 @@
         }
         case 3:
         {
-            CNLoginPhoneViewController* loginVC = [[CNLoginPhoneViewController alloc]init];
-            [self.navigationController pushViewController:loginVC animated:YES];
-            break;
-        }
-        case 4:
-        {
             CNServiceViewController* serviceVC = [[CNServiceViewController alloc]init];
             [self.navigationController pushViewController:serviceVC animated:YES];
             break;
@@ -238,8 +213,7 @@
 
 
 - (IBAction)button_country_clicked:(id)sender {
-    self.label_country.backgroundColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:1];
-    self.label_countryandarea.backgroundColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:1];
+    self.view_country.backgroundColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:1];
     [SMS_SDK getZone:^(enum SMS_ResponseState state, NSArray *array) {
         if (1==state)
         {
@@ -263,7 +237,7 @@
 #pragma mark - SecondViewControllerDelegate的方法
 - (void)setSecondData:(CountryAndAreaCode *)data {
     NSLog(@"从Second传过来的数据：%@,%@", data.areaCode,data.countryName);
-    self.label_code.text = [NSString stringWithFormat:@"+%@",data.areaCode];
+    self.areaCode = data.areaCode;
     self.label_country.text = [NSString stringWithFormat:@"%@",data.countryName];
 }
 

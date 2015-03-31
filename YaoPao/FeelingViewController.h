@@ -7,12 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <AdobeCreativeSDKImage/AdobeCreativeSDKImage.h>
+#import "WaterMarkViewController.h"
 @class CNCustomButton;
 @class CNOverlayViewController;
-@interface FeelingViewController : UIViewController<UITextFieldDelegate,UIScrollViewDelegate>
+@class AdobeUXImageEditorViewController;
+@interface FeelingViewController : UIViewController<UITextFieldDelegate,UIScrollViewDelegate,AdobeUXImageEditorViewControllerDelegate,addWaternDelegate>
 @property (assign, nonatomic) int currentpage;
 @property (strong, nonatomic) UIImagePickerController* cameraPicker;
 @property (strong, nonatomic) CNOverlayViewController* overlayVC;
+@property (strong, nonatomic) AdobeUXImageEditorViewController *editorController;
 @property (weak, nonatomic) IBOutlet UILabel *label_title;
 @property (weak, nonatomic) IBOutlet CNCustomButton *button_delete;
 @property (weak, nonatomic) IBOutlet CNCustomButton *button_save;
@@ -20,6 +24,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *button_right;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollview;
 @property (weak, nonatomic) IBOutlet UILabel *label_whichpage;
+@property (weak, nonatomic) IBOutlet UIImageView *imageview_page;
 @property (weak, nonatomic) IBOutlet UIButton *button_mood1;
 @property (weak, nonatomic) IBOutlet UIButton *button_mood2;
 @property (weak, nonatomic) IBOutlet UIButton *button_mood3;
@@ -34,5 +39,12 @@
 - (IBAction)button_clicked:(id)sender;
 - (IBAction)button_mood_clicked:(id)sender;
 - (IBAction)button_way_clicked:(id)sender;
+@property (weak, nonatomic) IBOutlet UIView *view_bottom;
+@property (weak, nonatomic) IBOutlet UIView *view_part1;
+@property (weak, nonatomic) IBOutlet UIView *view_part2;
+@property (weak, nonatomic) IBOutlet UIButton *button_deleteImage;
+@property (weak, nonatomic) IBOutlet UIButton *button_edit;
+@property (weak, nonatomic) IBOutlet UIImageView *imageview_nophoto;
+@property (weak, nonatomic) IBOutlet UIView *view_middle;
 
 @end

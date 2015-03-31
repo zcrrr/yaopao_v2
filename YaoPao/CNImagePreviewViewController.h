@@ -9,8 +9,11 @@
 #import <UIKit/UIKit.h>
 
 @interface CNImagePreviewViewController : UIViewController
+@property (strong, nonatomic) UIImagePickerController* cameraPicker;
 @property (strong, nonatomic) UIImage* image;
 - (IBAction)button_clicked:(id)sender;
 @property (weak, nonatomic) IBOutlet UIImageView *imageview;
+@property (weak, nonatomic) IBOutlet UIButton *button_rePhoto;
+@property (weak, nonatomic) IBOutlet UIButton *button_save;
 
 @end

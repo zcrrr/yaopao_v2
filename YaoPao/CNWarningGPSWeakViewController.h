@@ -11,5 +11,6 @@
 @interface CNWarningGPSWeakViewController : UIViewController
 - (IBAction)button_back_clicked:(id)sender;
 @property (strong, nonatomic) IBOutlet UIButton *button_back;
+@property (weak, nonatomic) IBOutlet UIView *view_pop;
 
 @end

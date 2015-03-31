@@ -180,7 +180,7 @@
         </view>
     </objects>
     <resources>
-        <image name="logo.png" width="120" height="120"/>
+        <image name="logo.png" width="150" height="150"/>
         <image name="runtype_run.png" width="110" height="110"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

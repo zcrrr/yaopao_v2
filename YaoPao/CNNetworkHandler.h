@@ -160,6 +160,12 @@
 - (void)downloadOneFileDidFailed:(NSString*)mes;
 @end
 
+@protocol weatherDelegate<NSObject>
+//下载记录
+- (void)weatherDidSuccess:(NSDictionary*)resultDic;
+- (void)weatherDidFailed:(NSString*)mes;
+@end
+
 
 
 @interface CNNetworkHandler : NSObject<ASIProgressDelegate,ASIHTTPRequestDelegate>
@@ -198,6 +204,7 @@
 @property (nonatomic, strong) id<uploadRecordDelegate> delegate_uploadRecord;
 @property (nonatomic, strong) id<downloadRecordDelegate> delegate_downloadRecord;
 @property (nonatomic, strong) id<downloadOneFileDelegate> delegate_downloadOneFile;
+@property (nonatomic, strong) id<weatherDelegate> delegate_weather;
 
 //定义每个请求的request
 @property (nonatomic, strong) ASIFormDataRequest* verifyCodeRequest;
@@ -225,6 +232,7 @@
 @property (nonatomic, strong) ASIFormDataRequest* uploadRecordRequest;
 @property (nonatomic, strong) ASIFormDataRequest* downloadRecordRequest;
 @property (nonatomic, strong) ASIHTTPRequest* downloadOneFileRequest;
+@property (nonatomic, strong) ASIHTTPRequest* weatherRequest;
 //每个请求的实现
 - (void)doRequest_verifyCode:(NSString*)phoneNO;
 - (void)doRequest_registerPhone:(NSMutableDictionary*)params;
@@ -251,5 +259,6 @@
 - (void)doRequest_uploadRecord:(NSMutableDictionary*)params;
 - (void)doRequest_downloadRecord:(NSMutableDictionary*)params;
 - (void)doRequest_downloadOneFile:(NSString*)str_url;
+- (void)doRequest_weather:(double)lon :(double)lat;
 
 @end

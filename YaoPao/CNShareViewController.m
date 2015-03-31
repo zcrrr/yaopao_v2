@@ -16,6 +16,9 @@
 #import "UIImage+Rescale.h"
 #import "CNRunManager.h"
 #import "CNMapImageAnnotationView.h"
+#import "CNCustomButton.h"
+#import "ColorValue.h"
+#import "OnlyTrackView.h"
 
 @interface CNShareViewController ()
 
@@ -24,7 +27,8 @@
 @implementation CNShareViewController
 @synthesize mapView;
 @synthesize oneRun;
-
+@synthesize currentpage;
+extern NSMutableArray* imageArray;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -38,21 +42,39 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    [self.button_jump addTarget:self action:@selector(button_blue_down:) forControlEvents:UIControlEventTouchDown];
-    [self.button_share addTarget:self action:@selector(button_green_down:) forControlEvents:UIControlEventTouchDown];
-    self.mapView=[[MAMapView alloc] initWithFrame:CGRectMake(0, 0, 300, 150)];
+    if(!iPhone5){//4、4s
+        self.view_shareview.frame = CGRectMake(0, 55, 320, 385);
+        self.scrollview.frame = CGRectMake(0, 46, 320, 255);
+        self.view_map_container.frame = CGRectMake(0, 0, 320, 235);
+        self.imageview_trackonly.frame = CGRectMake(320, 0, 320, 235);
+        self.view_onlytrack.frame = CGRectMake(320, 0, 320, 235);
+    }
+    [self.button_jump fillColor:kClear :kClear :kWhite :kWhiteHalfAlpha];
+    self.mapView=[[MAMapView alloc] initWithFrame:CGRectMake(0, 0, self.view_map_container.bounds.size.width, self.view_map_container.bounds.size.height)];
     self.mapView.delegate = self;
     self.mapView.showsCompass = NO;
     self.mapView.showsScale = NO;
     self.mapView.zoomEnabled = NO;
     self.mapView.scrollEnabled = NO;
     [self.view_map_container addSubview:self.mapView];
-//    [self.view_map_container sendSubviewToBack:self.mapView];
-    
+    [self.view_map_container sendSubviewToBack:self.mapView];
     NSData* imageData = kApp.imageData;
     if(imageData){
         self.imageview_avatar.image = [[UIImage alloc] initWithData:imageData];
     }
+    //照片
+    self.scrollview.delegate = self;
+    self.scrollview.showsHorizontalScrollIndicator=NO; //不显示水平滑动线
+    self.scrollview.showsVerticalScrollIndicator=NO;//不显示垂直滑动线
+    self.scrollview.pagingEnabled=YES;
+    self.scrollview.contentSize = CGSizeMake((320*([imageArray count]+2)), self.scrollview.bounds.size.height);
+    for (int i = 0; i < [imageArray count] ; i++){
+        UIImageView* imageview = [[UIImageView alloc]initWithFrame:CGRectMake((i+2)*320, 0, 320, self.scrollview.bounds.size.height)];
+        imageview.contentMode = UIViewContentModeScaleAspectFill;
+        imageview.image = (UIImage*)[imageArray objectAtIndex:i];
+        [self.scrollview addSubview:imageview];
+    }
+    self.label_whichpage.text = [NSString stringWithFormat:@"%i/%i",1,(int)[imageArray count]+2];
     if([self.dataSource isEqualToString:@"this"]){
         int type = kApp.runManager.howToMove;
         NSString* typeDes = @"";
@@ -79,7 +101,7 @@
         self.label_feel.text = kApp.runManager.remark;
         self.label_time.text = [CNUtil duringTimeStringFromSecond:[kApp.runManager during]/1000];
         self.label_pspeed.text = [CNUtil pspeedStringFromSecond:kApp.runManager.secondPerKm];
-        self.label_hspeed.text = [NSString stringWithFormat:@"+%i",kApp.runManager.score];
+        self.label_score.text = [NSString stringWithFormat:@"+%i",kApp.runManager.score];
         int mood = kApp.runManager.feeling;
         NSString* img_name_mood = [NSString stringWithFormat:@"mood%i_h.png",mood];
         self.image_mood.image = [UIImage imageNamed:img_name_mood];
@@ -87,7 +109,14 @@
         int way = kApp.runManager.runway;
         NSString* img_name_way = [NSString stringWithFormat:@"way%i_h.png",way];
         self.image_way.image = [UIImage imageNamed:img_name_way];
-        self.button_jump.titleLabel.text = @"跳过";
+        [self.button_jump setTitle:@"跳过" forState:UIControlStateNormal];
+        
+        self.label_dis_map1.text = [NSString stringWithFormat:@"%0.1f",kApp.runManager.distance/1000.0];
+        self.label_date_map1.text = [CNUtil getTimeFromTimestamp_ymd:[CNUtil getNowTime]];
+        self.label_time_map1.text = [CNUtil getTimeFromTimestamp_ms:[CNUtil getNowTime]];
+        self.label_dis_map2.text = [NSString stringWithFormat:@"%0.1f",kApp.runManager.distance/1000.0];
+        self.label_date_map2.text = [CNUtil getTimeFromTimestamp_ymd:[CNUtil getNowTime]];
+        self.label_time_map2.text = [CNUtil getTimeFromTimestamp_ms:[CNUtil getNowTime]];
     }else{
         int type = [self.oneRun.howToMove intValue];
         NSString* typeDes = @"";
@@ -114,15 +143,31 @@
         self.label_feel.text = oneRun.remark;
         self.label_time.text = [CNUtil duringTimeStringFromSecond:[oneRun.duration intValue]/1000];
         self.label_pspeed.text = [CNUtil pspeedStringFromSecond:[oneRun.secondPerKm intValue]];
-        self.label_hspeed.text = [NSString stringWithFormat:@"+%i",[oneRun.score intValue]];
+        self.label_score.text = [NSString stringWithFormat:@"+%i",[oneRun.score intValue]];
         int mood = [oneRun.feeling intValue];
-        NSString* img_name_mood = [NSString stringWithFormat:@"mood%i_h.png",mood];
+        NSString* img_name_mood = [NSString stringWithFormat:@"mood%i.png",mood];
         self.image_mood.image = [UIImage imageNamed:img_name_mood];
         
         int way = [oneRun.runway intValue];
-        NSString* img_name_way = [NSString stringWithFormat:@"way%i_h.png",way];
+        NSString* img_name_way = [NSString stringWithFormat:@"way%i.png",way];
         self.image_way.image = [UIImage imageNamed:img_name_way];
-        self.button_jump.titleLabel.text = @"返回";
+        [self.button_jump setTitle:@"跳过" forState:UIControlStateNormal];
+        self.label_dis_map1.text = [NSString stringWithFormat:@"%0.1f",[oneRun.distance doubleValue]/1000.0];
+        self.label_date_map1.text = [CNUtil getTimeFromTimestamp_ymd:[oneRun.rid longLongValue]/1000];
+        self.label_time_map1.text = [CNUtil getTimeFromTimestamp_ms:[oneRun.rid longLongValue]/1000];
+        
+        self.label_dis_map2.text = [NSString stringWithFormat:@"%0.1f",[oneRun.distance doubleValue]/1000.0];
+        self.label_date_map2.text = [CNUtil getTimeFromTimestamp_ymd:[oneRun.rid longLongValue]/1000];
+        self.label_time_map2.text = [CNUtil getTimeFromTimestamp_ms:[oneRun.rid longLongValue]/1000];
+        
+        
+    }
+}
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
+    if(scrollView==self.scrollview){
+        CGPoint offset = scrollView.contentOffset;
+        self.currentpage = offset.x/320; //计算当前的页码
+        self.label_whichpage.text = [NSString stringWithFormat:@"%i/%i",self.currentpage+1,(int)[imageArray count]+2];
     }
 }
 - (void)viewDidAppear:(BOOL)animated{
@@ -135,25 +180,18 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-- (void)button_blue_down:(id)sender{
-    ((UIButton*)sender).backgroundColor = [UIColor colorWithRed:0 green:88.0/255.0 blue:142.0/255.0 alpha:1];
-}
-- (void)button_green_down:(id)sender{
-    ((UIButton*)sender).backgroundColor = [UIColor colorWithRed:111.0/255.0 green:150.0/255.0 blue:26.0/255.0 alpha:1];
-}
 - (IBAction)button_jump_clicked:(id)sender {
-    self.button_jump.backgroundColor = [UIColor clearColor];
     if([self.dataSource isEqualToString:@"this"]){
-        CNRunRecordViewController* recordVC = [[CNRunRecordViewController alloc]init];
-        [self.navigationController pushViewController:recordVC animated:YES];
+        [self.navigationController popToRootViewControllerAnimated:NO];
+        [kApp showTab:1];
+        NSString* NOTIFICATION_REFRESH = @"REFRESH";
+        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_REFRESH object:nil];
     }else{
         [self.navigationController popViewControllerAnimated:YES];
     }
-    
 }
 - (IBAction)button_share_clicked:(id)sender {
     NSLog(@"share");
-    self.button_share.backgroundColor = [UIColor colorWithRed:143.0/255.0 green:195.0/255.0 blue:31.0/255.0 alpha:1];
     [self sharetest];
 }
 - (void)drawRunTrack{
@@ -161,6 +199,7 @@
     int i = 0;
     int n = 0;
     int pointCount = [kApp.runManager.GPSList count];
+    
     
     //画起点和终点
     CNGPSPoint* startPoint = [kApp.runManager.GPSList firstObject];
@@ -270,6 +309,19 @@
     MACoordinateSpan span = MACoordinateSpanMake(max_lat-min_lat+0.005, max_lon-min_lon+0.01);
     MACoordinateRegion region = MACoordinateRegionMake(center, span);
     [self.mapView setRegion:region animated:NO];
+    
+    //水印
+    NSMutableArray* trackpoints = [[NSMutableArray alloc]init];
+    for(i=0;i<pointCount;i++){
+        CNGPSPoint* gpsPoint = [kApp.runManager.GPSList objectAtIndex:i];
+        CLLocationCoordinate2D wgs84Point = CLLocationCoordinate2DMake(gpsPoint.lat, gpsPoint.lon);
+        CLLocationCoordinate2D encryptionPoint = [CNEncryption encrypt:wgs84Point];
+        //计算经纬度转屏幕坐标后的坐标
+        [trackpoints addObject:[NSValue valueWithCGPoint:[self.mapView convertCoordinate:encryptionPoint toPointToView:self.view_map_container]]];
+    }
+    self.view_onlytrack.pointArray = trackpoints;
+    self.view_onlytrack.color = @"green";
+    [self.view_onlytrack setNeedsDisplay];
 }
 - (MAOverlayView *)mapView:(MAMapView *)mapView viewForOverlay:(id)overlay
 {
@@ -306,8 +358,8 @@
             {
                 annotationView = [[CNMapImageAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:mapImageIndetifier];
                 // must set to NO, so we can show the custom callout view.
-                annotationView.draggable = YES;
-                annotationView.centerOffset = CGPointMake(0,-15);
+//                annotationView.draggable = YES;
+//                annotationView.centerOffset = CGPointMake(0,-15);
             }
             NSLog(@"title is %@",title);
             annotationView.type = title;
@@ -343,8 +395,10 @@
 }
 - (UIImage *)getWeiboImage{
     UIImage* image_background = [self snapshot:self.view_shareview];
-    CGRect inRect = CGRectMake(0,0,300,300);
-    UIImage *image_map = [self.mapView takeSnapshotInRect:inRect];
+    if(self.currentpage != 0){//不是第一页
+        return image_background;
+    }
+    UIImage *image_map = [self.mapView takeSnapshotInRect:self.view_map_container.frame];
     UIImage* image_combine = [self addImage:image_map toImage:image_background];
     return image_combine;
 }
@@ -363,9 +417,9 @@
     
     //Draw image2
     [image2 drawInRect:CGRectMake(0, 0, image2.size.width, image2.size.height)];
-    
+    NSLog(@"y is %f",self.scrollview.frame.origin.y);
     //Draw image1
-    [image1 drawInRect:CGRectMake(0, 60, image1.size.width, image1.size.height)];
+    [image1 drawInRect:CGRectMake(0, self.scrollview.frame.origin.y, image1.size.width, image1.size.height)];
     
     UIImage *resultImage=UIGraphicsGetImageFromCurrentImageContext();
     

@@ -13,9 +13,11 @@
 
 @property (strong, nonatomic) IBOutlet UIImageView* image_type;
 @property (strong, nonatomic) IBOutlet UILabel* label_date;
+@property (weak, nonatomic) IBOutlet UILabel *label_dis;
 @property (strong, nonatomic) IBOutlet UIImageView* image_mood;
 @property (strong, nonatomic) IBOutlet UIImageView* image_way;
 @property (strong, nonatomic) IBOutlet UIImageView* image_photo;
+@property (weak, nonatomic) IBOutlet UIImageView *image_weather;
 @property (strong, nonatomic) IBOutlet UILabel* label_pspeed;
 @property (strong, nonatomic) IBOutlet UILabel* label_during;
 @end

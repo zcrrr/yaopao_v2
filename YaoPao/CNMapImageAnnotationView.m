@@ -45,8 +45,8 @@
     
     if (self)
     {
-        self.bounds = CGRectMake(0, 0, 60, 60);
-        self.imageview = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 60, 60)];
+        self.bounds = CGRectMake(0, 0, 20, 20);
+        self.imageview = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 20, 20)];
         [self addSubview:self.imageview];
     }
     return self;

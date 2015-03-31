@@ -55,5 +55,8 @@
 
 - (IBAction)button_clicked:(id)sender;
 
+@property (weak, nonatomic) IBOutlet UIView *view_middle;
+@property (weak, nonatomic) IBOutlet UIButton *button_takephoto;
+@property (weak, nonatomic) IBOutlet UIButton *button_map;
 
 @end

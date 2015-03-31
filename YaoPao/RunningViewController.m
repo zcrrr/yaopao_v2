@@ -39,6 +39,7 @@
 @synthesize play5munite;
 @synthesize cameraPicker;
 @synthesize overlayVC;
+extern NSMutableArray* imageArray;
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
@@ -64,6 +65,7 @@
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
+    imageArray = nil;
     // Do any additional setup after loading the view from its nib.
     //启动runmanager跑步
     [kApp.runManager startRun];
@@ -95,6 +97,11 @@
         self.label_during_small.hidden = YES;
     }
     kApp.timer_playVoice = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(checkPlayVoice) userInfo:nil repeats:YES];
+    if(!iPhone5){//4、4s
+        self.view_middle.frame = CGRectMake(0, 270, 320, 44);
+        self.button_takephoto.frame = CGRectMake(72, 350, 65, 65);
+        self.button_map.frame = CGRectMake(183, 350, 65, 65);
+    }
 }
 - (void)checkPlayVoice{
     int distance = kApp.runManager.distance;
@@ -144,6 +151,9 @@
             self.view_circle.progress = kApp.runManager.completePercent;
             [self.view_circle setNeedsDisplay];
         }
+        if(duringMiliSecond > 60*60*1000){//超过一个小时
+            [self.label_during_big setFont:[UIFont systemFontOfSize:36]];
+        }
         self.label_during_big.text = [CNUtil duringTimeStringFromSecond:duringMiliSecond/1000];
     }else{
         self.label_during_small.text = [CNUtil duringTimeStringFromSecond:duringMiliSecond/1000];
@@ -174,7 +184,7 @@
         case 1:
         {
             NSLog(@"地图");
-            //    kApp.isInChina = NO;
+//            kApp.isInChina = NO;
             if(kApp.isInChina){
                 CNRunMapViewController* mapVC = [[CNRunMapViewController alloc]init];
                 [self.navigationController pushViewController:mapVC animated:YES];

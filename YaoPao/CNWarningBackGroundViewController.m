@@ -29,10 +29,9 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     [self.view setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.5]];
-    [self.button_back addTarget:self action:@selector(button_green_down:) forControlEvents:UIControlEventTouchDown];
-}
-- (void)button_green_down:(id)sender{
-    ((UIButton*)sender).backgroundColor = [UIColor colorWithRed:111.0/255.0 green:150.0/255.0 blue:26.0/255.0 alpha:1];
+    self.view_pop.layer.cornerRadius = 4;
+    self.button_back.layer.cornerRadius = 4;
+    self.button_how.layer.cornerRadius = 4;
 }
 - (void)didReceiveMemoryWarning
 {
@@ -52,7 +51,6 @@
 }
 
 - (IBAction)button_back_clicked:(id)sender {
-    self.button_back.backgroundColor = [UIColor colorWithRed:143.0/255.0 green:195.0/255.0 blue:31.0/255.0 alpha:1];
     [self dismissViewControllerAnimated:YES completion:^(void){NSLog(@"close");}];
 }
 @end

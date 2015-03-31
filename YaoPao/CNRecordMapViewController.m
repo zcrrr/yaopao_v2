@@ -16,6 +16,8 @@
 #import "CNGPSPoint4Match.h"
 #import "CNRunManager.h"
 #import "OneKMInfo.h"
+#import "CNCustomButton.h"
+#import "ColorValue.h"
 #define kPopInterval 1000
 
 @interface CNRecordMapViewController ()
@@ -41,7 +43,7 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    [self.button_back addTarget:self action:@selector(button_blue_down:) forControlEvents:UIControlEventTouchDown];
+    [self.button_back fillColor:kClear :kClear :kWhite :kWhiteHalfAlpha];
     self.mapView=[[MAMapView alloc] initWithFrame:CGRectMake(0, 0, 320, 468)];
     self.mapView.delegate = self;
     self.mapView.showsCompass = NO;
@@ -67,16 +69,12 @@
         [self drawMatchTrack];
     }
 }
-- (void)button_blue_down:(id)sender{
-    ((UIButton*)sender).backgroundColor = [UIColor colorWithRed:0 green:88.0/255.0 blue:142.0/255.0 alpha:1];
-}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 - (IBAction)button_back_clicked:(id)sender {
-    self.button_back.backgroundColor = [UIColor clearColor];
     [self.navigationController popViewControllerAnimated:YES];
 }
 - (void)initUI{
@@ -99,19 +97,19 @@
         case 1:
         {
             typeDes = @"跑步";
-            self.image_type.image = [UIImage imageNamed:@"runtype_run.png"];
+            self.image_type.image = [UIImage imageNamed:@"howToMove1.png"];
             break;
         }
         case 2:
         {
             typeDes = @"步行";
-            self.image_type.image = [UIImage imageNamed:@"runtype_walk.png"];
+            self.image_type.image = [UIImage imageNamed:@"howToMove2.png"];
             break;
         }
         case 3:
         {
             typeDes = @"自行车骑行";
-            self.image_type.image = [UIImage imageNamed:@"runtype_ride.png"];
+            self.image_type.image = [UIImage imageNamed:@"howToMove3.png"];
             break;
         }
         default:
@@ -291,8 +289,8 @@
             {
                 annotationView = [[CNMapImageAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:mapImageIndetifier];
                 // must set to NO, so we can show the custom callout view.
-                annotationView.draggable = YES;
-                annotationView.centerOffset = CGPointMake(0,-15);
+//                annotationView.draggable = YES;
+//                annotationView.centerOffset = CGPointMake(0,-15);
             }
             NSLog(@"title is %@",title);
             annotationView.type = title;

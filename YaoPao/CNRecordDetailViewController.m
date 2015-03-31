@@ -20,6 +20,8 @@
 #import "BinaryIOManager.h"
 #import "CNRunManager.h"
 #import "CNCloudRecord.h"
+#import "CNCustomButton.h"
+#import "ColorValue.h"
 
 @interface CNRecordDetailViewController ()
 
@@ -28,6 +30,8 @@
 @implementation CNRecordDetailViewController
 @synthesize oneRun;
 @synthesize mapView;
+@synthesize currentpage;
+extern NSMutableArray* imageArray;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -42,9 +46,9 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    [self.button_back addTarget:self action:@selector(button_blue_down:) forControlEvents:UIControlEventTouchDown];
-    [self.button_share addTarget:self action:@selector(button_blue_down:) forControlEvents:UIControlEventTouchDown];
-    self.mapView=[[MAMapView alloc] initWithFrame:CGRectMake(0, 0, 320, 250)];
+    [self.button_back fillColor:kClear :kClear :kWhite :kWhiteHalfAlpha];
+    [self.button_share fillColor:kClear :kClear :kWhite :kWhiteHalfAlpha];
+    self.mapView=[[MAMapView alloc] initWithFrame:CGRectMake(0, 0, 320, 320)];
     self.mapView.delegate = self;
     self.mapView.showsCompass = NO;
     self.mapView.showsScale = NO;
@@ -54,6 +58,30 @@
     [self.view_map_container sendSubviewToBack:self.mapView];
     self.textfield_remark.delegate = self;
     [self initUI];
+}
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
+    if(scrollView==self.scrollview){
+        CGPoint offset = scrollView.contentOffset;
+        self.currentpage = offset.x/320; //计算当前的页码
+        [self howControllerDisplay];
+    }
+}
+- (void)howControllerDisplay{
+    if([imageArray count] == 0){
+        self.button_left.hidden = YES;
+        self.button_right.hidden = YES;
+        return;
+    }
+    if(self.currentpage == 0){//第一页
+        self.button_left.hidden = YES;
+        self.button_right.hidden = NO;
+    }else if(self.currentpage == [imageArray count]){//最后一页
+        self.button_left.hidden = NO;
+        self.button_right.hidden = YES;
+    }else{//中间页
+        self.button_left.hidden = NO;
+        self.button_right.hidden = NO;
+    }
 }
 - (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
@@ -91,10 +119,6 @@
         [kApp.managedObjectContext save:&error];
     }
 }
-- (void)button_blue_down:(id)sender{
-    ((UIButton*)sender).backgroundColor = [UIColor colorWithRed:0 green:88.0/255.0 blue:142.0/255.0 alpha:1];
-}
-
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -102,7 +126,6 @@
 }
 
 - (IBAction)button_back_clicked:(id)sender {
-    self.button_back.backgroundColor = [UIColor clearColor];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -110,7 +133,6 @@
     if(![self.textfield_remark.text isEqualToString:self.oneRun.remark]){
         self.oneRun.remark = self.textfield_remark.text;
     }
-    self.button_share.backgroundColor = [UIColor clearColor];
     CNShareViewController* shareVC = [[CNShareViewController alloc]init];
     shareVC.dataSource = @"list";
     shareVC.oneRun = self.oneRun;
@@ -136,19 +158,19 @@
         case 1:
         {
             typeDes = @"跑步";
-            self.imageview_type.image = [UIImage imageNamed:@"runtype_run.png"];
+            self.imageview_type.image = [UIImage imageNamed:@"howToMove1.png"];
             break;
         }
         case 2:
         {
             typeDes = @"步行";
-            self.imageview_type.image = [UIImage imageNamed:@"runtype_walk.png"];
+            self.imageview_type.image = [UIImage imageNamed:@"howToMove2.png"];
             break;
         }
         case 3:
         {
             typeDes = @"自行车骑行";
-            self.imageview_type.image = [UIImage imageNamed:@"runtype_ride.png"];
+            self.imageview_type.image = [UIImage imageNamed:@"howToMove3.png"];
             break;
         }
         default:
@@ -168,7 +190,6 @@
     self.label_during.text = [CNUtil duringTimeStringFromSecond:[self.oneRun.duration intValue]/1000];
     self.label_pspeed.text = [CNUtil pspeedStringFromSecond:[self.oneRun.secondPerKm intValue]];
     self.label_aver_speed.text = [NSString stringWithFormat:@"+%i",[self.oneRun.score intValue]];
-    self.label_feel.text = self.oneRun.remark;
     self.textfield_remark.text = self.oneRun.remark;
     int mood = [self.oneRun.feeling intValue];
     NSString* img_name_mood = [NSString stringWithFormat:@"mood%i_h.png",mood];
@@ -178,22 +199,31 @@
     NSString* img_name_way = [NSString stringWithFormat:@"way%i_h.png",way];
     self.image_way.image = [UIImage imageNamed:img_name_way];
     //判断是否有图片
+    imageArray = [[NSMutableArray alloc]init];
     if(![oneRun.clientImagePaths isEqualToString:@""]){
+        NSArray* imagePaths = [oneRun.clientImagePaths componentsSeparatedByString:@"|"];
         //去沙盒读取图片
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES);
-        NSString *filePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:oneRun.clientImagePaths];
-        BOOL blHave=[[NSFileManager defaultManager] fileExistsAtPath:filePath];
-        if (blHave) {//图片存在
-            [self.scrollview setContentSize:CGSizeMake(640, 150)];
-            self.scrollview.showsHorizontalScrollIndicator=NO; //不显示水平滑动线
-            self.scrollview.showsVerticalScrollIndicator=NO;//不显示垂直滑动线
-            self.scrollview.pagingEnabled=YES;
-            UIImageView* photo = [[UIImageView alloc]initWithFrame:CGRectMake(320, 0, 320, 250)];
-            [self.scrollview addSubview:photo];
-            NSData *data = [NSData dataWithContentsOfFile:filePath];
-            photo.image = [[UIImage alloc] initWithData:data];
+        for (int i=0;i<[imagePaths count];i++){
+            NSString* onePath = [imagePaths objectAtIndex:i];
+            NSString *filePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:onePath];
+            BOOL blHave=[[NSFileManager defaultManager] fileExistsAtPath:filePath];
+            if (blHave) {//图片存在
+                [self.scrollview setContentSize:CGSizeMake(320+(i+1)*320, 320)];
+                self.scrollview.showsHorizontalScrollIndicator=NO; //不显示水平滑动线
+                self.scrollview.showsVerticalScrollIndicator=NO;//不显示垂直滑动线
+                self.scrollview.pagingEnabled=YES;
+                self.scrollview.delegate = self;
+                UIImageView* photo = [[UIImageView alloc]initWithFrame:CGRectMake(320+i*320, 0, 320, 320)];
+                photo.contentMode = UIViewContentModeScaleAspectFill;
+                [self.scrollview addSubview:photo];
+                NSData *data = [NSData dataWithContentsOfFile:filePath];
+                photo.image = [[UIImage alloc] initWithData:data];
+                [imageArray addObject:photo.image];
+            }
         }
     }
+    [self howControllerDisplay];
 }
 - (void)drawRunTrack{
     int j = 0;
@@ -345,8 +375,8 @@
             {
                 annotationView = [[CNMapImageAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:mapImageIndetifier];
                 // must set to NO, so we can show the custom callout view.
-                annotationView.draggable = YES;
-                annotationView.centerOffset = CGPointMake(0,-15);
+//                annotationView.draggable = YES;
+//                annotationView.centerOffset = CGPointMake(0,-15);
             }
             NSLog(@"title is %@",title);
             annotationView.type = title;
@@ -481,5 +511,16 @@
     CGRect rect = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
     self.view.frame = rect;
     [UIView commitAnimations];
+}
+- (IBAction)button_left_clicked:(id)sender {
+    [self.scrollview setContentOffset:CGPointMake(self.currentpage*320-320, 0) animated:YES];
+    self.currentpage -- ;
+    [self howControllerDisplay];
+}
+
+- (IBAction)button_right_clicked:(id)sender {
+    [self.scrollview setContentOffset:CGPointMake(self.currentpage*320+320, 0) animated:YES];
+    self.currentpage ++ ;
+    [self howControllerDisplay];
 }
 @end

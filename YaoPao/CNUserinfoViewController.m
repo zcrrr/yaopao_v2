@@ -11,6 +11,8 @@
 #import "UIImage+Rescale.h"
 #import "ASIHTTPRequest.h"
 #import "CNMainViewController.h"
+#import "ColorValue.h"
+#import "CNCustomButton.h"
 
 @interface CNUserinfoViewController ()
 
@@ -36,10 +38,7 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    
-    [self.button_back addTarget:self action:@selector(button_blue_down:) forControlEvents:UIControlEventTouchDown];
-    [self.button_save addTarget:self action:@selector(button_blue_down:) forControlEvents:UIControlEventTouchDown];
-    
+    [self.button_save fillColor:kClear :kClear :kWhite :kWhiteHalfAlpha];
     self.textfield_username.delegate = self;
     self.textfield_realname.delegate = self;
     self.textfield_birthday.delegate = self;
@@ -48,11 +47,6 @@
     self.textfield_des.delegate = self;
     self.textfield_birthday.inputView = self.datePicker;
     self.textfield_birthday.inputAccessoryView = self.accessoryView;
-    if([self.from isEqualToString:@"setting"]){
-        self.button_back.hidden = NO;
-    }else{
-        self.button_back.hidden = YES;
-    }
     //赋值：应该从plist？
     self.textfield_phone.text = [self codeAndPhone];
     NSString* username = [kApp.userInfoDic objectForKey:@"nickname"];
@@ -144,7 +138,7 @@
         //显示头像
         NSData* imageData = kApp.imageData;
         if(imageData){
-            self.image_avatar.image = [[UIImage alloc] initWithData:imageData];
+            [self.button_avatar setBackgroundImage:[[UIImage alloc] initWithData:imageData] forState:UIControlStateNormal];
         }else{
             NSString *avatar = imgpath;
             NSString* imageURL = [NSString stringWithFormat:@"%@%@",kApp.imageurl,avatar];
@@ -162,7 +156,7 @@
 - (void)requestFinished:(ASIHTTPRequest *)request{
     UIImage *image = [[UIImage alloc] initWithData:[request responseData]];
     if(image){
-        self.image_avatar.image = image;
+        [self.button_avatar setBackgroundImage:image forState:UIControlStateNormal];
         kApp.imageData = [request responseData];
     }
 }
@@ -172,11 +166,7 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)button_blue_down:(id)sender{
-    ((UIButton*)sender).backgroundColor = [UIColor colorWithRed:0 green:88.0/255.0 blue:142.0/255.0 alpha:1];
-}
 - (IBAction)button_save_clicked:(id)sender {
-    self.button_save.backgroundColor = [UIColor clearColor];
     NSMutableDictionary* params = [[NSMutableDictionary alloc]init];
     NSString* uid = [kApp.userInfoDic objectForKey:@"uid"];
     NSString* utype = [kApp.userInfoDic objectForKey:@"utype"];
@@ -210,6 +200,10 @@
     [self displayLoading];
 }
 
+- (IBAction)button_back_clicked:(id)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 - (IBAction)button_sex_clicked:(id)sender {
     [self resetSexButton:[sender tag]];
 }
@@ -236,11 +230,6 @@
 - (IBAction)button_avatar_clicked:(id)sender {
     UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:@"选取来自" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"拍照",@"用户相册", nil];
     [actionSheet showInView:self.view];
-}
-
-- (IBAction)button_back_clicked:(id)sender {
-    self.button_back.backgroundColor = [UIColor clearColor];
-    [self.navigationController popViewControllerAnimated:YES];
 }
 #pragma mark- textfiled delegate
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
@@ -295,19 +284,15 @@
     switch (tag) {
         case 0:
         {
-            [self.button_man setBackgroundColor:[UIColor colorWithRed:102.0/255.0 green:102.0/255.0 blue:153.0/255.0 alpha:1]];
-            [self.button_man setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-            [self.button_women setBackgroundColor:[UIColor whiteColor]];
-            [self.button_women setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+            [self.button_man setBackgroundImage:[UIImage imageNamed:@"sex_check.png"] forState:UIControlStateNormal];
+            [self.button_women setBackgroundImage:[UIImage imageNamed:@"sex_uncheck.png"] forState:UIControlStateNormal];
             self.selectedSex = @"M";
             break;
         }
         case 1:
         {
-            [self.button_man setBackgroundColor:[UIColor whiteColor]];
-            [self.button_man setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-            [self.button_women setBackgroundColor:[UIColor colorWithRed:102.0/255.0 green:102.0/255.0 blue:153.0/255.0 alpha:1]];
-            [self.button_women setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+            [self.button_man setBackgroundImage:[UIImage imageNamed:@"sex_uncheck.png"] forState:UIControlStateNormal];
+            [self.button_women setBackgroundImage:[UIImage imageNamed:@"sex_check.png"] forState:UIControlStateNormal];
             self.selectedSex = @"F";
             break;
         }
@@ -318,8 +303,7 @@
 #pragma mark- userinfo delegate
 - (void)updateUserinfoDidSuccess:(NSDictionary *)resultDic{
     [self hideLoading];
-    CNMainViewController* mainVC = [[CNMainViewController alloc]init];
-    [self.navigationController pushViewController:mainVC animated:YES];
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 - (void)updateUserinfoDidFailed:(NSString *)mes{
     [self hideLoading];
@@ -359,7 +343,7 @@
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
     UIImage *image = [info objectForKey:@"UIImagePickerControllerEditedImage"];
     UIImage* image_compressed = [image rescaleImageToSize:CGSizeMake(640, 640)];
-    self.image_avatar.image = image_compressed;
+    [self.button_avatar setBackgroundImage:image_compressed forState:UIControlStateNormal];
     [picker dismissViewControllerAnimated:YES completion:nil];
     
     //新头像同步到服务器
@@ -481,6 +465,10 @@ numberOfRowsInComponent:(NSInteger)component {
     self.textfield_height.text = [NSString stringWithFormat:@"%@cm",[self.height_array objectAtIndex:row]];
     [self.textfield_height resignFirstResponder];
     [self resetViewFrame];
+}
+
+- (IBAction)button_edit_nickname:(id)sender {
+    [self.textfield_username becomeFirstResponder];
 }
 - (void)displayLoading{
     self.loadingImage.hidden = NO;

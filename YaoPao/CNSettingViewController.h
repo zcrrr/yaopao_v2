@@ -10,16 +10,23 @@
 #import "FirstLevelViewController.h"
 
 @interface CNSettingViewController : FirstLevelViewController
-- (IBAction)button_back_clicked:(id)sender;
-- (IBAction)button_list_clicked:(id)sender;
-@property (strong, nonatomic) IBOutlet UIButton *button_back;
-@property (strong, nonatomic) IBOutlet UIView *view_user;
-@property (strong, nonatomic) IBOutlet UIView *view_about;
-@property (strong, nonatomic) IBOutlet UIView *view_ad;
-@property (strong, nonatomic) IBOutlet UIButton *button_user;
-@property (strong, nonatomic) IBOutlet UIButton *button_about;
-@property (strong, nonatomic) IBOutlet UIButton *button_ad;
-@property (strong, nonatomic) IBOutlet UIView *view_service;
-@property (strong, nonatomic) IBOutlet UIButton *button_service;
+@property (weak, nonatomic) IBOutlet UIButton *button_personal;
+@property (weak, nonatomic) IBOutlet UIButton *button_system;
+@property (weak, nonatomic) IBOutlet UIButton *button_update;
+@property (weak, nonatomic) IBOutlet UIButton *button_feedback;
+@property (weak, nonatomic) IBOutlet UIButton *button_service;
+@property (weak, nonatomic) IBOutlet UIButton *button_about;
+
+- (IBAction)button_clicked:(id)sender;
+@property (weak, nonatomic) IBOutlet UIView *view_personal;
+@property (weak, nonatomic) IBOutlet UIView *view_system;
+@property (weak, nonatomic) IBOutlet UIView *view_update;
+@property (weak, nonatomic) IBOutlet UIView *view_feedback;
+@property (weak, nonatomic) IBOutlet UIView *view_service;
+@property (weak, nonatomic) IBOutlet UIView *view_about;
+@property (weak, nonatomic) IBOutlet UIView *view_line1;
+@property (weak, nonatomic) IBOutlet UIView *view_line2;
+@property (weak, nonatomic) IBOutlet UIView *view_line3;
+@property (weak, nonatomic) IBOutlet UIView *view_line4;
 
 @end

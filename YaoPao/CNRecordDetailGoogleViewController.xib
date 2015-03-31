@@ -243,11 +243,11 @@
         </view>
     </objects>
     <resources>
-        <image name="edit.png" width="80" height="80"/>
-        <image name="logo.png" width="120" height="120"/>
-        <image name="mood1_h.png" width="160" height="160"/>
-        <image name="runtype_run.png" width="110" height="110"/>
-        <image name="way1_h.png" width="160" height="160"/>
+        <image name="edit.png" width="68" height="68"/>
+        <image name="logo.png" width="150" height="150"/>
+        <image name="mood1_h.png" width="54" height="54"/>
+        <image name="runtype_run.png" width="192" height="192"/>
+        <image name="way1_h.png" width="54" height="54"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

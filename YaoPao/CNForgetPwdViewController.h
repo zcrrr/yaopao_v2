@@ -12,6 +12,7 @@
 
 @interface CNForgetPwdViewController : UIViewController<UITextFieldDelegate,findPwdDelegate,SecondViewControllerDelegate>
 @property (assign, nonatomic) BOOL isVerify;
+@property (strong, nonatomic) NSString* areaCode;
 @property (strong, nonatomic) NSTimer* timer;
 @property (assign, nonatomic) int count;
 @property (strong, nonatomic) IBOutlet UIButton *button_back;
@@ -25,8 +26,8 @@
 @property (strong, nonatomic) IBOutlet UILabel *label_country;
 @property (strong, nonatomic) IBOutlet UILabel *label_countryandarea;
 @property (strong, nonatomic) IBOutlet UIButton *button_country;
+@property (weak, nonatomic) IBOutlet UIView *view_country;
 
-@property (strong, nonatomic) IBOutlet UILabel *label_code;
 - (IBAction)button_clicked:(id)sender;
 - (IBAction)view_touched:(id)sender;
 - (IBAction)button_country_clicked:(id)sender;

@@ -32,6 +32,10 @@
 @property (strong, nonatomic) IBOutlet UIToolbar *toolbar_time;
 - (IBAction)time_selected:(id)sender;
 @property (strong, nonatomic) IBOutlet UIButton *button_back;
+@property (weak, nonatomic) IBOutlet UIView *view_line1;
+@property (weak, nonatomic) IBOutlet UIView *view_line2;
+@property (weak, nonatomic) IBOutlet UIView *view_line3;
+@property (weak, nonatomic) IBOutlet UIView *view_line4;
 
 
 
