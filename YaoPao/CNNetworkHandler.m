@@ -897,7 +897,7 @@
     [self.downloadOneFileRequest startAsynchronous];
 }
 - (void)doRequest_weather:(double)lon :(double)lat{
-    NSString* str_url = [NSString stringWithFormat:@"http://appservice.yaopao.net/WeatherService/getWeather?lat=%f&lon=%f",lat,lon];
+    NSString* str_url = [NSString stringWithFormat:@"%@WeatherService/getWeather?lat=%f&lon=%f",ENDPOINTS,lat,lon];
     NSURL* url = [NSURL URLWithString:str_url];
     self.weatherRequest =  [ASIHTTPRequest requestWithURL:url];
     self.weatherRequest.tag = TAG_WEATHER;

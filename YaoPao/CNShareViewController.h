@@ -10,7 +10,7 @@
 #import <MAMapKit/MAMapKit.h>
 #import "RunClass.h"
 #import "CNCustomButton.h"
-@class OnlyTrackView;
+@class OnlyTrackView4share;
 
 @interface CNShareViewController : UIViewController<MAMapViewDelegate,UIScrollViewDelegate>
 
@@ -27,7 +27,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *label_score;
 - (IBAction)button_share_clicked:(id)sender;
 @property (strong, nonatomic) IBOutlet UIView *view_map_container;
-@property (weak, nonatomic) IBOutlet OnlyTrackView *view_onlytrack;
+@property (weak, nonatomic) IBOutlet OnlyTrackView4share *view_onlytrack;
 @property (strong, nonatomic) IBOutlet UIImageView *image_mood;
 @property (strong, nonatomic) IBOutlet UIImageView *image_way;
 @property (strong, nonatomic) IBOutlet CNCustomButton *button_jump;
@@ -42,5 +42,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *label_date_map2;
 @property (weak, nonatomic) IBOutlet UILabel *label_time_map2;
 @property (weak, nonatomic) IBOutlet UIImageView *imageview_trackonly;
+@property (weak, nonatomic) IBOutlet UIImageView *imageview_page;
 
 @end

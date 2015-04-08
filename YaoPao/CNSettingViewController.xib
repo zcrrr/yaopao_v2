@@ -261,7 +261,7 @@
                     <color key="backgroundColor" red="0.13725490196078433" green="0.13333333333333333" blue="0.16862745098039217" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
             </subviews>
-            <color key="backgroundColor" red="0.19607843137254902" green="0.18823529411764706" blue="0.23529411764705882" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" red="0.19607843137254902" green="0.18823529411764706" blue="0.23921568627450979" alpha="1" colorSpace="calibratedRGB"/>
             <point key="canvasLocation" x="455" y="377"/>
         </view>
     </objects>

@@ -7,18 +7,16 @@
 //
 
 #import "CNShareViewController.h"
-#import "CNMainViewController.h"
 #import "CNGPSPoint.h"
 #import "CNUtil.h"
 #import "CNEncryption.h"
-#import "CNRunRecordViewController.h"
 #import <ShareSDK/ShareSDK.h>
 #import "UIImage+Rescale.h"
 #import "CNRunManager.h"
 #import "CNMapImageAnnotationView.h"
 #import "CNCustomButton.h"
 #import "ColorValue.h"
-#import "OnlyTrackView.h"
+#import "OnlyTrackView4share.h"
 
 @interface CNShareViewController ()
 
@@ -48,6 +46,8 @@ extern NSMutableArray* imageArray;
         self.view_map_container.frame = CGRectMake(0, 0, 320, 235);
         self.imageview_trackonly.frame = CGRectMake(320, 0, 320, 235);
         self.view_onlytrack.frame = CGRectMake(320, 0, 320, 235);
+        self.imageview_page.frame = CGRectMake(134, 306, 51, 17);
+        self.label_whichpage.frame  = CGRectMake(134, 306, 51, 17);
     }
     [self.button_jump fillColor:kClear :kClear :kWhite :kWhiteHalfAlpha];
     self.mapView=[[MAMapView alloc] initWithFrame:CGRectMake(0, 0, self.view_map_container.bounds.size.width, self.view_map_container.bounds.size.height)];
@@ -145,11 +145,11 @@ extern NSMutableArray* imageArray;
         self.label_pspeed.text = [CNUtil pspeedStringFromSecond:[oneRun.secondPerKm intValue]];
         self.label_score.text = [NSString stringWithFormat:@"+%i",[oneRun.score intValue]];
         int mood = [oneRun.feeling intValue];
-        NSString* img_name_mood = [NSString stringWithFormat:@"mood%i.png",mood];
+        NSString* img_name_mood = [NSString stringWithFormat:@"mood%i_h.png",mood];
         self.image_mood.image = [UIImage imageNamed:img_name_mood];
         
         int way = [oneRun.runway intValue];
-        NSString* img_name_way = [NSString stringWithFormat:@"way%i.png",way];
+        NSString* img_name_way = [NSString stringWithFormat:@"way%i_h.png",way];
         self.image_way.image = [UIImage imageNamed:img_name_way];
         [self.button_jump setTitle:@"跳过" forState:UIControlStateNormal];
         self.label_dis_map1.text = [NSString stringWithFormat:@"%0.1f",[oneRun.distance doubleValue]/1000.0];
@@ -159,8 +159,6 @@ extern NSMutableArray* imageArray;
         self.label_dis_map2.text = [NSString stringWithFormat:@"%0.1f",[oneRun.distance doubleValue]/1000.0];
         self.label_date_map2.text = [CNUtil getTimeFromTimestamp_ymd:[oneRun.rid longLongValue]/1000];
         self.label_time_map2.text = [CNUtil getTimeFromTimestamp_ms:[oneRun.rid longLongValue]/1000];
-        
-        
     }
 }
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
@@ -312,16 +310,35 @@ extern NSMutableArray* imageArray;
     
     //水印
     NSMutableArray* trackpoints = [[NSMutableArray alloc]init];
+    float start_x = 0;
+    float start_y = 0;
+    float end_x = 0;
+    float end_y = 0;
     for(i=0;i<pointCount;i++){
         CNGPSPoint* gpsPoint = [kApp.runManager.GPSList objectAtIndex:i];
         CLLocationCoordinate2D wgs84Point = CLLocationCoordinate2DMake(gpsPoint.lat, gpsPoint.lon);
         CLLocationCoordinate2D encryptionPoint = [CNEncryption encrypt:wgs84Point];
         //计算经纬度转屏幕坐标后的坐标
-        [trackpoints addObject:[NSValue valueWithCGPoint:[self.mapView convertCoordinate:encryptionPoint toPointToView:self.view_map_container]]];
+        CGPoint point = [self.mapView convertCoordinate:encryptionPoint toPointToView:self.view_map_container];
+        NSDictionary* dic = [[NSDictionary alloc]initWithObjectsAndKeys:[NSString stringWithFormat:@"%f",point.x],@"x",[NSString stringWithFormat:@"%f",point.y],@"y",[NSString stringWithFormat:@"%i",gpsPoint.status],@"status",nil];
+        [trackpoints addObject:dic];
+        if(i == 0){//起点
+            start_x = point.x;
+            start_y = point.y;
+        }else if(i == pointCount-1){
+            end_x = point.x;
+            end_y = point.y;
+        }
     }
+    
     self.view_onlytrack.pointArray = trackpoints;
-    self.view_onlytrack.color = @"green";
     [self.view_onlytrack setNeedsDisplay];
+    UIImageView* imageview_start = [[UIImageView alloc]initWithFrame:CGRectMake(start_x-10, start_y-10, 20, 20)];
+    imageview_start.image = [UIImage imageNamed:@"map_start.png"];
+    [self.view_onlytrack addSubview:imageview_start];
+    UIImageView* imageview_end = [[UIImageView alloc]initWithFrame:CGRectMake(end_x-10, end_y-10, 20, 20)];
+    imageview_end.image = [UIImage imageNamed:@"map_end.png"];
+    [self.view_onlytrack addSubview:imageview_end];
 }
 - (MAOverlayView *)mapView:(MAMapView *)mapView viewForOverlay:(id)overlay
 {
@@ -400,10 +417,23 @@ extern NSMutableArray* imageArray;
     }
     UIImage *image_map = [self.mapView takeSnapshotInRect:self.view_map_container.frame];
     UIImage* image_combine = [self addImage:image_map toImage:image_background];
-    return image_combine;
+    
+    //画logo
+    UIGraphicsBeginImageContext(image_combine.size);
+    
+    //Draw image2
+    [image_combine drawInRect:CGRectMake(0, 0, image_combine.size.width, image_combine.size.height)];
+    //Draw image1
+    UIImage* image_logo = [UIImage imageNamed:@"yaopao_cn_logo_black.png"];
+    [image_logo drawInRect:CGRectMake(274, 54, 38, 17)];
+    
+    UIImage *resultImage=UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
+    
+    return resultImage;
 }
 - (UIImage *)snapshot:(UIView *)view
-
 {
     UIGraphicsBeginImageContextWithOptions(view.bounds.size, YES, 0);
     [view drawViewHierarchyInRect:view.bounds afterScreenUpdates:YES];

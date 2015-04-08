@@ -20,6 +20,7 @@
 @end
 
 @implementation CNSettingViewController
+@synthesize bannerView_;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -50,7 +51,15 @@
     [self.button_system addTarget:self action:@selector(changeViewColor:) forControlEvents:UIControlEventTouchDown];
     [self.button_update addTarget:self action:@selector(changeViewColor:) forControlEvents:UIControlEventTouchDown];
     
-    
+    NSArray* array = [kApp.showad componentsSeparatedByString:@","];
+    //广告：
+    if([array count] == 2){
+        if([[array objectAtIndex:0] isEqualToString:ClIENT_VERSION]){
+            if([[array objectAtIndex:1] isEqualToString:@"1"]){
+                [self addAd];
+            }
+        }
+    }
 }
 - (void)changeViewColor:(id)sender{
     switch ([sender tag]) {
@@ -144,5 +153,18 @@
         default:
             break;
     }
+}
+- (void)addAd{
+    self.bannerView_ = [[GADBannerView alloc] initWithAdSize:kGADAdSizeBanner];
+    if(iPhone5){
+        self.bannerView_.frame = CGRectMake(0, 476, 320, 50);
+    }else{
+        self.bannerView_.frame = CGRectMake(0, 388, 320, 50);
+    }
+    // 指定广告单元ID。
+    self.bannerView_.adUnitID = @"ca-app-pub-2147750945893708/7542258473";
+    self.bannerView_.rootViewController = self;
+    [self.view addSubview:bannerView_];
+    [bannerView_ loadRequest:[GADRequest request]];
 }
 @end

@@ -39,7 +39,7 @@
                     </subviews>
                     <color key="backgroundColor" red="0.2156862745" green="0.20784313730000001" blue="0.27058823529999998" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo.png" id="Qv9-TO-lRL">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_120.png" id="Qv9-TO-lRL">
                     <rect key="frame" x="128" y="143" width="64" height="64"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
@@ -99,7 +99,7 @@
     </objects>
     <resources>
         <image name="back_v2.png" width="48" height="68"/>
-        <image name="logo.png" width="150" height="150"/>
+        <image name="icon_120.png" width="120" height="120"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

@@ -7,7 +7,6 @@
 //
 
 #import "CNAppDelegate.h"
-#import "CNMainViewController.h"
 #import "CNNetworkHandler.h"
 #import <AdSupport/AdSupport.h>
 #import "CNLocationHandler.h"

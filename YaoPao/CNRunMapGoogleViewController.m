@@ -10,9 +10,8 @@
 #import "CNGPSPoint.h"
 #import "CNRunManager.h"
 #import "CNVoiceHandler.h"
-#import "CNMainViewController.h"
 #import "Toast+UIView.h"
-#import "CNRunMoodViewController.h"
+#import "FeelingViewController.h"
 #define kIntervalMap 2
 
 @interface CNRunMapGoogleViewController ()
@@ -267,14 +266,13 @@
                 kApp.gpsLevel = 1;
                 //弹出框，距离小于50
                 [kApp.window makeToast:@"您运动距离也太短啦！这次就不给您记录了，下次一定要加油！"];
-                CNMainViewController* mainVC = [[CNMainViewController alloc]init];
-                [self.navigationController pushViewController:mainVC animated:YES];
+                [self.navigationController popToRootViewControllerAnimated:YES];
             }else{
                 NSMutableDictionary* voice_params = [[NSMutableDictionary alloc]init];
                 [voice_params setObject:[NSString stringWithFormat:@"%i",kApp.runManager.distance] forKey:@"distance"];
                 [voice_params setObject:[NSString stringWithFormat:@"%i",[kApp.runManager during]/1000] forKey:@"second"];
                 [kApp.voiceHandler voiceOfapp:@"run_complete" :voice_params];
-                CNRunMoodViewController* moodVC = [[CNRunMoodViewController alloc]init];
+                FeelingViewController* moodVC = [[FeelingViewController alloc]init];
                 [self.navigationController pushViewController:moodVC animated:YES];
             }
             break;

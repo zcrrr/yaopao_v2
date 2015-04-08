@@ -8,7 +8,6 @@
 
 #import "CNLoginPhoneViewController.h"
 #import "CNNetworkHandler.h"
-#import "CNMainViewController.h"
 #import "CNForgetPwdViewController.h"
 #import "CNUserinfoViewController.h"
 #import "CNServiceViewController.h"

@@ -218,7 +218,7 @@
                     </connections>
                 </button>
             </subviews>
-            <color key="backgroundColor" red="0.19607843137254902" green="0.18823529411764706" blue="0.23921568627450981" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" red="0.1960784314" green="0.18823529410000001" blue="0.23921568630000001" alpha="1" colorSpace="calibratedRGB"/>
             <point key="canvasLocation" x="455" y="377"/>
         </view>
     </objects>

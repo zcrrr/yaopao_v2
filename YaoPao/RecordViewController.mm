@@ -108,8 +108,8 @@
     }
     NSLog(@"mutableFetchResult count is %i",[mutableFetchResult count]);
     if(page != 0 && [mutableFetchResult count] == 0){
-        UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:@"已经没有更多数据了" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-        [alert show];
+//        UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:@"已经没有更多数据了" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+//        [alert show];
         return;
     }
     [self.recordList = self.recordList addObjectsFromArray:mutableFetchResult];

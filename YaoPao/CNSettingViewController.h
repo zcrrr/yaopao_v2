@@ -8,8 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "FirstLevelViewController.h"
+#import "GADBannerView.h"
 
 @interface CNSettingViewController : FirstLevelViewController
+@property (strong, nonatomic) GADBannerView* bannerView_;
 @property (weak, nonatomic) IBOutlet UIButton *button_personal;
 @property (weak, nonatomic) IBOutlet UIButton *button_system;
 @property (weak, nonatomic) IBOutlet UIButton *button_update;

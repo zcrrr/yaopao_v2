@@ -10,7 +10,6 @@
 #import "CNNetworkHandler.h"
 #import "UIImage+Rescale.h"
 #import "ASIHTTPRequest.h"
-#import "CNMainViewController.h"
 #import "ColorValue.h"
 #import "CNCustomButton.h"
 

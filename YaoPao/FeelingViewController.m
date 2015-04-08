@@ -65,6 +65,7 @@ extern NSMutableArray* imageArray;
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self whichImageShouldDisplay];
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
 }
 - (void)whichImageShouldDisplay{
     //先删除所有控件

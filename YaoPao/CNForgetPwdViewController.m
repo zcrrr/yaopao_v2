@@ -8,7 +8,6 @@
 
 #import "CNForgetPwdViewController.h"
 #import "CNNetworkHandler.h"
-#import "CNMainViewController.h"
 #import "SMS_SDK/SMS_SDK.h"
 #import "SectionsViewController.h"
 #import "CNCloudRecord.h"

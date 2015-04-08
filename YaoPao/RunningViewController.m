@@ -43,6 +43,7 @@ extern NSMutableArray* imageArray;
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
     switch (kApp.runManager.runStatus) {
         case 1:
         {

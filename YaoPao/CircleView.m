@@ -27,7 +27,7 @@
     CGContextSetRGBStrokeColor(context, 116.0/255.0,198.0/255.0,62.0/255.0,1.0);
     CGContextSetLineWidth(context, 3.0);
     CGMutablePathRef path = CGPathCreateMutable();
-    CGPathAddArc(path, NULL, 90, 90, 88, 0.5*M_PI, 0.5*M_PI+progress*2*M_PI, NO);
+    CGPathAddArc(path, NULL, 90, 90, 88, 1.5*M_PI, 1.5*M_PI+progress*2*M_PI, NO);
     CGContextAddPath(context, path);
     CGContextDrawPath(context, kCGPathStroke);
 }

@@ -23,6 +23,7 @@
 #import "CNUserinfoViewController.h"
 #import "WaterMarkViewController.h"
 #import "CNVCodeViewController.h"
+#import <SMS_SDK/SMS_SDK.h>
 
 @interface HomeViewController ()
 
@@ -252,7 +253,6 @@ NSString* dayOrNight;
     // Pass the selected object to the new view controller.
 }
 */
-
 - (IBAction)button_clicked:(id)sender {
     switch ([sender tag]) {
         case 0:
@@ -262,6 +262,9 @@ NSString* dayOrNight;
 //            [CNAppDelegate popupWarningBackground];
             NSLog(@"同步");
             [CNAppDelegate popupWarningCloud];
+            
+            
+            
             
             break;
         }

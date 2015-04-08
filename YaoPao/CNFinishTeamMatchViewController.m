@@ -10,7 +10,6 @@
 #import "CNNetworkHandler.h"
 #import "ASIHTTPRequest.h"
 #import "CNDistanceImageView.h"
-#import "CNMainViewController.h"
 
 @interface CNFinishTeamMatchViewController ()
 
@@ -198,15 +197,15 @@
 */
 
 - (IBAction)button_ok_clicked:(id)sender {
-    self.button_ok.backgroundColor = [UIColor colorWithRed:0 green:123.0/255.0 blue:199.0/255.0 alpha:1];
-    CNMainViewController* mainvc = [[CNMainViewController alloc]init];
-    [self.navigationController pushViewController:mainvc animated:YES];
+//    self.button_ok.backgroundColor = [UIColor colorWithRed:0 green:123.0/255.0 blue:199.0/255.0 alpha:1];
+//    CNMainViewController* mainvc = [[CNMainViewController alloc]init];
+//    [self.navigationController pushViewController:mainvc animated:YES];
 }
 
 - (IBAction)button_share_clicked:(id)sender {
 //    self.button_share.backgroundColor = [UIColor colorWithRed:143.0/255.0 green:195.0/255.0 blue:31.0/255.0 alpha:1];
-    self.button_ok.backgroundColor = [UIColor colorWithRed:0 green:123.0/255.0 blue:199.0/255.0 alpha:1];
-    CNMainViewController* mainvc = [[CNMainViewController alloc]init];
-    [self.navigationController pushViewController:mainvc animated:YES];
+//    self.button_ok.backgroundColor = [UIColor colorWithRed:0 green:123.0/255.0 blue:199.0/255.0 alpha:1];
+//    CNMainViewController* mainvc = [[CNMainViewController alloc]init];
+//    [self.navigationController pushViewController:mainvc animated:YES];
 }
 @end

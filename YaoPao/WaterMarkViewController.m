@@ -252,7 +252,8 @@ extern NSString* dayOrNight;
         [self.view_onlyTrack setNeedsDisplay];
     }
     NSString* wob = self.whiteOrBlack == 0?@"w":@"b";
-    NSString* imageName = [NSString stringWithFormat:@"weather_marker_%@_%@_%@.png",wob,dayOrNight,weatherCode];
+    NSString* imageName = [NSString stringWithFormat:@"weather_icon_%@_%@_%@.png",wob,dayOrNight,weatherCode];
+    NSLog(@"weather name is %@",imageName);
     self.imageview_water3_weather.image = [UIImage imageNamed:imageName];
 }
 

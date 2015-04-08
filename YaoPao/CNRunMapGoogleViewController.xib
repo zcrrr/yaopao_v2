@@ -108,7 +108,7 @@
     <resources>
         <image name="button_back.png" width="200" height="200"/>
         <image name="button_back_h.png" width="200" height="200"/>
-        <image name="button_position.png" width="200" height="200"/>
+        <image name="button_position.png" width="48" height="68"/>
         <image name="button_position_h.png" width="200" height="200"/>
         <image name="gps4.png" width="44" height="28"/>
     </resources>

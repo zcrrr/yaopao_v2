@@ -31,7 +31,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <view contentMode="scaleToFill" id="SZU-Gr-66g">
-                            <rect key="frame" x="0.0" y="34" width="320" height="1"/>
+                            <rect key="frame" x="0.0" y="34" width="217" height="1"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.13725490196078433" green="0.13333333333333333" blue="0.16862745098039217" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         </view>

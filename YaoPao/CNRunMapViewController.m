@@ -10,7 +10,6 @@
 #import "CNGPSPoint.h"
 #import "FeelingViewController.h"
 #import "CNEncryption.h"
-#import "CNMainViewController.h"
 #import "Toast+UIView.h"
 #import "CNUtil.h"
 #import "CNVoiceHandler.h"
@@ -285,8 +284,7 @@ updatingLocation:(BOOL)updatingLocation
                 kApp.gpsLevel = 1;
                 //弹出框，距离小于50
                 [kApp.window makeToast:@"您运动距离也太短啦！这次就不给您记录了，下次一定要加油！"];
-                CNMainViewController* mainVC = [[CNMainViewController alloc]init];
-                [self.navigationController pushViewController:mainVC animated:YES];
+                [self.navigationController popToRootViewControllerAnimated:YES];
             }else{
                 NSMutableDictionary* voice_params = [[NSMutableDictionary alloc]init];
                 [voice_params setObject:[NSString stringWithFormat:@"%i",kApp.runManager.distance] forKey:@"distance"];

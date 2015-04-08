@@ -18,14 +18,17 @@
     self.selectIndex = 2;
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    NSURLRequest *request =[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://182.92.97.144:8888/chSports/sys/redirectMatchUrl.htm"]];
+    
+}
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    NSURLRequest *request =[NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@chSports/sys/redirectMatchUrl.htm",ENDPOINTS]]];
     self.webview.scalesPageToFit = YES;
     self.webview.delegate = self;
     [self.webview setBackgroundColor:[UIColor clearColor]];
     [self.webview loadRequest:request];
     [self displayLoading];
 }
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

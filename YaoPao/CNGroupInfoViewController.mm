@@ -18,7 +18,6 @@
 #import "CNNotRunTransmitRelayViewController.h"
 #import "CNNotInViewController.h"
 #import "CNMessageViewController.h"
-#import "CNRunRecordViewController.h"
 #import "CNDistanceImageView.h"
 
 
@@ -229,9 +228,9 @@
         case 1:{
             NSLog(@"用户运动记录");
             self.view_me.backgroundColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:1];
-            CNRunRecordViewController* recordVC = [[CNRunRecordViewController alloc]init];
-            recordVC.from = @"match";
-            [self.navigationController pushViewController:recordVC animated:YES];
+//            CNRunRecordViewController* recordVC = [[CNRunRecordViewController alloc]init];
+//            recordVC.from = @"match";
+//            [self.navigationController pushViewController:recordVC animated:YES];
 
             break;
         }
