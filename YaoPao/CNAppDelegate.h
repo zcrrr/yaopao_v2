@@ -35,6 +35,7 @@
 @property (nonatomic, assign) int score;//积分
 //用户信息
 @property (assign, nonatomic) int isLogin;//0-未登录，1-已经登录，2-正在登录
+@property (assign, nonatomic) int isLoginHX;//环信是否登录 0-未登录 1-已登录
 @property (strong, nonatomic) NSMutableDictionary* userInfoDic;
 @property (nonatomic, strong) NSData* imageData;//保存用户头像
 @property (nonatomic, assign) BOOL hasMessage;
@@ -62,6 +63,8 @@
 
 + (CNAppDelegate*)getApplicationDelegate;
 - (void)showTab:(int)index;
+- (void)needRegisterMobUser;//登录之后调用此方法用于向mob注册用户信息
+- (void)registerMobUser;//向mob注册用户信息
 
 
 //-----------------------------------------比赛------------------------------------------
@@ -135,4 +138,8 @@
 + (void)makeMatchTest;
 + (CNGPSPoint4Match*)test_getOnePoint;
 + (void)saveRun;
+
+
+//好友相关：
+@property (strong, nonatomic) NSMutableArray* myContactUseApp;//我的通讯录里使用app的所有人
 @end

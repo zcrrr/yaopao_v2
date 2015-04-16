@@ -12,7 +12,7 @@
 @class CNCustomButton;
 @class CNOverlayViewController;
 @class AdobeUXImageEditorViewController;
-@interface FeelingViewController : UIViewController<UITextFieldDelegate,UIScrollViewDelegate,AdobeUXImageEditorViewControllerDelegate,addWaternDelegate>
+@interface FeelingViewController : UIViewController<UITextFieldDelegate,UIScrollViewDelegate,AdobeUXImageEditorViewControllerDelegate,addWaternDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 @property (assign, nonatomic) int currentpage;
 @property (strong, nonatomic) UIImagePickerController* cameraPicker;
 @property (strong, nonatomic) CNOverlayViewController* overlayVC;

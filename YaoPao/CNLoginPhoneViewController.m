@@ -90,6 +90,8 @@
                 if ([self checkPwd]) {
                     if(self.agree == 1){
                         //先验证验证码
+                        //测试代码
+                        self.isVerify = YES;
                         if(self.isVerify){//已经验证
                             //登录
                             NSMutableDictionary* params = [[NSMutableDictionary alloc]init];
@@ -104,7 +106,6 @@
                     }else{
                         [kApp.window makeToast:@"您需要同意要跑服务协议才能进行后续操作"];
                     }
-                    
                 }
             }
             break;
@@ -321,6 +322,8 @@
     [self hideLoading];
     //登录、注册之后的一系列操作
     [self.navigationController popToRootViewControllerAnimated:YES];
+    //向mob提交用户信息
+//    [kApp registerMobUser];
     
     [CNCloudRecord ClearRecordAfterUserLogin];
     //用户登录之后先同步

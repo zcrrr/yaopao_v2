@@ -66,6 +66,7 @@ extern NSMutableArray* imageArray;
     [super viewWillAppear:animated];
     [self whichImageShouldDisplay];
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
+    NSLog(@"zhixing");
 }
 - (void)whichImageShouldDisplay{
     //先删除所有控件
@@ -187,7 +188,9 @@ extern NSMutableArray* imageArray;
         case 5:
         {
             NSLog(@"再拍一张");
-            [self takePhoto];
+            UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:@"选取来自" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"拍照",@"用户相册", nil];
+            [actionSheet showInView:self.view];
+            
             break;
         }
         case 6:
@@ -199,6 +202,50 @@ extern NSMutableArray* imageArray;
         default:
             break;
     }
+}
+#pragma -mark actionSheet delegate
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
+    switch (buttonIndex) {
+        case 0:
+        {
+            NSLog(@"拍照");
+            [self takePhoto];
+            break;
+        }
+        case 1:
+        {
+            NSLog(@"相册");
+            self.cameraPicker = [[UIImagePickerController alloc]init];
+            self.cameraPicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+            self.cameraPicker.allowsEditing = NO;
+            self.cameraPicker.delegate = self;
+            [self presentViewController:self.cameraPicker animated:YES completion:^{
+                
+            }];
+            break;
+        }
+        default:
+            break;
+    }
+}
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
+    if([picker isEqual:self.cameraPicker]){
+        UIImage *image = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
+        float width = image.size.width;
+        float height = image.size.height;
+        UIImage* imageScaled;
+        if(width > 1080 && height > 1080){
+            imageScaled = [image rescaleImageToSize:CGSizeMake(1080, 1080)];
+        }else{
+            imageScaled = [image rescaleImageToSize:CGSizeMake(640, 640)];
+        }
+        if(imageArray == nil){
+            imageArray = [[NSMutableArray alloc]init];
+        }
+        [imageArray addObject:imageScaled];
+        [picker dismissViewControllerAnimated:YES completion:nil];
+    }
+    
 }
 - (void)takePhoto{
     self.cameraPicker = [[UIImagePickerController alloc]init];

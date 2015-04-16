@@ -166,6 +166,24 @@
 - (void)weatherDidFailed:(NSString*)mes;
 @end
 
+//好友
+@protocol friendsListDelegate<NSObject>
+//获得好友列表以及申请列表
+- (void)friendsListDidSuccess:(NSDictionary*)resultDic;
+- (void)friendsListDidFailed:(NSString*)mes;
+@end
+@protocol sendMakeFriendsRequestDelegate<NSObject>
+//发送申请加好友
+- (void)sendMakeFriendsRequestDidSuccess:(NSDictionary*)resultDic;
+- (void)sendMakeFriendsRequestDidFailed:(NSString*)mes;
+@end
+
+@protocol agreeMakeFriendsDelegate<NSObject>
+//接受好友请求
+- (void)agreeMakeFriendsDidSuccess:(NSDictionary*)resultDic;
+- (void)agreeMakeFriendsDidFailed:(NSString*)mes;
+@end
+
 
 
 @interface CNNetworkHandler : NSObject<ASIProgressDelegate,ASIHTTPRequestDelegate>
@@ -205,6 +223,9 @@
 @property (nonatomic, strong) id<downloadRecordDelegate> delegate_downloadRecord;
 @property (nonatomic, strong) id<downloadOneFileDelegate> delegate_downloadOneFile;
 @property (nonatomic, strong) id<weatherDelegate> delegate_weather;
+@property (nonatomic, strong) id<friendsListDelegate> delegate_friendsList;
+@property (nonatomic, strong) id<sendMakeFriendsRequestDelegate> delegate_sendMakeFriendsRequest;
+@property (nonatomic, strong) id<agreeMakeFriendsDelegate> delegate_agreeMakeFriends;
 
 //定义每个请求的request
 @property (nonatomic, strong) ASIFormDataRequest* verifyCodeRequest;
@@ -233,6 +254,9 @@
 @property (nonatomic, strong) ASIFormDataRequest* downloadRecordRequest;
 @property (nonatomic, strong) ASIHTTPRequest* downloadOneFileRequest;
 @property (nonatomic, strong) ASIHTTPRequest* weatherRequest;
+@property (nonatomic, strong) ASIFormDataRequest* friendsListRequest;
+@property (nonatomic, strong) ASIFormDataRequest* sendMakeFriendsRequestRequest;
+@property (nonatomic, strong) ASIFormDataRequest* agreeMakeFriendsRequest;
 //每个请求的实现
 - (void)doRequest_verifyCode:(NSString*)phoneNO;
 - (void)doRequest_registerPhone:(NSMutableDictionary*)params;
@@ -260,5 +284,8 @@
 - (void)doRequest_downloadRecord:(NSMutableDictionary*)params;
 - (void)doRequest_downloadOneFile:(NSString*)str_url;
 - (void)doRequest_weather:(double)lon :(double)lat;
+- (void)doRequest_friendsList:(NSMutableDictionary*)params;
+- (void)doRequest_sendMakeFriendsRequest:(NSMutableDictionary*)params;
+- (void)doRequest_agreeMakeFriends:(NSMutableDictionary*)params;
 
 @end

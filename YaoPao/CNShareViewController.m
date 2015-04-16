@@ -26,6 +26,7 @@
 @synthesize mapView;
 @synthesize oneRun;
 @synthesize currentpage;
+@synthesize shareText;
 extern NSMutableArray* imageArray;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -35,7 +36,11 @@ extern NSMutableArray* imageArray;
     }
     return self;
 }
-
+- (void)changeLineOne:(UIView*)line{
+    CGRect frame_new = line.frame;
+    frame_new.size = CGSizeMake(frame_new.size.width, 0.5);
+    line.frame = frame_new;
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -58,10 +63,6 @@ extern NSMutableArray* imageArray;
     self.mapView.scrollEnabled = NO;
     [self.view_map_container addSubview:self.mapView];
     [self.view_map_container sendSubviewToBack:self.mapView];
-    NSData* imageData = kApp.imageData;
-    if(imageData){
-        self.imageview_avatar.image = [[UIImage alloc] initWithData:imageData];
-    }
     //照片
     self.scrollview.delegate = self;
     self.scrollview.showsHorizontalScrollIndicator=NO; //不显示水平滑动线
@@ -97,7 +98,7 @@ extern NSMutableArray* imageArray;
             default:
                 break;
         }
-        self.label_distance.text = [NSString stringWithFormat:@"我刚刚%@了%0.2f公里",typeDes,kApp.runManager.distance/1000.0];
+        self.shareText = [NSString stringWithFormat:@"我刚刚%@了%0.2f公里",typeDes,kApp.runManager.distance/1000.0];
         self.label_feel.text = kApp.runManager.remark;
         self.label_time.text = [CNUtil duringTimeStringFromSecond:[kApp.runManager during]/1000];
         self.label_pspeed.text = [CNUtil pspeedStringFromSecond:kApp.runManager.secondPerKm];
@@ -109,8 +110,18 @@ extern NSMutableArray* imageArray;
         int way = kApp.runManager.runway;
         NSString* img_name_way = [NSString stringWithFormat:@"way%i_h.png",way];
         self.image_way.image = [UIImage imageNamed:img_name_way];
-        [self.button_jump setTitle:@"跳过" forState:UIControlStateNormal];
         
+        if(mood == 0 && way == 0){
+            CGRect oldFrame = self.view_sharePart2.frame;
+            self.view_sharePart2.frame = CGRectMake(0, oldFrame.origin.y-39, 320, oldFrame.size.height);
+        }
+        
+        if(kApp.runManager.remark == nil || [kApp.runManager.remark isEqualToString:@""]){
+            CGRect oldFrame = self.view_sharePart2.frame;
+            self.view_sharePart2.frame = CGRectMake(0, oldFrame.origin.y-21, 320, oldFrame.size.height);
+        }
+        
+        [self.button_jump setTitle:@"跳过" forState:UIControlStateNormal];
         self.label_dis_map1.text = [NSString stringWithFormat:@"%0.1f",kApp.runManager.distance/1000.0];
         self.label_date_map1.text = [CNUtil getTimeFromTimestamp_ymd:[CNUtil getNowTime]];
         self.label_time_map1.text = [CNUtil getTimeFromTimestamp_ms:[CNUtil getNowTime]];
@@ -139,7 +150,7 @@ extern NSMutableArray* imageArray;
             default:
                 break;
         }
-        self.label_distance.text = [NSString stringWithFormat:@"我刚刚%@了%0.2f公里",typeDes, [oneRun.distance doubleValue]/1000.0];
+        self.shareText = [NSString stringWithFormat:@"我刚刚%@了%0.2f公里",typeDes, [oneRun.distance doubleValue]/1000.0];
         self.label_feel.text = oneRun.remark;
         self.label_time.text = [CNUtil duringTimeStringFromSecond:[oneRun.duration intValue]/1000];
         self.label_pspeed.text = [CNUtil pspeedStringFromSecond:[oneRun.secondPerKm intValue]];
@@ -151,6 +162,22 @@ extern NSMutableArray* imageArray;
         int way = [oneRun.runway intValue];
         NSString* img_name_way = [NSString stringWithFormat:@"way%i_h.png",way];
         self.image_way.image = [UIImage imageNamed:img_name_way];
+        
+        if(mood == 0 && way == 0){
+            CGRect oldFrame = self.view_sharePart2.frame;
+            self.view_sharePart2.frame = CGRectMake(0, oldFrame.origin.y-39, 320, oldFrame.size.height);
+            CGRect oldFrame2 = self.view_shareview.frame;
+            self.view_shareview.frame = CGRectMake(0, 55, 320, oldFrame2.size.height - 39);
+            
+        }
+        
+        if(oneRun.remark == nil || [oneRun.remark isEqualToString:@""]){
+            CGRect oldFrame = self.view_sharePart2.frame;
+            self.view_sharePart2.frame = CGRectMake(0, oldFrame.origin.y-21, 320, oldFrame.size.height);
+            CGRect oldFrame2 = self.view_shareview.frame;
+            self.view_shareview.frame = CGRectMake(0, 55, 320, oldFrame2.size.height - 21);
+        }
+        
         [self.button_jump setTitle:@"跳过" forState:UIControlStateNormal];
         self.label_dis_map1.text = [NSString stringWithFormat:@"%0.1f",[oneRun.distance doubleValue]/1000.0];
         self.label_date_map1.text = [CNUtil getTimeFromTimestamp_ymd:[oneRun.rid longLongValue]/1000];
@@ -386,12 +413,12 @@ extern NSMutableArray* imageArray;
     return nil;
 }
 - (void)sharetest{
-    id<ISSContent> publishContent = [ShareSDK content:self.label_distance.text
-                                       defaultContent:self.label_distance.text
+    id<ISSContent> publishContent = [ShareSDK content:shareText
+                                       defaultContent:shareText
                                                 image:[ShareSDK pngImageWithImage:[self getWeiboImage]]
                                                 title:@"要跑"
                                                   url:@"http://image.yaopao.net/html/redirect.html"
-                                          description:self.label_distance.text
+                                          description:shareText
                                             mediaType:SSPublishContentMediaTypeImage];
     [ShareSDK showShareActionSheet:nil
                          shareList:nil

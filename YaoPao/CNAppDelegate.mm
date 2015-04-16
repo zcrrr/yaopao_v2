@@ -48,6 +48,7 @@
 #import "CNSettingViewController.h"
 #import <AdobeCreativeSDKImage/AdobeCreativeSDKImage.h>
 #import <AdobeCreativeSDKFoundation/AdobeCreativeSDKFoundation.h>
+#import "EMSDKFull.h"
 
 
 @implementation CNAppDelegate
@@ -58,6 +59,7 @@
 @synthesize runManager;
 @synthesize cloudManager;
 @synthesize isLogin;
+@synthesize isLoginHX;
 @synthesize pid;
 @synthesize userInfoDic;
 @synthesize imageData;
@@ -124,6 +126,7 @@
 @synthesize isInChina;
 @synthesize isKnowCountry;
 @synthesize timer_playVoice;
+@synthesize myContactUseApp;
 
 @synthesize managedObjectModel=_managedObjectModel;
 @synthesize managedObjectContext=_managedObjectContext;
@@ -135,13 +138,16 @@
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     //如果是第一次升级安装，删除所有的记录
     [CNCloudRecord deleteAllRecordWhenFirstInstall];
+    //环信
+    //注册 APNS文件的名字, 需要与后台上传证书时的名字一一对应
+    [[EaseMob sharedInstance] registerSDKWithAppKey:@"yaopao#yaopao" apnsCertName:@""];
+    [[EaseMob sharedInstance] application:application didFinishLaunchingWithOptions:launchOptions];
     //google map
     [GMSServices provideAPIKey:@"AIzaSyCyYR5Ih3xP0rpYMaF1qAsInxFyqvaCJIY"];
     //高德地图
-    
-//    [MAMapServices sharedServices].apiKey =@"0f3dad31deac3acd29ce27c3c2a265f2";
+    [MAMapServices sharedServices].apiKey =@"0f3dad31deac3acd29ce27c3c2a265f2";
     //inhouse
-    [MAMapServices sharedServices].apiKey =@"e46925db02f9c24a1323a8b900e56346";
+//    [MAMapServices sharedServices].apiKey =@"e46925db02f9c24a1323a8b900e56346";
     //adobe creative
     NSString* const CreativeSDKClientId = @"b8ae54f2e0084b789790003fda5127e1";
     NSString* const CreativeSDKClientSecret = @"581b3dc8-5946-491e-88e4-ce258e94c5f4";
@@ -259,6 +265,7 @@
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     NSLog(@"退到后台");
+    [[EaseMob sharedInstance] applicationDidEnterBackground:application];
     if(kApp.isRunning == 0){
         if(kApp.locationHandler.isStart == 1){
             [self.locationHandler stopLocation];
@@ -270,6 +277,7 @@
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+    [[EaseMob sharedInstance] applicationWillEnterForeground:application];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
@@ -284,6 +292,7 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    [[EaseMob sharedInstance] applicationWillTerminate:application];
 }
 //托管对象
 -(NSManagedObjectModel *)managedObjectModel
@@ -467,6 +476,8 @@
     [rootViewController presentViewController:navVC animated:NO completion:^(void){NSLog(@"pop");}];
 }
 + (void)popupWarningCloud{
+    //测试代码
+    return;
     CNWarningCloudingViewController* warningVC = [[CNWarningCloudingViewController alloc]init];
     UINavigationController* navVC = [[UINavigationController alloc]initWithRootViewController:warningVC];
     navVC.modalPresentationStyle = UIModalPresentationCustom;
@@ -667,5 +678,57 @@
                  sourceApplication:sourceApplication
                         annotation:annotation
                         wxDelegate:self];
+}
+- (void)needRegisterMobUser{
+    [self registerMobUser];
+    NSString* filePath = [CNPersistenceHandler getDocument:@"registerMob.plist"];
+    NSMutableDictionary* registerMobDic = [NSMutableDictionary dictionaryWithContentsOfFile:filePath];
+    if(registerMobDic == nil){//没注册过
+        [self registerMobUser];
+    }
+}
+- (void)registerMobUser{
+    SMS_UserInfo* user = [[SMS_UserInfo alloc]init];
+//    user.phone = @"13810916514";
+//    user.nickname = @"张驰";
+//    user.uid = @"1000014";
+//    user.avatar = @"http://image.yaopao.net//image/20141017/120_0D10DB10558411E4B757C9719C9E7B87.jpg";
+    user.phone = [self.userInfoDic objectForKey:@"phone"];
+    user.nickname = [self.userInfoDic objectForKey:@"nickname"];
+    user.uid = [NSString stringWithFormat:@"%@",[self.userInfoDic objectForKey:@"uid"]];
+    user.avatar = [NSString stringWithFormat:@"%@%@",kApp.imageurl,[self.userInfoDic objectForKey:@"imgpath"]];
+    
+    
+    NSLog(@"phone is %@",user.phone);
+    NSLog(@"nickname is %@",user.nickname);
+    NSLog(@"uid is %@",user.uid);
+    NSLog(@"avatar is %@",user.avatar);
+    [SMS_SDK submitUserInfo:user
+                     result:^(enum SMS_ResponseState state) {
+                         if (state == SMS_ResponseStateSuccess)
+                         {
+                             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提交成功"
+                                                                             message:nil
+                                                                            delegate:self
+                                                                   cancelButtonTitle:@"OK"
+                                                                   otherButtonTitles:nil, nil];
+                             [alert show];
+//                             NSString* filePath = [CNPersistenceHandler getDocument:@"registerMob.plist"];
+//                             NSMutableDictionary* registerMobDic = [NSMutableDictionary dictionaryWithContentsOfFile:filePath];
+//                             if(registerMobDic == nil){
+//                                 [registerMobDic setObject:@"1" forKey:@"isRegister"];
+//                                 [registerMobDic writeToFile:filePath atomically:YES];
+//                             }
+                         }
+                         else if (state == SMS_ResponseStateFail)
+                         {
+                             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提交失败"
+                                                                             message:nil
+                                                                            delegate:self
+                                                                   cancelButtonTitle:@"OK"
+                                                                   otherButtonTitles:nil, nil];
+                             [alert show];
+                         }
+                     }];
 }
 @end

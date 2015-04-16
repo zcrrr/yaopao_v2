@@ -15,6 +15,7 @@
 #import "CNUtil.h"
 #import "CNCloudRecord.h"
 #import "ASIHTTPRequest.h"
+#import "EMSDKFull.h"
 #define kCheckServerTimeInterval 2
 #define kShortTime 3000
 
@@ -48,6 +49,9 @@
 @synthesize delegate_deleteRecord;
 @synthesize delegate_downloadRecord;
 @synthesize delegate_downloadOneFile;
+@synthesize delegate_friendsList;
+@synthesize delegate_sendMakeFriendsRequest;
+@synthesize delegate_agreeMakeFriends;
 
 @synthesize verifyCodeRequest;
 @synthesize registerPhoneRequest;
@@ -73,6 +77,9 @@
 @synthesize deleteRecordRequest;
 @synthesize downloadRecordRequest;
 @synthesize downloadOneFileRequest;
+@synthesize friendsListRequest;
+@synthesize sendMakeFriendsRequestRequest;
+@synthesize agreeMakeFriendsRequest;
 
 - (void)startQueue{
     //    self.handler = self;//持有自己的引用，这样就不会被释放,在delegate里面有了强引用，这里可以注释了
@@ -200,8 +207,16 @@
         }
         case TAG_AUTO_LOGIN:
         {
+            NSString* phoneNO = [kApp.userInfoDic objectForKey:@"phone"];
+            [[EaseMob sharedInstance].chatManager asyncLoginWithUsername:phoneNO password:phoneNO completion:^(NSDictionary *loginInfo, EMError *error) {
+                if (!error && loginInfo) {
+                    NSLog(@"登录环信成功!!");
+                    kApp.isLoginHX = 1;
+                }
+            } onQueue:nil];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"loginDone" object:nil];
 //            [kApp.cloudManager synTimeWithServer];
+            [kApp registerMobUser];
             //用户登录之后先同步
             [CNAppDelegate popupWarningCloud];
             break;
@@ -359,6 +374,33 @@
             }
             break;
         }
+        case TAG_FRIEND_LIST:
+        {
+            if(isSuccess){
+                [self.delegate_friendsList friendsListDidSuccess:result];
+            }else{
+                [self.delegate_friendsList friendsListDidFailed:desc];
+            }
+            break;
+        }
+        case TAG_SEND_MAKE_FRIENDS_REQUEST:
+        {
+            if(isSuccess){
+                [self.delegate_sendMakeFriendsRequest sendMakeFriendsRequestDidSuccess:result];
+            }else{
+                [self.delegate_sendMakeFriendsRequest sendMakeFriendsRequestDidFailed:desc];
+            }
+            break;
+        }
+        case TAG_AGREE_MAKE_FRIENDS:
+        {
+            if(isSuccess){
+                [self.delegate_agreeMakeFriends agreeMakeFriendsDidSuccess:result];
+            }else{
+                [self.delegate_agreeMakeFriends agreeMakeFriendsDidFailed:desc];
+            }
+            break;
+        }
         
         default:
             break;
@@ -473,6 +515,21 @@
         case TAG_WEATHER:
         {
             [self.delegate_weather weatherDidFailed:@""];
+            break;
+        }
+        case TAG_FRIEND_LIST:
+        {
+            [self.delegate_friendsList friendsListDidFailed:@""];
+            break;
+        }
+        case TAG_SEND_MAKE_FRIENDS_REQUEST:
+        {
+            [self.delegate_sendMakeFriendsRequest sendMakeFriendsRequestDidFailed:@""];
+            break;
+        }
+        case TAG_AGREE_MAKE_FRIENDS:
+        {
+            [self.delegate_agreeMakeFriends agreeMakeFriendsDidFailed:@""];
             break;
         }
         
@@ -908,6 +965,54 @@
     NSLog(@"天气url:%@",str_url);
     NSLog(@"天气:参数lon:%f,lat:%f",lon,lat);
     [[self networkQueue]addOperation:self.weatherRequest];
+}
+- (void)doRequest_friendsList:(NSMutableDictionary*)params{
+    NSString* str_url = [NSString stringWithFormat:@"%@chSports/friend/getrelatefriends.htm",ENDPOINTS];
+    NSURL* url = [NSURL URLWithString:str_url];
+    self.friendsListRequest =  [ASIFormDataRequest requestWithURL:url];
+    self.friendsListRequest.tag = TAG_FRIEND_LIST;
+    [self.friendsListRequest setNumberOfTimesToRetryOnTimeout:3];
+    [self.friendsListRequest setTimeOutSeconds:15];
+    [self.friendsListRequest addRequestHeader:@"X-PID" value:kApp.pid];
+    [self.friendsListRequest addRequestHeader:@"ua" value:kApp.ua];
+    for (id oneKey in [params allKeys]){
+        [self.friendsListRequest setPostValue:[params objectForKey:oneKey] forKey:oneKey];
+    }
+    NSLog(@"获取朋友列表url:%@",str_url);
+    NSLog(@"获取朋友列表参数:%@",params);
+    [[self networkQueue]addOperation:self.friendsListRequest];
+}
+- (void)doRequest_sendMakeFriendsRequest:(NSMutableDictionary*)params{
+    NSString* str_url = [NSString stringWithFormat:@"%@chSports/friend/reqaddfriend.htm",ENDPOINTS];
+    NSURL* url = [NSURL URLWithString:str_url];
+    self.sendMakeFriendsRequestRequest =  [ASIFormDataRequest requestWithURL:url];
+    self.sendMakeFriendsRequestRequest.tag = TAG_SEND_MAKE_FRIENDS_REQUEST;
+    [self.sendMakeFriendsRequestRequest setNumberOfTimesToRetryOnTimeout:3];
+    [self.sendMakeFriendsRequestRequest setTimeOutSeconds:15];
+    [self.sendMakeFriendsRequestRequest addRequestHeader:@"X-PID" value:kApp.pid];
+    [self.sendMakeFriendsRequestRequest addRequestHeader:@"ua" value:kApp.ua];
+    for (id oneKey in [params allKeys]){
+        [self.sendMakeFriendsRequestRequest setPostValue:[params objectForKey:oneKey] forKey:oneKey];
+    }
+    NSLog(@"发送加好友请求url:%@",str_url);
+    NSLog(@"发送加好友请求参数:%@",params);
+    [[self networkQueue]addOperation:self.sendMakeFriendsRequestRequest];
+}
+- (void)doRequest_agreeMakeFriends:(NSMutableDictionary*)params{
+    NSString* str_url = [NSString stringWithFormat:@"%@chSports/friend/acceptaddfriend.htm",ENDPOINTS];
+    NSURL* url = [NSURL URLWithString:str_url];
+    self.agreeMakeFriendsRequest =  [ASIFormDataRequest requestWithURL:url];
+    self.agreeMakeFriendsRequest.tag = TAG_AGREE_MAKE_FRIENDS;
+    [self.agreeMakeFriendsRequest setNumberOfTimesToRetryOnTimeout:3];
+    [self.agreeMakeFriendsRequest setTimeOutSeconds:15];
+    [self.agreeMakeFriendsRequest addRequestHeader:@"X-PID" value:kApp.pid];
+    [self.agreeMakeFriendsRequest addRequestHeader:@"ua" value:kApp.ua];
+    for (id oneKey in [params allKeys]){
+        [self.agreeMakeFriendsRequest setPostValue:[params objectForKey:oneKey] forKey:oneKey];
+    }
+    NSLog(@"同意添加好友url:%@",str_url);
+    NSLog(@"同意添加好友参数:%@",params);
+    [[self networkQueue]addOperation:self.agreeMakeFriendsRequest];
 }
 - (void)showAlert:(NSString*) content{
     UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:content delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];

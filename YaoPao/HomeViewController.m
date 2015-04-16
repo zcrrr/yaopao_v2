@@ -24,6 +24,7 @@
 #import "WaterMarkViewController.h"
 #import "CNVCodeViewController.h"
 #import <SMS_SDK/SMS_SDK.h>
+#import "CNADBookViewController.h"
 
 @interface HomeViewController ()
 
@@ -257,14 +258,13 @@ NSString* dayOrNight;
     switch ([sender tag]) {
         case 0:
         {
-//            CNVCodeViewController* testVC = [[CNVCodeViewController alloc]init];
-//            [self.navigationController pushViewController:testVC animated:YES];
 //            [CNAppDelegate popupWarningBackground];
             NSLog(@"同步");
-            [CNAppDelegate popupWarningCloud];
+//            [CNAppDelegate popupWarningCloud];
             
-            
-            
+            CNADBookViewController* testVC = [[CNADBookViewController alloc]init];
+            [self.navigationController pushViewController:testVC animated:YES];
+//            [kApp registerMobUser];
             
             break;
         }

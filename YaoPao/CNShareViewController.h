@@ -17,10 +17,9 @@
 @property (assign, nonatomic) int currentpage;
 @property (nonatomic, strong) MAMapView *mapView;
 @property (strong, nonatomic) NSString* dataSource;
+@property (strong, nonatomic) NSString* shareText;
 @property (strong, nonatomic) RunClass* oneRun;
 - (IBAction)button_jump_clicked:(id)sender;
-@property (strong, nonatomic) IBOutlet UIImageView *imageview_avatar;
-@property (strong, nonatomic) IBOutlet UILabel *label_distance;
 @property (strong, nonatomic) IBOutlet UILabel *label_feel;
 @property (strong, nonatomic) IBOutlet UILabel *label_time;
 @property (strong, nonatomic) IBOutlet UILabel *label_pspeed;
@@ -43,5 +42,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *label_time_map2;
 @property (weak, nonatomic) IBOutlet UIImageView *imageview_trackonly;
 @property (weak, nonatomic) IBOutlet UIImageView *imageview_page;
+@property (weak, nonatomic) IBOutlet UIView *view_sharePart2;
 
 @end
