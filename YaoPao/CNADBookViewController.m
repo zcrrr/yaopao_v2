@@ -492,6 +492,8 @@ BOOL friendList1NeedRefresh;
     NSMutableString* newFriendString = [NSMutableString stringWithString:@""];
     for(FriendInfo* friend in self.friendsNew){
         [newFriendString appendString:friend.phoneNO];
+        [newFriendString appendString:@","];
+        
     }
     //判断plist
     NSString* filePath = [CNPersistenceHandler getDocument:@"newFriend.plist"];

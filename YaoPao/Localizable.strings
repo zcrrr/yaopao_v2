@@ -1,0 +1,245 @@
+/* 
+  Localizable.strings
+  ChatDemo-UI2.0
+
+  Created by dhcdht on 15-1-20.
+  Copyright (c) 2015年 dhcdht. All rights reserved.
+*/
+//general
+"register" = "Register";
+"login" = "Login";
+"logout" = "Logout";
+"password" = "Password";
+"username" = "Username";
+
+"sure" = "OK";
+"yes" = "YES";
+"cancel" = "Cancel";
+"no" = "NO";
+
+"search" = "Search";
+"error" = "Error";
+"delete" = "Delete";
+"copy" = "Copy";
+"save" = "Save";
+"prompt" = "Prompt";
+"add" = "Add";
+"send" = "Send";
+"open" = "Open";
+"down" = "Down";
+"choose" = "Choose";
+"accept" = "Accept";
+"reject" = "Reject";
+
+"sendingApply" = "sending apply...";
+"acceptFail" = "accept failure";
+"rejectFail" = "reject failure";
+"refreshData" = "Refresh data...";
+"loadData" = "Load data...";
+"saySomething" = "Say somthing";
+"searchResults" = "The search results";
+"doneWithCount" = "Done(%i)";
+"sureToDelete" = "please make sure to delete";
+"receiveCmd" = "receive cmd message";
+"receiveMessage" = "you have a new message";
+"loginAtOtherDevice" = "your login account has been in other places";
+"loginUserRemoveFromServer" = "your account has been removed from the server side";
+
+//app
+"AppName" = "EaseMobDemo";
+
+//error des
+"error.connectServerFail" = "Connect to the server failed!";
+"error.connectServerTimeout" = "Connect to the server timed out!";
+
+//login
+"login.beginAutoLogin" = "Start automatic login...";
+"login.endAutoLogin" = "End automatic login...";
+"login.errorAutoLogin" = "Automatic logon failure.";
+"login.nameNotSupportZh" = "Name does not support Chinese";
+"login.ongoing" = "Is Login...";
+"login.fail" = "Logon failure";
+"login.inputNameAndPswd" = "Please enter username and password";
+"login.inputApnsNickname" = "Please enter nickname for apns";
+
+//register
+"register.ongoing" = "Is to register...";
+"register.fail" = "Registration failed";
+"register.success" = "Registered successfully, please log in";
+"register.repeat" = "You registered user already exists!";
+
+//apns
+"apns.failToRegisterApns" = "Fail to register apns";
+"apns.failToBindDeviceToken" = "Fail to bind device token";
+
+//friend
+"friend.add" = "add friend";
+"friend.somebodyAddWithName" = "%@ add you as a friend";
+"friend.beRefusedToAdd" = "you are shameless refused by '%@'";
+"friend.inputNameToSearch" = "input to find friends";
+"friend.repeat" = "'%@'has been your friend!";
+"friend.repeatApply" = "you have send fridend request to '%@'!";
+"friend.notAddSelf" = "can't add yourself as a friend";
+"friend.repeatInvite" = "%@ have sent the application to you";
+"friend.somebodyInvite" = "%@ invite you as a friend";
+"friend.sendApply" = "sending application...";
+"friend.sendApplyFail" = "send application fails, please operate again";
+"friend.sendApplySuccess" = "send successfully";
+"friend.black" = "Black List";
+"friend.notChatSelf" = "can't talk to yourself";
+"friend.notDeleteSelf" = "can't delete self";
+"friend.block" = "join the blacklist";
+
+//group
+"group.somebodyInvite" = "%@ invite you to join group \'%@\'";
+"group.applyJoin" = "%@ apply to join groups\'%@\'";
+"group.applyJoinWithName" = "%@ apply to join groups\'%@\'：%@";
+"group.sendApplyFail" = "send application failure:%@\nreason：%@";
+"group.beRefusedToJoin" = "be refused to join the group\'%@\'";
+"group.beKicked" = "you have been kicked out from the group of \'%@\'";
+"group.agreedAndJoined" = "agreed and joined the group of \'%@\'";
+"group.join" = "join the group";
+"group.joined" = "joined";
+"group.owner" = "Owner";
+"group.describe" = "Describe";
+"group.join.ongoing" = "join the group...";
+"group.join.fail" = "again failed to join the group, please";
+"group.sendingApply" = "send group of application...";
+"group.sendApplyRepeat" = "application has been sent";
+
+//Create Group
+"group.create.addOccupant" = "add members";
+"group.create.inputName" = "please enter the group name";
+"group.create.inputDescribe" = "please enter a group description";
+"group.create.groupPermission" = "group permission";
+"group.create.private" = "private group";
+"group.create.occupantPermissions" = "members invite permissions";
+"group.create.allowedOccupantInvite" = "allows group members to invite others";
+"group.create.unallowedOccupantInvite" = "don't allow group members to invite others";
+"group.create.ongoing" = "create a group...";
+"group.create.success" = "create group success";
+"group.create.fail" = "Failed to create a group, please operate again";
+"group.create.public" = "public group";
+"group.create.occupantJoinPermissions" = "members join permissions";
+"group.create.open" = "random join";
+"group.create.needApply" = "you need administrator agreed to join the group";
+
+//Group Bans
+"group.ban.removing" = "members are removing from the blacklist...";
+"group.ban.fetching" = "getting group blacklist...";
+"group.ban.fetchFail" = "fail to get blacklist: %@";
+
+//Group Detail
+"group.removeAllMessages" = "remove all messages";
+"group.destroy" = "dissolution of the group";
+"group.leave" = "quit the group";
+"group.id" = "groupID";
+"group.occupantCount" = "members count";
+"group.addingOccupant" = "add a group member...";
+"group.fetchInfoFail" = "failed to get the group details, please try again later";
+"group.removingOccupant" = "deleting member...";
+"group.destroyFail" = "dissolution of group failure";
+"group.leaveFail" = "exit the group failure";
+
+//Group Setting
+"group.setting.receiveAndPrompt" = "receive and prompt group of messages";
+"group.setting.receiveAndUnprompt" = "receive not only hint of messages";
+"group.setting.blockMessage" = "shielding of the message";
+"group.setting.save" = "set properties";
+"group.setting.success" = "set success";
+"group.setting.fail" = "set failure";
+
+//message
+"message.image" = "image";
+"message.location" = "location";
+"message.voice" = "audio";
+"message.vidio" = "vidio";
+"message.image1" = "[image]";
+"message.location1" = "[location]";
+"message.voice1" = "[audio]";
+"message.vidio1" = "[vidio]";
+"message.beginReceiveOffine" = "begin to receive offline messages";
+"message.endReceiveOffine" = "end to receive offline messages";
+"message.toolBar.inputPlaceHolder" = "input a new message";
+"message.toolBar.record.upCancel" = " Fingers up slide, cancel sending ";
+"message.toolBar.record.loosenCancel" = " loosen the fingers, to cancel sending ";
+"message.toolBar.record.touch" = "hold down to talk";
+"message.toolBar.record.send" = "loosen to send";
+"DXMessageToolBarDelegate.record" = "hold down to talk";
+"DXMessageToolBarDelegate.send" = "loosen to send";
+
+"message.downloadingAudio" = "downloading voice, click later";
+"message.downloadingVideo" = "downloading video...";
+"message.videoFail" = "video for failure!";
+"message.downloadingImage" = "downloading a image...";
+"message.imageFail" = "image for failure!";
+"message.thumImageFail" = "thumbnail for failure!";
+"message.simulatorNotSupportCamera" = "simulator does not support taking picture";
+"message.simulatorNotSupportVideo" = "simulator does not support vidio";
+"message.startRecordFail" = "failure to start recording";
+"message.noMessage" = "no messages";
+
+//network
+"network.disconnection" = "Network disconnection";
+
+//reconnection
+"reconnection.retry" = "Fail to log in your account, is try again... \nclick 'logout' button to jump to the login page \nclick 'continue to wait for' button for reconnection successful";
+"reconnection.ongoing" = "reconnecting...";
+"reconnection.fail" = "reconnection failure, later will continue to reconnection";
+"reconnection.success" = "reconnection successful！";
+"reconnection.wait" = "continue to wait";
+
+//location
+"location.messageType" = "location message";
+"location.fail" = "locate failure";
+"location.ongoning" = "locating...";
+
+//title
+"title.conversation" = "Conversations";
+"title.addressbook" = "AddressBook";
+"title.setting" = "Setting";
+"title.group" = "Group";
+"title.chooseContact" = "select the contact";
+"title.debug" = "Debug";
+"title.groupBlackList" = "Group black list";
+"title.createGroup" = "Create a group";
+"title.publicGroup" = "Public group";
+"title.groupSetting" = "Group Setting";
+"title.apnsSetting" = "Apns Settings";
+"title.buddyBlock" = "Black List";
+"title.apply" = "Application and notification";
+"title.groupApply" = "Group Notification";
+"title.groupSubjectChanging" = "Change group name";
+
+//setting
+"setting.autoLogin" = "automatic login";
+"setting.loginUser" = "log out(%@)";
+"setting.logoutOngoing" = "loging out...";
+
+"setting.notDisturb" = "No disturbing";
+"setting.showDetail" = "notify the display messages";
+"setting.open" = "open";
+"setting.nightOpen" = "only open at night (22:00 - 7:00)";
+"setting.close" = "close";
+"setting.sureNotDisturb" = "this setting will cause all day in the don't disturb mode, will no longer receive push messages. Whether or not to continue?";
+
+"setting.uploadLog" = "upload run log";
+"setting.sdkVersion" = "SDK version";
+"setting.uploading" = "uploading...";
+"setting.uploadSuccess" = "uploaded successfully";
+
+//NSDateCategory
+"NSDateCategory.text1" = "one minute";
+"NSDateCategory.text2" = "%.f minutes ago";
+"NSDateCategory.text3" = "%.f hours ago";
+"NSDateCategory.text4" = "%.f days ago";
+"NSDateCategory.text5" = "M-d";
+"NSDateCategory.text6" = "%.f years ago";
+"NSDateCategory.text7" = "M-d %@";
+"NSDateCategory.text8" = "M-d HH:mm";
+"NSDateCategory.text9" = "aa hh:mm";
+"NSDateCategory.text10" = "aa hh:mm";
+"NSDateCategory.text11" = "aa hh:mm";
+"NSDateCategory.text12" = "aa hh:mm";
+"NSDateCategory.text13" = "M-d HH:mm";
+"NSDateCategory.text14" = "today %@";

@@ -13,7 +13,7 @@
 #import "FriendInfo.h"
 #import "NewFriendsTableViewCell.h"
 #import "InviteFriendViewController.h"
-#import "AddFriendViewController.h"
+#import "CNAddFriendViewController.h"
 #import "CNNetworkHandler.h"
 #import "Toast+UIView.h"
 
@@ -207,7 +207,7 @@ BOOL friendList2NeedRefresh;
             break;
         case 2:
         {
-            AddFriendViewController* afVC = [[AddFriendViewController alloc]init];
+            CNAddFriendViewController* afVC = [[CNAddFriendViewController alloc]init];
             afVC.friend = friend;
             [self.navigationController pushViewController:afVC animated:YES];
             break;

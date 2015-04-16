@@ -9,6 +9,7 @@
 #import "FriendDetailViewController.h"
 #import "FriendInfo.h"
 #import "ASIHTTPRequest.h"
+#import "ChatViewController.h"
 
 @interface FriendDetailViewController ()
 
@@ -61,6 +62,22 @@
 */
 
 - (IBAction)button_clicked:(id)sender {
-    [self.navigationController popViewControllerAnimated:YES];
+    switch ([sender tag]) {
+        case 0:
+        {
+            [self.navigationController popViewControllerAnimated:YES];
+            break;
+        }
+        case 1:
+        {
+            NSLog(@"发起聊天");
+            ChatViewController *chatVC = [[ChatViewController alloc] initWithChatter:friend.phoneNO isGroup:NO];
+            chatVC.title = friend.phoneNO;
+            [self.navigationController pushViewController:chatVC animated:YES];
+        }
+        default:
+            break;
+    }
+    
 }
 @end

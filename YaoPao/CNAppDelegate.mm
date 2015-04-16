@@ -49,7 +49,7 @@
 #import <AdobeCreativeSDKImage/AdobeCreativeSDKImage.h>
 #import <AdobeCreativeSDKFoundation/AdobeCreativeSDKFoundation.h>
 #import "EMSDKFull.h"
-
+#import "ChatListViewController.h"
 
 @implementation CNAppDelegate
 @synthesize navVCList;
@@ -239,7 +239,8 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     UINavigationController* nav1 = [[UINavigationController alloc]initWithRootViewController:[[HomeViewController alloc]init]];
     UINavigationController* nav2 = [[UINavigationController alloc]initWithRootViewController:[[RecordViewController alloc]init]];
-    UINavigationController* nav3 = [[UINavigationController alloc]initWithRootViewController:[[MatchViewController alloc]init]];
+//    UINavigationController* nav3 = [[UINavigationController alloc]initWithRootViewController:[[MatchViewController alloc]init]];
+    UINavigationController* nav3 = [[UINavigationController alloc]initWithRootViewController:[[ChatListViewController alloc]init]];
     UINavigationController* nav4 = [[UINavigationController alloc]initWithRootViewController:[[CNSettingViewController alloc]init]];
     self.navVCList = [[NSMutableArray alloc]initWithObjects:nav1,nav2,nav3,nav4,nil];
     self.window.rootViewController = [self.navVCList objectAtIndex:0];

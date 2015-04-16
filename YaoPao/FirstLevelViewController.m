@@ -62,7 +62,7 @@
     for(i = 0;i<4;i++){
         UIButton* button = [[UIButton alloc]initWithFrame:CGRectMake(offsize-7, 2.5, 40, 42)];
         button.tag = i;
-        [button addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        [button addTarget:self action:@selector(tabButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         [bottomBar addSubview:button];
         offsize += 80;
     }
@@ -70,7 +70,7 @@
     view_line.backgroundColor = [UIColor colorWithRed:35.0/255.0 green:34.0/255.0 blue:43.0/255.0 alpha:1];
     [bottomBar addSubview:view_line];
 }
-- (void)buttonClicked:(id)sender{
+- (void)tabButtonClicked:(id)sender{
     int tag = (int)[sender tag];
     [kApp showTab:tag];
 }
