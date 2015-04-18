@@ -1,10 +1,10 @@
-/* 
-  Localizable.strings
-  ChatDemo-UI2.0
-
-  Created by dhcdht on 15-1-20.
-  Copyright (c) 2015年 dhcdht. All rights reserved.
-*/
+/*
+ Localizable.strings
+ ChatDemo-UI2.0
+ 
+ Created by dhcdht on 15-1-20.
+ Copyright (c) 2015年 dhcdht. All rights reserved.
+ */
 //general
 "register" = "Register";
 "login" = "Login";

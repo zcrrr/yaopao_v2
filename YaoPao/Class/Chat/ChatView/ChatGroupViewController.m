@@ -1,16 +1,16 @@
 /************************************************************
-  *  * EaseMob CONFIDENTIAL 
-  * __________________ 
-  * Copyright (C) 2013-2014 EaseMob Technologies. All rights reserved. 
-  *  
-  * NOTICE: All information contained herein is, and remains 
-  * the property of EaseMob Technologies.
-  * Dissemination of this information or reproduction of this material 
-  * is strictly forbidden unless prior written permission is obtained
-  * from EaseMob Technologies.
-  */
+ *  * EaseMob CONFIDENTIAL
+ * __________________
+ * Copyright (C) 2013-2014 EaseMob Technologies. All rights reserved.
+ *
+ * NOTICE: All information contained herein is, and remains
+ * the property of EaseMob Technologies.
+ * Dissemination of this information or reproduction of this material
+ * is strictly forbidden unless prior written permission is obtained
+ * from EaseMob Technologies.
+ */
 
-#import "ChatViewController.h"
+#import "ChatGroupViewController.h"
 
 #import <MediaPlayer/MediaPlayer.h>
 #import <MobileCoreServices/MobileCoreServices.h>
@@ -31,11 +31,10 @@
 #import "NSDate+Category.h"
 #import "DXMessageToolBar.h"
 #import "DXChatBarMoreView.h"
-#import "ChatViewController+Category.h"
-#import "FriendDetailFromChatViewController.h"
+#import "ChatGroupViewController+Category.h"
 #define KPageCount 20
 
-@interface ChatViewController ()<UITableViewDataSource, UITableViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, SRRefreshDelegate, IChatManagerDelegate, DXChatBarMoreViewDelegate, DXMessageToolBarDelegate, LocationViewDelegate, IDeviceManagerDelegate>
+@interface ChatGroupViewController ()<UITableViewDataSource, UITableViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, SRRefreshDelegate, IChatManagerDelegate, DXChatBarMoreViewDelegate, DXMessageToolBarDelegate, LocationViewDelegate, IDeviceManagerDelegate>
 {
     UIMenuController *_menuController;
     UIMenuItem *_copyMenuItem;
@@ -70,7 +69,7 @@
 
 @end
 
-@implementation ChatViewController
+@implementation ChatGroupViewController
 
 - (instancetype)initWithChatter:(NSString *)chatter isGroup:(BOOL)isGroup
 {
@@ -124,7 +123,7 @@
         self.edgesForExtendedLayout =  UIRectEdgeNone;
     }
     
-    #warning 以下三行代码必须写，注册为SDK的ChatManager的delegate
+#warning 以下三行代码必须写，注册为SDK的ChatManager的delegate
     [[[EaseMob sharedInstance] deviceManager] addDelegate:self onQueue:nil];
     [[EaseMob sharedInstance].chatManager removeDelegate:self];
     //注册为SDK的ChatManager的delegate
@@ -165,8 +164,6 @@
         case 1:
         {
             NSLog(@"详情");
-            FriendDetailFromChatViewController* fdfcVC = [[FriendDetailFromChatViewController alloc]init];
-            [self.navigationController pushViewController:fdfcVC animated:YES];
             break;
         }
             
@@ -487,7 +484,7 @@
 
 - (void)handleLongPress:(UILongPressGestureRecognizer *)recognizer
 {
-	if (recognizer.state == UIGestureRecognizerStateBegan && [self.dataSource count] > 0) {
+    if (recognizer.state == UIGestureRecognizerStateBegan && [self.dataSource count] > 0) {
         CGPoint location = [recognizer locationInView:self.tableView];
         NSIndexPath * indexPath = [self.tableView indexPathForRowAtPoint:location];
         id object = [self.dataSource objectAtIndex:indexPath.row];
@@ -566,7 +563,7 @@
     
     // 播放音频
     if (model.type == eMessageBodyType_Voice) {
-        __weak ChatViewController *weakSelf = self;
+        __weak ChatGroupViewController *weakSelf = self;
         BOOL isPrepare = [self.messageReadManager prepareMessageAudioModel:model updateViewCompletion:^(MessageModel *prevAudioModel, MessageModel *currentAudioModel) {
             if (prevAudioModel || currentAudioModel) {
                 [weakSelf.tableView reloadData];
@@ -575,7 +572,7 @@
         
         if (isPrepare) {
             _isPlayingAudio = YES;
-            __weak ChatViewController *weakSelf = self;
+            __weak ChatGroupViewController *weakSelf = self;
             [[[EaseMob sharedInstance] deviceManager] enableProximitySensor];
             [[EaseMob sharedInstance].chatManager asyncPlayAudio:model.chatVoice completion:^(EMError *error) {
                 [weakSelf.messageReadManager stopMessageAudioModel];
@@ -613,8 +610,8 @@
             return;
         }
     }
-
-    __weak ChatViewController *weakSelf = self;
+    
+    __weak ChatGroupViewController *weakSelf = self;
     id <IChatManager> chatManager = [[EaseMob sharedInstance] chatManager];
     [weakSelf showHudInView:weakSelf.view hint:NSLocalizedString(@"message.downloadingVideo", @"downloading video...")];
     [chatManager asyncFetchMessage:model.message progress:nil completion:^(EMMessage *aMessage, EMError *error) {
@@ -643,7 +640,7 @@
 // 图片的bubble被点击
 -(void)chatImageCellBubblePressed:(MessageModel *)model
 {
-    __weak ChatViewController *weakSelf = self;
+    __weak ChatGroupViewController *weakSelf = self;
     id <IChatManager> chatManager = [[EaseMob sharedInstance] chatManager];
     if ([model.messageBody messageBodyType] == eMessageBodyType_Image) {
         EMImageMessageBody *imageBody = (EMImageMessageBody *)model.messageBody;
@@ -706,7 +703,7 @@
 }
 
 - (void)reloadTableViewDataWithMessage:(EMMessage *)message{
-    __weak ChatViewController *weakSelf = self;
+    __weak ChatGroupViewController *weakSelf = self;
     dispatch_async(_messageQueue, ^{
         if ([weakSelf.conversation.chatter isEqualToString:message.conversationChatter])
         {
@@ -783,7 +780,7 @@
 {
     if (error && [_conversation.chatter isEqualToString:conversationChatter]) {
         
-        __weak ChatViewController *weakSelf = self;
+        __weak ChatGroupViewController *weakSelf = self;
         for (int i = 0; i < self.dataSource.count; i ++) {
             id object = [self.dataSource objectAtIndex:i];
             if ([object isKindOfClass:[MessageModel class]]) {
@@ -891,20 +888,20 @@
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"callOutWithChatter" object:self.chatter];
     
-//    __weak typeof(self) weakSelf = self;
-//    if([[AVAudioSession sharedInstance] respondsToSelector:@selector(requestRecordPermission:)])
-//    {
-//        //requestRecordPermission
-//        [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
-//            NSLog(@"granted = %d",granted);
-//            if(granted)
-//            {
-//                dispatch_async(dispatch_get_main_queue(), ^{
-//                    [[NSNotificationCenter defaultCenter] postNotificationName:@"callOutWithChatter" object:weakSelf.chatter];
-//                });
-//            }
-//        }];
-//    }
+    //    __weak typeof(self) weakSelf = self;
+    //    if([[AVAudioSession sharedInstance] respondsToSelector:@selector(requestRecordPermission:)])
+    //    {
+    //        //requestRecordPermission
+    //        [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
+    //            NSLog(@"granted = %d",granted);
+    //            if(granted)
+    //            {
+    //                dispatch_async(dispatch_get_main_queue(), ^{
+    //                    [[NSNotificationCenter defaultCenter] postNotificationName:@"callOutWithChatter" object:weakSelf.chatter];
+    //                });
+    //            }
+    //        }];
+    //    }
 }
 
 #pragma mark - LocationViewDelegate
@@ -1053,7 +1050,7 @@
                 [indexPaths addObject:[NSIndexPath indexPathForRow:(_longPressIndexPath.row - 1) inSection:0]];
             }
         }
-
+        
         [self.dataSource removeObjectsAtIndexes:indexs];
         [self.tableView beginUpdates];
         [self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
@@ -1118,7 +1115,7 @@
                 
                 [weakSelf.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[weakSelf.dataSource count] - currentCount - 1 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
             });
-
+            
             //从数据库导入时重新下载没有下载成功的附件
             for (NSInteger i = currentCount; i < [weakSelf.dataSource count]; i++)
             {
@@ -1144,7 +1141,7 @@
             [self showHint:NSLocalizedString(@"message.thumImageFail", @"thumbnail for failure!")];
         }
     };
-
+    
     if ([model.messageBody messageBodyType] == eMessageBodyType_Image) {
         EMImageMessageBody *imageBody = (EMImageMessageBody *)model.messageBody;
         if (imageBody.thumbnailDownloadStatus != EMAttachmentDownloadSuccessed)
@@ -1215,7 +1212,7 @@
 -(void)addMessage:(EMMessage *)message
 {
     [_messages addObject:message];
-    __weak ChatViewController *weakSelf = self;
+    __weak ChatGroupViewController *weakSelf = self;
     dispatch_async(_messageQueue, ^{
         NSArray *messages = [weakSelf formatMessage:message];
         NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
@@ -1342,19 +1339,19 @@
 -(void)sendTextMessage:(NSString *)textMessage
 {
     //test code
-//    for (int i = 0; i < 500; i++) {
-//        NSString *sender = [NSString stringWithFormat:@"sender%i", i];
-//        for (int j = 0; j < 10; j++) {
-//            NSString *str = [NSString stringWithFormat:@"text%i_%i", i, j];
-//            EMChatText *text = [[EMChatText alloc] initWithText:str];
-//            EMTextMessageBody *body = [[EMTextMessageBody alloc] initWithChatObject:text];
-//            EMMessage *retureMsg = [[EMMessage alloc] initWithReceiver:@"899" sender:sender bodies:[NSArray arrayWithObject:body]];
-//            retureMsg.requireEncryption = NO;
-//            retureMsg.isGroup = NO;
-//            [[EaseMob sharedInstance].chatManager asyncSendMessage:retureMsg progress:nil];
-//        }
-//    }
-
+    //    for (int i = 0; i < 500; i++) {
+    //        NSString *sender = [NSString stringWithFormat:@"sender%i", i];
+    //        for (int j = 0; j < 10; j++) {
+    //            NSString *str = [NSString stringWithFormat:@"text%i_%i", i, j];
+    //            EMChatText *text = [[EMChatText alloc] initWithText:str];
+    //            EMTextMessageBody *body = [[EMTextMessageBody alloc] initWithChatObject:text];
+    //            EMMessage *retureMsg = [[EMMessage alloc] initWithReceiver:@"899" sender:sender bodies:[NSArray arrayWithObject:body]];
+    //            retureMsg.requireEncryption = NO;
+    //            retureMsg.isGroup = NO;
+    //            [[EaseMob sharedInstance].chatManager asyncSendMessage:retureMsg progress:nil];
+    //        }
+    //    }
+    
     EMMessage *tempMessage = [ChatSendHelper sendTextMessageWithString:textMessage
                                                             toUsername:_conversation.chatter
                                                            isChatGroup:_isChatGroup

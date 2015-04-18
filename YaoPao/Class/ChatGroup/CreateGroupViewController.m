@@ -16,6 +16,7 @@
 #import "EMTextView.h"
 #import "EMSDKFull.h"
 #import "UIViewController+HUD.h"
+#import "CNNetworkHandler.h"
 
 @interface CreateGroupViewController ()<UITextFieldDelegate, UITextViewDelegate, EMChooseViewDelegate>
 
@@ -55,29 +56,49 @@
     {
         [self setEdgesForExtendedLayout:UIRectEdgeNone];
     }
-    self.title = NSLocalizedString(@"title.createGroup", @"Create a group");
+    UIView* topbar = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 55)];
+    topbar.backgroundColor = [UIColor blueColor];
+    [self.view addSubview:topbar];
+    UILabel* label_title = [[UILabel alloc]initWithFrame:CGRectMake(87, 20, 146, 35)];
+    [label_title setTextAlignment:NSTextAlignmentCenter];
+    label_title.text = NSLocalizedString(@"title.createGroup", @"Create a group");;
+    label_title.font = [UIFont systemFontOfSize:16];
+    label_title.textColor = [UIColor whiteColor];
+    [topbar addSubview:label_title];
+    UIButton * button_back = [UIButton buttonWithType:UIButtonTypeCustom];
+    button_back.frame = CGRectMake(0, 23, 50, 30);
+    [button_back setTitle:@"返回" forState:UIControlStateNormal];
+    button_back.tag = 0;
+    [button_back addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    [topbar addSubview:button_back];
+    
     self.view.backgroundColor = [UIColor colorWithRed:0.88 green:0.88 blue:0.88 alpha:1.0];
     
-    UIButton *addButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 60, 44)];
+    UIButton *addButton = [[UIButton alloc] initWithFrame:CGRectMake(10, 300, 300, 44)];
     addButton.titleLabel.font = [UIFont systemFontOfSize:14.0];
     [addButton setTitle:NSLocalizedString(@"group.create.addOccupant", @"add members") forState:UIControlStateNormal];
     [addButton setTitleColor:[UIColor colorWithRed:32 / 255.0 green:134 / 255.0 blue:158 / 255.0 alpha:1.0] forState:UIControlStateNormal];
     [addButton setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
     [addButton addTarget:self action:@selector(addContacts:) forControlEvents:UIControlEventTouchUpInside];
-    _rightItem = [[UIBarButtonItem alloc] initWithCustomView:addButton];
-    [self.navigationItem setRightBarButtonItem:_rightItem];
+    [self.view addSubview:addButton];
     
-    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
-    [backButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
-    [backButton addTarget:self.navigationController action:@selector(popViewControllerAnimated:) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
-    [self.navigationItem setLeftBarButtonItem:backItem];
     
     [self.view addSubview:self.textField];
     [self.view addSubview:self.textView];
-    [self.view addSubview:self.switchView];
+//    [self.view addSubview:self.switchView];
 }
-
+- (void)buttonClicked:(id)sender{
+    switch ([sender tag]) {
+        case 0:
+        {
+            NSLog(@"返回");
+            [self.navigationController popViewControllerAnimated:YES];
+            break;
+        }
+        default:
+            break;
+    }
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -89,7 +110,7 @@
 - (UITextField *)textField
 {
     if (_textField == nil) {
-        _textField = [[UITextField alloc] initWithFrame:CGRectMake(10, 10, 300, 40)];
+        _textField = [[UITextField alloc] initWithFrame:CGRectMake(10, 10+55, 300, 40)];
         _textField.layer.borderColor = [[UIColor lightGrayColor] CGColor];
         _textField.layer.borderWidth = 0.5;
         _textField.layer.cornerRadius = 3;
@@ -110,7 +131,7 @@
 - (EMTextView *)textView
 {
     if (_textView == nil) {
-        _textView = [[EMTextView alloc] initWithFrame:CGRectMake(10, 70, 300, 80)];
+        _textView = [[EMTextView alloc] initWithFrame:CGRectMake(10, 70+55, 300, 80)];
         _textView.layer.borderColor = [[UIColor lightGrayColor] CGColor];
         _textView.layer.borderWidth = 0.5;
         _textView.layer.cornerRadius = 3;
@@ -196,34 +217,42 @@
 
 - (void)viewController:(EMChooseViewController *)viewController didFinishSelectedSources:(NSArray *)selectedSources
 {
+    NSLog(@"didFinishSelectedSources");
     [self showHudInView:self.view hint:NSLocalizedString(@"group.create.ongoing", @"create a group...")];
-    
+    NSMutableString* invitePersons = [NSMutableString stringWithString:@""];
     NSMutableArray *source = [NSMutableArray array];
     for (EMBuddy *buddy in selectedSources) {
         [source addObject:buddy.username];
+        [invitePersons appendString:buddy.username];
+        [invitePersons appendString:@","];
+    }
+    if([invitePersons hasSuffix:@","]){
+        invitePersons = [NSMutableString stringWithString:[invitePersons substringToIndex:invitePersons.length - 1]];
     }
     
     EMGroupStyleSetting *setting = [[EMGroupStyleSetting alloc] init];
-    if (_isPublic) {
-        if(_isMemberOn)
-        {
-            setting.groupStyle = eGroupStyle_PublicOpenJoin;
-        }
-        else{
-            setting.groupStyle = eGroupStyle_PublicJoinNeedApproval;
-        }
-    }
-    else{
-        if(_isMemberOn)
-        {
-            setting.groupStyle = eGroupStyle_PrivateMemberCanInvite;
-        }
-        else{
-            setting.groupStyle = eGroupStyle_PrivateOnlyOwnerInvite;
-        }
-    }
-    
-//    setting.groupMaxUsersCount = 4;
+//    if (_isPublic) {
+//        if(_isMemberOn)
+//        {
+//            setting.groupStyle = eGroupStyle_PublicOpenJoin;
+//        }
+//        else{
+//            setting.groupStyle = eGroupStyle_PublicJoinNeedApproval;
+//        }
+//    }
+//    else{
+//        if(_isMemberOn)
+//        {
+//            setting.groupStyle = eGroupStyle_PrivateMemberCanInvite;
+//        }
+//        else{
+//            setting.groupStyle = eGroupStyle_PrivateOnlyOwnerInvite;
+//        }
+//    }
+    //默认私有群、允许成员加拉人
+    setting.groupStyle = eGroupStyle_PublicJoinNeedApproval;
+    setting.groupStyle = eGroupStyle_PrivateMemberCanInvite;
+    setting.groupMaxUsersCount = 50;
     __weak CreateGroupViewController *weakSelf = self;
     NSDictionary *loginInfo = [[[EaseMob sharedInstance] chatManager] loginInfo];
     NSString *username = [loginInfo objectForKey:kSDKUsername];
@@ -233,13 +262,31 @@
         if (group && !error) {
             [weakSelf showHint:NSLocalizedString(@"group.create.success", @"create group success")];
             [weakSelf.navigationController popViewControllerAnimated:YES];
+            //建群成功，调用yaopao接口，建群
+            NSMutableDictionary* params = [[NSMutableDictionary alloc]init];
+            NSString* uid = [NSString stringWithFormat:@"%@",[kApp.userInfoDic objectForKey:@"uid"]];
+            [params setObject:uid forKey:@"uid"];
+            [params setObject:self.textField.text forKey:@"groupname"];
+            [params setObject:self.textView.text forKey:@"desc"];
+            [params setObject:@"false" forKey:@"ispublic"];
+            [params setObject:@"50" forKey:@"maxusers"];
+            [params setObject:@"false" forKey:@"approval"];
+            [params setObject:[kApp.userInfoDic objectForKey:@"phone"] forKey:@"owner"];
+            [params setObject:invitePersons forKey:@"members"];
+            kApp.networkHandler.delegate_createGroup = self;
+            [kApp.networkHandler doRequest_createGroup:params];
         }
         else{
             [weakSelf showHint:NSLocalizedString(@"group.create.fail", @"Failed to create a group, please operate again")];
         }
     } onQueue:nil];
 }
-
+- (void)createGroupDidFailed:(NSString *)mes{
+    
+}
+- (void)createGroupDidSuccess:(NSDictionary *)resultDic{
+    
+}
 #pragma mark - action
 
 - (void)groupTypeChange:(UISwitch *)control

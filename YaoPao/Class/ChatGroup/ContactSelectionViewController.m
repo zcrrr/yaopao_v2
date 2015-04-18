@@ -74,18 +74,26 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.title = NSLocalizedString(@"title.chooseContact", @"select the contact");
-    self.navigationItem.rightBarButtonItem = nil;
-    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
-    [backButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
-    [backButton addTarget:self.navigationController action:@selector(popViewControllerAnimated:) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
-    [self.navigationItem setLeftBarButtonItem:backItem];
+    UIView* topbar = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 55)];
+    topbar.backgroundColor = [UIColor blueColor];
+    [self.view addSubview:topbar];
+    UILabel* label_title = [[UILabel alloc]initWithFrame:CGRectMake(87, 20, 146, 35)];
+    [label_title setTextAlignment:NSTextAlignmentCenter];
+    label_title.text = NSLocalizedString(@"title.chooseContact", @"select the contact");
+    label_title.font = [UIFont systemFontOfSize:16];
+    label_title.textColor = [UIColor whiteColor];
+    [topbar addSubview:label_title];
+    UIButton * button_back = [UIButton buttonWithType:UIButtonTypeCustom];
+    button_back.frame = CGRectMake(0, 23, 50, 30);
+    [button_back setTitle:@"返回" forState:UIControlStateNormal];
+    button_back.tag = 0;
+    [button_back addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    [topbar addSubview:button_back];
     
     [self.view addSubview:self.searchBar];
     [self.view addSubview:self.footerView];
     self.tableView.editing = YES;
-    self.tableView.frame = CGRectMake(0, self.searchBar.frame.size.height, self.view.frame.size.width, self.view.frame.size.height - self.searchBar.frame.size.height - self.footerView.frame.size.height);
+    self.tableView.frame = CGRectMake(0, self.searchBar.frame.size.height+55, self.view.frame.size.width, self.view.frame.size.height - self.searchBar.frame.size.height - self.footerView.frame.size.height-55);
     [self searchController];
     
     if ([_blockSelectedUsernames count] > 0) {
@@ -110,7 +118,18 @@
         }
     }
 }
-
+- (void)buttonClicked:(id)sender{
+    switch ([sender tag]) {
+        case 0:
+        {
+            NSLog(@"返回");
+            [self.navigationController popViewControllerAnimated:YES];
+            break;
+        }
+        default:
+            break;
+    }
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -122,7 +141,7 @@
 - (UISearchBar *)searchBar
 {
     if (_searchBar == nil) {
-        _searchBar = [[EMSearchBar alloc] initWithFrame: CGRectMake(0, 0, self.view.frame.size.width, 44)];
+        _searchBar = [[EMSearchBar alloc] initWithFrame: CGRectMake(0, 55, self.view.frame.size.width, 44)];
         _searchBar.delegate = self;
         _searchBar.placeholder = NSLocalizedString(@"search", @"Search");
         _searchBar.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin;
@@ -385,20 +404,27 @@
 - (void)loadDataSource
 {
     [self showHudInView:self.view hint:NSLocalizedString(@"loadData", @"Load data...")];
-    [_dataSource removeAllObjects];
-    [_contactsSource removeAllObjects];
-    
-    NSArray *buddyList = [[EaseMob sharedInstance].chatManager buddyList];
-    for (EMBuddy *buddy in buddyList) {
-        if (buddy.followState != eEMBuddyFollowState_NotFollowed) {
-            [self.contactsSource addObject:buddy];
+    [[EaseMob sharedInstance].chatManager asyncFetchBuddyListWithCompletion:^(NSArray *buddyList, EMError *error) {
+        if (!error) {
+            NSLog(@"获取成功 -- %@",buddyList);
+            [_dataSource removeAllObjects];
+            [_contactsSource removeAllObjects];
+            
+            NSArray *buddyList = [[EaseMob sharedInstance].chatManager buddyList];
+            for (EMBuddy *buddy in buddyList) {
+                if (buddy.followState != eEMBuddyFollowState_NotFollowed) {
+                    [self.contactsSource addObject:buddy];
+                }
+            }
+            [_dataSource addObjectsFromArray:[self sortRecords:self.contactsSource]];
+            
+            [self hideHud];
+            [self.tableView reloadData];
+        }else{
+            [self hideHud];
         }
-    }
-    
-    [_dataSource addObjectsFromArray:[self sortRecords:self.contactsSource]];
-    
-    [self hideHud];
-    [self.tableView reloadData];
+    } onQueue:nil];
+
 }
 
 - (void)doneAction:(id)sender

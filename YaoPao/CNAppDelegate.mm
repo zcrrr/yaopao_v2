@@ -140,6 +140,7 @@
     [CNCloudRecord deleteAllRecordWhenFirstInstall];
     //环信
     //注册 APNS文件的名字, 需要与后台上传证书时的名字一一对应
+//    [[EaseMob sharedInstance] registerSDKWithAppKey:@"yaopao#yaopao" apnsCertName:@"" otherConfig:@{kSDKConfigEnableConsoleLogger:[NSNumber numberWithBool:NO]}];
     [[EaseMob sharedInstance] registerSDKWithAppKey:@"yaopao#yaopao" apnsCertName:@""];
     [[EaseMob sharedInstance] application:application didFinishLaunchingWithOptions:launchOptions];
     //google map

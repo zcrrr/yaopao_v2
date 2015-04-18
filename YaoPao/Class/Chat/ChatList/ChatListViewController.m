@@ -23,6 +23,7 @@
 #import "UIViewController+HUD.h"
 #import "CNADBookViewController.h"
 #import "CreateGroupViewController.h"
+#import "ChatGroupViewController.h"
 
 @interface ChatListViewController ()<UITableViewDelegate,UITableViewDataSource, UISearchDisplayDelegate,SRRefreshDelegate, UISearchBarDelegate, IChatManagerDelegate>
 
@@ -406,7 +407,7 @@
     
     EMConversation *conversation = [self.dataSource objectAtIndex:indexPath.row];
     
-    ChatViewController *chatController;
+    
     NSString *title = conversation.chatter;
     if (conversation.isGroup) {
         NSArray *groupArray = [[EaseMob sharedInstance].chatManager groupList];
@@ -416,12 +417,20 @@
                 break;
             }
         }
+        ChatGroupViewController *chatController;
+        NSString *chatter = conversation.chatter;
+        chatController = [[ChatGroupViewController alloc] initWithChatter:chatter isGroup:conversation.isGroup];
+        chatController.title = title;
+        [self.navigationController pushViewController:chatController animated:YES];
+    }else{
+        ChatViewController *chatController;
+        NSString *chatter = conversation.chatter;
+        chatController = [[ChatViewController alloc] initWithChatter:chatter isGroup:conversation.isGroup];
+        chatController.title = title;
+        [self.navigationController pushViewController:chatController animated:YES];
     }
     
-    NSString *chatter = conversation.chatter;
-    chatController = [[ChatViewController alloc] initWithChatter:chatter isGroup:conversation.isGroup];
-    chatController.title = title;
-    [self.navigationController pushViewController:chatController animated:YES];
+    
 }
 
 -(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath{

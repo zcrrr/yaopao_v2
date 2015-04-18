@@ -16,6 +16,8 @@
 #import <SMS_SDK/SMS_SDK.h>
 #import "NewFriendsTableViewCell.h"
 #import "FriendDetailViewController.h"
+#import "CNGroupInfo.h"
+#import "ChatGroupViewController.h"
 
 @interface CNADBookViewController ()
 
@@ -30,6 +32,7 @@
 @synthesize groupedMap;
 @synthesize friendsNew;
 @synthesize haveNewFriends;
+@synthesize FriendNewString;
 BOOL friendList1NeedRefresh;
 
 - (void)viewDidLoad {
@@ -40,9 +43,6 @@ BOOL friendList1NeedRefresh;
         kApp.myContactUseApp = [[NSMutableArray alloc]init];
     }
     friendList1NeedRefresh = YES;
-    
-    
-    
     //发送请求
 //    NSMutableDictionary* params = [[NSMutableDictionary alloc]init];
 //    [params setObject:@"5" forKey:@"uid"];
@@ -65,6 +65,7 @@ BOOL friendList1NeedRefresh;
         self.friends = [[NSMutableArray alloc]init];
         self.friendsIWant = [[NSMutableArray alloc]init];
         self.frinedsWantMe = [[NSMutableArray alloc]init];
+        self.myGroups = [[NSMutableArray alloc]init];
         self.keys = [[NSMutableArray alloc]init];
         self.groupedMap = [[NSMutableDictionary alloc]init];
         //好友列表
@@ -114,12 +115,11 @@ BOOL friendList1NeedRefresh;
         [self.groupedMap setValue:nameStartWithSameLetter forKey:oneKey];
     }
     //在dic里加上跑团的信息
-//    NSArray* groupList = [[NSArray alloc]initWithObjects:@"跑团1",@"跑团2",@"跑团3",nil];
-//    [self.groupedMap setValue:groupList forKey:@"跑团"];
+    [self.groupedMap setValue:self.myGroups forKey:@"跑团"];
     
     self.keys = [[NSMutableArray alloc]init];
     [self.keys addObject:@"推荐好友"];
-//    [self.keys addObject:@"跑团"];
+    [self.keys addObject:@"跑团"];
     [self.keys addObjectsFromArray:[array_keys sortedArrayUsingSelector:@selector(compare:)]];
 }
 - (void)didReceiveMemoryWarning {
@@ -303,6 +303,22 @@ BOOL friendList1NeedRefresh;
                 return nil;
         }
         
+    }else if(section == 1){//跑团
+        NSString* key = [self.keys objectAtIndex:section];
+        static NSString *CellIdentifier = @"NewFriendsTableViewCell";
+        BOOL nibsRegistered = NO;
+        if (!nibsRegistered) {
+            UINib *nib = [UINib nibWithNibName:NSStringFromClass([NewFriendsTableViewCell class]) bundle:nil];
+            [tableView registerNib:nib forCellReuseIdentifier:CellIdentifier];
+            nibsRegistered = YES;
+        }
+        CNGroupInfo* group = [[groupedMap objectForKey:key]objectAtIndex:row];
+        NewFriendsTableViewCell *cell = (NewFriendsTableViewCell*)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        
+        cell.label_username.text = group.groupName;
+        cell.imageview_avatar.image = [UIImage imageNamed:@"avatar_default.png"];
+        cell.button_action.hidden = YES;
+        return cell;
     }else{
         NSString* key = [self.keys objectAtIndex:section];
         static NSString *CellIdentifier = @"NewFriendsTableViewCell";
@@ -349,6 +365,11 @@ BOOL friendList1NeedRefresh;
         NewFriendsViewController* nfVC = [[NewFriendsViewController alloc]init];
         nfVC.friendsNew = self.friendsNew;
         [self.navigationController pushViewController:nfVC animated:YES];
+        [self writeNewFriendsStringToPlist];
+    }else if(section == 1){//点击跑团
+        CNGroupInfo* group = [self.myGroups objectAtIndex:row];
+        ChatGroupViewController* chatController = [[ChatGroupViewController alloc] initWithChatter:group.groupId isGroup:YES];
+        [self.navigationController pushViewController:chatController animated:YES];
     }else{
         FriendInfo* friend = [[groupedMap objectForKey:key]objectAtIndex:row];
         FriendDetailViewController* fdVC = [[FriendDetailViewController alloc]init];
@@ -399,6 +420,20 @@ BOOL friendList1NeedRefresh;
     [self printFriendList:self.friendsIWant];
     NSLog(@"self.frinedsWantMe is:");
     [self printFriendList:self.frinedsWantMe];
+    
+    //获取组
+    NSArray* grouplist = [resultDic objectForKey:@"grouplist"];
+    for(NSDictionary* dic in grouplist){
+        NSString* groupId = [dic objectForKey:@"id"];
+        NSString* groupName = [dic objectForKey:@"name"];
+        NSString* groupDesc = [dic objectForKey:@"description"];
+        CNGroupInfo* groupInfo = [[CNGroupInfo alloc]init];
+        groupInfo.groupId = groupId;
+        groupInfo.groupName = groupName;
+        groupInfo.groupDesc = groupDesc;
+        [self.myGroups addObject:groupInfo];
+    }
+    
     if([kApp.myContactUseApp count] > 0){//已经获取过通讯录中使用app的人
         NSLog(@"已经获取过通讯录中使用app的人,无需重新获取");
         [self makeNewFriendsList];
@@ -487,21 +522,27 @@ BOOL friendList1NeedRefresh;
     }
     NSLog(@"-----------------------------------------------------------");
 }
+- (void)writeNewFriendsStringToPlist{
+    NSString* filePath = [CNPersistenceHandler getDocument:@"newFriend.plist"];
+    NSMutableDictionary* newFriendsDic = [NSMutableDictionary dictionaryWithContentsOfFile:filePath];
+    if(newFriendsDic == nil){//没有这个文件，说明第一次
+        newFriendsDic = [[NSMutableDictionary alloc]init];
+    }
+    [newFriendsDic setObject:self.FriendNewString forKey:@"newFriends"];
+    [newFriendsDic writeToFile:filePath atomically:YES];
+}
 - (void)ishaveNewFriends{
     //先得到本次最新的电话字符串
-    NSMutableString* newFriendString = [NSMutableString stringWithString:@""];
+    self.FriendNewString = [NSMutableString stringWithString:@""];
     for(FriendInfo* friend in self.friendsNew){
-        [newFriendString appendString:friend.phoneNO];
-        [newFriendString appendString:@","];
+        [self.FriendNewString appendString:friend.phoneNO];
+        [self.FriendNewString appendString:@","];
         
     }
     //判断plist
     NSString* filePath = [CNPersistenceHandler getDocument:@"newFriend.plist"];
     NSMutableDictionary* newFriendsDic = [NSMutableDictionary dictionaryWithContentsOfFile:filePath];
     if(newFriendsDic == nil){//没有这个文件，说明第一次
-        newFriendsDic = [[NSMutableDictionary alloc]init];
-        [newFriendsDic setObject:newFriendString forKey:@"newFriends"];
-        [newFriendsDic writeToFile:filePath atomically:YES];
         NSLog(@"第一次进入该页面");
         self.haveNewFriends = YES;
         return;
@@ -509,15 +550,11 @@ BOOL friendList1NeedRefresh;
         NSString* newFriendStringOld = [newFriendsDic objectForKey:@"newFriends"];
         for(FriendInfo* friend in self.friendsNew){
             if(![newFriendStringOld containsString:friend.phoneNO]){//出现了不同电话号码
-                [newFriendsDic setObject:newFriendString forKey:@"newFriends"];
-                [newFriendsDic writeToFile:filePath atomically:YES];
                 NSLog(@"有新的朋友");
                 self.haveNewFriends = YES;
                 return;
             }
         }
-        [newFriendsDic setObject:newFriendString forKey:@"newFriends"];
-        [newFriendsDic writeToFile:filePath atomically:YES];
         NSLog(@"没有新的朋友");
         self.haveNewFriends = NO;
     }

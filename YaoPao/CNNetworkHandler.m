@@ -52,6 +52,7 @@
 @synthesize delegate_friendsList;
 @synthesize delegate_sendMakeFriendsRequest;
 @synthesize delegate_agreeMakeFriends;
+@synthesize delegate_createGroup;
 
 @synthesize verifyCodeRequest;
 @synthesize registerPhoneRequest;
@@ -80,6 +81,7 @@
 @synthesize friendsListRequest;
 @synthesize sendMakeFriendsRequestRequest;
 @synthesize agreeMakeFriendsRequest;
+@synthesize createGroupRequest;
 
 - (void)startQueue{
     //    self.handler = self;//持有自己的引用，这样就不会被释放,在delegate里面有了强引用，这里可以注释了
@@ -401,6 +403,15 @@
             }
             break;
         }
+        case TAG_CREATE_GROUP:
+        {
+            if(isSuccess){
+                [self.delegate_createGroup createGroupDidSuccess:result];
+            }else{
+                [self.delegate_createGroup createGroupDidFailed:desc];
+            }
+            break;
+        }
         
         default:
             break;
@@ -530,6 +541,11 @@
         case TAG_AGREE_MAKE_FRIENDS:
         {
             [self.delegate_agreeMakeFriends agreeMakeFriendsDidFailed:@""];
+            break;
+        }
+        case TAG_CREATE_GROUP:
+        {
+            [self.delegate_createGroup createGroupDidFailed:@""];
             break;
         }
         
@@ -1013,6 +1029,22 @@
     NSLog(@"同意添加好友url:%@",str_url);
     NSLog(@"同意添加好友参数:%@",params);
     [[self networkQueue]addOperation:self.agreeMakeFriendsRequest];
+}
+- (void)doRequest_createGroup:(NSMutableDictionary*)params{
+    NSString* str_url = [NSString stringWithFormat:@"%@chSports/group/addgroup.htm",ENDPOINTS];
+    NSURL* url = [NSURL URLWithString:str_url];
+    self.createGroupRequest =  [ASIFormDataRequest requestWithURL:url];
+    self.createGroupRequest.tag = TAG_CREATE_GROUP;
+    [self.createGroupRequest setNumberOfTimesToRetryOnTimeout:3];
+    [self.createGroupRequest setTimeOutSeconds:15];
+    [self.createGroupRequest addRequestHeader:@"X-PID" value:kApp.pid];
+    [self.createGroupRequest addRequestHeader:@"ua" value:kApp.ua];
+    for (id oneKey in [params allKeys]){
+        [self.createGroupRequest setPostValue:[params objectForKey:oneKey] forKey:oneKey];
+    }
+    NSLog(@"创建跑团url:%@",str_url);
+    NSLog(@"创建跑团参数:%@",params);
+    [[self networkQueue]addOperation:self.createGroupRequest];
 }
 - (void)showAlert:(NSString*) content{
     UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:content delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];

@@ -184,6 +184,12 @@
 - (void)agreeMakeFriendsDidFailed:(NSString*)mes;
 @end
 
+@protocol createGroupDelegate<NSObject>
+//创建跑团
+- (void)createGroupDidSuccess:(NSDictionary*)resultDic;
+- (void)createGroupDidFailed:(NSString*)mes;
+@end
+
 
 
 @interface CNNetworkHandler : NSObject<ASIProgressDelegate,ASIHTTPRequestDelegate>
@@ -226,6 +232,7 @@
 @property (nonatomic, strong) id<friendsListDelegate> delegate_friendsList;
 @property (nonatomic, strong) id<sendMakeFriendsRequestDelegate> delegate_sendMakeFriendsRequest;
 @property (nonatomic, strong) id<agreeMakeFriendsDelegate> delegate_agreeMakeFriends;
+@property (nonatomic, strong) id<createGroupDelegate> delegate_createGroup;
 
 //定义每个请求的request
 @property (nonatomic, strong) ASIFormDataRequest* verifyCodeRequest;
@@ -257,6 +264,7 @@
 @property (nonatomic, strong) ASIFormDataRequest* friendsListRequest;
 @property (nonatomic, strong) ASIFormDataRequest* sendMakeFriendsRequestRequest;
 @property (nonatomic, strong) ASIFormDataRequest* agreeMakeFriendsRequest;
+@property (nonatomic, strong) ASIFormDataRequest* createGroupRequest;
 //每个请求的实现
 - (void)doRequest_verifyCode:(NSString*)phoneNO;
 - (void)doRequest_registerPhone:(NSMutableDictionary*)params;
@@ -287,5 +295,6 @@
 - (void)doRequest_friendsList:(NSMutableDictionary*)params;
 - (void)doRequest_sendMakeFriendsRequest:(NSMutableDictionary*)params;
 - (void)doRequest_agreeMakeFriends:(NSMutableDictionary*)params;
+- (void)doRequest_createGroup:(NSMutableDictionary*)params;
 
 @end
