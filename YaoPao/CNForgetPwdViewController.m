@@ -11,6 +11,7 @@
 #import "SMS_SDK/SMS_SDK.h"
 #import "SectionsViewController.h"
 #import "CNCloudRecord.h"
+#import "EMSDKFull.h"
 
 
 @interface CNForgetPwdViewController ()
@@ -312,6 +313,15 @@
     //登录、注册之后的一系列操作
     [CNCloudRecord ClearRecordAfterUserLogin];
     [self.navigationController popToRootViewControllerAnimated:YES];
+    //向mob注册用户信息
+    [kApp needRegisterMobUser];
+    NSString* phoneNO = [kApp.userInfoDic objectForKey:@"phone"];
+    [[EaseMob sharedInstance].chatManager asyncLoginWithUsername:phoneNO password:phoneNO completion:^(NSDictionary *loginInfo, EMError *error) {
+        if (!error && loginInfo) {
+            NSLog(@"登录环信成功!!");
+            kApp.isLoginHX = 1;
+        }
+    } onQueue:nil];
     //用户登录之后先同步
     [CNAppDelegate popupWarningCloud];
 }

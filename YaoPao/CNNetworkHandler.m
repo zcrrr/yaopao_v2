@@ -218,7 +218,7 @@
             } onQueue:nil];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"loginDone" object:nil];
 //            [kApp.cloudManager synTimeWithServer];
-            [kApp registerMobUser];
+            [kApp needRegisterMobUser];
             //用户登录之后先同步
             [CNAppDelegate popupWarningCloud];
             break;

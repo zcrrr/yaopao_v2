@@ -303,6 +303,8 @@
 - (void)updateUserinfoDidSuccess:(NSDictionary *)resultDic{
     [self hideLoading];
     [self.navigationController popToRootViewControllerAnimated:YES];
+    //向mob注册用户信息
+    [kApp registerMobUser];
 }
 - (void)updateUserinfoDidFailed:(NSString *)mes{
     [self hideLoading];

@@ -10,6 +10,7 @@
 #import "FriendInfo.h"
 #import "CNNetworkHandler.h"
 #import "Toast+UIView.h"
+#import "FriendsHandler.h"
 
 @interface CNAddFriendViewController ()
 
@@ -71,11 +72,9 @@
     [self hideLoading];
     self.friend.status = 3;
     //如果此时回到list1，应该刷新
-    extern BOOL friendList1NeedRefresh;
-    friendList1NeedRefresh = YES;
+    kApp.friendHandler.friendList1NeedRefresh = YES;
     //如果此时回到list2，应该刷新
-    extern BOOL friendList2NeedRefresh;
-    friendList2NeedRefresh = YES;
+    kApp.friendHandler.friendList2NeedRefresh = YES;
     
 }
 - (void)displayLoading{

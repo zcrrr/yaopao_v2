@@ -17,6 +17,7 @@
 #import "EMSDKFull.h"
 #import "UIViewController+HUD.h"
 #import "CNNetworkHandler.h"
+#import "ChatGroupViewController.h"
 
 @interface CreateGroupViewController ()<UITextFieldDelegate, UITextViewDelegate, EMChooseViewDelegate>
 
@@ -260,6 +261,8 @@
     [[EaseMob sharedInstance].chatManager asyncCreateGroupWithSubject:self.textField.text description:self.textView.text invitees:source initialWelcomeMessage:messageStr styleSetting:setting completion:^(EMGroup *group, EMError *error) {
         [weakSelf hideHud];
         if (group && !error) {
+            ChatGroupViewController *chatController = [[ChatGroupViewController alloc] initWithChatter:group.groupId isGroup:YES];
+            [self.navigationController pushViewController:chatController animated:YES];
             [weakSelf showHint:NSLocalizedString(@"group.create.success", @"create group success")];
             [weakSelf.navigationController popViewControllerAnimated:YES];
             //建群成功，调用yaopao接口，建群
@@ -285,6 +288,7 @@
     
 }
 - (void)createGroupDidSuccess:(NSDictionary *)resultDic{
+    
     
 }
 #pragma mark - action

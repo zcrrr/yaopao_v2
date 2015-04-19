@@ -12,11 +12,13 @@
 
 - (void)awakeFromNib {
     // Initialization code
+    self.imageview_avatar.layer.cornerRadius = self.imageview_avatar.bounds.size.width/2;
+    self.imageview_avatar.layer.masksToBounds = YES;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
-
+    
     // Configure the view for the selected state
 }
 

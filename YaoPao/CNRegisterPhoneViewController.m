@@ -15,6 +15,7 @@
 #import "SMS_SDK/SMS_SDK.h"
 #import "SectionsViewController.h"
 #import "CNCloudRecord.h"
+#import "EMSDKFull.h"
 
 @interface CNRegisterPhoneViewController ()
 
@@ -350,6 +351,15 @@
     [self hideLoading];
     [self showAlert:@"注册成功"];
     [CNCloudRecord ClearRecordAfterUserLogin];
+    //向mob注册用户信息
+    [kApp needRegisterMobUser];
+    NSString* phoneNO = [kApp.userInfoDic objectForKey:@"phone"];
+    [[EaseMob sharedInstance].chatManager asyncLoginWithUsername:phoneNO password:phoneNO completion:^(NSDictionary *loginInfo, EMError *error) {
+        if (!error && loginInfo) {
+            NSLog(@"登录环信成功!!");
+            kApp.isLoginHX = 1;
+        }
+    } onQueue:nil];
     CNUserinfoViewController* userInfoVC = [[CNUserinfoViewController alloc]init];
     [self.navigationController pushViewController:userInfoVC animated:YES];
 }

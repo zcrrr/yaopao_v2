@@ -10,6 +10,7 @@
 #import "FriendInfo.h"
 #import "ASIHTTPRequest.h"
 #import "ChatViewController.h"
+#import "EMSDKFull.h"
 
 @interface FriendDetailViewController ()
 
@@ -21,6 +22,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    self.imageview_avatar.layer.cornerRadius = self.imageview_avatar.bounds.size.width/2;
+    self.imageview_avatar.layer.masksToBounds = YES;
     if(self.friend.avatarUrlInYaoPao != nil && ![self.friend.avatarUrlInYaoPao isEqualToString:@""]){//有头像url
         NSString* fullurl = [NSString stringWithFormat:@"%@%@",kApp.imageurl,self.friend.avatarUrlInYaoPao];
         __block UIImage* image = [kApp.avatarDic objectForKey:fullurl];
@@ -42,6 +45,8 @@
     }
     self.label_name.text =  friend.nameInYaoPao;
     self.label_phone.text = friend.phoneNO;
+    NSString* imageName = [NSString stringWithFormat:@"sex_%@.png",friend.sex];
+    self.imageview_sex.image = [UIImage imageNamed:imageName];
     
 }
 
@@ -75,9 +80,31 @@
             chatVC.title = friend.phoneNO;
             [self.navigationController pushViewController:chatVC animated:YES];
         }
+        case 2:
+        {
+            NSString* message = [NSString stringWithFormat:@"确认删除与%@的聊天记录？",friend.nameInYaoPao];
+            UIAlertView* alert =[[UIAlertView alloc] initWithTitle:nil message:message delegate:self cancelButtonTitle:@"确认" otherButtonTitles:@"取消", nil];
+            [alert show];
+            break;
+        }
         default:
             break;
     }
-    
+}
+#pragma -mark alert delegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    switch (buttonIndex) {
+        case 0:
+        {
+            [[EaseMob sharedInstance].chatManager removeConversationByChatter:friend.phoneNO deleteMessages:YES append2Chat:YES];
+            break;
+        }
+        case 1:
+        {
+            [alertView dismissWithClickedButtonIndex:1 animated:YES];
+        }
+        default:
+            break;
+    }
 }
 @end

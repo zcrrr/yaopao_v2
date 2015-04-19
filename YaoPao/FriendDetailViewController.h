@@ -9,12 +9,13 @@
 #import <UIKit/UIKit.h>
 @class FriendInfo;
 
-@interface FriendDetailViewController : UIViewController
+@interface FriendDetailViewController : UIViewController<UIAlertViewDelegate>
 
 @property (strong, nonatomic) FriendInfo* friend;
 @property (weak, nonatomic) IBOutlet UIImageView *imageview_avatar;
 @property (weak, nonatomic) IBOutlet UILabel *label_name;
 @property (weak, nonatomic) IBOutlet UILabel *label_phone;
+@property (weak, nonatomic) IBOutlet UIImageView *imageview_sex;
 - (IBAction)button_clicked:(id)sender;
 
 @end

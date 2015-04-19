@@ -16,16 +16,15 @@
 #import "CNAddFriendViewController.h"
 #import "CNNetworkHandler.h"
 #import "Toast+UIView.h"
+#import "FriendsHandler.h"
 
 @interface NewFriendsViewController ()
 
 @end
 
 @implementation NewFriendsViewController
-@synthesize friendsNew;
 @synthesize friendsToInvite;
 @synthesize friendOnHandle;
-BOOL friendList2NeedRefresh;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -66,13 +65,13 @@ BOOL friendList2NeedRefresh;
             }
         }
     }
-    friendList2NeedRefresh = YES;
+    kApp.friendHandler.friendList2NeedRefresh = YES;
 }
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    if(friendList2NeedRefresh){
+    if(kApp.friendHandler.friendList2NeedRefresh){
         NSLog(@"需要刷新好友列表2");
-        friendList2NeedRefresh = NO;
+        kApp.friendHandler.friendList2NeedRefresh = NO;
         [self.tableview reloadData];
     }else{
         NSLog(@"不需要刷新好友列表2");
@@ -85,6 +84,7 @@ BOOL friendList2NeedRefresh;
     for(i = 0;i<[kApp.myContactUseApp count];i++){
         FriendInfo* oneObject = [kApp.myContactUseApp objectAtIndex:i];
         if([phoneNO containsString:oneObject.phoneNO]){
+            oneObject.nameInPhone = friend.nameInPhone;
             return YES;
         }
     }
@@ -110,18 +110,24 @@ BOOL friendList2NeedRefresh;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     if(section == 0){
-        return [self.friendsNew count];
+        return [kApp.friendHandler.friendsNew count];
     }else{
         return [self.friendsToInvite count];
     }
 }
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
+- (UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    UIView* customView = [[UIView alloc]init];
+    customView.backgroundColor = [UIColor colorWithRed:246.0/255.0 green:246.0/255.0 blue:246.0/255.0 alpha:1];
+    UILabel* headerLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, 0, 300, 22)];
+    headerLabel.textColor = [UIColor colorWithRed:137.0/255.0 green:137.0/255.0 blue:137.0/255.0 alpha:1];
+    [headerLabel setFont:[UIFont systemFontOfSize:12]];
     if(section == 0){
-        return @"已加入要跑的好友";
+        headerLabel.text = @"已加入要跑的好友";
     }else{
-        return @"邀请好友加入要跑";
+        headerLabel.text = @"邀请好友加入要跑";
     }
+    [customView addSubview:headerLabel];
+    return customView;
 }
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -137,8 +143,28 @@ BOOL friendList2NeedRefresh;
     NewFriendsTableViewCell *cell = (NewFriendsTableViewCell*)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     FriendInfo* friend;
     if(section == 0){
-        friend = [self.friendsNew objectAtIndex:row];
+        friend = [kApp.friendHandler.friendsNew objectAtIndex:row];
         cell.label_username.text = friend.nameInYaoPao;
+        if(friend.avatarUrlInYaoPao != nil && ![friend.avatarUrlInYaoPao isEqualToString:@""]){//有头像url
+            NSString* fullurl = [NSString stringWithFormat:@"%@%@",kApp.imageurl,friend.avatarUrlInYaoPao];
+            __block UIImage* image = [kApp.avatarDic objectForKey:fullurl];
+            if(image != nil){//缓存中有
+                cell.imageview_avatar.image = image;
+            }else{//下载
+                NSURL *url = [NSURL URLWithString:fullurl];
+                __block ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
+                [request setCompletionBlock :^{
+                    image = [[UIImage alloc] initWithData:[request responseData]];
+                    if(image != nil){
+                        cell.imageview_avatar.image = image;
+                        [kApp.avatarDic setObject:image forKey:fullurl];
+                    }
+                }];
+                [request startAsynchronous ];
+            }
+        }else{
+            cell.imageview_avatar.image = [UIImage imageNamed:@"avatar_default.png"];
+        }
     }else{
         friend = [self.friendsToInvite objectAtIndex:row];
         cell.label_username.text = friend.nameInPhone;
@@ -189,12 +215,24 @@ BOOL friendList2NeedRefresh;
     return cell;
 }
 - (IBAction)button_clicked:(id)sender {
-    [self.navigationController popViewControllerAnimated:YES];
+    switch ([sender tag]) {
+        case 0:
+            [self.navigationController popViewControllerAnimated:YES];
+            break;
+        case 1:
+        {
+            NSLog(@"添加");
+            break;
+        }
+        default:
+            break;
+    }
+    
 }
 - (void)actionButtonClicked:(id)sender{
     int tag = (int)[sender tag];
     int row = tag>9999?tag-10000:tag;
-    FriendInfo* friend = tag>9999?[self.friendsNew objectAtIndex:row]:[self.friendsToInvite objectAtIndex:row];
+    FriendInfo* friend = tag>9999?[kApp.friendHandler.friendsNew objectAtIndex:row]:[self.friendsToInvite objectAtIndex:row];
     switch (friend.status) {
         case 0:
         {
@@ -240,8 +278,7 @@ BOOL friendList2NeedRefresh;
     [self.tableview reloadData];
     [self hideLoading];
     //如果此时回到list1，应该刷新
-    extern BOOL friendList1NeedRefresh;
-    friendList1NeedRefresh = YES;
+    kApp.friendHandler.friendList1NeedRefresh = YES;
 }
 - (void)displayLoading{
     self.loadingImage.hidden = NO;

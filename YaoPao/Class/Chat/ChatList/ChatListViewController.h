@@ -13,8 +13,9 @@
 #import <UIKit/UIKit.h>
 #import "FirstLevelViewController.h"
 #import "EMSDKFull.h"
+#import "FriendsHandler.h"
 
-@interface ChatListViewController : FirstLevelViewController
+@interface ChatListViewController : FirstLevelViewController<requestFriendsDelegate>;
 
 - (void)refreshDataSource;
 

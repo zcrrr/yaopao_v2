@@ -18,6 +18,7 @@
 #import "CNCloudRecord.h"
 #import "ColorValue.h"
 #import "CNCustomButton.h"
+#import "EMSDKFull.h"
 
 @interface CNLoginPhoneViewController ()
 
@@ -323,7 +324,14 @@
     //登录、注册之后的一系列操作
     [self.navigationController popToRootViewControllerAnimated:YES];
     //向mob提交用户信息
-//    [kApp registerMobUser];
+    [kApp needRegisterMobUser];
+    NSString* phoneNO = [kApp.userInfoDic objectForKey:@"phone"];
+    [[EaseMob sharedInstance].chatManager asyncLoginWithUsername:phoneNO password:phoneNO completion:^(NSDictionary *loginInfo, EMError *error) {
+        if (!error && loginInfo) {
+            NSLog(@"登录环信成功!!");
+            kApp.isLoginHX = 1;
+        }
+    } onQueue:nil];
     
     [CNCloudRecord ClearRecordAfterUserLogin];
     //用户登录之后先同步

@@ -50,6 +50,7 @@
 #import <AdobeCreativeSDKFoundation/AdobeCreativeSDKFoundation.h>
 #import "EMSDKFull.h"
 #import "ChatListViewController.h"
+#import "FriendsHandler.h"
 
 @implementation CNAppDelegate
 @synthesize navVCList;
@@ -58,6 +59,7 @@
 @synthesize voiceHandler;
 @synthesize runManager;
 @synthesize cloudManager;
+@synthesize friendHandler;
 @synthesize isLogin;
 @synthesize isLoginHX;
 @synthesize pid;
@@ -374,6 +376,9 @@
     self.voiceHandler = [[CNVoiceHandler alloc]init];
     [self.voiceHandler initPlayer];
     self.cloudManager = [[CNCloudRecord alloc]init];
+    self.friendHandler = [[FriendsHandler alloc]init];
+    self.friendHandler.friendList1NeedRefresh = YES;
+    self.friendHandler.friendList2NeedRefresh = YES;
     self.pid = [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
     NSLog(@"pid is %@",pid);
     self.ua = [NSString stringWithFormat:@"I_%@,i_%@",[[UIDevice currentDevice] systemVersion],ClIENT_VERSION];
@@ -682,7 +687,6 @@
                         wxDelegate:self];
 }
 - (void)needRegisterMobUser{
-    [self registerMobUser];
     NSString* filePath = [CNPersistenceHandler getDocument:@"registerMob.plist"];
     NSMutableDictionary* registerMobDic = [NSMutableDictionary dictionaryWithContentsOfFile:filePath];
     if(registerMobDic == nil){//没注册过
@@ -691,16 +695,10 @@
 }
 - (void)registerMobUser{
     SMS_UserInfo* user = [[SMS_UserInfo alloc]init];
-//    user.phone = @"13810916514";
-//    user.nickname = @"张驰";
-//    user.uid = @"1000014";
-//    user.avatar = @"http://image.yaopao.net//image/20141017/120_0D10DB10558411E4B757C9719C9E7B87.jpg";
     user.phone = [self.userInfoDic objectForKey:@"phone"];
     user.nickname = [self.userInfoDic objectForKey:@"nickname"];
     user.uid = [NSString stringWithFormat:@"%@",[self.userInfoDic objectForKey:@"uid"]];
     user.avatar = [NSString stringWithFormat:@"%@%@",kApp.imageurl,[self.userInfoDic objectForKey:@"imgpath"]];
-    
-    
     NSLog(@"phone is %@",user.phone);
     NSLog(@"nickname is %@",user.nickname);
     NSLog(@"uid is %@",user.uid);
@@ -715,12 +713,12 @@
                                                                    cancelButtonTitle:@"OK"
                                                                    otherButtonTitles:nil, nil];
                              [alert show];
-//                             NSString* filePath = [CNPersistenceHandler getDocument:@"registerMob.plist"];
-//                             NSMutableDictionary* registerMobDic = [NSMutableDictionary dictionaryWithContentsOfFile:filePath];
-//                             if(registerMobDic == nil){
-//                                 [registerMobDic setObject:@"1" forKey:@"isRegister"];
-//                                 [registerMobDic writeToFile:filePath atomically:YES];
-//                             }
+                             NSString* filePath = [CNPersistenceHandler getDocument:@"registerMob.plist"];
+                             NSMutableDictionary* registerMobDic = [NSMutableDictionary dictionaryWithContentsOfFile:filePath];
+                             if(registerMobDic == nil){
+                                 [registerMobDic setObject:@"1" forKey:@"isRegister"];
+                                 [registerMobDic writeToFile:filePath atomically:YES];
+                             }
                          }
                          else if (state == SMS_ResponseStateFail)
                          {

@@ -10,6 +10,7 @@
                 <outlet property="imageview_avatar" destination="1H9-zW-pIO" id="Uqd-Vp-iNA"/>
                 <outlet property="label_name" destination="Pdp-NI-fcW" id="aKq-gY-jmn"/>
                 <outlet property="label_phone" destination="mrT-w2-dsm" id="3zH-Z4-iD9"/>
+                <outlet property="view" destination="lid-oV-bCR" id="Zek-MB-tLc"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>

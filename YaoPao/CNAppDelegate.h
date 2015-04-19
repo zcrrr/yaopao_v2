@@ -14,6 +14,7 @@
 @class CNVoiceHandler;
 @class CNRunManager;
 @class CNCloudRecord;
+@class FriendsHandler;
 
 @interface CNAppDelegate : UIResponder <UIApplicationDelegate>
 
@@ -25,6 +26,7 @@
 @property (strong ,nonatomic) CNVoiceHandler* voiceHandler;
 @property (strong ,nonatomic) CNRunManager* runManager;
 @property (strong, nonatomic) CNCloudRecord* cloudManager;
+@property (strong, nonatomic) FriendsHandler* friendHandler;
 
 @property (nonatomic, strong) NSString* pid;
 @property (nonatomic, strong) NSString* ua;

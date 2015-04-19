@@ -258,17 +258,8 @@ NSString* dayOrNight;
     switch ([sender tag]) {
         case 0:
         {
-//            [CNAppDelegate popupWarningBackground];
             NSLog(@"同步");
-//            [CNAppDelegate popupWarningCloud];
-            
-            NSArray *languages = [NSLocale preferredLanguages];
-            NSString *currentLanguage = [languages objectAtIndex:0];
-            NSLog ( @"%@" , currentLanguage);
-//            CNADBookViewController* testVC = [[CNADBookViewController alloc]init];
-//            [self.navigationController pushViewController:testVC animated:YES];
-//            [kApp registerMobUser];
-            
+            [CNAppDelegate popupWarningCloud];
             break;
         }
         case 1:

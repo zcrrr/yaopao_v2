@@ -33,6 +33,7 @@
 #import "DXChatBarMoreView.h"
 #import "ChatViewController+Category.h"
 #import "FriendDetailFromChatViewController.h"
+#import "FriendsHandler.h"
 #define KPageCount 20
 
 @interface ChatViewController ()<UITableViewDataSource, UITableViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, SRRefreshDelegate, IChatManagerDelegate, DXChatBarMoreViewDelegate, DXMessageToolBarDelegate, LocationViewDelegate, IDeviceManagerDelegate>
@@ -166,6 +167,8 @@
         {
             NSLog(@"详情");
             FriendDetailFromChatViewController* fdfcVC = [[FriendDetailFromChatViewController alloc]init];
+            FriendInfo* friend = [kApp.friendHandler.friendsDicByPhone objectForKey:self.chatter];
+            fdfcVC.friend = friend;
             [self.navigationController pushViewController:fdfcVC animated:YES];
             break;
         }

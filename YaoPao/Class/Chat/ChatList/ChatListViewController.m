@@ -24,6 +24,8 @@
 #import "CNADBookViewController.h"
 #import "CreateGroupViewController.h"
 #import "ChatGroupViewController.h"
+#import "CNLoginPhoneViewController.h"
+#import "Toast+UIView.h"
 
 @interface ChatListViewController ()<UITableViewDelegate,UITableViewDataSource, UISearchDisplayDelegate,SRRefreshDelegate, UISearchBarDelegate, IChatManagerDelegate>
 
@@ -53,6 +55,13 @@
 {
     self.selectIndex = 2;
     [super viewDidLoad];
+    if(kApp.isLogin == 0){
+        [kApp.window makeToast:@"请先登录"];
+        CNLoginPhoneViewController* loginVC = [[CNLoginPhoneViewController alloc]init];
+        [self.navigationController pushViewController:loginVC animated:YES];
+    }
+    
+    
     UIView* topbar = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 55)];
     topbar.backgroundColor = [UIColor blueColor];
     [self.view addSubview:topbar];
@@ -85,6 +94,13 @@
 
     [self searchController];
 }
+- (void)requestFriendsDidSuccess{
+    __weak ChatListViewController *weakSelf = self;
+    [weakSelf hideHud];
+}
+- (void)requestFriendsDidFailed{
+    
+}
 - (void)buttonClicked:(id)sender{
     switch ([sender tag]) {
         case 0:
@@ -114,7 +130,12 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
+    //获取好友信息
+    if(kApp.friendHandler.friendList1NeedRefresh){
+        kApp.friendHandler.delegete_requestFriends = self;
+        [kApp.friendHandler dorequest];
+        [self showHudInView:self.view hint:@"加载好友信息..."];
+    }
     [self refreshDataSource];
     [self registerNotifications];
 }

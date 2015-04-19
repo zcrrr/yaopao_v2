@@ -11,6 +11,6 @@
 @interface IntroduceFriendsTableViewCellCondition3 : UITableViewCell
 @property (weak, nonatomic) IBOutlet UIImageView *imageview_avatar;
 @property (weak, nonatomic) IBOutlet UILabel *label_name;
-@property (weak, nonatomic) IBOutlet UILabel *label_num;
+@property (weak, nonatomic) IBOutlet UIButton *button_num;
 
 @end
