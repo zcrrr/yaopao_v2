@@ -57,35 +57,56 @@
     {
         [self setEdgesForExtendedLayout:UIRectEdgeNone];
     }
+    [self.view setBackgroundColor:[UIColor colorWithRed:246.0/255.0 green:246.0/255.0 blue:247.0/255.0 alpha:1]];
     UIView* topbar = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 55)];
-    topbar.backgroundColor = [UIColor blueColor];
+    topbar.backgroundColor = [UIColor colorWithRed:58.0/255.0 green:166.0/255.0 blue:1 alpha:1];
     [self.view addSubview:topbar];
     UILabel* label_title = [[UILabel alloc]initWithFrame:CGRectMake(87, 20, 146, 35)];
     [label_title setTextAlignment:NSTextAlignmentCenter];
-    label_title.text = NSLocalizedString(@"title.createGroup", @"Create a group");;
+    label_title.text = NSLocalizedString(@"title.createGroup", @"Create a group");
     label_title.font = [UIFont systemFontOfSize:16];
     label_title.textColor = [UIColor whiteColor];
     [topbar addSubview:label_title];
     UIButton * button_back = [UIButton buttonWithType:UIButtonTypeCustom];
-    button_back.frame = CGRectMake(0, 23, 50, 30);
-    [button_back setTitle:@"返回" forState:UIControlStateNormal];
+    button_back.frame = CGRectMake(6, 23, 21, 29);
+    [button_back setBackgroundImage:[UIImage imageNamed:@"back_v2.png"] forState:UIControlStateNormal];
     button_back.tag = 0;
     [button_back addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
     [topbar addSubview:button_back];
     
-    self.view.backgroundColor = [UIColor colorWithRed:0.88 green:0.88 blue:0.88 alpha:1.0];
-    
-    UIButton *addButton = [[UIButton alloc] initWithFrame:CGRectMake(10, 300, 300, 44)];
+    UIButton *addButton = [[UIButton alloc] initWithFrame:CGRectMake(14, 266, 293, 43)];
     addButton.titleLabel.font = [UIFont systemFontOfSize:14.0];
-    [addButton setTitle:NSLocalizedString(@"group.create.addOccupant", @"add members") forState:UIControlStateNormal];
-    [addButton setTitleColor:[UIColor colorWithRed:32 / 255.0 green:134 / 255.0 blue:158 / 255.0 alpha:1.0] forState:UIControlStateNormal];
-    [addButton setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
+    [addButton setTitle:@"添加好友" forState:UIControlStateNormal];
+    [addButton setBackgroundImage:[UIImage imageNamed:@"button_green.png"] forState:UIControlStateNormal];
+    [addButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [addButton addTarget:self action:@selector(addContacts:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:addButton];
     
+    UIView* view_groupname = [[UIView alloc]initWithFrame:CGRectMake(0, 55+9, 320, 43)];
+    view_groupname.backgroundColor = [UIColor whiteColor];
+    UILabel* label_groupname = [[UILabel alloc]initWithFrame:CGRectMake(13, 0, 28, 43)];
+    label_groupname.text = @"名称";
+    label_groupname.textColor = [UIColor blackColor];
+    label_groupname.font = [UIFont systemFontOfSize:14];
+    label_groupname.textAlignment = NSTextAlignmentLeft;
+    [view_groupname addSubview:label_groupname];
+    [view_groupname addSubview:self.textField];
+    [self.view addSubview:view_groupname];
     
-    [self.view addSubview:self.textField];
-    [self.view addSubview:self.textView];
+    
+    UIView* view_groupdesc = [[UIView alloc]initWithFrame:CGRectMake(0, 110, 320, 143)];
+    view_groupdesc.backgroundColor = [UIColor whiteColor];
+    UILabel* label_groupdesc = [[UILabel alloc]initWithFrame:CGRectMake(13, 0, 28, 43)];
+    label_groupdesc.text = @"简介";
+    label_groupdesc.textColor = [UIColor blackColor];
+    label_groupdesc.font = [UIFont systemFontOfSize:14];
+    label_groupdesc.textAlignment = NSTextAlignmentLeft;
+    [view_groupdesc addSubview:label_groupdesc];
+    [view_groupdesc addSubview:self.textView];
+    [self.view addSubview:view_groupdesc];
+    
+    
+    
 //    [self.view addSubview:self.switchView];
 }
 - (void)buttonClicked:(id)sender{
@@ -100,6 +121,7 @@
             break;
     }
 }
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -107,20 +129,19 @@
 }
 
 #pragma mark - getter
-
 - (UITextField *)textField
 {
     if (_textField == nil) {
-        _textField = [[UITextField alloc] initWithFrame:CGRectMake(10, 10+55, 300, 40)];
-        _textField.layer.borderColor = [[UIColor lightGrayColor] CGColor];
-        _textField.layer.borderWidth = 0.5;
-        _textField.layer.cornerRadius = 3;
-        _textField.leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 5, 30)];
+        _textField = [[UITextField alloc] initWithFrame:CGRectMake(51, 0, 320-51-21, 43)];
+//        _textField.layer.borderColor = [[UIColor lightGrayColor] CGColor];
+//        _textField.layer.borderWidth = 0.5;
+//        _textField.layer.cornerRadius = 3;
+//        _textField.leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 5, 30)];
         _textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-        _textField.leftViewMode = UITextFieldViewModeAlways;
+//        _textField.leftViewMode = UITextFieldViewModeAlways;
         _textField.clearButtonMode = UITextFieldViewModeWhileEditing;
-        _textField.font = [UIFont systemFontOfSize:15.0];
-        _textField.backgroundColor = [UIColor whiteColor];
+        _textField.font = [UIFont systemFontOfSize:14.0];
+        _textField.textColor = [UIColor colorWithRed:201.0/255.0 green:201.0/255.0 blue:201.0/255.0 alpha:1];
         _textField.placeholder = NSLocalizedString(@"group.create.inputName", @"please enter the group name");
         _textField.returnKeyType = UIReturnKeyDone;
         _textField.delegate = self;
@@ -132,17 +153,16 @@
 - (EMTextView *)textView
 {
     if (_textView == nil) {
-        _textView = [[EMTextView alloc] initWithFrame:CGRectMake(10, 70+55, 300, 80)];
-        _textView.layer.borderColor = [[UIColor lightGrayColor] CGColor];
-        _textView.layer.borderWidth = 0.5;
-        _textView.layer.cornerRadius = 3;
+        _textView = [[EMTextView alloc] initWithFrame:CGRectMake(47, 5, 320-51-21, 130)];
+//        _textView.layer.borderColor = [[UIColor lightGrayColor] CGColor];
+//        _textView.layer.borderWidth = 0.5;
+//        _textView.layer.cornerRadius = 3;
         _textView.font = [UIFont systemFontOfSize:14.0];
-        _textView.backgroundColor = [UIColor whiteColor];
+        _textView.textColor = [UIColor colorWithRed:201.0/255.0 green:201.0/255.0 blue:201.0/255.0 alpha:1];
         _textView.placeholder = NSLocalizedString(@"group.create.inputDescribe", @"please enter a group description");
         _textView.returnKeyType = UIReturnKeyDone;
         _textView.delegate = self;
     }
-    
     return _textView;
 }
 

@@ -53,6 +53,10 @@
 @synthesize delegate_sendMakeFriendsRequest;
 @synthesize delegate_agreeMakeFriends;
 @synthesize delegate_createGroup;
+@synthesize delegate_rejectMakeFriends;
+@synthesize delegate_searchFriend;
+@synthesize delegate_deleteFriend;
+@synthesize delegate_deleteOneFile;
 
 @synthesize verifyCodeRequest;
 @synthesize registerPhoneRequest;
@@ -82,6 +86,10 @@
 @synthesize sendMakeFriendsRequestRequest;
 @synthesize agreeMakeFriendsRequest;
 @synthesize createGroupRequest;
+@synthesize rejectMakeFriendsRequest;
+@synthesize searchFriendRequest;
+@synthesize deleteFriendRequest;
+@synthesize deleteOneFileRequest;
 
 - (void)startQueue{
     //    self.handler = self;//持有自己的引用，这样就不会被释放,在delegate里面有了强引用，这里可以注释了
@@ -220,7 +228,7 @@
 //            [kApp.cloudManager synTimeWithServer];
             [kApp needRegisterMobUser];
             //用户登录之后先同步
-            [CNAppDelegate popupWarningCloud];
+            [CNAppDelegate popupWarningCloud:NO];
             break;
         }
         case TAG_FIND_PWD_VCODE:
@@ -412,6 +420,33 @@
             }
             break;
         }
+        case TAG_REJECT_MAKE_FRIENDS:
+        {
+            if(isSuccess){
+                [self.delegate_rejectMakeFriends rejectMakeFriendsDidSuccess:result];
+            }else{
+                [self.delegate_rejectMakeFriends rejectMakeFriendsDidFailed:desc];
+            }
+            break;
+        }
+        case TAG_SEARCH_FRIEND:
+        {
+            if(isSuccess){
+                [self.delegate_searchFriend searchFriendDidSuccess:result];
+            }else{
+                [self.delegate_searchFriend searchFriendDidFailed:desc];
+            }
+            break;
+        }
+        case TAG_DELETE_FRIEND:
+        {
+            if(isSuccess){
+                [self.delegate_deleteFriend deleteFriendDidSuccess:result];
+            }else{
+                [self.delegate_deleteFriend deleteFriendDidFailed:desc];
+            }
+            break;
+        }
         
         default:
             break;
@@ -546,6 +581,21 @@
         case TAG_CREATE_GROUP:
         {
             [self.delegate_createGroup createGroupDidFailed:@""];
+            break;
+        }
+        case TAG_REJECT_MAKE_FRIENDS:
+        {
+            [self.delegate_rejectMakeFriends rejectMakeFriendsDidFailed:@""];
+            break;
+        }
+        case TAG_SEARCH_FRIEND:
+        {
+            [self.delegate_searchFriend searchFriendDidFailed:@""];
+            break;
+        }
+        case TAG_DELETE_FRIEND:
+        {
+            [self.delegate_deleteFriend deleteFriendDidFailed:@""];
             break;
         }
         
@@ -969,6 +1019,25 @@
     NSLog(@"下载文件url:%@",str_url);
     [self.downloadOneFileRequest startAsynchronous];
 }
+- (void)doRequest_deleteOneFile:(NSMutableDictionary*)params{
+    NSString* str_url = [NSString stringWithFormat:@"%@chSports/run/delrunimgs.htm",ENDPOINTS];
+    NSURL* url = [NSURL URLWithString:str_url];
+    self.deleteOneFileRequest =  [ASIFormDataRequest requestWithURL:url];
+    self.deleteOneFileRequest.tag = TAG_DELETE_ONE_FILE;
+    [self.deleteOneFileRequest setNumberOfTimesToRetryOnTimeout:3];
+    [self.deleteOneFileRequest setTimeOutSeconds:15];
+    [self.deleteOneFileRequest addRequestHeader:@"X-PID" value:kApp.pid];
+    [self.deleteOneFileRequest addRequestHeader:@"ua" value:kApp.ua];
+    self.deleteOneFileRequest.delegate = self;
+    for (id oneKey in [params allKeys]){
+        [self.deleteOneFileRequest setPostValue:[params objectForKey:oneKey] forKey:oneKey];
+    }
+    NSLog(@"删除单个文件url:%@",str_url);
+    NSLog(@"删除单个文件参数:%@",params);
+    self.newprogress = 0.5;
+    [self.deleteOneFileRequest startAsynchronous];
+}
+
 - (void)doRequest_weather:(double)lon :(double)lat{
     NSString* str_url = [NSString stringWithFormat:@"%@WeatherService/getWeather?lat=%f&lon=%f",ENDPOINTS,lat,lon];
     NSURL* url = [NSURL URLWithString:str_url];
@@ -1029,6 +1098,54 @@
     NSLog(@"同意添加好友url:%@",str_url);
     NSLog(@"同意添加好友参数:%@",params);
     [[self networkQueue]addOperation:self.agreeMakeFriendsRequest];
+}
+- (void)doRequest_rejectMakeFriends:(NSMutableDictionary*)params{
+    NSString* str_url = [NSString stringWithFormat:@"%@chSports/friend/delcache.htm",ENDPOINTS];
+    NSURL* url = [NSURL URLWithString:str_url];
+    self.rejectMakeFriendsRequest =  [ASIFormDataRequest requestWithURL:url];
+    self.rejectMakeFriendsRequest.tag = TAG_REJECT_MAKE_FRIENDS;
+    [self.rejectMakeFriendsRequest setNumberOfTimesToRetryOnTimeout:3];
+    [self.rejectMakeFriendsRequest setTimeOutSeconds:15];
+    [self.rejectMakeFriendsRequest addRequestHeader:@"X-PID" value:kApp.pid];
+    [self.rejectMakeFriendsRequest addRequestHeader:@"ua" value:kApp.ua];
+    for (id oneKey in [params allKeys]){
+        [self.rejectMakeFriendsRequest setPostValue:[params objectForKey:oneKey] forKey:oneKey];
+    }
+    NSLog(@"忽略好友请求url:%@",str_url);
+    NSLog(@"忽略好友请求参数:%@",params);
+    [[self networkQueue]addOperation:self.rejectMakeFriendsRequest];
+}
+- (void)doRequest_deleteFriend:(NSMutableDictionary*)params{
+    NSString* str_url = [NSString stringWithFormat:@"%@chSports/friend/removefriend.htm",ENDPOINTS];
+    NSURL* url = [NSURL URLWithString:str_url];
+    self.deleteFriendRequest =  [ASIFormDataRequest requestWithURL:url];
+    self.deleteFriendRequest.tag = TAG_DELETE_FRIEND;
+    [self.deleteFriendRequest setNumberOfTimesToRetryOnTimeout:3];
+    [self.deleteFriendRequest setTimeOutSeconds:15];
+    [self.deleteFriendRequest addRequestHeader:@"X-PID" value:kApp.pid];
+    [self.deleteFriendRequest addRequestHeader:@"ua" value:kApp.ua];
+    for (id oneKey in [params allKeys]){
+        [self.deleteFriendRequest setPostValue:[params objectForKey:oneKey] forKey:oneKey];
+    }
+    NSLog(@"删除好友url:%@",str_url);
+    NSLog(@"删除好友参数:%@",params);
+    [[self networkQueue]addOperation:self.deleteFriendRequest];
+}
+- (void)doRequest_searchFriend:(NSMutableDictionary*)params{
+    NSString* str_url = [NSString stringWithFormat:@"%@chSports/friend/searchfriend.htm",ENDPOINTS];
+    NSURL* url = [NSURL URLWithString:str_url];
+    self.searchFriendRequest =  [ASIFormDataRequest requestWithURL:url];
+    self.searchFriendRequest.tag = TAG_SEARCH_FRIEND;
+    [self.searchFriendRequest setNumberOfTimesToRetryOnTimeout:3];
+    [self.searchFriendRequest setTimeOutSeconds:15];
+    [self.searchFriendRequest addRequestHeader:@"X-PID" value:kApp.pid];
+    [self.searchFriendRequest addRequestHeader:@"ua" value:kApp.ua];
+    for (id oneKey in [params allKeys]){
+        [self.searchFriendRequest setPostValue:[params objectForKey:oneKey] forKey:oneKey];
+    }
+    NSLog(@"搜索好友url:%@",str_url);
+    NSLog(@"搜索好友参数:%@",params);
+    [[self networkQueue]addOperation:self.searchFriendRequest];
 }
 - (void)doRequest_createGroup:(NSMutableDictionary*)params{
     NSString* str_url = [NSString stringWithFormat:@"%@chSports/group/addgroup.htm",ENDPOINTS];
@@ -1091,6 +1208,11 @@
         case TAG_DOWNLOAD_ONE_FILE:
         {
             [self.delegate_downloadOneFile downloadOneFileDidFailed:@""];
+            break;
+        }
+        case TAG_DELETE_ONE_FILE:
+        {
+            [self.delegate_deleteOneFile deleteOneFileDidFailed:@""];
             break;
         }
         default:
@@ -1156,6 +1278,15 @@
                 [self.delegate_downloadRecord downloadRecordDidSuccess:result];
             }else{
                 [self.delegate_downloadRecord downloadRecordDidFailed:desc];
+            }
+            break;
+        }
+        case TAG_DELETE_ONE_FILE:
+        {
+            if(isSuccess){
+                [self.delegate_deleteOneFile deleteOneFileDidSuccess:result];
+            }else{
+                [self.delegate_deleteOneFile deleteOneFileDidFailed:desc];
             }
             break;
         }

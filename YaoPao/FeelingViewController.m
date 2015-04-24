@@ -158,7 +158,7 @@ extern NSMutableArray* imageArray;
             shareVC.dataSource = @"this";
             [self.navigationController pushViewController:shareVC animated:YES];
             if(kApp.isLogin == 1){
-                [CNAppDelegate popupWarningCloud];
+                [CNAppDelegate popupWarningCloud:NO];
             }
             break;
         }

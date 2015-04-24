@@ -8,11 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "FriendsHandler.h"
+@class CNCustomButton;
 
 @interface CNADBookViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,requestFriendsDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableview;
 
 
+@property (weak, nonatomic) IBOutlet CNCustomButton *button_add;
 @property (strong, nonatomic) NSMutableArray* keys;
 @property (strong, nonatomic) NSMutableDictionary* groupedMap;
 @property (strong, nonatomic) IBOutlet UIActivityIndicatorView *indicator;

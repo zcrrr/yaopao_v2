@@ -58,6 +58,7 @@
         _lineView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.contentView.frame.size.width, 1)];
         _lineView.backgroundColor = RGBACOLOR(207, 210, 213, 0.7);
         [self.contentView addSubview:_lineView];
+        self.imageView.image = [UIImage imageNamed:@"avatar_default.png"];
     }
     return self;
 }
@@ -88,6 +89,8 @@
     
     [self.imageView sd_setImageWithURL:_imageURL placeholderImage:_placeholderImage];
     self.imageView.frame = CGRectMake(10, 7, 45, 45);
+    self.imageView.layer.cornerRadius = self.imageView.bounds.size.width/2;
+    self.imageView.layer.masksToBounds = YES;
     
     self.textLabel.text = _name;
     self.textLabel.frame = CGRectMake(65, 7, 175, 20);

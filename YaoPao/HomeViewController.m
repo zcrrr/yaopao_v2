@@ -25,6 +25,7 @@
 #import "CNVCodeViewController.h"
 #import <SMS_SDK/SMS_SDK.h>
 #import "CNADBookViewController.h"
+#import "CNCloudRecord.h"
 
 @interface HomeViewController ()
 
@@ -150,6 +151,8 @@ NSString* dayOrNight;
 }
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    [kApp.cloudManager addObserver:self forKeyPath:@"stepDes" options:NSKeyValueObservingOptionNew context:nil];
+    [kApp.networkHandler addObserver:self forKeyPath:@"newprogress" options:NSKeyValueObservingOptionNew context:nil];
     [MobClick beginLogPageView:@"mainPage"];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     [self initUI];
@@ -201,6 +204,8 @@ NSString* dayOrNight;
 {
     [super viewWillDisappear:animated];
     [MobClick endLogPageView:@"mainPage"];
+    [kApp.cloudManager removeObserver:self forKeyPath:@"stepDes"];
+    [kApp.networkHandler removeObserver:self forKeyPath:@"newprogress"];
 }
 - (void)showAlert:(NSString*) content{
     UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:content delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
@@ -259,7 +264,7 @@ NSString* dayOrNight;
         case 0:
         {
             NSLog(@"同步");
-            [CNAppDelegate popupWarningCloud];
+            [CNAppDelegate popupWarningCloud:YES];
             break;
         }
         case 1:
@@ -347,6 +352,18 @@ NSString* dayOrNight;
             [CNAppDelegate popupWarningGPSWeak];
             return NO;
         }
+    }
+}
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+    if([keyPath isEqualToString:@"stepDes"]){
+        if([kApp.cloudManager.stepDes isEqualToString:@"同步完毕！"]){
+            self.progressview_cloud.hidden = YES;
+            self.button_cloud.enabled = YES;
+        }
+    }else if([keyPath isEqualToString:@"newprogress"]){
+        self.progressview_cloud.hidden = NO;
+        [self.progressview_cloud setProgress:kApp.networkHandler.newprogress];
+        self.button_cloud.enabled = NO;
     }
 }
 @end

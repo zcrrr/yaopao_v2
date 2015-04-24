@@ -7,10 +7,13 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FriendDetailViewController">
             <connections>
+                <outlet property="button_deletefriend" destination="Obh-5E-l0R" id="Kum-dT-d2X"/>
                 <outlet property="imageview_avatar" destination="4k2-CQ-X2c" id="hHM-7I-Uwd"/>
                 <outlet property="imageview_sex" destination="AM0-v2-f4Z" id="Wmy-u6-mLH"/>
+                <outlet property="indicator" destination="mfv-cY-sIq" id="uTQ-4L-mYq"/>
                 <outlet property="label_name" destination="7oc-xh-dP2" id="cJK-mm-RmH"/>
                 <outlet property="label_phone" destination="O6z-M6-5fQ" id="8j7-GE-hbR"/>
+                <outlet property="loadingImage" destination="7pN-54-Pku" id="2AK-gy-C4s"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -40,6 +43,17 @@
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
                         </label>
+                        <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Obh-5E-l0R" customClass="CNCustomButton">
+                            <rect key="frame" x="247" y="23" width="60" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                            <state key="normal" title="删除好友">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="button_clicked:" destination="-1" eventType="touchUpInside" id="eCj-n4-O8k"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" red="0.2274509804" green="0.65098039220000004" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
@@ -97,6 +111,14 @@
                         <action selector="button_clicked:" destination="-1" eventType="touchUpInside" id="hxf-s7-DkU"/>
                     </connections>
                 </button>
+                <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" image="netProcess.png" id="7pN-54-Pku">
+                    <rect key="frame" x="113" y="240" width="94" height="89"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                </imageView>
+                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" hidesWhenStopped="YES" style="whiteLarge" id="mfv-cY-sIq">
+                    <rect key="frame" x="141" y="266" width="37" height="37"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                </activityIndicatorView>
             </subviews>
             <color key="backgroundColor" red="0.96470588235294119" green="0.96470588235294119" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <point key="canvasLocation" x="356" y="353"/>
@@ -108,6 +130,7 @@
         <image name="button_green.png" width="690" height="100"/>
         <image name="button_red.png" width="690" height="100"/>
         <image name="button_red_on.png" width="690" height="100"/>
+        <image name="netProcess.png" width="85" height="85"/>
         <image name="sex_M.png" width="50" height="50"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

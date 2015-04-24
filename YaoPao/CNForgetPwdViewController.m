@@ -323,7 +323,7 @@
         }
     } onQueue:nil];
     //用户登录之后先同步
-    [CNAppDelegate popupWarningCloud];
+    [CNAppDelegate popupWarningCloud:NO];
 }
 - (void)findPwdDidFailed:(NSString *)mes{
     

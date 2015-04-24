@@ -8,9 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "CNNetworkHandler.h"
+@class CNCustomButton;
 @class FriendInfo;
 
 @interface NewFriendsViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,agreeMakeFriendsDelegate>
+@property (weak, nonatomic) IBOutlet CNCustomButton *button_add;
 @property (strong, nonatomic) FriendInfo* friendOnHandle;
 - (IBAction)button_clicked:(id)sender;
 @property (weak, nonatomic) IBOutlet UITableView *tableview;

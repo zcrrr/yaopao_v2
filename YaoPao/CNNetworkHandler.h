@@ -159,9 +159,14 @@
 - (void)downloadOneFileDidSuccess:(NSData*)data;
 - (void)downloadOneFileDidFailed:(NSString*)mes;
 @end
+@protocol deleteOneFileDelegate<NSObject>
+//删除一个文件
+- (void)deleteOneFileDidSuccess:(NSData*)data;
+- (void)deleteOneFileDidFailed:(NSString*)mes;
+@end
 
 @protocol weatherDelegate<NSObject>
-//下载记录
+//天气
 - (void)weatherDidSuccess:(NSDictionary*)resultDic;
 - (void)weatherDidFailed:(NSString*)mes;
 @end
@@ -184,11 +189,30 @@
 - (void)agreeMakeFriendsDidFailed:(NSString*)mes;
 @end
 
+@protocol rejectMakeFriendsDelegate<NSObject>
+//忽略好友申请
+- (void)rejectMakeFriendsDidSuccess:(NSDictionary*)resultDic;
+- (void)rejectMakeFriendsDidFailed:(NSString*)mes;
+@end
+
+@protocol deleteFriendDelegate<NSObject>
+//删除好友
+- (void)deleteFriendDidSuccess:(NSDictionary*)resultDic;
+- (void)deleteFriendDidFailed:(NSString*)mes;
+@end
+
+@protocol searchFriendDelegate<NSObject>
+//搜索好友
+- (void)searchFriendDidSuccess:(NSDictionary*)resultDic;
+- (void)searchFriendDidFailed:(NSString*)mes;
+@end
+
 @protocol createGroupDelegate<NSObject>
 //创建跑团
 - (void)createGroupDidSuccess:(NSDictionary*)resultDic;
 - (void)createGroupDidFailed:(NSString*)mes;
 @end
+
 
 
 
@@ -228,11 +252,15 @@
 @property (nonatomic, strong) id<uploadRecordDelegate> delegate_uploadRecord;
 @property (nonatomic, strong) id<downloadRecordDelegate> delegate_downloadRecord;
 @property (nonatomic, strong) id<downloadOneFileDelegate> delegate_downloadOneFile;
+@property (nonatomic, strong) id<deleteOneFileDelegate> delegate_deleteOneFile;
 @property (nonatomic, strong) id<weatherDelegate> delegate_weather;
 @property (nonatomic, strong) id<friendsListDelegate> delegate_friendsList;
 @property (nonatomic, strong) id<sendMakeFriendsRequestDelegate> delegate_sendMakeFriendsRequest;
 @property (nonatomic, strong) id<agreeMakeFriendsDelegate> delegate_agreeMakeFriends;
 @property (nonatomic, strong) id<createGroupDelegate> delegate_createGroup;
+@property (nonatomic, strong) id<rejectMakeFriendsDelegate> delegate_rejectMakeFriends;
+@property (nonatomic, strong) id<searchFriendDelegate> delegate_searchFriend;
+@property (nonatomic, strong) id<deleteFriendDelegate> delegate_deleteFriend;
 
 //定义每个请求的request
 @property (nonatomic, strong) ASIFormDataRequest* verifyCodeRequest;
@@ -260,11 +288,15 @@
 @property (nonatomic, strong) ASIFormDataRequest* uploadRecordRequest;
 @property (nonatomic, strong) ASIFormDataRequest* downloadRecordRequest;
 @property (nonatomic, strong) ASIHTTPRequest* downloadOneFileRequest;
+@property (nonatomic, strong) ASIFormDataRequest* deleteOneFileRequest;
 @property (nonatomic, strong) ASIHTTPRequest* weatherRequest;
 @property (nonatomic, strong) ASIFormDataRequest* friendsListRequest;
 @property (nonatomic, strong) ASIFormDataRequest* sendMakeFriendsRequestRequest;
 @property (nonatomic, strong) ASIFormDataRequest* agreeMakeFriendsRequest;
 @property (nonatomic, strong) ASIFormDataRequest* createGroupRequest;
+@property (nonatomic, strong) ASIFormDataRequest* rejectMakeFriendsRequest;
+@property (nonatomic, strong) ASIFormDataRequest* searchFriendRequest;
+@property (nonatomic, strong) ASIFormDataRequest* deleteFriendRequest;
 //每个请求的实现
 - (void)doRequest_verifyCode:(NSString*)phoneNO;
 - (void)doRequest_registerPhone:(NSMutableDictionary*)params;
@@ -291,10 +323,14 @@
 - (void)doRequest_uploadRecord:(NSMutableDictionary*)params;
 - (void)doRequest_downloadRecord:(NSMutableDictionary*)params;
 - (void)doRequest_downloadOneFile:(NSString*)str_url;
+- (void)doRequest_deleteOneFile:(NSMutableDictionary*)params;
 - (void)doRequest_weather:(double)lon :(double)lat;
 - (void)doRequest_friendsList:(NSMutableDictionary*)params;
 - (void)doRequest_sendMakeFriendsRequest:(NSMutableDictionary*)params;
 - (void)doRequest_agreeMakeFriends:(NSMutableDictionary*)params;
 - (void)doRequest_createGroup:(NSMutableDictionary*)params;
+- (void)doRequest_rejectMakeFriends:(NSMutableDictionary*)params;
+- (void)doRequest_searchFriend:(NSMutableDictionary*)params;
+- (void)doRequest_deleteFriend:(NSMutableDictionary*)params;
 
 @end

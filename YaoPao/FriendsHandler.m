@@ -198,10 +198,9 @@
     }
 }
 - (void)printFriendList:(NSArray*)friendList{
-    return;
     for(int i = 0;i<[friendList count];i++){
         FriendInfo* friend = [friendList objectAtIndex:i];
-        NSLog(@"%@,%@,%@,%@,%@,%i,%@,%@",friend.uid,friend.phoneNO,friend.nameInPhone,friend.nameInYaoPao,friend.avatarUrlInYaoPao,friend.status,friend.verifyMessage,@"");
+        NSLog(@"%@,%@,%@,%@,%@,%i,%@,%@",friend.uid,friend.phoneNO,friend.nameInPhone,friend.nameInYaoPao,friend.avatarUrlInYaoPao,friend.status,friend.verifyMessage,friend.sex);
     }
     NSLog(@"-----------------------------------------------------------");
 }

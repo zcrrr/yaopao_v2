@@ -11,11 +11,12 @@
 #import "CNNetworkHandler.h"
 @class GCDAsyncUdpSocket;
 
-@interface CNCloudRecord : NSObject<deleteRecordDelegate,cloudDataDelegate,uploadRecordDelegate,downloadRecordDelegate,downloadOneFileDelegate>
+@interface CNCloudRecord : NSObject<deleteRecordDelegate,cloudDataDelegate,uploadRecordDelegate,downloadRecordDelegate,downloadOneFileDelegate,deleteOneFileDelegate>
 
 @property (strong, nonatomic) NSMutableArray* fileArray;
 @property (strong, nonatomic) NSMutableArray* addRecordArray;
 @property (strong, nonatomic) NSMutableArray* downLoadRecordArray;
+@property (strong, nonatomic) NSMutableArray* editImageAddArray;
 @property (assign, nonatomic) long long synTimeNew;
 @property (nonatomic, strong) GCDAsyncUdpSocket *udpSocket;
 @property (assign, nonatomic) long long startRequestTime;

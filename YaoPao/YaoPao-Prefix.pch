@@ -19,8 +19,8 @@
 #endif
 
 #define ClIENT_VERSION @"2.0.0"
-//#define ENDPOINTS kApp.mainurl
-#define ENDPOINTS @"http://182.92.97.144:8888/"
+#define ENDPOINTS kApp.mainurl
+//#define ENDPOINTS @"http://182.92.97.144:8888/"
 #define IOS7OFFSIZE (IOS7?20:0)
 #define IOS7 ![[[UIDevice currentDevice] systemVersion] hasPrefix:@"6"]
 #define iPhone5 ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(640, 1136), [[UIScreen mainScreen] currentMode].size) : NO)
@@ -63,6 +63,8 @@
 #define TAG_UPLOAD_RECORD 23
 #define TAG_DOWNLAOD_RECORD 24
 #define TAG_DOWNLOAD_ONE_FILE 25
+#define TAG_DELETE_ONE_FILE 34
+
 
 #define TAG_WEATHER 26
 
@@ -70,4 +72,7 @@
 #define TAG_SEND_MAKE_FRIENDS_REQUEST 28
 #define TAG_AGREE_MAKE_FRIENDS 29
 #define TAG_CREATE_GROUP 30
+#define TAG_REJECT_MAKE_FRIENDS 31
+#define TAG_SEARCH_FRIEND 32
+#define TAG_DELETE_FRIEND 33
 

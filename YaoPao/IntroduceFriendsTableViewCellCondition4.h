@@ -13,6 +13,6 @@
 @property (weak, nonatomic) IBOutlet UIImageView *imageview2;
 @property (weak, nonatomic) IBOutlet UIImageView *imageview3;
 @property (weak, nonatomic) IBOutlet UIImageView *imageview4;
-@property (weak, nonatomic) IBOutlet UILabel *label_num;
+@property (weak, nonatomic) IBOutlet UIButton *button_num;
 
 @end

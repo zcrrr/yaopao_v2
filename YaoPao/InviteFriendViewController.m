@@ -20,6 +20,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    self.imageview_avatar.layer.cornerRadius = self.imageview_avatar.bounds.size.width/2;
+    self.imageview_avatar.layer.masksToBounds = YES;
     self.label_nameInPhone.text = self.friend.nameInPhone;
     self.label_phoneNO.text = self.friend.phoneNO;
     if(self.friend.avatarInPhone != nil){

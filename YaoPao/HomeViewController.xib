@@ -27,6 +27,7 @@
                 <outlet property="label_temp" destination="VrS-wI-JoA" id="TKs-9h-eHf"/>
                 <outlet property="label_username" destination="aaD-A4-gkK" id="1wD-vo-uWh"/>
                 <outlet property="loadingImage" destination="7ib-hA-Htn" id="J1r-6R-e4K"/>
+                <outlet property="progressview_cloud" destination="BGE-bz-4Nf" id="LHh-6m-JD4"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
                 <outlet property="view_line_horizontal1" destination="tgb-BQ-Mhl" id="RjL-MJ-C2N"/>
                 <outlet property="view_line_horizontal2" destination="Fhp-o3-nFi" id="Bes-OG-Tts"/>
@@ -171,6 +172,12 @@
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </view>
+                <progressView hidden="YES" opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" id="BGE-bz-4Nf">
+                    <rect key="frame" x="0.0" y="55" width="320" height="2"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="progressTintColor" red="0.54901960780000003" green="0.77647058820000003" blue="0.24313725489999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="trackTintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                </progressView>
                 <view contentMode="scaleToFill" id="YpA-K1-qfO">
                     <rect key="frame" x="0.0" y="267" width="160" height="80"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>

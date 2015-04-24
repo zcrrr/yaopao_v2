@@ -18,6 +18,8 @@
 #import "CNGroupInfo.h"
 #import "ChatGroupViewController.h"
 #import "FriendsHandler.h"
+#import "ColorValue.h"
+#import "CNCustomButton.h"
 
 @interface CNADBookViewController ()
 
@@ -32,6 +34,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     self.tableview.sectionIndexBackgroundColor = [UIColor clearColor];
+    [self.button_add fillColor:kClear :kClear :kWhite :kWhiteHalfAlpha];
 }
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
@@ -266,19 +269,17 @@
                     }
                 }
                 if(kApp.friendHandler.haveNewFriends){
-                    cell.label_num.hidden = NO;
-                    cell.label_num.text = [NSString stringWithFormat:@"%i",displayNum];
+                    cell.button_num.hidden = NO;
+                    [cell.button_num setTitle:[NSString stringWithFormat:@"%i",displayNum] forState:UIControlStateNormal];
                 }else{
-                    cell.label_num.hidden = YES;
+                    cell.button_num.hidden = YES;
                 }
                 return cell;
                 break;
             }
-                
             default:
                 return nil;
         }
-        
     }else if(section == 1){//跑团
         NSString* key = [self.keys objectAtIndex:section];
         static NSString *CellIdentifier = @"NewFriendsTableViewCell";
@@ -393,9 +394,11 @@
 - (void)displayLoading{
     self.loadingImage.hidden = NO;
     [self.indicator startAnimating];
+    self.view.userInteractionEnabled = NO;
 }
 - (void)hideLoading{
     self.loadingImage.hidden = YES;
     [self.indicator stopAnimating];
+    self.view.userInteractionEnabled = YES;
 }
 @end

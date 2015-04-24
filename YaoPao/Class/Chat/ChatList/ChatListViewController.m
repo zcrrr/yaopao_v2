@@ -26,6 +26,7 @@
 #import "ChatGroupViewController.h"
 #import "CNLoginPhoneViewController.h"
 #import "Toast+UIView.h"
+#import "FriendInfo.h"
 
 @interface ChatListViewController ()<UITableViewDelegate,UITableViewDataSource, UISearchDisplayDelegate,SRRefreshDelegate, UISearchBarDelegate, IChatManagerDelegate>
 
@@ -35,6 +36,7 @@
 @property (nonatomic, strong) EMSearchBar           *searchBar;
 @property (nonatomic, strong) SRRefreshView         *slimeView;
 @property (nonatomic, strong) UIView                *networkStateView;
+@property (nonatomic, strong) UIView                *view_pop;
 
 @property (strong, nonatomic) EMSearchDisplayController *searchController;
 
@@ -60,10 +62,50 @@
         CNLoginPhoneViewController* loginVC = [[CNLoginPhoneViewController alloc]init];
         [self.navigationController pushViewController:loginVC animated:YES];
     }
+    self.view_pop = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 568)];
+    self.view_pop.backgroundColor = [UIColor clearColor];
+    UIView* view_content = [[UIView alloc]initWithFrame:CGRectMake(218, 55, 102, 51)];
+    view_content.backgroundColor = [UIColor colorWithRed:58.0/255.0 green:166.0/255.0 blue:1 alpha:1];
+    UIImageView* imageview_chat = [[UIImageView alloc]initWithFrame:CGRectMake(8, 6, 16, 14)];
+    imageview_chat.image = [UIImage imageNamed:@"create_chat.png"];
+    UILabel* label_chat = [[UILabel alloc]initWithFrame:CGRectMake(32, 6, 60, 14)];
+    label_chat.text = @"发起聊天";
+    label_chat.textColor = [UIColor whiteColor];
+    [label_chat setFont:[UIFont systemFontOfSize:14]];
+    label_chat.textAlignment = NSTextAlignmentCenter;
+    UIView* view_line = [[UIView alloc]initWithFrame:CGRectMake(0, 26, 102, 1)];
+    view_line.backgroundColor = [UIColor colorWithRed:121.0/255.0 green:194.0/255.0 blue:1 alpha:1];
+    UIImageView* imageview_group = [[UIImageView alloc]initWithFrame:CGRectMake(8, 32, 16, 14)];
+    imageview_group.image = [UIImage imageNamed:@"create_group.png"];
+    UILabel* label_group = [[UILabel alloc]initWithFrame:CGRectMake(32, 32, 60, 14)];
+    label_group.text = @"创建跑团";
+    label_group.textColor = [UIColor whiteColor];
+    [label_group setFont:[UIFont systemFontOfSize:14]];
+    label_group.textAlignment = NSTextAlignmentCenter;
     
+    UIButton * button_startChat = [UIButton buttonWithType:UIButtonTypeCustom];
+    button_startChat.frame = CGRectMake(0, 0, 102, 25);
+    button_startChat.tag = 2;
+    [button_startChat addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIButton * button_createGroup = [UIButton buttonWithType:UIButtonTypeCustom];
+    button_createGroup.frame = CGRectMake(0, 26, 102, 25);
+    button_createGroup.tag = 3;
+    [button_createGroup addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    
+    
+    [view_content addSubview:imageview_chat];
+    [view_content addSubview:label_chat];
+    [view_content addSubview:view_line];
+    [view_content addSubview:imageview_group];
+    [view_content addSubview:label_group];
+    [view_content addSubview:button_startChat];
+    [view_content addSubview:button_createGroup];
+    
+    [self.view_pop addSubview:view_content];
     
     UIView* topbar = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 55)];
-    topbar.backgroundColor = [UIColor blueColor];
+    topbar.backgroundColor = [UIColor colorWithRed:58.0/255.0 green:166.0/255.0 blue:1 alpha:1];
     [self.view addSubview:topbar];
     UILabel* label_title = [[UILabel alloc]initWithFrame:CGRectMake(87, 20, 146, 35)];
     [label_title setTextAlignment:NSTextAlignmentCenter];
@@ -71,16 +113,17 @@
     label_title.font = [UIFont systemFontOfSize:16];
     label_title.textColor = [UIColor whiteColor];
     [topbar addSubview:label_title];
+    
     UIButton * button_contact = [UIButton buttonWithType:UIButtonTypeCustom];
-    button_contact.frame = CGRectMake(200, 23, 60, 30);
-    [button_contact setTitle:@"通讯录" forState:UIControlStateNormal];
+    button_contact.frame = CGRectMake(254, 30, 20, 14);
+    [button_contact setBackgroundImage:[UIImage imageNamed:@"chat_home_contact.png"] forState:UIControlStateNormal];
     button_contact.tag = 0;
     [button_contact addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
     [topbar addSubview:button_contact];
     
     UIButton * button_add = [UIButton buttonWithType:UIButtonTypeCustom];
-    button_add.frame = CGRectMake(270, 23, 50, 30);
-    [button_add setTitle:@"add" forState:UIControlStateNormal];
+    button_add.frame = CGRectMake(293, 30, 14, 14);
+    [button_add setBackgroundImage:[UIImage imageNamed:@"chat_home_add.png"] forState:UIControlStateNormal];
     button_add.tag = 1;
     [button_add addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
     [topbar addSubview:button_add];
@@ -91,15 +134,33 @@
     [self.view addSubview:self.tableView];
     [self.tableView addSubview:self.slimeView];
     [self networkStateView];
-
     [self searchController];
+    //添加弹出框
+    [self.view addSubview:self.view_pop];
+    self.view_pop.hidden = YES;
+    UITapGestureRecognizer* tapRecognizer_switch = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(hidePopView:)];
+    [self.view_pop addGestureRecognizer:tapRecognizer_switch];
+}
+- (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    self.view_pop.hidden = YES;
+    [self unregisterNotifications];
+}
+- (void)hidePopView:(id)sender
+{
+    self.view_pop.hidden = YES;
 }
 - (void)requestFriendsDidSuccess{
     __weak ChatListViewController *weakSelf = self;
     [weakSelf hideHud];
+    self.view.userInteractionEnabled = YES;
+    NSLog(@"请求成功");
+    [self.tableView reloadData];
 }
 - (void)requestFriendsDidFailed{
-    
+    __weak ChatListViewController *weakSelf = self;
+    [weakSelf hideHud];
+    self.view.userInteractionEnabled = YES;
 }
 - (void)buttonClicked:(id)sender{
     switch ([sender tag]) {
@@ -113,11 +174,23 @@
         case 1:
         {
             NSLog(@"发起");
+            self.view_pop.hidden = NO;
+            break;
+        }
+        case 2:
+        {
+            NSLog(@"发起对话");
+            CNADBookViewController* adbookVC = [[CNADBookViewController alloc]init];
+            [self.navigationController pushViewController:adbookVC animated:YES];
+            break;
+        }
+        case 3:
+        {
+            NSLog(@"创建组");
             CreateGroupViewController *createChatroom = [[CreateGroupViewController alloc] init];
             [self.navigationController pushViewController:createChatroom animated:YES];
             break;
         }
-            
         default:
             break;
     }
@@ -130,20 +203,17 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self refreshDataSource];
+    [self registerNotifications];
+    
     //获取好友信息
     if(kApp.friendHandler.friendList1NeedRefresh){
         kApp.friendHandler.delegete_requestFriends = self;
         [kApp.friendHandler dorequest];
         [self showHudInView:self.view hint:@"加载好友信息..."];
+        self.view.userInteractionEnabled = NO;
+        NSLog(@"开始请求");
     }
-    [self refreshDataSource];
-    [self registerNotifications];
-}
-
--(void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    [self unregisterNotifications];
 }
 
 - (void)removeEmptyConversationsFromDB
@@ -390,19 +460,35 @@
     EMConversation *conversation = [self.dataSource objectAtIndex:indexPath.row];
     cell.name = conversation.chatter;
     if (!conversation.isGroup) {
-        cell.placeholderImage = [UIImage imageNamed:@"chatListCellHead.png"];
+        FriendInfo* friend = [kApp.friendHandler.friendsDicByPhone objectForKey:conversation.chatter];
+        if(friend != nil){
+            if(friend.avatarUrlInYaoPao != nil && ![friend.avatarUrlInYaoPao isEqualToString:@""]){//有头像url
+                NSString* fullurl = [NSString stringWithFormat:@"%@%@",kApp.imageurl,friend.avatarUrlInYaoPao];
+                __block UIImage* image = [kApp.avatarDic objectForKey:fullurl];
+                if(image != nil){//缓存中有
+                    cell.placeholderImage = image;
+                }else{//下载
+                    NSURL *url = [NSURL URLWithString:fullurl];
+                    __block ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
+                    [request setCompletionBlock :^{
+                        image = [[UIImage alloc] initWithData:[request responseData]];
+                        if(image != nil){
+                            cell.placeholderImage = image;
+                            cell.imageView.image = image;
+                            [kApp.avatarDic setObject:image forKey:fullurl];
+                        }
+                    }];
+                    [request startAsynchronous ];
+                }
+            }else{
+                cell.placeholderImage = [UIImage imageNamed:@"avatar_default.png"];
+            }
+        }else{
+            cell.placeholderImage = [UIImage imageNamed:@"avatar_default.png"];
+        }
     }
     else{
-        NSString *imageName = @"groupPublicHeader";
-        NSArray *groupArray = [[EaseMob sharedInstance].chatManager groupList];
-        for (EMGroup *group in groupArray) {
-            if ([group.groupId isEqualToString:conversation.chatter]) {
-                cell.name = group.groupSubject;
-                imageName = group.isPublic ? @"groupPublicHeader" : @"groupPrivateHeader";
-                break;
-            }
-        }
-        cell.placeholderImage = [UIImage imageNamed:imageName];
+        cell.placeholderImage = [UIImage imageNamed:@"group_avatar_default.png"];
     }
     cell.detailMsg = [self subTitleMessageByConversation:conversation];
     cell.time = [self lastMessageTimeByConversation:conversation];

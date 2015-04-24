@@ -18,6 +18,9 @@
 #import "RealtimeSearchUtil.h"
 #import "EMSDKFull.h"
 #import "UIViewController+HUD.h"
+#import "FriendInfo.h"
+#import "FriendsHandler.h"
+#import "ASIHTTPRequest.h"
 
 @interface ContactSelectionViewController ()<UISearchBarDelegate, UISearchDisplayDelegate>
 
@@ -74,8 +77,9 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.view.backgroundColor = [UIColor colorWithRed:246.0/255.0 green:246.0/255.0 blue:247.0/255.0 alpha:1];
     UIView* topbar = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 55)];
-    topbar.backgroundColor = [UIColor blueColor];
+    topbar.backgroundColor = [UIColor colorWithRed:58.0/255.0 green:166.0/255.0 blue:1 alpha:1];
     [self.view addSubview:topbar];
     UILabel* label_title = [[UILabel alloc]initWithFrame:CGRectMake(87, 20, 146, 35)];
     [label_title setTextAlignment:NSTextAlignmentCenter];
@@ -84,8 +88,8 @@
     label_title.textColor = [UIColor whiteColor];
     [topbar addSubview:label_title];
     UIButton * button_back = [UIButton buttonWithType:UIButtonTypeCustom];
-    button_back.frame = CGRectMake(0, 23, 50, 30);
-    [button_back setTitle:@"返回" forState:UIControlStateNormal];
+    button_back.frame = CGRectMake(6, 23, 21, 29);
+    [button_back setBackgroundImage:[UIImage imageNamed:@"back_v2.png"] forState:UIControlStateNormal];
     button_back.tag = 0;
     [button_back addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
     [topbar addSubview:button_back];
@@ -117,6 +121,8 @@
             [self reloadFooterView];
         }
     }
+    self.tableView.sectionIndexBackgroundColor = [UIColor clearColor];
+    self.tableView.backgroundColor = [UIColor colorWithRed:246.0/255.0 green:246.0/255.0 blue:247.0/255.0 alpha:1];
 }
 - (void)buttonClicked:(id)sender{
     switch ([sender tag]) {
@@ -231,15 +237,16 @@
     if (_footerView == nil) {
         _footerView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 50, self.view.frame.size.width, 50)];
         _footerView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin;
-        _footerView.backgroundColor = [UIColor colorWithRed:207 / 255.0 green:210 /255.0 blue:213 / 255.0 alpha:0.7];
+        _footerView.backgroundColor = [UIColor whiteColor];
         
         _footerScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(10, 0, _footerView.frame.size.width - 30 - 70, _footerView.frame.size.height - 5)];
         _footerScrollView.backgroundColor = [UIColor clearColor];
         [_footerView addSubview:_footerScrollView];
         
-        _doneButton = [[UIButton alloc] initWithFrame:CGRectMake(_footerView.frame.size.width - 80, 8, 70, _footerView.frame.size.height - 16)];
-        [_doneButton setBackgroundColor:[UIColor colorWithRed:10 / 255.0 green:82 / 255.0 blue:104 / 255.0 alpha:1.0]];
+        _doneButton = [[UIButton alloc] initWithFrame:CGRectMake(_footerView.frame.size.width - 70, 12, 55, 26)];
         [_doneButton setTitle:NSLocalizedString(@"accept", @"Accept") forState:UIControlStateNormal];
+        [_doneButton setBackgroundImage:[UIImage imageNamed:@"action_buttonbg.png"] forState:UIControlStateNormal];
+        [_doneButton setBackgroundImage:[UIImage imageNamed:@"action_buttonbg_on.png"] forState:UIControlStateHighlighted];
         [_doneButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         _doneButton.titleLabel.font = [UIFont systemFontOfSize:14.0];
         [_doneButton setTitle:NSLocalizedString(@"ok", @"OK") forState:UIControlStateNormal];
@@ -256,15 +263,44 @@
 {
     static NSString *CellIdentifier = @"ContactListCell";
     BaseTableViewCell *cell = (BaseTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    
     // Configure the cell...
     if (cell == nil) {
         cell = [[BaseTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     
     EMBuddy *buddy = [[_dataSource objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
-    cell.imageView.image = [UIImage imageNamed:@"chatListCellHead.png"];
-    cell.textLabel.text = buddy.username;
+    FriendInfo* friend = [kApp.friendHandler.friendsDicByPhone objectForKey:buddy.username];
+    if(friend != nil){
+        if(friend.avatarUrlInYaoPao != nil && ![friend.avatarUrlInYaoPao isEqualToString:@""]){//有头像url
+            NSString* fullurl = [NSString stringWithFormat:@"%@%@",kApp.imageurl,friend.avatarUrlInYaoPao];
+            NSLog(@"kApp.avatarDic is %@",kApp.avatarDic);
+            __block UIImage* image = [kApp.avatarDic objectForKey:fullurl];
+            if(image != nil){//缓存中有
+                NSLog(@"缓存中有");
+                cell.imageView.image = image;
+            }else{//下载
+                NSURL *url = [NSURL URLWithString:fullurl];
+                __block ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
+                [request setCompletionBlock :^{
+                    image = [[UIImage alloc] initWithData:[request responseData]];
+                    if(image != nil){
+                        NSLog(@"网络请求图片成功！！");
+                        cell.imageView.image = image;
+                        [kApp.avatarDic setObject:image forKey:fullurl];
+                    }
+                }];
+                [request startAsynchronous ];
+                NSLog(@"网络请求图片");
+            }
+        }else{
+            cell.imageView.image = [UIImage imageNamed:@"avatar_default.png"];
+        }
+        cell.textLabel.text = friend.nameInYaoPao;
+    }else{
+        cell.imageView.image = [UIImage imageNamed:@"avatar_default.png"];
+        cell.textLabel.text = buddy.username;
+    }
+    
     
     return cell;
 }
@@ -386,8 +422,30 @@
     for (int i = 0; i < count; i++) {
         EMBuddy *buddy = [self.selectedContacts objectAtIndex:i];
         EMRemarkImageView *remarkView = [[EMRemarkImageView alloc] initWithFrame:CGRectMake(i * imageSize, 0, imageSize, imageSize)];
-        remarkView.image = [UIImage imageNamed:@"chatListCellHead.png"];
-        remarkView.remark = buddy.username;
+//        remarkView.layer.cornerRadius = remarkView.bounds.size.width/2;
+//        remarkView.layer.masksToBounds = YES;
+        FriendInfo* friend = [kApp.friendHandler.friendsDicByPhone objectForKey:buddy.username];
+        if(friend != nil){
+            if(friend.avatarUrlInYaoPao != nil && ![friend.avatarUrlInYaoPao isEqualToString:@""]){//有头像url
+                NSString* fullurl = [NSString stringWithFormat:@"%@%@",kApp.imageurl,friend.avatarUrlInYaoPao];
+                NSLog(@"kApp.avatarDic is %@",kApp.avatarDic);
+                __block UIImage* image = [kApp.avatarDic objectForKey:fullurl];
+                if(image != nil){//缓存中有
+                    NSLog(@"缓存中有");
+                    remarkView.image = image;
+                }else{
+                    remarkView.image = [UIImage imageNamed:@"avatar_default.png"];
+                }
+            }else{
+                remarkView.image = [UIImage imageNamed:@"avatar_default.png"];
+            }
+            remarkView.remark = friend.nameInYaoPao;
+        }else{
+            remarkView.image = [UIImage imageNamed:@"avatar_default.png"];
+            remarkView.remark = buddy.username;
+        }
+        
+        
         [self.footerScrollView addSubview:remarkView];
     }
     

@@ -27,6 +27,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *label_temp;
 @property (weak, nonatomic) IBOutlet UILabel *label_pmLevel;
 @property (weak, nonatomic) IBOutlet UIImageView *imageview_weather;
+@property (weak, nonatomic) IBOutlet UIProgressView *progressview_cloud;
 
 @property (strong, nonatomic) IBOutlet UIActivityIndicatorView *indicator;
 @property (strong, nonatomic) IBOutlet UIImageView *loadingImage;

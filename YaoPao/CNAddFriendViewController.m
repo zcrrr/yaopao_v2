@@ -48,6 +48,7 @@
         case 1:
         {
             //发送
+            [self.textfield_verifyMessage resignFirstResponder];
             NSMutableDictionary* params = [[NSMutableDictionary alloc]init];
             NSString* uid = [NSString stringWithFormat:@"%@",[kApp.userInfoDic objectForKey:@"uid"]];
             [params setObject:uid forKey:@"uid"];
@@ -70,19 +71,22 @@
 - (void)sendMakeFriendsRequestDidSuccess:(NSDictionary *)resultDic{
     [kApp.window makeToast:@"发送好友请求成功"];
     [self hideLoading];
-    self.friend.status = 3;
+    self.friend.status = 4;
     //如果此时回到list1，应该刷新
     kApp.friendHandler.friendList1NeedRefresh = YES;
     //如果此时回到list2，应该刷新
     kApp.friendHandler.friendList2NeedRefresh = YES;
+    [self.navigationController popViewControllerAnimated:YES];
     
 }
 - (void)displayLoading{
     self.loadingImage.hidden = NO;
     [self.indicator startAnimating];
+    self.view.userInteractionEnabled = NO;
 }
 - (void)hideLoading{
     self.loadingImage.hidden = YES;
     [self.indicator stopAnimating];
+    self.view.userInteractionEnabled = YES;
 }
 @end

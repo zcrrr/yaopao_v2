@@ -31,6 +31,7 @@
 @synthesize stepDes;
 @synthesize fileCount;
 @synthesize userCancel;
+@synthesize editImageAddArray;
 
 + (void)ClearRecordAfterUserLogin{
     NSString* uid = [NSString stringWithFormat:@"%i",[[kApp.userInfoDic objectForKey:@"uid"] intValue]];
@@ -53,6 +54,7 @@
             [self deletePlistRecord:runclass];
         }
     }
+    NSLog(@"存记录2");
     if ([kApp.managedObjectContext save:&error]) {
         NSLog(@"Error:%@,%@",error,[error userInfo]);
     }
@@ -68,6 +70,7 @@
         [cloudDiary setObject:uid forKey:@"uid"];
         NSMutableArray* deleteArray = [[NSMutableArray alloc]init];
         [cloudDiary setObject:deleteArray forKey:@"deleteArray"];
+        
         NSString* filePath_cloud = [CNPersistenceHandler getDocument:@"cloudDiary.plist"];
         [cloudDiary writeToFile:filePath_cloud atomically:YES];
     }
@@ -157,6 +160,7 @@
     [self deletePlistRecord:runclass];
     NSError* error=nil;
     [kApp.managedObjectContext deleteObject:runclass];
+    NSLog(@"存记录3");
     if ([kApp.managedObjectContext save:&error]) {
         NSLog(@"Error:%@,%@",error,[error userInfo]);
     }
@@ -180,6 +184,7 @@
         for(RunClass* runclass in mutableFetchResult){
             [kApp.managedObjectContext deleteObject:runclass];
         }
+        NSLog(@"存记录4");
         if ([kApp.managedObjectContext save:&error]) {
             NSLog(@"Error:%@,%@",error,[error userInfo]);
         }
@@ -209,13 +214,15 @@
     [cloudDiary setObject:uid forKey:@"uid"];
     NSMutableArray* deleteArray = [[NSMutableArray alloc]init];
     [cloudDiary setObject:deleteArray forKey:@"deleteArray"];
+    NSMutableArray* editImageLaterArray = [[NSMutableArray alloc]init];
+    [cloudDiary setObject:editImageLaterArray forKey:@"editImageLaterArray"];
     NSString* filePath_cloud = [CNPersistenceHandler getDocument:@"cloudDiary.plist"];
     [cloudDiary writeToFile:filePath_cloud atomically:YES];
 }
 - (void)startCloud{
     if([CNUtil canNetWork]){
         if(self.isSynServerTime){
-            [self cloud_step12];
+            [self cloud_step0];
         }else{
             self.forCloud = 1;
             [self synTimeWithServer];
@@ -226,7 +233,7 @@
         [alert show];
     }
 }
-- (void)cloud_step12{
+- (void)cloud_step0{
     //第一步
     if(kApp.isLogin != 1){//是否登录
         UIAlertView* alert = [[UIAlertView alloc]initWithTitle:@"" message:@"请先登录再同步记录" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
@@ -245,8 +252,47 @@
     [cloudDiary setObject:uid forKey:@"uid"];
     [cloudDiary writeToFile:filePath_cloud atomically:YES];
     NSLog(@"------------------第一步：赋值uid:%@",uid);
-    //第二步：删除记录
-    NSLog(@"------------------第二步：删除记录");
+    //第二步：上传或者删除需要的图片
+    NSArray* arrayTemp = [cloudDiary objectForKey:@"editImageLaterArray"];
+    if(arrayTemp == nil || [arrayTemp count] <1){//没有需要上传的图片或删除的图片
+        [self cloud_step2];
+    }else{
+        //对arrayTemp进行处理得到删除字符串以及添加数组
+        NSMutableArray* deleteImageArray = [[NSMutableArray alloc]init];
+        for(NSString* oneLine in arrayTemp){
+            NSArray* oneLineArray = [oneLine componentsSeparatedByString:@"-"];
+            if([[oneLineArray objectAtIndex:0] isEqualToString:@"add"]){//添加
+                [self.editImageAddArray addObject:oneLine];
+            }else{//删除
+                [deleteImageArray addObject:[oneLineArray objectAtIndex:1]];
+            }
+        }
+        if([deleteImageArray count] == 0){
+            [self cloud_step1];
+        }else{
+            //先删除
+            SBJsonWriter *jsonWriter = [[SBJsonWriter alloc] init];
+            NSString* jsonString = [jsonWriter stringWithObject:deleteImageArray];
+            NSMutableDictionary* params = [[NSMutableDictionary alloc]init];
+            [params setObject:uid forKey:@"uid"];
+            [params setObject:jsonString forKey:@"imgpaths"];
+            kApp.networkHandler.delegate_deleteOneFile = self;
+            [kApp.networkHandler doRequest_deleteOneFile:params];
+        }
+    }
+}
+- (void)cloud_step1{
+    //上传照片
+    NSString* oneAction = [self.editImageAddArray firstObject];
+    NSArray* temparray = [oneAction componentsSeparatedByString:@"-"];
+    
+}
+- (void)cloud_step2{
+    NSLog(@"------------------第三步：删除记录");
+    NSString* filePath_cloud = [CNPersistenceHandler getDocument:@"cloudDiary.plist"];
+    NSMutableDictionary* cloudDiary = [NSMutableDictionary dictionaryWithContentsOfFile:filePath_cloud];
+    //第一步：将uid赋值
+    NSString* uid = [NSString stringWithFormat:@"%i",[[kApp.userInfoDic objectForKey:@"uid"]intValue]];
     NSArray* deleteArray = [cloudDiary objectForKey:@"deleteArray"];
     if(deleteArray == nil||[deleteArray count]<1){//不需要删除
         NSLog(@"不需要删除");
@@ -373,6 +419,7 @@
         }
     }
     NSError *error = nil;
+    NSLog(@"存记录5");
     if ([kApp.managedObjectContext save:&error]) {
         NSLog(@"Error:%@,%@",error,[error userInfo]);
     }
@@ -465,6 +512,7 @@
         runclass.serverBinaryFilePath = [resultDic objectForKey:@"serverBinaryFilePath"];
     }
     NSError *error = nil;
+    NSLog(@"存记录6");
     if ([kApp.managedObjectContext save:&error]) {
         NSLog(@"Error:%@,%@",error,[error userInfo]);
     }
@@ -501,6 +549,7 @@
             [kApp.managedObjectContext deleteObject:runclass];
             [CNCloudRecord deletePlistRecord:runclass];
         }
+        NSLog(@"存记录7");
         if ([kApp.managedObjectContext save:&error]) {
             NSLog(@"Error:%@,%@",error,[error userInfo]);
         }
@@ -544,7 +593,6 @@
         }
         
         RunClass * runClass  = [NSEntityDescription insertNewObjectForEntityForName:@"RunClass" inManagedObjectContext:kApp.managedObjectContext];
-        
         runClass.averageHeart = [dic objectForKey:@"averageHeart"];
         runClass.clientBinaryFilePath = @"";
         runClass.clientImagePaths = @"";
@@ -594,19 +642,21 @@
             for(int j=0;j<[imagePaths count];j++){
                 [self.fileArray addObject:[NSString stringWithFormat:@"%i,%@,%@,22",[self.downLoadRecordArray count]-1,runClass.rid,[imagePaths objectAtIndex:j]]];
             }
-            
         }
     }
-    self.fileCount = [self.fileArray count];
     [self downloadfile];
 }
 - (void)downloadfile{
     if(self.userCancel){
+        for(RunClass* runclass in self.downLoadRecordArray){
+            [kApp.managedObjectContext deleteObject:runclass];
+        }
         [self cloudFailed:@"用户取消"];
         return;
     }
     if([self.fileArray count] == 0){//刚开始下载就为0，说明本次同步只有更新，没有新增
         NSError *error = nil;
+        NSLog(@"存记录8");
         if ([kApp.managedObjectContext save:&error]) {
         }else{
             [self cloudFailed:@"存储下载记录失败"];
@@ -627,6 +677,7 @@
 - (void)downloadOneFileDidSuccess:(NSData *)data{
     if(self.userCancel){
         [self cloudFailed:@"用户取消"];
+        
         return;
     }
     NSString* fileString = [self.fileArray lastObject];
@@ -679,6 +730,7 @@
         [self downloadfile];
     }else{
         NSError *error = nil;
+        NSLog(@"存记录1");
         if ([kApp.managedObjectContext save:&error]) {
             for(int i=0;i<[self.downLoadRecordArray count];i++){
                 RunClass* oneRunClass = [self.downLoadRecordArray objectAtIndex:i];
@@ -758,7 +810,7 @@ withFilterContext:(id)filterContext
             self.deltaMiliSecond = deltaTime;
             self.isSynServerTime = YES;
             if(self.forCloud == 1){
-                [self cloud_step12];
+                [self cloud_step0];
                 self.forCloud = 0;
             }
         }else{//请求时间过长，则存入数组
@@ -780,7 +832,7 @@ withFilterContext:(id)filterContext
                 NSLog(@"取得的deltaMiliSecond是%i",self.deltaMiliSecond);
                 self.isSynServerTime = YES;
                 if(self.forCloud == 1){
-                    [self cloud_step12];
+                    [self cloud_step0];
                     self.forCloud = 0;
                 }
             }else{//没到十次继续请求

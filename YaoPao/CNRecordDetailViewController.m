@@ -22,6 +22,7 @@
 #import "CNCloudRecord.h"
 #import "CNCustomButton.h"
 #import "ColorValue.h"
+#import "CNImageEditerViewController.h"
 
 @interface CNRecordDetailViewController ()
 
@@ -192,12 +193,16 @@ extern NSMutableArray* imageArray;
     self.label_aver_speed.text = [NSString stringWithFormat:@"+%i",[self.oneRun.score intValue]];
     self.textfield_remark.text = self.oneRun.remark;
     int mood = [self.oneRun.feeling intValue];
-    NSString* img_name_mood = [NSString stringWithFormat:@"mood%i_h.png",mood];
+    NSString* img_name_mood = [NSString stringWithFormat:@"mood%i_hd.png",mood];
     self.image_mood.image = [UIImage imageNamed:img_name_mood];
     
     int way = [self.oneRun.runway intValue];
-    NSString* img_name_way = [NSString stringWithFormat:@"way%i_h.png",way];
+    NSString* img_name_way = [NSString stringWithFormat:@"way%i_hd.png",way];
     self.image_way.image = [UIImage imageNamed:img_name_way];
+    
+    if(kApp.runManager.runway == 0){//没选道路
+        self.image_mood.frame = self.image_way.frame;
+    }
     //判断是否有图片
     imageArray = [[NSMutableArray alloc]init];
     if(![oneRun.clientImagePaths isEqualToString:@""]){
@@ -522,5 +527,11 @@ extern NSMutableArray* imageArray;
     [self.scrollview setContentOffset:CGPointMake(self.currentpage*320+320, 0) animated:YES];
     self.currentpage ++ ;
     [self howControllerDisplay];
+}
+
+- (IBAction)button_imageEdit_clicked:(id)sender {
+    CNImageEditerViewController* ieVC = [[CNImageEditerViewController alloc]init];
+    ieVC.oneRun = self.oneRun;
+    [self.navigationController pushViewController:ieVC animated:YES];
 }
 @end

@@ -46,13 +46,14 @@ extern NSMutableArray* imageArray;
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     if(!iPhone5){//4、4s
-        self.view_shareview.frame = CGRectMake(0, 55, 320, 385);
-        self.scrollview.frame = CGRectMake(0, 46, 320, 255);
-        self.view_map_container.frame = CGRectMake(0, 0, 320, 235);
-        self.imageview_trackonly.frame = CGRectMake(320, 0, 320, 235);
-        self.view_onlytrack.frame = CGRectMake(320, 0, 320, 235);
-        self.imageview_page.frame = CGRectMake(134, 306, 51, 17);
-        self.label_whichpage.frame  = CGRectMake(134, 306, 51, 17);
+        self.view_map_container.frame = CGRectMake(0, 0, 320, 260);
+        self.view_onlytrack.frame = CGRectMake(320, 0, 320, 260);
+        self.scrollview.frame = CGRectMake(0, 0, 320, 260);
+        self.view_sharePart2.frame = CGRectMake(0, 38, 320, 302);
+        
+        self.view_shareview.frame = CGRectMake(0, 55, 320, 340);
+//        self.imageview_page.frame = CGRectMake(134, 306, 51, 17);
+//        self.label_whichpage.frame  = CGRectMake(134, 306, 51, 17);
     }
     [self.button_jump fillColor:kClear :kClear :kWhite :kWhiteHalfAlpha];
     self.mapView=[[MAMapView alloc] initWithFrame:CGRectMake(0, 0, self.view_map_container.bounds.size.width, self.view_map_container.bounds.size.height)];
@@ -77,48 +78,44 @@ extern NSMutableArray* imageArray;
     }
     self.label_whichpage.text = [NSString stringWithFormat:@"%i/%i",1,(int)[imageArray count]+2];
     if([self.dataSource isEqualToString:@"this"]){
+        [self.button_jump setTitle:@"跳过" forState:UIControlStateNormal];
         int type = kApp.runManager.howToMove;
         NSString* typeDes = @"";
         switch (type) {
             case 1:
             {
-                typeDes = @"跑";
+                typeDes = @"跑步";
+                self.imageview_type.image = [UIImage imageNamed:@"howToMove1.png"];
+                self.imageview_type2.image = [UIImage imageNamed:@"howToMove1.png"];
                 break;
             }
             case 2:
             {
                 typeDes = @"步行";
-                break;
-            }
-            case 3:
-            {
-                typeDes = @"骑行";
+                self.imageview_type.image = [UIImage imageNamed:@"howToMove2.png"];
+                self.imageview_type2.image = [UIImage imageNamed:@"howToMove2.png"];
                 break;
             }
             default:
                 break;
         }
         self.shareText = [NSString stringWithFormat:@"我刚刚%@了%0.2f公里",typeDes,kApp.runManager.distance/1000.0];
-        self.label_feel.text = kApp.runManager.remark;
+        self.label_feel.text = [kApp.runManager.remark isEqualToString:@""]?self.shareText:kApp.runManager.remark;
         self.label_time.text = [CNUtil duringTimeStringFromSecond:[kApp.runManager during]/1000];
         self.label_pspeed.text = [CNUtil pspeedStringFromSecond:kApp.runManager.secondPerKm];
         self.label_score.text = [NSString stringWithFormat:@"+%i",kApp.runManager.score];
         int mood = kApp.runManager.feeling;
-        NSString* img_name_mood = [NSString stringWithFormat:@"mood%i_h.png",mood];
+        NSString* img_name_mood = [NSString stringWithFormat:@"mood%i_hd.png",mood];
         self.image_mood.image = [UIImage imageNamed:img_name_mood];
+        self.imageview_mood2.image = [UIImage imageNamed:img_name_mood];
         
         int way = kApp.runManager.runway;
-        NSString* img_name_way = [NSString stringWithFormat:@"way%i_h.png",way];
+        NSString* img_name_way = [NSString stringWithFormat:@"way%i_hd.png",way];
         self.image_way.image = [UIImage imageNamed:img_name_way];
-        
-        if(mood == 0 && way == 0){
-            CGRect oldFrame = self.view_sharePart2.frame;
-            self.view_sharePart2.frame = CGRectMake(0, oldFrame.origin.y-39, 320, oldFrame.size.height);
-        }
-        
-        if(kApp.runManager.remark == nil || [kApp.runManager.remark isEqualToString:@""]){
-            CGRect oldFrame = self.view_sharePart2.frame;
-            self.view_sharePart2.frame = CGRectMake(0, oldFrame.origin.y-21, 320, oldFrame.size.height);
+        self.imageview_way2.image = [UIImage imageNamed:img_name_way];
+        if(kApp.runManager.runway == 0){//没选道路
+            self.image_mood.frame = self.image_way.frame;
+            self.imageview_mood2.frame = self.imageview_way2.frame;
         }
         
         [self.button_jump setTitle:@"跳过" forState:UIControlStateNormal];
@@ -129,56 +126,55 @@ extern NSMutableArray* imageArray;
         self.label_date_map2.text = [CNUtil getTimeFromTimestamp_ymd:[CNUtil getNowTime]];
         self.label_time_map2.text = [CNUtil getTimeFromTimestamp_ms:[CNUtil getNowTime]];
     }else{
+        [self.button_jump setTitle:@"返回" forState:UIControlStateNormal];
         int type = [self.oneRun.howToMove intValue];
         NSString* typeDes = @"";
         switch (type) {
             case 1:
             {
-                typeDes = @"跑";
+                typeDes = @"跑步";
+                self.imageview_type.image = [UIImage imageNamed:@"howToMove1.png"];
+                self.imageview_type2.image = [UIImage imageNamed:@"howToMove1.png"];
                 break;
             }
             case 2:
             {
                 typeDes = @"步行";
+                self.imageview_type.image = [UIImage imageNamed:@"howToMove2.png"];
+                self.imageview_type2.image = [UIImage imageNamed:@"howToMove2.png"];
                 break;
             }
             case 3:
             {
-                typeDes = @"骑行";
+                typeDes = @"自行车骑行";
+                self.imageview_type.image = [UIImage imageNamed:@"runtype_ride.png"];
+                self.imageview_type2.image = [UIImage imageNamed:@"runtype_ride.png"];
                 break;
             }
             default:
                 break;
         }
         self.shareText = [NSString stringWithFormat:@"我刚刚%@了%0.2f公里",typeDes, [oneRun.distance doubleValue]/1000.0];
-        self.label_feel.text = oneRun.remark;
+        self.label_feel.text = [oneRun.remark isEqualToString:@""]?self.shareText:oneRun.remark;
         self.label_time.text = [CNUtil duringTimeStringFromSecond:[oneRun.duration intValue]/1000];
         self.label_pspeed.text = [CNUtil pspeedStringFromSecond:[oneRun.secondPerKm intValue]];
         self.label_score.text = [NSString stringWithFormat:@"+%i",[oneRun.score intValue]];
         int mood = [oneRun.feeling intValue];
-        NSString* img_name_mood = [NSString stringWithFormat:@"mood%i_h.png",mood];
+        NSString* img_name_mood = [NSString stringWithFormat:@"mood%i_hd.png",mood];
         self.image_mood.image = [UIImage imageNamed:img_name_mood];
+        self.imageview_mood2.image = [UIImage imageNamed:img_name_mood];
         
         int way = [oneRun.runway intValue];
-        NSString* img_name_way = [NSString stringWithFormat:@"way%i_h.png",way];
+        NSString* img_name_way = [NSString stringWithFormat:@"way%i_hd.png",way];
         self.image_way.image = [UIImage imageNamed:img_name_way];
+        self.imageview_way2.image = [UIImage imageNamed:img_name_way];
         
-        if(mood == 0 && way == 0){
-            CGRect oldFrame = self.view_sharePart2.frame;
-            self.view_sharePart2.frame = CGRectMake(0, oldFrame.origin.y-39, 320, oldFrame.size.height);
-            CGRect oldFrame2 = self.view_shareview.frame;
-            self.view_shareview.frame = CGRectMake(0, 55, 320, oldFrame2.size.height - 39);
-            
+        if(kApp.runManager.runway == 0){//没选道路
+            self.image_mood.frame = self.image_way.frame;
+            self.imageview_mood2.frame = self.imageview_way2.frame;
         }
         
-        if(oneRun.remark == nil || [oneRun.remark isEqualToString:@""]){
-            CGRect oldFrame = self.view_sharePart2.frame;
-            self.view_sharePart2.frame = CGRectMake(0, oldFrame.origin.y-21, 320, oldFrame.size.height);
-            CGRect oldFrame2 = self.view_shareview.frame;
-            self.view_shareview.frame = CGRectMake(0, 55, 320, oldFrame2.size.height - 21);
-        }
         
-        [self.button_jump setTitle:@"跳过" forState:UIControlStateNormal];
         self.label_dis_map1.text = [NSString stringWithFormat:@"%0.1f",[oneRun.distance doubleValue]/1000.0];
         self.label_date_map1.text = [CNUtil getTimeFromTimestamp_ymd:[oneRun.rid longLongValue]/1000];
         self.label_time_map1.text = [CNUtil getTimeFromTimestamp_ms:[oneRun.rid longLongValue]/1000];
@@ -207,13 +203,17 @@ extern NSMutableArray* imageArray;
 }
 - (IBAction)button_jump_clicked:(id)sender {
     if([self.dataSource isEqualToString:@"this"]){
-        [self.navigationController popToRootViewControllerAnimated:NO];
-        [kApp showTab:1];
+        [self.navigationController popToRootViewControllerAnimated:YES];
+        [self performSelector:@selector(gotoRecordPage) withObject:nil afterDelay:0.5];
+        
         NSString* NOTIFICATION_REFRESH = @"REFRESH";
         [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_REFRESH object:nil];
     }else{
         [self.navigationController popViewControllerAnimated:YES];
     }
+}
+- (void)gotoRecordPage{
+    [kApp showTab:1];
 }
 - (IBAction)button_share_clicked:(id)sender {
     NSLog(@"share");

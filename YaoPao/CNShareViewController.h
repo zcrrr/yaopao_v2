@@ -27,8 +27,12 @@
 - (IBAction)button_share_clicked:(id)sender;
 @property (strong, nonatomic) IBOutlet UIView *view_map_container;
 @property (weak, nonatomic) IBOutlet OnlyTrackView4share *view_onlytrack;
+@property (weak, nonatomic) IBOutlet UIImageView *imageview_type;
 @property (strong, nonatomic) IBOutlet UIImageView *image_mood;
 @property (strong, nonatomic) IBOutlet UIImageView *image_way;
+@property (weak, nonatomic) IBOutlet UIImageView *imageview_type2;
+@property (weak, nonatomic) IBOutlet UIImageView *imageview_mood2;
+@property (weak, nonatomic) IBOutlet UIImageView *imageview_way2;
 @property (strong, nonatomic) IBOutlet CNCustomButton *button_jump;
 @property (strong, nonatomic) IBOutlet UIButton *button_share;
 @property (strong, nonatomic) IBOutlet UIView *view_shareview;

@@ -30,27 +30,29 @@
                         <rect key="frame" x="115" y="7" width="30" height="30"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="dUh-iX-Ov7">
-                        <rect key="frame" x="257" y="10" width="10" height="21"/>
+                    <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="9E8-dK-kjj">
+                        <rect key="frame" x="281" y="14" width="15" height="15"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                        <nil key="highlightedColor"/>
-                    </label>
+                        <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                        <state key="normal" title="1" backgroundImage="bg_rednum.png">
+                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                        </state>
+                    </button>
                 </subviews>
             </tableViewCellContentView>
             <connections>
+                <outlet property="button_num" destination="9E8-dK-kjj" id="gGM-Ia-LCB"/>
                 <outlet property="imageview1" destination="Iqv-Pj-a5b" id="Fz3-Gn-g15"/>
                 <outlet property="imageview2" destination="2nj-fe-x1W" id="0jL-G1-lNT"/>
                 <outlet property="imageview3" destination="cfr-pv-jTo" id="wnz-Ic-U3V"/>
                 <outlet property="imageview4" destination="iej-aM-dpi" id="cVs-Nq-tR1"/>
-                <outlet property="label_num" destination="dUh-iX-Ov7" id="2qN-Yi-fsf"/>
             </connections>
             <point key="canvasLocation" x="356" y="271"/>
         </tableViewCell>
     </objects>
     <resources>
         <image name="avatar_default.png" width="192" height="192"/>
+        <image name="bg_rednum.png" width="36" height="36"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

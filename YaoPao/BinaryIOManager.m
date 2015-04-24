@@ -289,6 +289,7 @@
             int speed = gps.speed;
             CNGPSPoint* point = [[CNGPSPoint alloc]initWithLon:lon andLat:lat andStatus:status andTime:timeStamp andCourse:dir andAltitude:alt andSpeed:speed];
             [kApp.runManager.GPSList addObject:point];
+            NSLog(@"timeStamp is %llu",timeStamp);
             
         }
         

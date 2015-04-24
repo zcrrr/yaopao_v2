@@ -131,7 +131,7 @@
 + (void)popupWarningBackground;
 + (void)popupWarningNotInStartZone;
 + (void)popupWarningCheckTime;
-+ (void)popupWarningCloud;
++ (void)popupWarningCloud:(BOOL)visible;
 
 //用与测试
 @property (assign, nonatomic) int testIndex;

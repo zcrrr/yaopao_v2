@@ -120,7 +120,17 @@
     self.label_during.text = [CNUtil duringTimeStringFromSecond:[oneRun.duration intValue]/1000];
     self.label_pspeed.text = [CNUtil pspeedStringFromSecond:[oneRun.secondPerKm intValue]];
     self.label_aver_speed.text = [NSString stringWithFormat:@"+%i",[oneRun.score intValue]];
+    int mood = [self.oneRun.feeling intValue];
+    NSString* img_name_mood = [NSString stringWithFormat:@"mood%i_hd.png",mood];
+    self.imageview_mood.image = [UIImage imageNamed:img_name_mood];
     
+    int way = [self.oneRun.runway intValue];
+    NSString* img_name_way = [NSString stringWithFormat:@"way%i_hd.png",way];
+    self.imageview_way.image = [UIImage imageNamed:img_name_way];
+    
+    if(kApp.runManager.runway == 0){//没选道路
+        self.imageview_mood.frame = self.imageview_way.frame;
+    }
     
 //    [self testDrawOneByOne];
 }

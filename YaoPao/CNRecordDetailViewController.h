@@ -42,5 +42,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *button_right;
 - (IBAction)button_left_clicked:(id)sender;
 - (IBAction)button_right_clicked:(id)sender;
+- (IBAction)button_imageEdit_clicked:(id)sender;
 
 @end

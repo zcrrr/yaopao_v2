@@ -335,7 +335,7 @@
     
     [CNCloudRecord ClearRecordAfterUserLogin];
     //用户登录之后先同步
-    [CNAppDelegate popupWarningCloud];
+    [CNAppDelegate popupWarningCloud:NO];
     
 //    CNUserinfoViewController* userInfoVC = [[CNUserinfoViewController alloc]init];
 //    [self.navigationController pushViewController:userInfoVC animated:YES];

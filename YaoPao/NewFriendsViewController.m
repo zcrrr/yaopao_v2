@@ -17,6 +17,12 @@
 #import "CNNetworkHandler.h"
 #import "Toast+UIView.h"
 #import "FriendsHandler.h"
+#import "FriendDetailWantMeViewController.h"
+#import "FriendDetailNotFriendViewController.h"
+#import "SearchFriendViewController.h"
+#import "FriendDetailViewController.h"
+#import "ColorValue.h"
+#import "CNCustomButton.h"
 
 @interface NewFriendsViewController ()
 
@@ -28,6 +34,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self.button_add fillColor:kClear :kClear :kWhite :kWhiteHalfAlpha];
     self.friendsToInvite = [[NSMutableArray alloc]init];
     // Do any additional setup after loading the view from its nib.
     ABAddressBookRef addressBook = ABAddressBookCreateWithOptions(NULL, NULL);
@@ -65,7 +72,6 @@
             }
         }
     }
-    kApp.friendHandler.friendList2NeedRefresh = YES;
 }
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
@@ -76,7 +82,6 @@
     }else{
         NSLog(@"不需要刷新好友列表2");
     }
-    
 }
 - (BOOL)isFriendAlreadyJoin:(FriendInfo*)friend{
     NSString* phoneNO = friend.phoneNO;
@@ -208,11 +213,63 @@
             cell.button_action.tag = row;
         }
         [cell.button_action addTarget:self action:@selector(actionButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        [cell.button_action setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     }else{
         [cell.button_action setEnabled:NO];
+        [cell.button_action setBackgroundImage:[UIImage imageNamed:@"action_button_no.png"] forState:UIControlStateNormal];
+        [cell.button_action setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
     }
     
     return cell;
+}
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    NSInteger row = [indexPath row];
+    NSInteger section = [indexPath section];
+    if(section == 0){//已加入要跑
+        FriendInfo* friend = [kApp.friendHandler.friendsNew objectAtIndex:row];
+        switch (friend.status) {
+            case 2://可添加
+            {
+                FriendDetailNotFriendViewController* fdnfVC = [[FriendDetailNotFriendViewController alloc]init];
+                fdnfVC.friend = friend;
+                [self.navigationController pushViewController:fdnfVC animated:YES];
+                break;
+            }
+            case 3://可接受或忽略
+            {
+                FriendDetailWantMeViewController* fdwmVC = [[FriendDetailWantMeViewController alloc]init];
+                fdwmVC.friend = friend;
+                [self.navigationController pushViewController:fdwmVC animated:YES];
+                break;
+            }
+            case 4://等待验证
+            {
+                FriendDetailNotFriendViewController* fdnfVC = [[FriendDetailNotFriendViewController alloc]init];
+                fdnfVC.friend = friend;
+                [self.navigationController pushViewController:fdnfVC animated:YES];
+                break;
+            }
+            case 5://已接受
+            {
+                FriendDetailViewController* fdVC = [[FriendDetailViewController alloc]init];
+                fdVC.friend = friend;
+                [self.navigationController pushViewController:fdVC animated:YES];
+                break;
+            }
+            case 6://已忽略
+            {
+                FriendDetailNotFriendViewController* fdnfVC = [[FriendDetailNotFriendViewController alloc]init];
+                fdnfVC.friend = friend;
+                [self.navigationController pushViewController:fdnfVC animated:YES];
+                break;
+            }
+            default:
+                break;
+        }
+    }else{//还没加入要跑
+        
+    }
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 - (IBAction)button_clicked:(id)sender {
     switch ([sender tag]) {
@@ -222,8 +279,18 @@
         case 1:
         {
             NSLog(@"添加");
+            SearchFriendViewController* sfVC = [[SearchFriendViewController alloc]init];
+            [self.navigationController pushViewController:sfVC animated:YES];
             break;
         }
+        case 2:
+        {
+            NSLog(@"搜索");
+            SearchFriendViewController* sfVC = [[SearchFriendViewController alloc]init];
+            [self.navigationController pushViewController:sfVC animated:YES];
+            break;
+        }
+        
         default:
             break;
     }
@@ -283,9 +350,11 @@
 - (void)displayLoading{
     self.loadingImage.hidden = NO;
     [self.indicator startAnimating];
+    self.view.userInteractionEnabled = NO;
 }
 - (void)hideLoading{
     self.loadingImage.hidden = YES;
     [self.indicator stopAnimating];
+    self.view.userInteractionEnabled = YES;
 }
 @end

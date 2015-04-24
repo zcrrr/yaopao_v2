@@ -142,8 +142,8 @@
     [CNCloudRecord deleteAllRecordWhenFirstInstall];
     //环信
     //注册 APNS文件的名字, 需要与后台上传证书时的名字一一对应
-//    [[EaseMob sharedInstance] registerSDKWithAppKey:@"yaopao#yaopao" apnsCertName:@"" otherConfig:@{kSDKConfigEnableConsoleLogger:[NSNumber numberWithBool:NO]}];
-    [[EaseMob sharedInstance] registerSDKWithAppKey:@"yaopao#yaopao" apnsCertName:@""];
+    [[EaseMob sharedInstance] registerSDKWithAppKey:@"yaopao#yaopao" apnsCertName:@"" otherConfig:@{kSDKConfigEnableConsoleLogger:[NSNumber numberWithBool:NO]}];
+//    [[EaseMob sharedInstance] registerSDKWithAppKey:@"yaopao#yaopao" apnsCertName:@""];
     [[EaseMob sharedInstance] application:application didFinishLaunchingWithOptions:launchOptions];
     //google map
     [GMSServices provideAPIKey:@"AIzaSyCyYR5Ih3xP0rpYMaF1qAsInxFyqvaCJIY"];
@@ -482,16 +482,22 @@
     rootViewController.modalPresentationStyle = UIModalPresentationCurrentContext;
     [rootViewController presentViewController:navVC animated:NO completion:^(void){NSLog(@"pop");}];
 }
-+ (void)popupWarningCloud{
++ (void)popupWarningCloud:(BOOL)visible{
     //测试代码
-    return;
-    CNWarningCloudingViewController* warningVC = [[CNWarningCloudingViewController alloc]init];
-    UINavigationController* navVC = [[UINavigationController alloc]initWithRootViewController:warningVC];
-    navVC.modalPresentationStyle = UIModalPresentationCustom;
-    warningVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-    UIViewController* rootViewController =  [[UIApplication sharedApplication] keyWindow].rootViewController;
-    rootViewController.modalPresentationStyle = UIModalPresentationCurrentContext;
-    [rootViewController presentViewController:navVC animated:NO completion:^(void){NSLog(@"pop");}];
+//    return;
+    if(visible){
+        CNWarningCloudingViewController* warningVC = [[CNWarningCloudingViewController alloc]init];
+        UINavigationController* navVC = [[UINavigationController alloc]initWithRootViewController:warningVC];
+        navVC.modalPresentationStyle = UIModalPresentationCustom;
+        warningVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+        UIViewController* rootViewController =  [[UIApplication sharedApplication] keyWindow].rootViewController;
+        rootViewController.modalPresentationStyle = UIModalPresentationCurrentContext;
+        [rootViewController presentViewController:navVC animated:NO completion:^(void){NSLog(@"pop");}];
+    }else{
+        [kApp.cloudManager startCloud];
+    }
+    
+    
 }
 
 + (CNGPSPoint4Match*)test_getOnePoint{

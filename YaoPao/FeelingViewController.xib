@@ -135,10 +135,10 @@
                         <button opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="05v-j9-iAe">
                             <rect key="frame" x="38" y="7" width="29" height="29"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" backgroundImage="delete.png">
+                            <state key="normal" backgroundImage="delete_edit.png">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
-                            <state key="highlighted" backgroundImage="delete_on.png"/>
+                            <state key="highlighted" backgroundImage="delete_edit_on.png"/>
                             <connections>
                                 <action selector="button_clicked:" destination="-1" eventType="touchUpInside" id="4Q3-VU-qbp"/>
                             </connections>
@@ -316,8 +316,8 @@
     </objects>
     <resources>
         <image name="bg_nophoto.png" width="750" height="750"/>
-        <image name="delete.png" width="68" height="68"/>
-        <image name="delete_on.png" width="68" height="68"/>
+        <image name="delete_edit.png" width="68" height="68"/>
+        <image name="delete_edit_on.png" width="68" height="68"/>
         <image name="edit.png" width="68" height="68"/>
         <image name="edit_on.png" width="68" height="68"/>
         <image name="mood1.png" width="54" height="54"/>

@@ -7,6 +7,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CNADBookViewController">
             <connections>
+                <outlet property="button_add" destination="kNx-hh-Fvc" id="Dm1-Rn-d4b"/>
                 <outlet property="indicator" destination="VdW-Bj-mvF" id="TU8-1b-dgA"/>
                 <outlet property="loadingImage" destination="qk9-90-lUu" id="5Hf-DP-d7v"/>
                 <outlet property="tableview" destination="FaI-xv-IwW" id="sch-5T-C90"/>
@@ -71,7 +72,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </activityIndicatorView>
             </subviews>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <color key="backgroundColor" red="0.96470588239999999" green="0.96470588239999999" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <point key="canvasLocation" x="421" y="129"/>
         </view>
     </objects>
