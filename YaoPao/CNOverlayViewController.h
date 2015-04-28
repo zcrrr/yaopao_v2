@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CNImagePreviewViewController.h"
 @class CNImagePreviewViewController;
 
 @interface CNOverlayViewController : UIViewController<UIImagePickerControllerDelegate,UINavigationControllerDelegate>
@@ -16,5 +17,5 @@
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *indicator;
 - (IBAction)button_clicked:(id)sender;
 @property (weak, nonatomic) IBOutlet UIButton *button_cancel;
-
+@property (strong, nonatomic) id<saveImageDelegate> delegate_savaImage;
 @end

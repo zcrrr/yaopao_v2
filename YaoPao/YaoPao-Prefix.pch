@@ -18,9 +18,9 @@
     #import "CNPersistenceHandler.h"
 #endif
 
-#define ClIENT_VERSION @"2.0.0"
-#define ENDPOINTS kApp.mainurl
-//#define ENDPOINTS @"http://182.92.97.144:8888/"
+#define ClIENT_VERSION @"2.0.1"
+//#define ENDPOINTS kApp.mainurl
+#define ENDPOINTS @"http://182.92.97.144:8888/"
 #define IOS7OFFSIZE (IOS7?20:0)
 #define IOS7 ![[[UIDevice currentDevice] systemVersion] hasPrefix:@"6"]
 #define iPhone5 ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(640, 1136), [[UIScreen mainScreen] currentMode].size) : NO)
@@ -75,4 +75,5 @@
 #define TAG_REJECT_MAKE_FRIENDS 31
 #define TAG_SEARCH_FRIEND 32
 #define TAG_DELETE_FRIEND 33
+#define TAG_GROUP_MEMBER 34
 

@@ -244,6 +244,7 @@
     self.downLoadRecordArray = [[NSMutableArray alloc]init];
     self.addRecordArray = [[NSMutableArray alloc]init];
     self.fileArray = [[NSMutableArray alloc]init];
+    self.editImageAddArray = [[NSMutableArray alloc]init];
     NSString* filePath_cloud = [CNPersistenceHandler getDocument:@"cloudDiary.plist"];
     self.userCancel = NO;
     NSMutableDictionary* cloudDiary = [NSMutableDictionary dictionaryWithContentsOfFile:filePath_cloud];
@@ -265,9 +266,11 @@
                 [self.editImageAddArray addObject:oneLine];
             }else{//删除
                 [deleteImageArray addObject:[oneLineArray objectAtIndex:1]];
+                [self deleteOneLineToPlist:oneLine];
             }
         }
         if([deleteImageArray count] == 0){
+            NSLog(@"不用删除图片，直接上传图片");
             [self cloud_step1];
         }else{
             //先删除
@@ -278,14 +281,70 @@
             [params setObject:jsonString forKey:@"imgpaths"];
             kApp.networkHandler.delegate_deleteOneFile = self;
             [kApp.networkHandler doRequest_deleteOneFile:params];
+            NSLog(@"删除后期修改的图片");
+            self.stepDes = @"删除后期修改的图片";
         }
     }
 }
+- (void)deleteOneLineToPlist:(NSString*)oneLine{
+    NSString* filePath_cloud = [CNPersistenceHandler getDocument:@"cloudDiary.plist"];
+    NSMutableDictionary* cloudDiary = [NSMutableDictionary dictionaryWithContentsOfFile:filePath_cloud];
+    NSMutableArray* editImageLaterArray = [cloudDiary objectForKey:@"editImageLaterArray"];
+    [editImageLaterArray removeObject:oneLine];
+    [cloudDiary setObject:editImageLaterArray forKey:@"editImageLaterArray"];
+    [cloudDiary writeToFile:filePath_cloud atomically:YES];
+}
+- (void)deleteOneFileDidFailed:(NSString *)mes{
+    [self cloudFailed:@"删除图片文件失败"];
+}
+- (void)deleteOneFileDidSuccess{
+    NSLog(@"删除图片文件成功");
+    
+    [self cloud_step1];
+}
 - (void)cloud_step1{
-    //上传照片
+    if([self.editImageAddArray count] == 0){//无需上传图片
+        NSLog(@"无需上传图片");
+        [self cloud_step2];
+        return;
+    }
+    self.fileCount = [self.editImageAddArray count];
+    [self uploadOneImage];
+}
+- (void)uploadOneImage{
+    if(self.userCancel){
+        [self cloudFailed:@"用户取消"];
+        return;
+    }
     NSString* oneAction = [self.editImageAddArray firstObject];
     NSArray* temparray = [oneAction componentsSeparatedByString:@"-"];
-    
+    NSString* uid = [NSString stringWithFormat:@"%i",[[kApp.userInfoDic objectForKey:@"uid"]intValue]];
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES);
+    NSString *filePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:[temparray objectAtIndex:1]];
+    NSLog(@"filePath is %@",filePath);
+    BOOL blHave=[[NSFileManager defaultManager] fileExistsAtPath:filePath];
+    NSData* binaryData;
+    if(blHave){
+        binaryData = [NSData dataWithContentsOfFile:filePath];
+        NSMutableDictionary* params = [[NSMutableDictionary alloc]init];
+        [params setObject:uid forKey:@"uid"];
+        [params setObject:@"2" forKey:@"type"];
+        [params setObject:[NSString stringWithFormat:@"%@_%@",uid,[temparray objectAtIndex:2]] forKey:@"rid"];
+        [params setObject:binaryData forKey:@"avatar"];
+        kApp.networkHandler.delegate_cloudData = self;
+        [kApp.networkHandler doRequest_cloudData:params];
+        self.stepDes = [NSString stringWithFormat:@"正在上传后期修改的图片%i/%i",(self.fileCount-[self.editImageAddArray count]+1),self.fileCount];
+    }else{
+        binaryData = nil;
+        [self deleteOneLineToPlist:oneAction];
+        [self.editImageAddArray removeObjectAtIndex:0];
+        if([self.editImageAddArray count]>0){
+            [self uploadOneImage];
+        }else{//文件全部上传完毕，下一步
+            NSLog(@"图片全部上传完毕");
+            [self cloud_step2];
+        }
+    }
 }
 - (void)cloud_step2{
     NSLog(@"------------------第三步：删除记录");
@@ -492,36 +551,65 @@
         [self cloudFailed:@"用户取消"];
         return;
     }
-    NSString* fileString = [self.fileArray lastObject];
-    NSArray* tempArray = [fileString componentsSeparatedByString:@","];
-    int index = [[tempArray objectAtIndex:0]intValue];
-    int type = [[tempArray objectAtIndex:2]intValue];
-    RunClass* runclass = [self.addRecordArray objectAtIndex:index];
-    if(type == 2){
-        if([runclass.serverImagePaths isEqualToString:@""]){
-            runclass.serverImagePaths = [resultDic objectForKey:@"serverImagePaths"];
-        }else{
-            runclass.serverImagePaths = [NSString stringWithFormat:@"%@|%@",runclass.serverImagePaths,[resultDic objectForKey:@"serverImagePaths"]];
+    if([self.editImageAddArray count] == 0){//说明此处上传文件是后面的上传文件
+        NSString* fileString = [self.fileArray lastObject];
+        NSArray* tempArray = [fileString componentsSeparatedByString:@","];
+        int index = [[tempArray objectAtIndex:0]intValue];
+        int type = [[tempArray objectAtIndex:2]intValue];
+        RunClass* runclass = [self.addRecordArray objectAtIndex:index];
+        if(type == 2){
+            if([runclass.serverImagePaths isEqualToString:@""]){
+                runclass.serverImagePaths = [resultDic objectForKey:@"serverImagePaths"];
+            }else{
+                runclass.serverImagePaths = [NSString stringWithFormat:@"%@|%@",runclass.serverImagePaths,[resultDic objectForKey:@"serverImagePaths"]];
+            }
+            if([runclass.serverImagePathsSmall isEqualToString:@""]){
+                runclass.serverImagePathsSmall = [resultDic objectForKey:@"serverImagePathsSmall"];
+            }else{
+                runclass.serverImagePathsSmall = [NSString stringWithFormat:@"%@|%@",runclass.serverImagePathsSmall,[resultDic objectForKey:@"serverImagePathsSmall"]];
+            }
+        }else if(type == 3){
+            runclass.serverBinaryFilePath = [resultDic objectForKey:@"serverBinaryFilePath"];
         }
-        if([runclass.serverImagePathsSmall isEqualToString:@""]){
-            runclass.serverImagePathsSmall = [resultDic objectForKey:@"serverImagePathsSmall"];
-        }else{
-            runclass.serverImagePathsSmall = [NSString stringWithFormat:@"%@|%@",runclass.serverImagePathsSmall,[resultDic objectForKey:@"serverImagePathsSmall"]];
+        NSError *error = nil;
+        NSLog(@"存记录6");
+        if ([kApp.managedObjectContext save:&error]) {
+            NSLog(@"Error:%@,%@",error,[error userInfo]);
         }
-    }else if(type == 3){
-        runclass.serverBinaryFilePath = [resultDic objectForKey:@"serverBinaryFilePath"];
-    }
-    NSError *error = nil;
-    NSLog(@"存记录6");
-    if ([kApp.managedObjectContext save:&error]) {
-        NSLog(@"Error:%@,%@",error,[error userInfo]);
-    }
-    [self.fileArray removeLastObject];
-    if([self.fileArray count]>0){
-        [self uploadOneFile];
-    }else{//文件全部上传完毕，下一步
-        NSLog(@"文件全部上传完毕");
-        [self cloud_step4];
+        [self.fileArray removeLastObject];
+        if([self.fileArray count]>0){
+            [self uploadOneFile];
+        }else{//文件全部上传完毕，下一步
+            NSLog(@"文件全部上传完毕");
+            [self cloud_step4];
+        }
+    }else{//前面的上传图片
+        NSString* fileString = [self.editImageAddArray firstObject];
+        NSArray* tempArray = [fileString componentsSeparatedByString:@"-"];
+        NSString* rid = [tempArray objectAtIndex:2];
+        NSString* filter = [NSString stringWithFormat:@"rid==%@",rid];
+        NSMutableArray* mutableFetchResult = [self getRecordsByFilter:filter];
+        if(mutableFetchResult != nil && [mutableFetchResult count]>0){//如果已经存在rid，说明是要更新的记录
+            NSLog(@"存在一个已有的记录");
+            RunClass* runclass = [mutableFetchResult objectAtIndex:0];
+            NSMutableArray* imagePathsList = [[NSMutableArray alloc]initWithArray:[runclass.serverImagePaths componentsSeparatedByString:@"|"]];
+            runclass.serverImagePaths = [self replacePlaceHolder:imagePathsList :[resultDic objectForKey:@"serverImagePaths"]];
+            
+            NSMutableArray* imagePathsListSmall = [[NSMutableArray alloc]initWithArray:[runclass.serverImagePathsSmall componentsSeparatedByString:@"|"]];
+            runclass.serverImagePathsSmall = [self replacePlaceHolder:imagePathsListSmall :[resultDic objectForKey:@"serverImagePathsSmall"]];
+        }
+        NSError *error = nil;
+        if ([kApp.managedObjectContext save:&error]) {
+            NSLog(@"Error:%@,%@",error,[error userInfo]);
+        }
+        [self deleteOneLineToPlist:fileString];
+        [self.editImageAddArray removeObjectAtIndex:0];
+        if([self.editImageAddArray count]>0){
+            [self uploadOneImage];
+        }else{//文件全部上传完毕，下一步
+            NSLog(@"图片全部上传完毕");
+            [self cloud_step2];
+        }
     }
 }
 - (void)uploadRecordDidFailed:(NSString *)mes{
@@ -584,12 +672,10 @@
         NSString* rid = [[[dic objectForKey:@"rid"]componentsSeparatedByString:@"_"]objectAtIndex:1];
         NSString* filter = [NSString stringWithFormat:@"rid==%@",rid];
         NSMutableArray* mutableFetchResult = [self getRecordsByFilter:filter];
-        if(mutableFetchResult != nil && [mutableFetchResult count]>0){//如果已经存在rid，说明是要更新的记录
+        if(mutableFetchResult != nil && [mutableFetchResult count]>0){//如果已经存在rid，说明是要更新的记录、先删除
             NSLog(@"存在一个已有的记录");
             RunClass* runClass = [mutableFetchResult objectAtIndex:0];
-            runClass.remark = [dic objectForKey:@"remark"];
-            runClass.updateTime = [dic objectForKey:@"updateTime"];
-            continue;
+            [kApp.managedObjectContext deleteObject:runClass];
         }
         
         RunClass * runClass  = [NSEntityDescription insertNewObjectForEntityForName:@"RunClass" inManagedObjectContext:kApp.managedObjectContext];
@@ -844,5 +930,29 @@ withFilterContext:(id)filterContext
         NSLog(@"------------------------未收到服务器响应");
         [self sendMessage];
     }
+}
+- (NSString*)replacePlaceHolder:(NSMutableArray*)array :(NSString*)str{
+    if(array == nil || [array count] == 0){
+        return @"";
+    }
+    for (int i = 0;i<[array count];i++){
+        if([[array objectAtIndex:i] isEqualToString:@"placeholder"]){
+            [array replaceObjectAtIndex:i withObject:str];
+            break;
+        }
+    }
+    return [self arrayToString:array];
+}
+- (NSString*)arrayToString:(NSMutableArray*)array{
+    if([array count] == 0)return @"";
+    NSMutableString* arrayStr = [NSMutableString stringWithString:@""];
+    for(NSString* onePath in array){
+        [arrayStr appendString:onePath];
+        [arrayStr appendString:@"|"];
+    }
+    if([arrayStr hasSuffix:@"|"]){
+        arrayStr = [NSMutableString stringWithString:[arrayStr substringToIndex:arrayStr.length - 1]];
+    }
+    return arrayStr;
 }
 @end

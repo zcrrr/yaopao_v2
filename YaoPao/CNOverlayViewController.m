@@ -18,6 +18,7 @@
 @implementation CNOverlayViewController
 @synthesize cameraPicker;
 @synthesize imagePreviewVC;
+@synthesize delegate_savaImage;
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
@@ -77,6 +78,7 @@
     self.button_takephoto.hidden = NO;
     [self.indicator stopAnimating];
     self.imagePreviewVC.cameraPicker = self.cameraPicker;
+    self.imagePreviewVC.delegete_saveImage = self.delegate_savaImage;
     [self.cameraPicker pushViewController:self.imagePreviewVC animated:YES];
 }
 @end

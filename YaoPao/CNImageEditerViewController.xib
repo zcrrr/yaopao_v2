@@ -12,6 +12,7 @@
                 <outlet property="button_edit" destination="KX7-v3-fyz" id="oCr-0T-NFb"/>
                 <outlet property="button_left" destination="afx-qG-rR0" id="bOT-vw-gGb"/>
                 <outlet property="button_right" destination="Ng8-Wg-zzS" id="KyH-hE-oNZ"/>
+                <outlet property="button_save" destination="kMx-DX-VMg" id="TCE-vG-NRp"/>
                 <outlet property="imageview_page" destination="yIq-jG-arv" id="PCK-eI-rn7"/>
                 <outlet property="label_title" destination="QMo-gc-8I9" id="do2-pz-0Ux"/>
                 <outlet property="label_whichpage" destination="Tve-Wv-w94" id="eDo-Nk-pBu"/>
@@ -140,7 +141,7 @@
                     </subviews>
                     <color key="backgroundColor" red="0.094117647060000004" green="0.094117647060000004" blue="0.094117647060000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
-                <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="kMx-DX-VMg">
+                <button opaque="NO" tag="1" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="kMx-DX-VMg">
                     <rect key="frame" x="14" y="521" width="293" height="42"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>

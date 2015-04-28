@@ -71,11 +71,9 @@ extern NSMutableArray* imageArray;
         self.serverImagePathsArray = [[NSMutableArray alloc]init];
         self.serverImagePathsSmallArray = [[NSMutableArray alloc]init];
     }else{//本地路径不是空，还需判断服务器路径是否为空
-        if([oneRun.serverImagePaths isEqualToString:@""]){//本地不空，服务器空
+        if([oneRun.serverImagePaths isEqualToString:@""]){//本地不空，服务器空,肯定没同步
             self.clientImagePathsArray = [[NSMutableArray alloc]initWithArray:[oneRun.clientImagePaths componentsSeparatedByString:@"|"]];
             self.clientImagePathsSmallArray = [[NSMutableArray alloc]initWithArray:[oneRun.clientImagePathsSmall componentsSeparatedByString:@"|"]];
-            self.serverImagePathsArray = [[NSMutableArray alloc]init];
-            self.serverImagePathsSmallArray = [[NSMutableArray alloc]init];
         }else{//本地不为空，服务器也不为空，则同步过
             self.clientImagePathsArray = [[NSMutableArray alloc]initWithArray:[oneRun.clientImagePaths componentsSeparatedByString:@"|"]];
             self.clientImagePathsSmallArray = [[NSMutableArray alloc]initWithArray:[oneRun.clientImagePaths componentsSeparatedByString:@"|"]];
@@ -156,7 +154,19 @@ extern NSMutableArray* imageArray;
         case 0:
         {
             NSLog(@"返回");
-            [self.navigationController popViewControllerAnimated:YES];
+            if(self.button_save.enabled){//可以点，证明有改变
+                if(kApp.cloudManager.isSynServerTime){
+                    self.oneRun.updateTime = [NSNumber numberWithLongLong:([CNUtil getNowTime1000]+kApp.cloudManager.deltaMiliSecond)];
+                }else{
+                    self.oneRun.updateTime = [NSNumber numberWithLongLong:0];
+                }
+                //第三步：先保存到本地数据库
+                NSError *error = nil;
+                [kApp.managedObjectContext save:&error];
+            }
+            NSString* NOTIFICATION_REFRESH = @"REFRESH";
+            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_REFRESH object:nil];
+            [self.navigationController popToRootViewControllerAnimated:YES];
             break;
         }
         case 1:
@@ -173,6 +183,8 @@ extern NSMutableArray* imageArray;
             NSError *error = nil;
             [kApp.managedObjectContext save:&error];
             //第四步：同步接口
+            [CNAppDelegate popupWarningCloud:YES];
+            [self.button_save setEnabled:NO];
             break;
         }
         case 2:
@@ -196,6 +208,9 @@ extern NSMutableArray* imageArray;
             NSLog(@"删除图片");
             [self deleteOneImage:self.currentpage];
             [imageArray removeObjectAtIndex:self.currentpage];
+            if(self.currentpage = [imageArray count]){//最后一张
+                self.currentpage --;
+            }
             [self whichImageShouldDisplay];
             break;
         }
@@ -270,8 +285,15 @@ extern NSMutableArray* imageArray;
     self.cameraPicker.cameraOverlayView = self.overlayVC.view;
     [self presentViewController:self.cameraPicker animated:YES completion:^{
         self.overlayVC.cameraPicker = self.cameraPicker;
+        self.overlayVC.delegate_savaImage = self;
         self.overlayVC.cameraPicker.delegate = self.overlayVC;
     }];
+}
+- (void)saveImageDidFailed{
+    
+}
+- (void)saveImageDidSuccess:(UIImage *)image{
+    [self addOneNewImage:image];
 }
 - (void)displayEditorForImage:(UIImage *)imageToEdit
 {
@@ -301,15 +323,13 @@ extern NSMutableArray* imageArray;
 - (void)addWaterDidSuccess:(UIImage *)image{
     [self editOneImage:image :self.currentpage];
     [imageArray removeObjectAtIndex:self.currentpage];
-    [imageArray insertObject:image atIndex:self.currentpage];
+    [imageArray addObject:image];
 }
 - (void)photoEditorCanceled:(AdobeUXImageEditorViewController *)editor
 {
     // Handle cancellation here
     NSLog(@"cancel");
     [self.editorController dismissViewControllerAnimated:YES completion:nil];
-    
-    
 }
 - (void)image: (UIImage *) image didFinishSavingWithError: (NSError *) error contextInfo: (void *) contextInfo{
     NSString *msg = nil ;
@@ -322,6 +342,7 @@ extern NSMutableArray* imageArray;
     [alert show];
 }
 - (void)addOneNewImage:(UIImage*)image{
+    [self.button_save setEnabled:YES];
     //保存图片
     long long thatTime = [oneRun.rid longLongValue];
     long long nowTime = [CNUtil getNowTime1000];
@@ -336,34 +357,25 @@ extern NSMutableArray* imageArray;
     UIImage* image_small = [image rescaleImageToSize:CGSizeMake(120, 120)];
     [UIImagePNGRepresentation(image_small) writeToFile: filePath_small atomically:YES];
     //更新本地clientImagePath
-    NSMutableString* clientImagePaths = [NSMutableString stringWithString:oneRun.clientImagePaths];
-    NSMutableString* clientImagePathsSmall = [NSMutableString stringWithString:oneRun.clientImagePathsSmall];
     NSString* thisImagePath = [NSString stringWithFormat:@"%@/%lli_big.jpg",[CNUtil getYearMonth:thatTime/1000],nowTime];
-    if([clientImagePaths isEqualToString:@""]){//还没有图片
-         [clientImagePaths appendString:thisImagePath];
-    }else{
-         [clientImagePaths appendString:[NSString stringWithFormat:@"|%@",thisImagePath]];
-    }
-    oneRun.clientImagePaths = clientImagePaths;
-    if([clientImagePathsSmall isEqualToString:@""]){//还没有图片
-        [clientImagePathsSmall appendString:[NSString stringWithFormat:@"%@/%lli_small.jpg",[CNUtil getYearMonth:thatTime/1000],nowTime]];
-    }else{
-        [clientImagePathsSmall appendString:[NSString stringWithFormat:@"|%@/%lli_small.jpg",[CNUtil getYearMonth:thatTime/1000],nowTime]];
-    }
-    oneRun.clientImagePathsSmall = clientImagePathsSmall;
-    //更新path数组
-    [self updatePathsArray];
+    NSString* thisImagePathSmall = [NSString stringWithFormat:@"%@/%lli_small.jpg",[CNUtil getYearMonth:thatTime/1000],nowTime];
+    [self.clientImagePathsArray addObject:thisImagePath];
+    [self.clientImagePathsSmallArray addObject:thisImagePathSmall];
+    oneRun.clientImagePaths = [self arrayToString:self.clientImagePathsArray];
+    oneRun.clientImagePathsSmall = [self arrayToString:self.clientImagePathsSmallArray];
     //如果已经同步，操作名单新增一行
     if(self.isThisRecordClouded){
+        [self.serverImagePathsArray addObject:@"placeholder"];
+        [self.serverImagePathsSmallArray addObject:@"placeholder"];
         NSString* oneAction = [NSString stringWithFormat:@"add-%@-%@",thisImagePath,oneRun.rid];
         [self addOneLineToPlist:oneAction];
-        [self.serverImagePathsArray addObject:@""];//占位
-        [self.serverImagePathsSmallArray addObject:@""];//占位
+        oneRun.serverImagePaths = [self arrayToString:self.serverImagePathsArray];
+        oneRun.serverImagePathsSmall = [self arrayToString:self.serverImagePathsSmallArray];
     }
     [self print4array];
-    
 }
 - (void)deleteOneImage:(int)index{
+    [self.button_save setEnabled:YES];
     //删除本地图片:大图
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES);
     NSString *filePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:[self.clientImagePathsArray objectAtIndex:index]];
@@ -379,79 +391,104 @@ extern NSMutableArray* imageArray;
         [CNPersistenceHandler DeleteSingleFile:filePath_small];
     }
     //更新clientImagePath
+    NSString* deleteLine = [self.clientImagePathsArray objectAtIndex:index];
     [self.clientImagePathsArray removeObjectAtIndex:index];
     [self.clientImagePathsSmallArray removeObjectAtIndex:index];
     self.oneRun.clientImagePaths = [self arrayToString:self.clientImagePathsArray];
     self.oneRun.clientImagePathsSmall = [self arrayToString:self.clientImagePathsSmallArray];
     //如果已经同步，更新serverImagePath,samll.操作名单新增二行（大、小各一行）
     if(self.isThisRecordClouded){
-        NSString* oneAction = [NSString stringWithFormat:@"del-%@-%@",[self.serverImagePathsArray objectAtIndex:index],oneRun.rid];
-        [self addOneLineToPlist:oneAction];
+        if(![[self.serverImagePathsArray objectAtIndex:index] isEqualToString:@"placeholder"]){//server不为空，说明删除的照片，已经在服务器上了
+            NSString* oneAction = [NSString stringWithFormat:@"del-%@-%@",[self.serverImagePathsArray objectAtIndex:index],oneRun.rid];
+            [self addOneLineToPlist:oneAction];
+            NSString* oneAction_small = [NSString stringWithFormat:@"del-%@-%@",[self.serverImagePathsSmallArray objectAtIndex:index],oneRun.rid];
+            [self addOneLineToPlist:oneAction_small];
+        }else{//说明删除的照片还没往服务器同步，那么删除当时添加的哪行
+            NSString* oneAction = [NSString stringWithFormat:@"add-%@-%@",deleteLine,oneRun.rid];
+            [self deleteOneLineToPlist:oneAction];
+        }
         [self.serverImagePathsArray removeObjectAtIndex:index];
-        oneRun.serverImagePaths = [self arrayToString:self.serverImagePathsArray];
-        
-        NSString* oneAction_small = [NSString stringWithFormat:@"del-%@-%@",[self.serverImagePathsSmallArray objectAtIndex:index],oneRun.rid];
-        [self addOneLineToPlist:oneAction_small];
         [self.serverImagePathsSmallArray removeObjectAtIndex:index];
+        oneRun.serverImagePaths = [self arrayToString:self.serverImagePathsArray];
         oneRun.serverImagePathsSmall = [self arrayToString:self.serverImagePathsSmallArray];
     }
     [self print4array];
 }
 - (void)editOneImage:(UIImage*)image :(int)index{
-    //删除本地图片:大图
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES);
-    NSString *filePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:[self.clientImagePathsArray objectAtIndex:index]];
-    NSLog(@"delete:%@",filePath);
-    BOOL blHave=[[NSFileManager defaultManager] fileExistsAtPath:filePath];
-    if(blHave){
-        [CNPersistenceHandler DeleteSingleFile:filePath];
-    }
-    //删除本地图片:小图
-    NSString *filePath_small = [[paths objectAtIndex:0] stringByAppendingPathComponent:[self.clientImagePathsSmallArray objectAtIndex:index]];
-    BOOL blHave_samll=[[NSFileManager defaultManager] fileExistsAtPath:filePath_small];
-    if(blHave_samll){
-        [CNPersistenceHandler DeleteSingleFile:filePath_small];
-    }
-    //保存新图片到本地
-    long long thatTime = [oneRun.rid longLongValue];
-    long long nowTime = [CNUtil getNowTime1000];
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString *path = [documentsDirectory stringByAppendingPathComponent:[CNUtil getYearMonth:thatTime/1000]];
-    NSString *filePath_big_save = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"/%lli_big.jpg",nowTime]];   // 保存文件的名称
-    NSString *filePath_small_save = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"/%lli_small.jpg",nowTime]];
-    NSLog(@"filePath_big is %@",filePath_big_save);
-    NSLog(@"filePath_small is %@",filePath_small_save);
-    [UIImagePNGRepresentation(image) writeToFile: filePath_big_save atomically:YES];
-    UIImage* image_small = [image rescaleImageToSize:CGSizeMake(120, 120)];
-    [UIImagePNGRepresentation(image_small) writeToFile: filePath_small_save atomically:YES];
-    NSString* thisImagePath_big = [NSString stringWithFormat:@"%@/%lli_big.jpg",[CNUtil getYearMonth:thatTime/1000],nowTime];
-    NSString* thisImagePath_small = [NSString stringWithFormat:@"%@/%lli_small.jpg",[CNUtil getYearMonth:thatTime/1000],nowTime];
-    //更新clientImagePath
-    [self.clientImagePathsArray replaceObjectAtIndex:index withObject:thisImagePath_big];
-    [self.clientImagePathsSmallArray replaceObjectAtIndex:index withObject:thisImagePath_small];
-    oneRun.clientImagePaths = [self arrayToString:self.clientImagePathsArray];
-    oneRun.clientImagePathsSmall = [self arrayToString:self.clientImagePathsSmallArray];
-    //如果已经同步：先删除原来对应的serverimagepaths,操作名单新增两行
-    if(self.isThisRecordClouded){
-        NSString* oneAction = [NSString stringWithFormat:@"add-%@-%@",thisImagePath_big,oneRun.rid];
-        [self addOneLineToPlist:oneAction];
-        
-        NSString* oneAction_del = [NSString stringWithFormat:@"del-%@-%@",[self.serverImagePathsArray objectAtIndex:index],oneRun.rid];
-        [self addOneLineToPlist:oneAction_del];
-        [self.serverImagePathsArray removeObjectAtIndex:index];
-        oneRun.serverImagePaths = [self arrayToString:self.serverImagePathsArray];
-        
-        NSString* oneAction_small = [NSString stringWithFormat:@"del-%@-%@",[self.serverImagePathsSmallArray objectAtIndex:index],oneRun.rid];
-        [self addOneLineToPlist:oneAction_small];
-        [self.serverImagePathsSmallArray removeObjectAtIndex:index];
-        oneRun.serverImagePathsSmall = [self arrayToString:self.serverImagePathsSmallArray];
-    }
+    [self.button_save setEnabled:YES];
+    [self deleteOneImage:index];
+    [self addOneNewImage:image];
+//    //删除本地图片:大图
+//    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES);
+//    NSString *filePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:[self.clientImagePathsArray objectAtIndex:index]];
+//    NSLog(@"delete:%@",filePath);
+//    BOOL blHave=[[NSFileManager defaultManager] fileExistsAtPath:filePath];
+//    if(blHave){
+//        [CNPersistenceHandler DeleteSingleFile:filePath];
+//    }
+//    //删除本地图片:小图
+//    NSString *filePath_small = [[paths objectAtIndex:0] stringByAppendingPathComponent:[self.clientImagePathsSmallArray objectAtIndex:index]];
+//    BOOL blHave_samll=[[NSFileManager defaultManager] fileExistsAtPath:filePath_small];
+//    if(blHave_samll){
+//        [CNPersistenceHandler DeleteSingleFile:filePath_small];
+//    }
+//    //保存新图片到本地
+//    long long thatTime = [oneRun.rid longLongValue];
+//    long long nowTime = [CNUtil getNowTime1000];
+//    NSString *documentsDirectory = [paths objectAtIndex:0];
+//    NSString *path = [documentsDirectory stringByAppendingPathComponent:[CNUtil getYearMonth:thatTime/1000]];
+//    NSString *filePath_big_save = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"/%lli_big.jpg",nowTime]];   // 保存文件的名称
+//    NSString *filePath_small_save = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"/%lli_small.jpg",nowTime]];
+//    NSLog(@"filePath_big is %@",filePath_big_save);
+//    NSLog(@"filePath_small is %@",filePath_small_save);
+//    [UIImagePNGRepresentation(image) writeToFile: filePath_big_save atomically:YES];
+//    UIImage* image_small = [image rescaleImageToSize:CGSizeMake(120, 120)];
+//    [UIImagePNGRepresentation(image_small) writeToFile: filePath_small_save atomically:YES];
+//    NSString* thisImagePath_big = [NSString stringWithFormat:@"%@/%lli_big.jpg",[CNUtil getYearMonth:thatTime/1000],nowTime];
+//    NSString* thisImagePath_small = [NSString stringWithFormat:@"%@/%lli_small.jpg",[CNUtil getYearMonth:thatTime/1000],nowTime];
+//    //更新clientImagePath
+//    NSString* deleteLine = [self.clientImagePathsArray objectAtIndex:index];
+//    [self.clientImagePathsArray replaceObjectAtIndex:index withObject:thisImagePath_big];
+//    [self.clientImagePathsSmallArray replaceObjectAtIndex:index withObject:thisImagePath_small];
+//    oneRun.clientImagePaths = [self arrayToString:self.clientImagePathsArray];
+//    oneRun.clientImagePathsSmall = [self arrayToString:self.clientImagePathsSmallArray];
+//    //如果已经同步：先删除原来对应的serverimagepaths,操作名单新增两行
+//    if(self.isThisRecordClouded){
+//        NSString* oneAction = [NSString stringWithFormat:@"add-%@-%@",thisImagePath_big,oneRun.rid];
+//        [self addOneLineToPlist:oneAction];
+//        
+//        if(![[self.serverImagePathsArray objectAtIndex:index] isEqualToString:@""]){
+//            NSString* oneAction_del = [NSString stringWithFormat:@"del-%@-%@",[self.serverImagePathsArray objectAtIndex:index],oneRun.rid];
+//            [self addOneLineToPlist:oneAction_del];
+//            [self.serverImagePathsArray replaceObjectAtIndex:index withObject:@""];
+//            oneRun.serverImagePaths = [self arrayToString:self.serverImagePathsArray];
+//            
+//            NSString* oneAction_small = [NSString stringWithFormat:@"del-%@-%@",[self.serverImagePathsSmallArray objectAtIndex:index],oneRun.rid];
+//            [self addOneLineToPlist:oneAction_small];
+//            [self.serverImagePathsSmallArray replaceObjectAtIndex:index withObject:@""];
+//            oneRun.serverImagePathsSmall = [self arrayToString:self.serverImagePathsSmallArray];
+//        }else{//删除名单中add的那项
+//            NSString* oneAction = [NSString stringWithFormat:@"add-%@-%@",deleteLine,oneRun.rid];
+//            [self deleteOneLineToPlist:oneAction];
+//        }
+//    }
     [self print4array];
+}
+- (void)deleteOneLineToPlist:(NSString*)oneLine{
+    NSString* filePath_cloud = [CNPersistenceHandler getDocument:@"cloudDiary.plist"];
+    NSMutableDictionary* cloudDiary = [NSMutableDictionary dictionaryWithContentsOfFile:filePath_cloud];
+    NSMutableArray* editImageLaterArray = [cloudDiary objectForKey:@"editImageLaterArray"];
+    [editImageLaterArray removeObject:oneLine];
+    [cloudDiary setObject:editImageLaterArray forKey:@"editImageLaterArray"];
+    [cloudDiary writeToFile:filePath_cloud atomically:YES];
 }
 - (void)addOneLineToPlist:(NSString*)oneLine{
     NSString* filePath_cloud = [CNPersistenceHandler getDocument:@"cloudDiary.plist"];
     NSMutableDictionary* cloudDiary = [NSMutableDictionary dictionaryWithContentsOfFile:filePath_cloud];
     NSMutableArray* editImageLaterArray = [cloudDiary objectForKey:@"editImageLaterArray"];
+    if(editImageLaterArray == nil){
+        editImageLaterArray = [[NSMutableArray alloc]init];
+    }
     [editImageLaterArray addObject:oneLine];
     [cloudDiary setObject:editImageLaterArray forKey:@"editImageLaterArray"];
     [cloudDiary writeToFile:filePath_cloud atomically:YES];
@@ -460,12 +497,8 @@ extern NSMutableArray* imageArray;
     if([array count] == 0)return @"";
     NSMutableString* arrayStr = [NSMutableString stringWithString:@""];
     for(NSString* onePath in array){
-        if([onePath isEqualToString:@""]){
-            continue;
-        }else{
-            [arrayStr appendString:onePath];
-            [arrayStr appendString:@"|"];
-        }
+        [arrayStr appendString:onePath];
+        [arrayStr appendString:@"|"];
     }
     if([arrayStr hasSuffix:@"|"]){
         arrayStr = [NSMutableString stringWithString:[arrayStr substringToIndex:arrayStr.length - 1]];

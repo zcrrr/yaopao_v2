@@ -20,8 +20,11 @@
                 <outlet property="label_date2" destination="ONc-ts-ry9" id="USm-eE-CwM"/>
                 <outlet property="label_date3" destination="HLB-Dh-ROE" id="M8I-Vq-3ta"/>
                 <outlet property="label_date4" destination="Fph-Vo-ZFN" id="PH2-Zh-0AE"/>
+                <outlet property="label_date_map1" destination="0Sj-cv-Ht9" id="Ajh-bK-8Fc"/>
+                <outlet property="label_dis_map1" destination="UpL-XR-ez6" id="uJK-D9-Od2"/>
                 <outlet property="label_during" destination="ehv-YJ-yHu" id="QYO-tq-hjd"/>
                 <outlet property="label_pspeed" destination="KcN-8Q-eHz" id="7oA-pI-7tm"/>
+                <outlet property="label_time_map1" destination="GoQ-hL-lar" id="IMl-nX-aNq"/>
                 <outlet property="label_title" destination="xTy-mH-Vyo" id="IN0-9T-Xvk"/>
                 <outlet property="scrollview" destination="QU1-B7-q3Q" id="vwT-Wz-w8l"/>
                 <outlet property="textfield_remark" destination="GxI-C5-qY6" id="e2R-oj-MRn"/>
@@ -94,22 +97,53 @@
                                     <rect key="frame" x="230" y="5" width="40" height="40"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 </imageView>
+                                <view contentMode="scaleToFill" id="h5y-xb-4e1" userLabel="View_water3">
+                                    <rect key="frame" x="15" y="235" width="105" height="57"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="21.1" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="UpL-XR-ez6">
+                                            <rect key="frame" x="0.0" y="0.0" width="78" height="49"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="41"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2015/01/09" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="0Sj-cv-Ht9">
+                                            <rect key="frame" x="1" y="43" width="59" height="14"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="km" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ZTo-Aj-0Aj">
+                                            <rect key="frame" x="78" y="22" width="24" height="21"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="19:32" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="GoQ-hL-lar">
+                                            <rect key="frame" x="73" y="43" width="29" height="14"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
                             </subviews>
                             <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         </view>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="5p7-bb-TtM">
-                            <rect key="frame" x="0.0" y="0.0" width="320" height="320"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal">
-                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <connections>
-                                <action selector="button_gotoMap_clicked:" destination="-1" eventType="touchUpInside" id="nrG-jL-tAR"/>
-                            </connections>
-                        </button>
                     </subviews>
                     <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
                 </scrollView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="5p7-bb-TtM">
+                    <rect key="frame" x="30" y="55" width="260" height="320"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <state key="normal">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="button_gotoMap_clicked:" destination="-1" eventType="touchUpInside" id="nrG-jL-tAR"/>
+                    </connections>
+                </button>
                 <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="lQ4-Fs-7rf">
                     <rect key="frame" x="0.0" y="193" width="22" height="43"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>

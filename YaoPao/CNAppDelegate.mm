@@ -160,6 +160,7 @@
     
     //友盟
     [MobClick startWithAppkey:@"53fd6e13fd98c561b903e002" reportPolicy:BATCH   channelId:@""];
+    [MobClick checkUpdate];
     [MobClick updateOnlineConfig];
     [MobClick setLogEnabled:YES];
     self.mainurl = [MobClick getConfigParams:@"mainurl"];
@@ -176,7 +177,7 @@
     self.showad = [MobClick getConfigParams:@"showad"];
     NSLog(@"self.showad is %@",self.showad);
     if (self.showad == nil || ([NSNull null] == (NSNull *)self.showad)) {
-        self.showad = @"2.0.0,1";
+        self.showad = @"2.0.1,1";
     }
 //#ifdef SIMULATORTEST
 //
@@ -249,7 +250,7 @@
     self.window.rootViewController = [self.navVCList objectAtIndex:0];
     [self.window makeKeyAndVisible];
     //屏幕长亮
-    [[ UIApplication sharedApplication] setIdleTimerDisabled:YES ] ;
+    [[ UIApplication sharedApplication] setIdleTimerDisabled:YES ];
     
     
 
@@ -713,12 +714,12 @@
                      result:^(enum SMS_ResponseState state) {
                          if (state == SMS_ResponseStateSuccess)
                          {
-                             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提交成功"
-                                                                             message:nil
-                                                                            delegate:self
-                                                                   cancelButtonTitle:@"OK"
-                                                                   otherButtonTitles:nil, nil];
-                             [alert show];
+//                             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提交成功"
+//                                                                             message:nil
+//                                                                            delegate:self
+//                                                                   cancelButtonTitle:@"OK"
+//                                                                   otherButtonTitles:nil, nil];
+//                             [alert show];
                              NSString* filePath = [CNPersistenceHandler getDocument:@"registerMob.plist"];
                              NSMutableDictionary* registerMobDic = [NSMutableDictionary dictionaryWithContentsOfFile:filePath];
                              if(registerMobDic == nil){
@@ -728,12 +729,12 @@
                          }
                          else if (state == SMS_ResponseStateFail)
                          {
-                             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提交失败"
-                                                                             message:nil
-                                                                            delegate:self
-                                                                   cancelButtonTitle:@"OK"
-                                                                   otherButtonTitles:nil, nil];
-                             [alert show];
+//                             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提交失败"
+//                                                                             message:nil
+//                                                                            delegate:self
+//                                                                   cancelButtonTitle:@"OK"
+//                                                                   otherButtonTitles:nil, nil];
+//                             [alert show];
                          }
                      }];
 }

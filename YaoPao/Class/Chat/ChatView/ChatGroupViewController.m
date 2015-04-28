@@ -32,6 +32,7 @@
 #import "DXMessageToolBar.h"
 #import "DXChatBarMoreView.h"
 #import "ChatGroupViewController+Category.h"
+#import "ZCGroupSettingViewController.h"
 #define KPageCount 20
 
 @interface ChatGroupViewController ()<UITableViewDataSource, UITableViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, SRRefreshDelegate, IChatManagerDelegate, DXChatBarMoreViewDelegate, DXMessageToolBarDelegate, LocationViewDelegate, IDeviceManagerDelegate>
@@ -52,6 +53,7 @@
 @property (nonatomic) BOOL isChatGroup;
 @property (strong, nonatomic) NSString *chatter;
 
+
 @property (strong, nonatomic) NSMutableArray *dataSource;//tableView数据源
 @property (strong, nonatomic) SRRefreshView *slimeView;
 @property (strong, nonatomic) UITableView *tableView;
@@ -70,6 +72,7 @@
 @end
 
 @implementation ChatGroupViewController
+@synthesize from;
 
 - (instancetype)initWithChatter:(NSString *)chatter isGroup:(BOOL)isGroup
 {
@@ -93,11 +96,11 @@
     [super viewDidLoad];
     [self registerBecomeActive];
     // Do any additional setup after loading the view.
-    self.view.backgroundColor = [UIColor lightGrayColor];
+    [self.view setBackgroundColor:[UIColor colorWithRed:246.0/255.0 green:246.0/255.0 blue:247.0/255.0 alpha:1]];
     
     //zc
     UIView* topbar = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 55)];
-    topbar.backgroundColor = [UIColor blueColor];
+    topbar.backgroundColor = [UIColor colorWithRed:58.0/255.0 green:166.0/255.0 blue:1 alpha:1];
     [self.view addSubview:topbar];
     UILabel* label_title = [[UILabel alloc]initWithFrame:CGRectMake(87, 20, 146, 35)];
     [label_title setTextAlignment:NSTextAlignmentCenter];
@@ -158,12 +161,22 @@
         case 0:
         {
             NSLog(@"返回");
-            [self.navigationController popViewControllerAnimated:YES];
+            if([self.from isEqualToString:@"creatGroup"]){
+                [self.navigationController popToRootViewControllerAnimated:YES];
+            }else{
+                [self.navigationController popViewControllerAnimated:YES];
+            }
             break;
         }
         case 1:
         {
             NSLog(@"详情");
+            [self.view endEditing:YES];
+            if (_isChatGroup) {
+                ZCGroupSettingViewController *detailController = [[ZCGroupSettingViewController alloc] init];
+                detailController.chatGroupId = _chatter;
+                [self.navigationController pushViewController:detailController animated:YES];
+            }
             break;
         }
             

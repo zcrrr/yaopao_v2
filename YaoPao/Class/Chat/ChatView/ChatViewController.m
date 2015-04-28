@@ -95,11 +95,11 @@
     [super viewDidLoad];
     [self registerBecomeActive];
     // Do any additional setup after loading the view.
-    self.view.backgroundColor = [UIColor lightGrayColor];
+    [self.view setBackgroundColor:[UIColor colorWithRed:246.0/255.0 green:246.0/255.0 blue:247.0/255.0 alpha:1]];
     
     //zc
     UIView* topbar = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 55)];
-    topbar.backgroundColor = [UIColor blueColor];
+    topbar.backgroundColor = [UIColor colorWithRed:58.0/255.0 green:166.0/255.0 blue:1 alpha:1];
     [self.view addSubview:topbar];
     UILabel* label_title = [[UILabel alloc]initWithFrame:CGRectMake(87, 20, 146, 35)];
     [label_title setTextAlignment:NSTextAlignmentCenter];
@@ -154,6 +154,7 @@
     
     //通过会话管理者获取已收发消息
     [self loadMoreMessages];
+    
 }
 - (void)buttonClicked:(id)sender{
     switch ([sender tag]) {
@@ -161,6 +162,7 @@
         {
             NSLog(@"返回");
             [self.navigationController popViewControllerAnimated:YES];
+
             break;
         }
         case 1:

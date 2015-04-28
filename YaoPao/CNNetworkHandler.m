@@ -57,6 +57,7 @@
 @synthesize delegate_searchFriend;
 @synthesize delegate_deleteFriend;
 @synthesize delegate_deleteOneFile;
+@synthesize delegate_groupMember;
 
 @synthesize verifyCodeRequest;
 @synthesize registerPhoneRequest;
@@ -90,6 +91,7 @@
 @synthesize searchFriendRequest;
 @synthesize deleteFriendRequest;
 @synthesize deleteOneFileRequest;
+@synthesize groupMemberRequest;
 
 - (void)startQueue{
     //    self.handler = self;//持有自己的引用，这样就不会被释放,在delegate里面有了强引用，这里可以注释了
@@ -447,6 +449,15 @@
             }
             break;
         }
+        case TAG_GROUP_MEMBER:
+        {
+            if(isSuccess){
+                [self.delegate_groupMember groupMemberDidSuccess:result];
+            }else{
+                [self.delegate_groupMember groupMemberDidFailed:desc];
+            }
+            break;
+        }
         
         default:
             break;
@@ -596,6 +607,11 @@
         case TAG_DELETE_FRIEND:
         {
             [self.delegate_deleteFriend deleteFriendDidFailed:@""];
+            break;
+        }
+        case TAG_GROUP_MEMBER:
+        {
+            [self.delegate_groupMember groupMemberDidFailed:@""];
             break;
         }
         
@@ -1163,6 +1179,22 @@
     NSLog(@"创建跑团参数:%@",params);
     [[self networkQueue]addOperation:self.createGroupRequest];
 }
+- (void)doRequest_groupMember:(NSMutableDictionary*)params{
+    NSString* str_url = [NSString stringWithFormat:@"%@chSports/group/getgroupusers.htm",ENDPOINTS];
+    NSURL* url = [NSURL URLWithString:str_url];
+    self.groupMemberRequest =  [ASIFormDataRequest requestWithURL:url];
+    self.groupMemberRequest.tag = TAG_GROUP_MEMBER;
+    [self.groupMemberRequest setNumberOfTimesToRetryOnTimeout:3];
+    [self.groupMemberRequest setTimeOutSeconds:15];
+    [self.groupMemberRequest addRequestHeader:@"X-PID" value:kApp.pid];
+    [self.groupMemberRequest addRequestHeader:@"ua" value:kApp.ua];
+    for (id oneKey in [params allKeys]){
+        [self.groupMemberRequest setPostValue:[params objectForKey:oneKey] forKey:oneKey];
+    }
+    NSLog(@"跑团成员url:%@",str_url);
+    NSLog(@"跑团成员参数:%@",params);
+    [[self networkQueue]addOperation:self.groupMemberRequest];
+}
 - (void)showAlert:(NSString*) content{
     UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:content delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
     [alert show];
@@ -1284,7 +1316,7 @@
         case TAG_DELETE_ONE_FILE:
         {
             if(isSuccess){
-                [self.delegate_deleteOneFile deleteOneFileDidSuccess:result];
+                [self.delegate_deleteOneFile deleteOneFileDidSuccess];
             }else{
                 [self.delegate_deleteOneFile deleteOneFileDidFailed:desc];
             }

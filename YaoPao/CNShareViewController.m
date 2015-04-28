@@ -476,7 +476,7 @@ extern NSMutableArray* imageArray;
     [image2 drawInRect:CGRectMake(0, 0, image2.size.width, image2.size.height)];
     NSLog(@"y is %f",self.scrollview.frame.origin.y);
     //Draw image1
-    [image1 drawInRect:CGRectMake(0, self.scrollview.frame.origin.y, image1.size.width, image1.size.height)];
+    [image1 drawInRect:CGRectMake(0, self.view_sharePart2.frame.origin.y, image1.size.width, image1.size.height)];
     
     UIImage *resultImage=UIGraphicsGetImageFromCurrentImageContext();
     

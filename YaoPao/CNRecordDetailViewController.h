@@ -44,4 +44,8 @@
 - (IBAction)button_right_clicked:(id)sender;
 - (IBAction)button_imageEdit_clicked:(id)sender;
 
+@property (weak, nonatomic) IBOutlet UILabel *label_dis_map1;
+@property (weak, nonatomic) IBOutlet UILabel *label_date_map1;
+@property (weak, nonatomic) IBOutlet UILabel *label_time_map1;
+
 @end

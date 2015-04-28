@@ -17,6 +17,7 @@
 NSMutableArray* imageArray;
 @synthesize cameraPicker;
 @synthesize image;
+@synthesize delegete_saveImage;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -80,10 +81,13 @@ NSMutableArray* imageArray;
     NSString *msg = nil ;
     if(error != NULL){
         msg = @"保存图片失败" ;
+        [self.delegete_saveImage saveImageDidFailed];
     }else{
         msg = @"保存图片成功" ;
+        [self.delegete_saveImage saveImageDidSuccess:self.image];
     }
     [kApp.window makeToast:msg duration:1 position:nil];
     [self.cameraPicker dismissViewControllerAnimated:YES completion:nil];
+    
 }
 @end

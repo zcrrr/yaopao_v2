@@ -33,10 +33,12 @@
 @property (strong, nonatomic) UILabel *groupMemberTitleLabel;
 @property (strong, nonatomic) UISwitch *groupMemberSwitch;
 @property (strong, nonatomic) UILabel *groupMemberLabel;
+@property (strong, nonatomic) NSString* groupId;
 
 @end
 
 @implementation CreateGroupViewController
+@synthesize groupId;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -279,12 +281,7 @@
     NSString *username = [loginInfo objectForKey:kSDKUsername];
     NSString *messageStr = [NSString stringWithFormat:NSLocalizedString(@"group.somebodyInvite", @"%@ invite you to join groups \'%@\'"), username, self.textField.text];
     [[EaseMob sharedInstance].chatManager asyncCreateGroupWithSubject:self.textField.text description:self.textView.text invitees:source initialWelcomeMessage:messageStr styleSetting:setting completion:^(EMGroup *group, EMError *error) {
-        [weakSelf hideHud];
         if (group && !error) {
-            ChatGroupViewController *chatController = [[ChatGroupViewController alloc] initWithChatter:group.groupId isGroup:YES];
-            [self.navigationController pushViewController:chatController animated:YES];
-            [weakSelf showHint:NSLocalizedString(@"group.create.success", @"create group success")];
-            [weakSelf.navigationController popViewControllerAnimated:YES];
             //建群成功，调用yaopao接口，建群
             NSMutableDictionary* params = [[NSMutableDictionary alloc]init];
             NSString* uid = [NSString stringWithFormat:@"%@",[kApp.userInfoDic objectForKey:@"uid"]];
@@ -298,6 +295,7 @@
             [params setObject:invitePersons forKey:@"members"];
             kApp.networkHandler.delegate_createGroup = self;
             [kApp.networkHandler doRequest_createGroup:params];
+            self.groupId = group.groupId;
         }
         else{
             [weakSelf showHint:NSLocalizedString(@"group.create.fail", @"Failed to create a group, please operate again")];
@@ -305,11 +303,16 @@
     } onQueue:nil];
 }
 - (void)createGroupDidFailed:(NSString *)mes{
-    
+    __weak CreateGroupViewController *weakSelf = self;
+    [weakSelf hideHud];
 }
 - (void)createGroupDidSuccess:(NSDictionary *)resultDic{
-    
-    
+    __weak CreateGroupViewController *weakSelf = self;
+    [weakSelf hideHud];
+    [weakSelf showHint:NSLocalizedString(@"group.create.success", @"create group success")];
+    ChatGroupViewController *chatController = [[ChatGroupViewController alloc] initWithChatter:self.groupId isGroup:YES];
+    chatController.from = @"creatGroup";
+    [self.navigationController pushViewController:chatController animated:YES];
 }
 #pragma mark - action
 

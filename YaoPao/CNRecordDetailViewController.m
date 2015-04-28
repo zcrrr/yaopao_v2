@@ -229,6 +229,9 @@ extern NSMutableArray* imageArray;
         }
     }
     [self howControllerDisplay];
+    self.label_dis_map1.text = [NSString stringWithFormat:@"%0.1f",[oneRun.distance doubleValue]/1000.0];
+    self.label_date_map1.text = [CNUtil getTimeFromTimestamp_ymd:[oneRun.rid longLongValue]/1000];
+    self.label_time_map1.text = [CNUtil getTimeFromTimestamp_ms:[oneRun.rid longLongValue]/1000];
 }
 - (void)drawRunTrack{
     int j = 0;
@@ -391,9 +394,16 @@ extern NSMutableArray* imageArray;
     return nil;
 }
 - (IBAction)button_gotoMap_clicked:(id)sender {
-    CNRecordMapViewController* recordMapVC = [[CNRecordMapViewController alloc]init];
-    recordMapVC.oneRun = self.oneRun;
-    [self.navigationController pushViewController:recordMapVC animated:YES];
+    if(self.currentpage == 0){
+        CNRecordMapViewController* recordMapVC = [[CNRecordMapViewController alloc]init];
+        recordMapVC.oneRun = self.oneRun;
+        [self.navigationController pushViewController:recordMapVC animated:YES];
+    }else{
+        CNImageEditerViewController* ieVC = [[CNImageEditerViewController alloc]init];
+        ieVC.oneRun = self.oneRun;
+        [self.navigationController pushViewController:ieVC animated:YES];
+    }
+    
 }
 //比赛：
 - (void)drawMatchTrack{

@@ -161,7 +161,7 @@
 @end
 @protocol deleteOneFileDelegate<NSObject>
 //删除一个文件
-- (void)deleteOneFileDidSuccess:(NSData*)data;
+- (void)deleteOneFileDidSuccess;
 - (void)deleteOneFileDidFailed:(NSString*)mes;
 @end
 
@@ -212,6 +212,17 @@
 - (void)createGroupDidSuccess:(NSDictionary*)resultDic;
 - (void)createGroupDidFailed:(NSString*)mes;
 @end
+@protocol groupMemberDelegate<NSObject>
+//创建跑团
+- (void)groupMemberDidSuccess:(NSDictionary*)resultDic;
+- (void)groupMemberDidFailed:(NSString*)mes;
+@end
+@protocol exitGroupDelegate<NSObject>
+//创建跑团
+- (void)exitGroupDidSuccess:(NSDictionary*)resultDic;
+- (void)exitGroupDidFailed:(NSString*)mes;
+@end
+
 
 
 
@@ -261,6 +272,7 @@
 @property (nonatomic, strong) id<rejectMakeFriendsDelegate> delegate_rejectMakeFriends;
 @property (nonatomic, strong) id<searchFriendDelegate> delegate_searchFriend;
 @property (nonatomic, strong) id<deleteFriendDelegate> delegate_deleteFriend;
+@property (nonatomic, strong) id<groupMemberDelegate> delegate_groupMember;
 
 //定义每个请求的request
 @property (nonatomic, strong) ASIFormDataRequest* verifyCodeRequest;
@@ -297,6 +309,7 @@
 @property (nonatomic, strong) ASIFormDataRequest* rejectMakeFriendsRequest;
 @property (nonatomic, strong) ASIFormDataRequest* searchFriendRequest;
 @property (nonatomic, strong) ASIFormDataRequest* deleteFriendRequest;
+@property (nonatomic, strong) ASIFormDataRequest* groupMemberRequest;
 //每个请求的实现
 - (void)doRequest_verifyCode:(NSString*)phoneNO;
 - (void)doRequest_registerPhone:(NSMutableDictionary*)params;
@@ -332,5 +345,6 @@
 - (void)doRequest_rejectMakeFriends:(NSMutableDictionary*)params;
 - (void)doRequest_searchFriend:(NSMutableDictionary*)params;
 - (void)doRequest_deleteFriend:(NSMutableDictionary*)params;
+- (void)doRequest_groupMember:(NSMutableDictionary*)params;
 
 @end

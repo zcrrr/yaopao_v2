@@ -9,13 +9,14 @@
 #import <UIKit/UIKit.h>
 #import <AdobeCreativeSDKImage/AdobeCreativeSDKImage.h>
 #import "WaterMarkViewController.h"
+#import "CNImagePreviewViewController.h"
 
 @class CNCustomButton;
 @class CNOverlayViewController;
 @class AdobeUXImageEditorViewController;
 @class RunClass;
 
-@interface CNImageEditerViewController : UIViewController<UIScrollViewDelegate,AdobeUXImageEditorViewControllerDelegate,addWaternDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
+@interface CNImageEditerViewController : UIViewController<UIScrollViewDelegate,AdobeUXImageEditorViewControllerDelegate,addWaternDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,saveImageDelegate>
 
 @property (strong ,nonatomic) RunClass* oneRun;
 @property (strong, nonatomic) NSMutableArray* editImageArray;
@@ -39,5 +40,6 @@
 - (IBAction)button_clicked:(id)sender;
 @property (weak, nonatomic) IBOutlet UIButton *button_deleteImage;
 @property (weak, nonatomic) IBOutlet UIButton *button_edit;
+@property (weak, nonatomic) IBOutlet UIButton *button_save;
 
 @end

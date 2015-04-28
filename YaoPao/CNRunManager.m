@@ -179,7 +179,7 @@
     CNGPSPoint* lastPoint = [self.GPSList lastObject];
     CLLocation *current=[[CLLocation alloc] initWithLatitude:gpsPoint.lat longitude:gpsPoint.lon];
     CLLocation *before=[[CLLocation alloc] initWithLatitude:lastPoint.lat longitude:lastPoint.lon];
-    CLLocationDistance meter=[current distanceFromLocation:before];
+    CLLocationDistance meter=[current distanceFromLocation:before]*1.05;
     if (meter < 5) {// 离得特别近
         if (gpsPoint.status == lastPoint.status) {// 两点状态一样
             // 不保存这个点，算一下配速和进度条

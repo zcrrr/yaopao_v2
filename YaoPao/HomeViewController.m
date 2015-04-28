@@ -265,6 +265,7 @@ NSString* dayOrNight;
         {
             NSLog(@"同步");
             [CNAppDelegate popupWarningCloud:YES];
+            
             break;
         }
         case 1:
@@ -338,7 +339,6 @@ NSString* dayOrNight;
     return YES;
 #else
 # endif
-    
     if (0.001 > fabs(kApp.locationHandler.userLocation_lon) || 0.001 > fabs(kApp.locationHandler.userLocation_lat))
     {
         NSLog(@"异常提示：gps信号弱");
@@ -361,9 +361,12 @@ NSString* dayOrNight;
             self.button_cloud.enabled = YES;
         }
     }else if([keyPath isEqualToString:@"newprogress"]){
-        self.progressview_cloud.hidden = NO;
-        [self.progressview_cloud setProgress:kApp.networkHandler.newprogress];
-        self.button_cloud.enabled = NO;
+        if(kApp.isLogin == 1 && ![kApp.cloudManager.stepDes isEqualToString:@"同步完毕！"]){
+            self.progressview_cloud.hidden = NO;
+            [self.progressview_cloud setProgress:kApp.networkHandler.newprogress];
+            self.button_cloud.enabled = NO;
+        }
+        
     }
 }
 @end

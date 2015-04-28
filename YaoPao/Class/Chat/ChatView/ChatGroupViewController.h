@@ -12,5 +12,6 @@
 
 - (instancetype)initWithChatter:(NSString *)chatter isGroup:(BOOL)isGroup;
 - (void)reloadData;
+@property (strong, nonatomic) NSString* from;
 
 @end

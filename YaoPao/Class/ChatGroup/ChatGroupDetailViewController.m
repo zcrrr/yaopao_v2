@@ -109,11 +109,27 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
-    [backButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
-    [backButton addTarget:self.navigationController action:@selector(popViewControllerAnimated:) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
-    [self.navigationItem setLeftBarButtonItem:backItem];
+//    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
+//    [backButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
+//    [backButton addTarget:self.navigationController action:@selector(popViewControllerAnimated:) forControlEvents:UIControlEventTouchUpInside];
+//    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+//    [self.navigationItem setLeftBarButtonItem:backItem];
+    
+    UIView* topbar = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 55)];
+    topbar.backgroundColor = [UIColor colorWithRed:58.0/255.0 green:166.0/255.0 blue:1 alpha:1];
+    [self.view addSubview:topbar];
+    UILabel* label_title = [[UILabel alloc]initWithFrame:CGRectMake(87, 20, 146, 35)];
+    [label_title setTextAlignment:NSTextAlignmentCenter];
+    label_title.text = @"随便写一个先";
+    label_title.font = [UIFont systemFontOfSize:16];
+    label_title.textColor = [UIColor whiteColor];
+    [topbar addSubview:label_title];
+    UIButton * button_back = [UIButton buttonWithType:UIButtonTypeCustom];
+    button_back.frame = CGRectMake(0, 23, 50, 30);
+    [button_back setTitle:@"返回" forState:UIControlStateNormal];
+    button_back.tag = 0;
+    [button_back addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    [topbar addSubview:button_back];
     
     self.tableView.tableFooterView = self.footerView;
     
@@ -132,7 +148,19 @@
     
     [self fetchGroupInfo];
 }
-
+- (void)buttonClicked:(id)sender{
+    switch ([sender tag]) {
+        case 0:
+        {
+            NSLog(@"返回");
+            [self.navigationController popViewControllerAnimated:YES];
+            break;
+        }
+            
+        default:
+            break;
+    }
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -149,7 +177,7 @@
 - (UIScrollView *)scrollView
 {
     if (_scrollView == nil) {
-        _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(10, 10, self.view.frame.size.width - 20, kContactSize)];
+        _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(10, 10+55, self.view.frame.size.width - 20, kContactSize)];
         _scrollView.tag = 0;
         
         _addButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, kContactSize - 10, kContactSize - 10)];
