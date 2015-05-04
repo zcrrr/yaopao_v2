@@ -7,6 +7,8 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FriendDetailViewController">
             <connections>
+                <outlet property="button_chat" destination="FXA-yY-ca4" id="RNs-H4-tP0"/>
+                <outlet property="button_clearHistory" destination="wq1-nO-4C1" id="jBW-bD-hFJ"/>
                 <outlet property="button_deletefriend" destination="Obh-5E-l0R" id="Kum-dT-d2X"/>
                 <outlet property="imageview_avatar" destination="4k2-CQ-X2c" id="hHM-7I-Uwd"/>
                 <outlet property="imageview_sex" destination="AM0-v2-f4Z" id="Wmy-u6-mLH"/>
@@ -43,13 +45,14 @@
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Obh-5E-l0R" customClass="CNCustomButton">
-                            <rect key="frame" x="247" y="23" width="60" height="30"/>
+                        <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Obh-5E-l0R">
+                            <rect key="frame" x="296" y="30" width="16" height="15"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                            <state key="normal" title="删除好友">
+                            <state key="normal" backgroundImage="delete_friend.png">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
+                            <state key="highlighted" backgroundImage="delete_friend_on.png"/>
                             <connections>
                                 <action selector="button_clicked:" destination="-1" eventType="touchUpInside" id="eCj-n4-O8k"/>
                             </connections>
@@ -130,6 +133,8 @@
         <image name="button_green.png" width="690" height="100"/>
         <image name="button_red.png" width="690" height="100"/>
         <image name="button_red_on.png" width="690" height="100"/>
+        <image name="delete_friend.png" width="38" height="34"/>
+        <image name="delete_friend_on.png" width="38" height="34"/>
         <image name="netProcess.png" width="85" height="85"/>
         <image name="sex_M.png" width="50" height="50"/>
     </resources>

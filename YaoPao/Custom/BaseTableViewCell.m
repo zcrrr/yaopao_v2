@@ -42,7 +42,6 @@
 -(void)layoutSubviews
 {
     [super layoutSubviews];
-    NSLog(@"layoutSubviews");
     self.imageView.frame = CGRectMake(10, 8, 34, 34);
     self.imageView.layer.cornerRadius = self.imageView.bounds.size.width/2;
     self.imageView.layer.masksToBounds = YES;

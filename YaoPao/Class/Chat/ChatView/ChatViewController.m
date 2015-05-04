@@ -32,8 +32,9 @@
 #import "DXMessageToolBar.h"
 #import "DXChatBarMoreView.h"
 #import "ChatViewController+Category.h"
-#import "FriendDetailFromChatViewController.h"
+#import "FriendDetailViewController.h"
 #import "FriendsHandler.h"
+#import "FriendInfo.h"
 #define KPageCount 20
 
 @interface ChatViewController ()<UITableViewDataSource, UITableViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, SRRefreshDelegate, IChatManagerDelegate, DXChatBarMoreViewDelegate, DXMessageToolBarDelegate, LocationViewDelegate, IDeviceManagerDelegate>
@@ -103,13 +104,14 @@
     [self.view addSubview:topbar];
     UILabel* label_title = [[UILabel alloc]initWithFrame:CGRectMake(87, 20, 146, 35)];
     [label_title setTextAlignment:NSTextAlignmentCenter];
-    label_title.text = self.chatter;
+    FriendInfo* friend = [kApp.friendHandler.friendsDicByPhone objectForKey:self.chatter];
+    label_title.text = friend.nameInYaoPao;
     label_title.font = [UIFont systemFontOfSize:16];
     label_title.textColor = [UIColor whiteColor];
     [topbar addSubview:label_title];
     UIButton * button_back = [UIButton buttonWithType:UIButtonTypeCustom];
-    button_back.frame = CGRectMake(0, 23, 50, 30);
-    [button_back setTitle:@"返回" forState:UIControlStateNormal];
+    button_back.frame = CGRectMake(6, 23, 21, 29);
+    [button_back setBackgroundImage:[UIImage imageNamed:@"back_v2.png"] forState:UIControlStateNormal];
     button_back.tag = 0;
     [button_back addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
     [topbar addSubview:button_back];
@@ -162,16 +164,17 @@
         {
             NSLog(@"返回");
             [self.navigationController popViewControllerAnimated:YES];
-
             break;
         }
         case 1:
         {
             NSLog(@"详情");
-            FriendDetailFromChatViewController* fdfcVC = [[FriendDetailFromChatViewController alloc]init];
+            FriendDetailViewController* fdfcVC = [[FriendDetailViewController alloc]init];
             FriendInfo* friend = [kApp.friendHandler.friendsDicByPhone objectForKey:self.chatter];
             fdfcVC.friend = friend;
+            fdfcVC.from = @"chat";
             [self.navigationController pushViewController:fdfcVC animated:YES];
+            [self.view endEditing:YES];
             break;
         }
             
@@ -341,7 +344,7 @@
         _tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
         _tableView.delegate = self;
         _tableView.dataSource = self;
-        _tableView.backgroundColor = [UIColor lightGrayColor];
+        _tableView.backgroundColor = [UIColor colorWithRed:246.0/255.0 green:246.0/255.0 blue:247.0/255.0 alpha:1];
         _tableView.tableFooterView = [[UIView alloc] init];
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         
@@ -435,6 +438,18 @@
                 cell = [[EMChatViewCell alloc] initWithMessageModel:model reuseIdentifier:cellIdentifier];
                 cell.backgroundColor = [UIColor clearColor];
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            }
+            //byzc
+            NSString* phoneno = model.username;
+            FriendInfo* friend = [kApp.friendHandler.friendsDicByPhone objectForKey:phoneno];
+            if(friend != nil){
+                if(friend.avatarUrlInYaoPao != nil&&![friend.avatarUrlInYaoPao isEqualToString:@""]){
+                    model.headImageURL = [NSURL URLWithString:friend.avatarUrlInYaoPao];
+                }else{
+                    model.headImageURL = nil;
+                }
+            }else{
+                model.headImageURL = nil;
             }
             cell.messageModel = model;
             
@@ -1275,6 +1290,13 @@
             [_dataSource removeAllObjects];
             [_tableView reloadData];
             [self showHint:NSLocalizedString(@"message.noMessage", @"no messages")];
+        }else{
+            __weak typeof(self) weakSelf = self;
+            [weakSelf.conversation removeAllMessages];
+            [weakSelf.messages removeAllObjects];
+            weakSelf.chatTagDate = nil;
+            [weakSelf.dataSource removeAllObjects];
+            [weakSelf.tableView reloadData];
         }
     }
     else{

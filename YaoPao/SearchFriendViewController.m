@@ -279,7 +279,6 @@
     NSArray* array = [resultDic objectForKey:@"frdlist"];
     if(array == nil || [array count] == 0){
         [kApp.window makeToast:@"没有相关搜索结果!"];
-        
         return;
     }
     self.searchResult = [[NSMutableArray alloc]init];

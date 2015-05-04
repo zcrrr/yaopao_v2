@@ -13,7 +13,6 @@
 #import "EMSDKFull.h"
 #import "Toast+UIView.h"
 #import "FriendsHandler.h"
-#import "ColorValue.h"
 #import "CNCustomButton.h"
 
 @interface FriendDetailViewController ()
@@ -22,11 +21,11 @@
 
 @implementation FriendDetailViewController
 @synthesize friend;
+@synthesize from;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    [self.button_deletefriend fillColor:kClear :kClear :kWhite :kWhiteHalfAlpha];
     self.imageview_avatar.layer.cornerRadius = self.imageview_avatar.bounds.size.width/2;
     self.imageview_avatar.layer.masksToBounds = YES;
     if(self.friend.avatarUrlInYaoPao != nil && ![self.friend.avatarUrlInYaoPao isEqualToString:@""]){//有头像url
@@ -52,6 +51,10 @@
     self.label_phone.text = self.friend.phoneNO;
     NSString* imageName = [NSString stringWithFormat:@"sex_%@.png",self.friend.sex];
     self.imageview_sex.image = [UIImage imageNamed:imageName];
+    if([self.from isEqualToString:@"chat"]){
+        self.button_chat.hidden = YES;
+        self.button_clearHistory.frame = self.button_chat.frame;
+    }
     
 }
 
@@ -116,6 +119,7 @@
                 case 0:
                 {
                     [[EaseMob sharedInstance].chatManager removeConversationByChatter:friend.phoneNO deleteMessages:YES append2Chat:YES];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"RemoveAllMessages" object:nil];
                     break;
                 }
                 case 1:

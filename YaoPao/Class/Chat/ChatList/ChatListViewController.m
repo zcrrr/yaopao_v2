@@ -458,7 +458,17 @@
         cell = [[ChatListCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:identify];
     }
     EMConversation *conversation = [self.dataSource objectAtIndex:indexPath.row];
-    cell.name = conversation.chatter;
+    FriendInfo* friend = [kApp.friendHandler.friendsDicByPhone objectForKey:conversation.chatter];
+    cell.name = friend.nameInYaoPao;
+//    cell.name = @"dkkd";
+    NSArray *groupArray = [[EaseMob sharedInstance].chatManager groupList];
+    for (EMGroup *group in groupArray) {
+        if ([group.groupId isEqualToString:conversation.chatter]) {
+            cell.name = group.groupSubject;
+            break;
+        }
+    }
+    
     if (!conversation.isGroup) {
         FriendInfo* friend = [kApp.friendHandler.friendsDicByPhone objectForKey:conversation.chatter];
         if(friend != nil){
@@ -528,6 +538,7 @@
         NSString *chatter = conversation.chatter;
         chatController = [[ChatGroupViewController alloc] initWithChatter:chatter isGroup:conversation.isGroup];
         chatController.title = title;
+        chatController.groupname = title;
         [self.navigationController pushViewController:chatController animated:YES];
     }else{
         ChatViewController *chatController;

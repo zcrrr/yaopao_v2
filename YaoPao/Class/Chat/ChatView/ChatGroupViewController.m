@@ -33,6 +33,8 @@
 #import "DXChatBarMoreView.h"
 #import "ChatGroupViewController+Category.h"
 #import "ZCGroupSettingViewController.h"
+#import "FriendInfo.h"
+#import "FriendsHandler.h"
 #define KPageCount 20
 
 @interface ChatGroupViewController ()<UITableViewDataSource, UITableViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, SRRefreshDelegate, IChatManagerDelegate, DXChatBarMoreViewDelegate, DXMessageToolBarDelegate, LocationViewDelegate, IDeviceManagerDelegate>
@@ -54,6 +56,7 @@
 @property (strong, nonatomic) NSString *chatter;
 
 
+
 @property (strong, nonatomic) NSMutableArray *dataSource;//tableView数据源
 @property (strong, nonatomic) SRRefreshView *slimeView;
 @property (strong, nonatomic) UITableView *tableView;
@@ -73,6 +76,7 @@
 
 @implementation ChatGroupViewController
 @synthesize from;
+@synthesize groupname;
 
 - (instancetype)initWithChatter:(NSString *)chatter isGroup:(BOOL)isGroup
 {
@@ -104,13 +108,13 @@
     [self.view addSubview:topbar];
     UILabel* label_title = [[UILabel alloc]initWithFrame:CGRectMake(87, 20, 146, 35)];
     [label_title setTextAlignment:NSTextAlignmentCenter];
-    label_title.text = self.chatter;
+    label_title.text = self.groupname;
     label_title.font = [UIFont systemFontOfSize:16];
     label_title.textColor = [UIColor whiteColor];
     [topbar addSubview:label_title];
     UIButton * button_back = [UIButton buttonWithType:UIButtonTypeCustom];
-    button_back.frame = CGRectMake(0, 23, 50, 30);
-    [button_back setTitle:@"返回" forState:UIControlStateNormal];
+    button_back.frame = CGRectMake(6, 23, 21, 29);
+    [button_back setBackgroundImage:[UIImage imageNamed:@"back_v2.png"] forState:UIControlStateNormal];
     button_back.tag = 0;
     [button_back addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
     [topbar addSubview:button_back];
@@ -346,7 +350,7 @@
         _tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
         _tableView.delegate = self;
         _tableView.dataSource = self;
-        _tableView.backgroundColor = [UIColor lightGrayColor];
+        _tableView.backgroundColor = [UIColor colorWithRed:246.0/255.0 green:246.0/255.0 blue:247.0/255.0 alpha:1];
         _tableView.tableFooterView = [[UIView alloc] init];
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         
@@ -440,6 +444,18 @@
                 cell = [[EMChatViewCell alloc] initWithMessageModel:model reuseIdentifier:cellIdentifier];
                 cell.backgroundColor = [UIColor clearColor];
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            }
+            //byzc
+            NSString* phoneno = model.username;
+            FriendInfo* friend = [kApp.friendHandler.friendsDicByPhone objectForKey:phoneno];
+            if(friend != nil){
+                if(friend.avatarUrlInYaoPao != nil&&![friend.avatarUrlInYaoPao isEqualToString:@""]){
+                    model.headImageURL = [NSURL URLWithString:friend.avatarUrlInYaoPao];
+                }else{
+                    model.headImageURL = nil;
+                }
+            }else{
+                model.headImageURL = nil;
             }
             cell.messageModel = model;
             
@@ -899,7 +915,7 @@
 
 - (void)moreViewAudioCallAction:(DXChatBarMoreView *)moreView
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"callOutWithChatter" object:self.chatter];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"callOutWithChatter" object:_chatter];
     
     //    __weak typeof(self) weakSelf = self;
     //    if([[AVAudioSession sharedInstance] respondsToSelector:@selector(requestRecordPermission:)])

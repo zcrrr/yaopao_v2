@@ -85,13 +85,17 @@
         [nameStartWithSameLetter addObject:friend];
         [self.groupedMap setValue:nameStartWithSameLetter forKey:oneKey];
     }
-    //在dic里加上跑团的信息
-    [self.groupedMap setValue:kApp.friendHandler.myGroups forKey:@"跑团"];
+
+    
+    
+    
     
     self.keys = [[NSMutableArray alloc]init];
     [self.keys addObject:@"推荐好友"];
     if([kApp.friendHandler.myGroups count]>0){
+        //在dic里加上跑团的信息
         [self.keys addObject:@"跑团"];
+        [self.groupedMap setValue:kApp.friendHandler.myGroups forKey:@"跑团"];
     }
     [self.keys addObjectsFromArray:[self.keysJustFriend sortedArrayUsingSelector:@selector(compare:)]];
     [self.tableview reloadData];
@@ -280,7 +284,7 @@
             default:
                 return nil;
         }
-    }else if(section == 1){//跑团
+    }else if([[self.keys objectAtIndex:section] isEqualToString:@"跑团"]){//跑团
         NSString* key = [self.keys objectAtIndex:section];
         static NSString *CellIdentifier = @"NewFriendsTableViewCell";
         BOOL nibsRegistered = NO;
@@ -342,9 +346,10 @@
         NewFriendsViewController* nfVC = [[NewFriendsViewController alloc]init];
         [self.navigationController pushViewController:nfVC animated:YES];
         [self writeNewFriendsStringToPlist];
-    }else if(section == 1){//点击跑团
+    }else if([[self.keys objectAtIndex:section] isEqualToString:@"跑团"]){//点击跑团
         CNGroupInfo* group = [kApp.friendHandler.myGroups objectAtIndex:row];
         ChatGroupViewController* chatController = [[ChatGroupViewController alloc] initWithChatter:group.groupId isGroup:YES];
+        chatController.groupname = group.groupName;
         [self.navigationController pushViewController:chatController animated:YES];
     }else{
         FriendInfo* friend = [[groupedMap objectForKey:key]objectAtIndex:row];

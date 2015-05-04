@@ -438,7 +438,7 @@
         return;
     }
     NSLog(@"上传一个文件");
-    NSString* fileString = [self.fileArray lastObject];
+    NSString* fileString = [self.fileArray firstObject];
     NSArray* tempArray = [fileString componentsSeparatedByString:@","];
     NSString* uid = [NSString stringWithFormat:@"%i",[[kApp.userInfoDic objectForKey:@"uid"]intValue]];
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES);
@@ -552,7 +552,7 @@
         return;
     }
     if([self.editImageAddArray count] == 0){//说明此处上传文件是后面的上传文件
-        NSString* fileString = [self.fileArray lastObject];
+        NSString* fileString = [self.fileArray firstObject];
         NSArray* tempArray = [fileString componentsSeparatedByString:@","];
         int index = [[tempArray objectAtIndex:0]intValue];
         int type = [[tempArray objectAtIndex:2]intValue];
@@ -576,7 +576,7 @@
         if ([kApp.managedObjectContext save:&error]) {
             NSLog(@"Error:%@,%@",error,[error userInfo]);
         }
-        [self.fileArray removeLastObject];
+        [self.fileArray removeObjectAtIndex:0];
         if([self.fileArray count]>0){
             [self uploadOneFile];
         }else{//文件全部上传完毕，下一步
@@ -594,7 +594,7 @@
             RunClass* runclass = [mutableFetchResult objectAtIndex:0];
             NSMutableArray* imagePathsList = [[NSMutableArray alloc]initWithArray:[runclass.serverImagePaths componentsSeparatedByString:@"|"]];
             runclass.serverImagePaths = [self replacePlaceHolder:imagePathsList :[resultDic objectForKey:@"serverImagePaths"]];
-            
+            NSLog(@"runclass.serverImagePaths is %@",runclass.serverImagePaths);
             NSMutableArray* imagePathsListSmall = [[NSMutableArray alloc]initWithArray:[runclass.serverImagePathsSmall componentsSeparatedByString:@"|"]];
             runclass.serverImagePathsSmall = [self replacePlaceHolder:imagePathsListSmall :[resultDic objectForKey:@"serverImagePathsSmall"]];
         }
@@ -751,7 +751,7 @@
         [self cloudSuccess];
         return;
     }
-    NSString* fileString = [self.fileArray lastObject];
+    NSString* fileString = [self.fileArray firstObject];
     NSString* str_url = [NSString stringWithFormat:@"%@%@",kApp.imageurl,[[fileString componentsSeparatedByString:@","]objectAtIndex:2]];
     kApp.networkHandler.delegate_downloadOneFile = self;
     [kApp.networkHandler doRequest_downloadOneFile:str_url];
@@ -766,7 +766,7 @@
         
         return;
     }
-    NSString* fileString = [self.fileArray lastObject];
+    NSString* fileString = [self.fileArray firstObject];
     long long time = [[[fileString componentsSeparatedByString:@","]objectAtIndex:1] longLongValue]/1000;
     int index = [[[fileString componentsSeparatedByString:@","]objectAtIndex:0] intValue];
     int type = [[[fileString componentsSeparatedByString:@","]objectAtIndex:3] intValue];
@@ -811,7 +811,7 @@
         [data writeToFile:binarayFile atomically:YES];
         runClass.clientBinaryFilePath = [NSString stringWithFormat:@"%@/%lli.yaopao",[CNUtil getYearMonth:time],time];
     }
-    [self.fileArray removeLastObject];
+    [self.fileArray removeObjectAtIndex:0];
     if([self.fileArray count] > 0){
         [self downloadfile];
     }else{
@@ -836,6 +836,8 @@
     [CNCloudRecord createCloudDiary:self.synTimeNew];
     NSString* NOTIFICATION_REFRESH = @"REFRESH";
     [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_REFRESH object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"updatePathsArray" object:nil];
+    
 }
 - (void)cloudFailed:(NSString*)error{
     NSLog(@"同步失败：%@",error);

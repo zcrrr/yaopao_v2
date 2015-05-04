@@ -12,6 +12,7 @@
 
 #import "EMChatViewBaseCell.h"
 #import "UIImageView+EMWebCache.h"
+#import "ASIHTTPRequest.h"
 
 NSString *const kRouterEventChatHeadImageTapEventName = @"kRouterEventChatHeadImageTapEventName";
 
@@ -72,8 +73,31 @@ NSString *const kRouterEventChatHeadImageTapEventName = @"kRouterEventChatHeadIm
     
     _nameLabel.hidden = !messageModel.isChatGroup;
     
+    
     UIImage *placeholderImage = [UIImage imageNamed:@"chatListCellHead"];
-    [self.headImageView sd_setImageWithURL:_messageModel.headImageURL placeholderImage:placeholderImage];
+    if(messageModel.headImageURL == nil){
+        _headImageView.image = [UIImage imageNamed:@"avatar_default.png"];
+        return;
+    }
+    NSString* fullurl = [NSString stringWithFormat:@"%@%@",kApp.imageurl,[messageModel.headImageURL absoluteString]];
+    __block UIImage* image = [kApp.avatarDic objectForKey:fullurl];
+    if(image != nil){//缓存中有
+        _headImageView.image = image;
+    }else{//下载
+        NSURL *url = [NSURL URLWithString:fullurl];
+        __block ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
+        [request setCompletionBlock :^{
+            image = [[UIImage alloc] initWithData:[request responseData]];
+            if(image != nil){
+                _headImageView.image = image;
+                [kApp.avatarDic setObject:image forKey:fullurl];
+            }
+        }];
+        [request startAsynchronous ];
+    }
+    
+    
+//    [self.headImageView sd_setImageWithURL:_messageModel.headImageURL placeholderImage:placeholderImage];
 }
 
 #pragma mark - private

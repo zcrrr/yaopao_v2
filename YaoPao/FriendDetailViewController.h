@@ -9,11 +9,11 @@
 #import <UIKit/UIKit.h>
 @class FriendInfo;
 #import "CNNetworkHandler.h"
-@class CNCustomButton;
 
 @interface FriendDetailViewController : UIViewController<UIAlertViewDelegate,deleteFriendDelegate>
 
-@property (weak, nonatomic) IBOutlet CNCustomButton *button_deletefriend;
+@property (strong, nonatomic) NSString* from;
+@property (weak, nonatomic) IBOutlet UIButton *button_deletefriend;
 @property (strong, nonatomic) FriendInfo* friend;
 @property (weak, nonatomic) IBOutlet UIImageView *imageview_avatar;
 @property (weak, nonatomic) IBOutlet UILabel *label_name;
@@ -22,5 +22,7 @@
 - (IBAction)button_clicked:(id)sender;
 @property (strong, nonatomic) IBOutlet UIActivityIndicatorView *indicator;
 @property (strong, nonatomic) IBOutlet UIImageView *loadingImage;
+@property (weak, nonatomic) IBOutlet UIButton *button_chat;
+@property (weak, nonatomic) IBOutlet UIButton *button_clearHistory;
 
 @end

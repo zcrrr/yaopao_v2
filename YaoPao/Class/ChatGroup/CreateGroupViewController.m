@@ -280,14 +280,15 @@
     NSDictionary *loginInfo = [[[EaseMob sharedInstance] chatManager] loginInfo];
     NSString *username = [loginInfo objectForKey:kSDKUsername];
     NSString *messageStr = [NSString stringWithFormat:NSLocalizedString(@"group.somebodyInvite", @"%@ invite you to join groups \'%@\'"), username, self.textField.text];
-    [[EaseMob sharedInstance].chatManager asyncCreateGroupWithSubject:self.textField.text description:self.textView.text invitees:source initialWelcomeMessage:messageStr styleSetting:setting completion:^(EMGroup *group, EMError *error) {
-        if (group && !error) {
+//    [[EaseMob sharedInstance].chatManager asyncCreateGroupWithSubject:self.textField.text description:self.textView.text invitees:source initialWelcomeMessage:messageStr styleSetting:setting completion:^(EMGroup *group, EMError *error) {
+//        if (group && !error) {
             //建群成功，调用yaopao接口，建群
+            NSString* groupDesc = [self.textView.text isEqualToString:@""]?@"没有添加描述":self.textView.text;
             NSMutableDictionary* params = [[NSMutableDictionary alloc]init];
             NSString* uid = [NSString stringWithFormat:@"%@",[kApp.userInfoDic objectForKey:@"uid"]];
             [params setObject:uid forKey:@"uid"];
             [params setObject:self.textField.text forKey:@"groupname"];
-            [params setObject:self.textView.text forKey:@"desc"];
+            [params setObject:groupDesc forKey:@"desc"];
             [params setObject:@"false" forKey:@"ispublic"];
             [params setObject:@"50" forKey:@"maxusers"];
             [params setObject:@"false" forKey:@"approval"];
@@ -295,24 +296,35 @@
             [params setObject:invitePersons forKey:@"members"];
             kApp.networkHandler.delegate_createGroup = self;
             [kApp.networkHandler doRequest_createGroup:params];
-            self.groupId = group.groupId;
-        }
-        else{
-            [weakSelf showHint:NSLocalizedString(@"group.create.fail", @"Failed to create a group, please operate again")];
-        }
-    } onQueue:nil];
+//            self.groupId = group.groupId;
+//        }
+//        else{
+//            [weakSelf showHint:NSLocalizedString(@"group.create.fail", @"Failed to create a group, please operate again")];
+//        }
+//    } onQueue:nil];
 }
 - (void)createGroupDidFailed:(NSString *)mes{
     __weak CreateGroupViewController *weakSelf = self;
     [weakSelf hideHud];
 }
 - (void)createGroupDidSuccess:(NSDictionary *)resultDic{
-    __weak CreateGroupViewController *weakSelf = self;
-    [weakSelf hideHud];
-    [weakSelf showHint:NSLocalizedString(@"group.create.success", @"create group success")];
-    ChatGroupViewController *chatController = [[ChatGroupViewController alloc] initWithChatter:self.groupId isGroup:YES];
-    chatController.from = @"creatGroup";
-    [self.navigationController pushViewController:chatController animated:YES];
+    //先刷新全局群组信息：
+    [[EaseMob sharedInstance].chatManager asyncFetchMyGroupsListWithCompletion:^(NSArray *groups, EMError *error) {
+        if (!error) {
+            NSLog(@"获取成功 -- %@",groups);
+            __weak CreateGroupViewController *weakSelf = self;
+            [weakSelf hideHud];
+            [weakSelf showHint:NSLocalizedString(@"group.create.success", @"create group success")];
+            self.groupId = [[[resultDic objectForKey:@"grouplist"]objectAtIndex:0]objectForKey:@"id"];
+            ChatGroupViewController *chatController = [[ChatGroupViewController alloc] initWithChatter:self.groupId isGroup:YES];
+            chatController.groupname = self.textField.text;
+            chatController.from = @"creatGroup";
+            [self.navigationController pushViewController:chatController animated:YES];
+        }
+    } onQueue:nil];
+    
+    
+    
 }
 #pragma mark - action
 
@@ -360,11 +372,10 @@
 - (void)addContacts:(id)sender
 {
     if (self.textField.text.length == 0) {
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"prompt", @"Prompt") message:NSLocalizedString(@"group.create.inputName", @"please enter the group name") delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"prompt", @"Prompt") message:@"请输入跑团名称" delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
         [alertView show];
         return;
     }
-    
     [self.view endEditing:YES];
     
     ContactSelectionViewController *selectionController = [[ContactSelectionViewController alloc] init];

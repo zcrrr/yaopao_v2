@@ -213,15 +213,37 @@
 - (void)createGroupDidFailed:(NSString*)mes;
 @end
 @protocol groupMemberDelegate<NSObject>
-//创建跑团
+//获取跑团成员
 - (void)groupMemberDidSuccess:(NSDictionary*)resultDic;
 - (void)groupMemberDidFailed:(NSString*)mes;
 @end
 @protocol exitGroupDelegate<NSObject>
-//创建跑团
+//退出跑团
 - (void)exitGroupDidSuccess:(NSDictionary*)resultDic;
 - (void)exitGroupDidFailed:(NSString*)mes;
 @end
+@protocol deleteGroupDelegate<NSObject>
+//解散跑团
+- (void)deleteGroupDidSuccess:(NSDictionary*)resultDic;
+- (void)deleteGroupDidFailed:(NSString*)mes;
+@end
+@protocol addMemberDelegate<NSObject>
+//添加成员
+- (void)addMemberDidSuccess:(NSDictionary*)resultDic;
+- (void)addMemberDidFailed:(NSString*)mes;
+@end
+@protocol delMemberDelegate<NSObject>
+//删除成员
+- (void)delMemberDidSuccess:(NSDictionary*)resultDic;
+- (void)delMemberDidFailed:(NSString*)mes;
+@end
+@protocol changeGroupNameDelegate<NSObject>
+//修改跑团名称
+- (void)changeGroupNameDidSuccess:(NSDictionary*)resultDic;
+- (void)changeGroupNameDidFailed:(NSString*)mes;
+@end
+
+
 
 
 
@@ -273,6 +295,11 @@
 @property (nonatomic, strong) id<searchFriendDelegate> delegate_searchFriend;
 @property (nonatomic, strong) id<deleteFriendDelegate> delegate_deleteFriend;
 @property (nonatomic, strong) id<groupMemberDelegate> delegate_groupMember;
+@property (nonatomic, strong) id<exitGroupDelegate> delegate_exitGroup;
+@property (nonatomic, strong) id<deleteGroupDelegate> delegate_deleteGroup;
+@property (nonatomic, strong) id<addMemberDelegate> delegate_addMember;
+@property (nonatomic, strong) id<delMemberDelegate> delegate_delMember;
+@property (nonatomic, strong) id<changeGroupNameDelegate> delegate_changeGroupName;
 
 //定义每个请求的request
 @property (nonatomic, strong) ASIFormDataRequest* verifyCodeRequest;
@@ -310,6 +337,11 @@
 @property (nonatomic, strong) ASIFormDataRequest* searchFriendRequest;
 @property (nonatomic, strong) ASIFormDataRequest* deleteFriendRequest;
 @property (nonatomic, strong) ASIFormDataRequest* groupMemberRequest;
+@property (nonatomic, strong) ASIFormDataRequest* exitGroupRequest;
+@property (nonatomic, strong) ASIFormDataRequest* deleteGroupRequest;
+@property (nonatomic, strong) ASIFormDataRequest* addMemberRequest;
+@property (nonatomic, strong) ASIFormDataRequest* delMemberRequest;
+@property (nonatomic, strong) ASIFormDataRequest* changeGroupNameRequest;
 //每个请求的实现
 - (void)doRequest_verifyCode:(NSString*)phoneNO;
 - (void)doRequest_registerPhone:(NSMutableDictionary*)params;
@@ -346,5 +378,10 @@
 - (void)doRequest_searchFriend:(NSMutableDictionary*)params;
 - (void)doRequest_deleteFriend:(NSMutableDictionary*)params;
 - (void)doRequest_groupMember:(NSMutableDictionary*)params;
+- (void)doRequest_exitGroup:(NSMutableDictionary*)params;
+- (void)doRequest_deleteGroup:(NSMutableDictionary*)params;
+- (void)doRequest_addMember:(NSMutableDictionary*)params;
+- (void)doRequest_delMember:(NSMutableDictionary*)params;
+- (void)doRequest_changeGroupName:(NSMutableDictionary*)params;
 
 @end

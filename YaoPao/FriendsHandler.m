@@ -11,6 +11,7 @@
 #import "FriendInfo.h"
 #import "CNGroupInfo.h"
 #import <SMS_SDK/SMS_SDK.h>
+#import "EMSDKFull.h"
 
 @implementation FriendsHandler
 
@@ -27,6 +28,7 @@
 @synthesize friendsNew;
 @synthesize haveNewFriends;
 @synthesize friendsDicByPhone;
+
 
 - (void)dorequest{
     if(kApp.myContactUseApp == nil){
@@ -59,7 +61,16 @@
         FriendInfo* oneFriend = [[FriendInfo alloc]initWithUid:friendUid phoneNO:phoneNO nameInPhone:@"" nameInYaoPao:nickname avatarInPhone:nil avatarUrlInYaoPao:avatar status:1 verifyMessage:@"" sex:sex];
         [self.friends addObject:oneFriend];
         [self.friendsDicByPhone setObject:oneFriend forKey:phoneNO];
+        //还得加上我自己
+        NSString* myuid = [NSString stringWithFormat:@"%@",[kApp.userInfoDic objectForKey:@"uid"]];
+        NSString* myphone = [kApp.userInfoDic objectForKey:@"phone"];
+        NSString* mynickname = [kApp.userInfoDic objectForKey:@"nickname"];
+        NSString* myavatar = [kApp.userInfoDic objectForKey:@"imgpath"];
+        NSString* mysex = [kApp.userInfoDic objectForKey:@"gender"];
+        FriendInfo* meInstance = [[FriendInfo alloc]initWithUid:myuid phoneNO:myphone nameInPhone:@"" nameInYaoPao:mynickname avatarInPhone:nil avatarUrlInYaoPao:myavatar status:1 verifyMessage:@"" sex:mysex];
+        [self.friendsDicByPhone setObject:meInstance forKey:myphone];
     }
+    NSLog(@"kApp.userInfoDic is %@",kApp.userInfoDic);
     NSArray* treqlist = [resultDic objectForKey:@"treqlist"];
     for(NSDictionary* dic in treqlist){
         NSString* friendUid = [NSString stringWithFormat:@"%@",[dic objectForKey:@"id"]];
@@ -101,7 +112,9 @@
         groupInfo.groupDesc = groupDesc;
         [self.myGroups addObject:groupInfo];
     }
-    
+    [[EaseMob sharedInstance].chatManager fetchBuddyListWithError:nil];
+    NSArray *buddyList = [[EaseMob sharedInstance].chatManager buddyList];
+    NSLog(@"环信---好友获取成功： %@",buddyList);
     if([kApp.myContactUseApp count] > 0){//已经获取过通讯录中使用app的人
         NSLog(@"已经获取过通讯录中使用app的人,无需重新获取");
         [self makeNewFriendsList];

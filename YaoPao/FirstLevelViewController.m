@@ -39,7 +39,7 @@
         offsize += 80;
     }
     offsize = 27;
-    NSArray* titles = [[NSArray alloc]initWithObjects:@"首页",@"运动记录",@"赛事",@"设置",nil];
+    NSArray* titles = [[NSArray alloc]initWithObjects:@"首页",@"运动记录",@"跑团",@"设置",nil];
     for(i = 0;i<4;i++){
         UILabel* label;
         if(i != 1){

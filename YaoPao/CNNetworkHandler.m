@@ -58,6 +58,11 @@
 @synthesize delegate_deleteFriend;
 @synthesize delegate_deleteOneFile;
 @synthesize delegate_groupMember;
+@synthesize delegate_exitGroup;
+@synthesize delegate_addMember;
+@synthesize delegate_deleteGroup;
+@synthesize delegate_delMember;
+@synthesize delegate_changeGroupName;
 
 @synthesize verifyCodeRequest;
 @synthesize registerPhoneRequest;
@@ -92,6 +97,11 @@
 @synthesize deleteFriendRequest;
 @synthesize deleteOneFileRequest;
 @synthesize groupMemberRequest;
+@synthesize exitGroupRequest;
+@synthesize deleteGroupRequest;
+@synthesize addMemberRequest;
+@synthesize delMemberRequest;
+@synthesize changeGroupNameRequest;
 
 - (void)startQueue{
     //    self.handler = self;//持有自己的引用，这样就不会被释放,在delegate里面有了强引用，这里可以注释了
@@ -224,6 +234,8 @@
                 if (!error && loginInfo) {
                     NSLog(@"登录环信成功!!");
                     kApp.isLoginHX = 1;
+//                    NSArray *groupArray = [[EaseMob sharedInstance].chatManager groupList];
+//                    NSLog(@"groupArray is %@",groupArray);
                 }
             } onQueue:nil];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"loginDone" object:nil];
@@ -458,6 +470,51 @@
             }
             break;
         }
+        case TAG_EXIT_GROUP:
+        {
+            if(isSuccess){
+                [self.delegate_exitGroup exitGroupDidSuccess:result];
+            }else{
+                [self.delegate_exitGroup exitGroupDidFailed:desc];
+            }
+            break;
+        }
+        case TAG_DELETE_GROUP:
+        {
+            if(isSuccess){
+                [self.delegate_deleteGroup deleteGroupDidSuccess:result];
+            }else{
+                [self.delegate_deleteGroup deleteGroupDidFailed:desc];
+            }
+            break;
+        }
+        case TAG_ADD_MEMBER:
+        {
+            if(isSuccess){
+                [self.delegate_addMember addMemberDidSuccess:result];
+            }else{
+                [self.delegate_addMember addMemberDidFailed:desc];
+            }
+            break;
+        }
+        case TAG_DEL_MEMBER:
+        {
+            if(isSuccess){
+                [self.delegate_delMember delMemberDidSuccess:result];
+            }else{
+                [self.delegate_delMember delMemberDidFailed:desc];
+            }
+            break;
+        }
+        case TAG_CHANGE_GROUP_NAME:
+        {
+            if(isSuccess){
+                [self.delegate_changeGroupName changeGroupNameDidSuccess:result];
+            }else{
+                [self.delegate_changeGroupName changeGroupNameDidFailed:desc];
+            }
+            break;
+        }
         
         default:
             break;
@@ -614,7 +671,31 @@
             [self.delegate_groupMember groupMemberDidFailed:@""];
             break;
         }
-        
+        case TAG_EXIT_GROUP:
+        {
+            [self.delegate_exitGroup exitGroupDidFailed:@""];
+            break;
+        }
+        case TAG_DELETE_GROUP:
+        {
+            [self.delegate_deleteGroup deleteGroupDidFailed:@""];
+            break;
+        }
+        case TAG_ADD_MEMBER:
+        {
+            [self.delegate_addMember addMemberDidFailed:@""];
+            break;
+        }
+        case TAG_DEL_MEMBER:
+        {
+            [self.delegate_delMember delMemberDidFailed:@""];
+            break;
+        }
+        case TAG_CHANGE_GROUP_NAME:
+        {
+            [self.delegate_changeGroupName changeGroupNameDidFailed:@""];
+            break;
+        }
             
         default:
             break;
@@ -1194,6 +1275,86 @@
     NSLog(@"跑团成员url:%@",str_url);
     NSLog(@"跑团成员参数:%@",params);
     [[self networkQueue]addOperation:self.groupMemberRequest];
+}
+- (void)doRequest_exitGroup:(NSMutableDictionary*)params{
+    NSString* str_url = [NSString stringWithFormat:@"%@chSports/group/deleteusertogroup.htm",ENDPOINTS];
+    NSURL* url = [NSURL URLWithString:str_url];
+    self.exitGroupRequest =  [ASIFormDataRequest requestWithURL:url];
+    self.exitGroupRequest.tag = TAG_EXIT_GROUP;
+    [self.exitGroupRequest setNumberOfTimesToRetryOnTimeout:3];
+    [self.exitGroupRequest setTimeOutSeconds:15];
+    [self.exitGroupRequest addRequestHeader:@"X-PID" value:kApp.pid];
+    [self.exitGroupRequest addRequestHeader:@"ua" value:kApp.ua];
+    for (id oneKey in [params allKeys]){
+        [self.exitGroupRequest setPostValue:[params objectForKey:oneKey] forKey:oneKey];
+    }
+    NSLog(@"退出跑团url:%@",str_url);
+    NSLog(@"退出跑团参数:%@",params);
+    [[self networkQueue]addOperation:self.exitGroupRequest];
+}
+- (void)doRequest_addMember:(NSMutableDictionary*)params{
+    NSString* str_url = [NSString stringWithFormat:@"%@chSports/group/adduserstogroup.htm",ENDPOINTS];
+    NSURL* url = [NSURL URLWithString:str_url];
+    self.addMemberRequest =  [ASIFormDataRequest requestWithURL:url];
+    self.addMemberRequest.tag = TAG_ADD_MEMBER;
+    [self.addMemberRequest setNumberOfTimesToRetryOnTimeout:3];
+    [self.addMemberRequest setTimeOutSeconds:15];
+    [self.addMemberRequest addRequestHeader:@"X-PID" value:kApp.pid];
+    [self.addMemberRequest addRequestHeader:@"ua" value:kApp.ua];
+    for (id oneKey in [params allKeys]){
+        [self.addMemberRequest setPostValue:[params objectForKey:oneKey] forKey:oneKey];
+    }
+    NSLog(@"添加成员url:%@",str_url);
+    NSLog(@"添加成员参数:%@",params);
+    [[self networkQueue]addOperation:self.addMemberRequest];
+}
+- (void)doRequest_deleteGroup:(NSMutableDictionary*)params{
+    NSString* str_url = [NSString stringWithFormat:@"%@chSports/group/deletegroup.htm",ENDPOINTS];
+    NSURL* url = [NSURL URLWithString:str_url];
+    self.deleteGroupRequest =  [ASIFormDataRequest requestWithURL:url];
+    self.deleteGroupRequest.tag = TAG_DELETE_GROUP;
+    [self.deleteGroupRequest setNumberOfTimesToRetryOnTimeout:3];
+    [self.deleteGroupRequest setTimeOutSeconds:15];
+    [self.deleteGroupRequest addRequestHeader:@"X-PID" value:kApp.pid];
+    [self.deleteGroupRequest addRequestHeader:@"ua" value:kApp.ua];
+    for (id oneKey in [params allKeys]){
+        [self.deleteGroupRequest setPostValue:[params objectForKey:oneKey] forKey:oneKey];
+    }
+    NSLog(@"解散跑团url:%@",str_url);
+    NSLog(@"解散跑团参数:%@",params);
+    [[self networkQueue]addOperation:self.deleteGroupRequest];
+}
+- (void)doRequest_delMember:(NSMutableDictionary*)params{
+    NSString* str_url = [NSString stringWithFormat:@"%@chSports/group/deleteusertogroup.htm",ENDPOINTS];
+    NSURL* url = [NSURL URLWithString:str_url];
+    self.delMemberRequest =  [ASIFormDataRequest requestWithURL:url];
+    self.delMemberRequest.tag = TAG_DEL_MEMBER;
+    [self.delMemberRequest setNumberOfTimesToRetryOnTimeout:3];
+    [self.delMemberRequest setTimeOutSeconds:15];
+    [self.delMemberRequest addRequestHeader:@"X-PID" value:kApp.pid];
+    [self.delMemberRequest addRequestHeader:@"ua" value:kApp.ua];
+    for (id oneKey in [params allKeys]){
+        [self.delMemberRequest setPostValue:[params objectForKey:oneKey] forKey:oneKey];
+    }
+    NSLog(@"删除跑团成员url:%@",str_url);
+    NSLog(@"删除跑团成员参数:%@",params);
+    [[self networkQueue]addOperation:self.delMemberRequest];
+}
+- (void)doRequest_changeGroupName:(NSMutableDictionary*)params{
+    NSString* str_url = [NSString stringWithFormat:@"%@chSports/group/updategroup.htm",ENDPOINTS];
+    NSURL* url = [NSURL URLWithString:str_url];
+    self.changeGroupNameRequest =  [ASIFormDataRequest requestWithURL:url];
+    self.changeGroupNameRequest.tag = TAG_CHANGE_GROUP_NAME;
+    [self.changeGroupNameRequest setNumberOfTimesToRetryOnTimeout:3];
+    [self.changeGroupNameRequest setTimeOutSeconds:15];
+    [self.changeGroupNameRequest addRequestHeader:@"X-PID" value:kApp.pid];
+    [self.changeGroupNameRequest addRequestHeader:@"ua" value:kApp.ua];
+    for (id oneKey in [params allKeys]){
+        [self.changeGroupNameRequest setPostValue:[params objectForKey:oneKey] forKey:oneKey];
+    }
+    NSLog(@"修改跑团名称url:%@",str_url);
+    NSLog(@"修改跑团名称参数:%@",params);
+    [[self networkQueue]addOperation:self.changeGroupNameRequest];
 }
 - (void)showAlert:(NSString*) content{
     UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:content delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];

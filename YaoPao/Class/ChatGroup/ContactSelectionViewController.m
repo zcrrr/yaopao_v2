@@ -103,12 +103,13 @@
     if ([_blockSelectedUsernames count] > 0) {
         for (NSString *username in _blockSelectedUsernames) {
             NSInteger section = [self sectionForString:username];
+            NSLog(@"_dataSource count is %i,section is %i",[_dataSource count],section);
             NSMutableArray *tmpArray = [_dataSource objectAtIndex:section];
             if (tmpArray && [tmpArray count] > 0) {
                 for (int i = 0; i < [tmpArray count]; i++) {
                     EMBuddy *buddy = [tmpArray objectAtIndex:i];
                     if ([buddy.username isEqualToString:username]) {
-                        [self.selectedContacts addObject:buddy];
+//                        [self.selectedContacts addObject:buddy];
                         [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section] animated:NO scrollPosition:UITableViewScrollPositionNone];
                         
                         break;
@@ -269,6 +270,7 @@
     }
     
     EMBuddy *buddy = [[_dataSource objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+    NSMutableDictionary *temp = kApp.friendHandler.friendsDicByPhone;
     FriendInfo* friend = [kApp.friendHandler.friendsDicByPhone objectForKey:buddy.username];
     if(friend != nil){
         if(friend.avatarUrlInYaoPao != nil && ![friend.avatarUrlInYaoPao isEqualToString:@""]){//有头像url
@@ -458,33 +460,24 @@
 }
 
 #pragma mark - public
-
 - (void)loadDataSource
 {
     [self showHudInView:self.view hint:NSLocalizedString(@"loadData", @"Load data...")];
-    [[EaseMob sharedInstance].chatManager asyncFetchBuddyListWithCompletion:^(NSArray *buddyList, EMError *error) {
-        if (!error) {
-            NSLog(@"获取成功 -- %@",buddyList);
-            [_dataSource removeAllObjects];
-            [_contactsSource removeAllObjects];
-            
-            NSArray *buddyList = [[EaseMob sharedInstance].chatManager buddyList];
-            for (EMBuddy *buddy in buddyList) {
-                if (buddy.followState != eEMBuddyFollowState_NotFollowed) {
-                    [self.contactsSource addObject:buddy];
-                }
-            }
-            [_dataSource addObjectsFromArray:[self sortRecords:self.contactsSource]];
-            
-            [self hideHud];
-            [self.tableView reloadData];
-        }else{
-            [self hideHud];
+    [_dataSource removeAllObjects];
+    [_contactsSource removeAllObjects];
+    
+    NSArray *buddyList = [[EaseMob sharedInstance].chatManager buddyList];
+    for (EMBuddy *buddy in buddyList) {
+        if (buddy.followState != eEMBuddyFollowState_NotFollowed) {
+            [self.contactsSource addObject:buddy];
         }
-    } onQueue:nil];
-
+    }
+    
+    [_dataSource addObjectsFromArray:[self sortRecords:self.contactsSource]];
+    
+    [self hideHud];
+    [self.tableView reloadData];
 }
-
 - (void)doneAction:(id)sender
 {
     if (_delegate && [_delegate respondsToSelector:@selector(viewController:didFinishSelectedSources:)]) {

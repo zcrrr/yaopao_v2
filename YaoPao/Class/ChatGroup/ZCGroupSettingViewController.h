@@ -13,10 +13,13 @@
 #import "CNNetworkHandler.h"
 
 
-@interface ZCGroupSettingViewController : UIViewController<IChatManagerDelegate, EMChooseViewDelegate,groupMemberDelegate,UITableViewDataSource,UITableViewDelegate>
+@interface ZCGroupSettingViewController : UIViewController<IChatManagerDelegate, EMChooseViewDelegate,groupMemberDelegate,UITableViewDataSource,UITableViewDelegate,exitGroupDelegate,deleteGroupDelegate,addMemberDelegate,delMemberDelegate>
 @property (strong, nonatomic) NSString* chatGroupId;
 @property (strong, nonatomic) EMGroup *chatGroup;
 @property (assign, nonatomic) BOOL isOwner;
+@property (assign, nonatomic) BOOL isDelBtnDisplay;
+@property (assign, nonatomic) int handleIndex;
+@property (strong, nonatomic) NSMutableArray* delButtonList;
 @property (strong, nonatomic) NSMutableArray *dataSource;
 @property (weak, nonatomic) IBOutlet UIView *view_member;
 @property (weak, nonatomic) IBOutlet UITableView *tableview;
@@ -26,5 +29,7 @@
 @property (strong, nonatomic) IBOutlet UIActivityIndicatorView *indicator;
 @property (strong, nonatomic) IBOutlet UIImageView *loadingImage;
 @property (weak, nonatomic) IBOutlet UIButton *button_clear;
+@property (weak, nonatomic) IBOutlet UIButton *button_addMember;
+@property (weak, nonatomic) IBOutlet UIButton *button_showDelButtons;
 
 @end

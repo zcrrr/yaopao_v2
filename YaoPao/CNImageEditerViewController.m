@@ -38,6 +38,7 @@ extern NSMutableArray* imageArray;
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(backToList) name:@"updatePathsArray" object:nil];
     [self.button_back fillColor:kClear :kClear :kWhite :kWhiteHalfAlpha];
     NSDate *date = [NSDate dateWithTimeIntervalSince1970:[CNUtil getNowTime]];
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
@@ -82,7 +83,9 @@ extern NSMutableArray* imageArray;
         }
     }
 }
-
+-(void)backToList{
+    [self.navigationController popToRootViewControllerAnimated:YES];
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -163,9 +166,9 @@ extern NSMutableArray* imageArray;
                 //第三步：先保存到本地数据库
                 NSError *error = nil;
                 [kApp.managedObjectContext save:&error];
+                NSString* NOTIFICATION_REFRESH = @"REFRESH";
+                [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_REFRESH object:nil];
             }
-            NSString* NOTIFICATION_REFRESH = @"REFRESH";
-            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_REFRESH object:nil];
             [self.navigationController popToRootViewControllerAnimated:YES];
             break;
         }
@@ -472,7 +475,6 @@ extern NSMutableArray* imageArray;
 //            [self deleteOneLineToPlist:oneAction];
 //        }
 //    }
-    [self print4array];
 }
 - (void)deleteOneLineToPlist:(NSString*)oneLine{
     NSString* filePath_cloud = [CNPersistenceHandler getDocument:@"cloudDiary.plist"];
@@ -520,6 +522,11 @@ extern NSMutableArray* imageArray;
     NSLog(@"clientImagePathsSmallArray is %@",clientImagePathsSmallArray);
     NSLog(@"serverImagePathsArray is %@",serverImagePathsArray);
     NSLog(@"serverImagePathsSmallArray is %@",serverImagePathsSmallArray);
+    NSString* filePath_cloud = [CNPersistenceHandler getDocument:@"cloudDiary.plist"];
+    NSMutableDictionary* cloudDiary = [NSMutableDictionary dictionaryWithContentsOfFile:filePath_cloud];
+    NSMutableArray* editImageLaterArray = [cloudDiary objectForKey:@"editImageLaterArray"];
+    NSLog(@"editImageLaterArray is %@",editImageLaterArray);
+    
 }
 
 @end
