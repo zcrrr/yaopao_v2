@@ -14,16 +14,32 @@
 
 @implementation GroupMemberRankingListViewController
 @synthesize type;
+@synthesize groupid;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     NSLog(@"type is %@",type);
+    NSString* urlString = @"";
+    NSString* uid = [NSString stringWithFormat:@"%@",[kApp.userInfoDic objectForKey:@"uid"]];
+    if([type isEqualToString:@"ranklist"]){
+        self.label_title.text = @"团员运动排行榜";
+        urlString = [NSString stringWithFormat:@"%@chSports/group/ranklist.htm?uid=%@&X-PID=%@&groupid=%@&version=1.0",ENDPOINTS,uid,kApp.pid,self.groupid];
+    }else if([type isEqualToString:@"latestRecords"]){
+        self.label_title.text = @"团员运动记录";
+        urlString = [NSString stringWithFormat:@"%@chSports/group/record.htm?uid=%@&X-PID=%@&groupid=%@&version=1.0",ENDPOINTS,uid,kApp.pid,self.groupid];
+    }
+    self.webview.delegate = self;
+    NSURLRequest *request =[NSURLRequest requestWithURL:[NSURL URLWithString:urlString]];
+    [self.webview loadRequest:request];
+    [self displayLoading];
 }
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+- (void)webViewDidFinishLoad:(UIWebView *)webView{
+    [self hideLoading];
 }
 
 /*
@@ -38,5 +54,13 @@
 
 - (IBAction)button_clicked:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
+}
+- (void)displayLoading{
+    self.loadingImage.hidden = NO;
+    [self.indicator startAnimating];
+}
+- (void)hideLoading{
+    self.loadingImage.hidden = YES;
+    [self.indicator stopAnimating];
 }
 @end

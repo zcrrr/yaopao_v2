@@ -320,6 +320,7 @@
         if (!error && loginInfo) {
             NSLog(@"登录环信成功!!");
             kApp.isLoginHX = 1;
+            [CNAppDelegate howManyMessageToRead];
         }
     } onQueue:nil];
     //用户登录之后先同步

@@ -59,6 +59,7 @@
         
     [self refreshData];
 }
+
 - (void)refreshTop{
     NSString* filePath_record = [CNPersistenceHandler getDocument:@"all_record.plist"];
     NSMutableDictionary* record_dic = [NSMutableDictionary dictionaryWithContentsOfFile:filePath_record];
@@ -288,5 +289,28 @@
     // Pass the selected object to the new view controller.
 }
 */
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    if(kApp.unreadMessageCount != 0){
+        self.reddot.hidden = NO;
+    }else{
+        self.reddot.hidden = YES;
+    }
+    [kApp addObserver:self forKeyPath:@"unreadMessageCount" options:NSKeyValueObservingOptionNew context:nil];
+}
+- (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    [kApp removeObserver:self forKeyPath:@"unreadMessageCount"];
+}
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+    if([keyPath isEqualToString:@"unreadMessageCount"]){
+        NSLog(@"--------------unreadMessageCount is %i",kApp.unreadMessageCount);
+        if(kApp.unreadMessageCount != 0){
+            self.reddot.hidden = NO;
+        }else{
+            self.reddot.hidden = YES;
+        }
+    }
+}
 
 @end

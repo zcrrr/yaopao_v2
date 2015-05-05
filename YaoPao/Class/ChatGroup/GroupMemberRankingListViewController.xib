@@ -7,7 +7,11 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="GroupMemberRankingListViewController">
             <connections>
+                <outlet property="indicator" destination="Qiu-7f-EW9" id="sMv-xT-toN"/>
+                <outlet property="label_title" destination="X2z-s9-KyT" id="0qj-Ou-nvT"/>
+                <outlet property="loadingImage" destination="2ao-es-25l" id="Ut1-Pv-mo4"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+                <outlet property="webview" destination="ziY-BJ-UJD" id="Lo5-LQ-FZI"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -39,6 +43,19 @@
                     </subviews>
                     <color key="backgroundColor" red="0.2274509804" green="0.65098039220000004" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
+                <webView contentMode="scaleToFill" id="ziY-BJ-UJD">
+                    <rect key="frame" x="0.0" y="55" width="320" height="513"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                </webView>
+                <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" image="netProcess.png" id="2ao-es-25l">
+                    <rect key="frame" x="113" y="240" width="94" height="89"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                </imageView>
+                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" hidesWhenStopped="YES" style="whiteLarge" id="Qiu-7f-EW9">
+                    <rect key="frame" x="141" y="266" width="37" height="37"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                </activityIndicatorView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <point key="canvasLocation" x="356" y="258"/>
@@ -46,6 +63,7 @@
     </objects>
     <resources>
         <image name="back_v2.png" width="48" height="68"/>
+        <image name="netProcess.png" width="85" height="85"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

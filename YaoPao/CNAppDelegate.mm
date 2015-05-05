@@ -129,6 +129,7 @@
 @synthesize isKnowCountry;
 @synthesize timer_playVoice;
 @synthesize myContactUseApp;
+@synthesize unreadMessageCount;
 
 @synthesize managedObjectModel=_managedObjectModel;
 @synthesize managedObjectContext=_managedObjectContext;
@@ -142,9 +143,35 @@
     [CNCloudRecord deleteAllRecordWhenFirstInstall];
     //环信
     //注册 APNS文件的名字, 需要与后台上传证书时的名字一一对应
-    [[EaseMob sharedInstance] registerSDKWithAppKey:@"yaopao#yaopao" apnsCertName:@"" otherConfig:@{kSDKConfigEnableConsoleLogger:[NSNumber numberWithBool:NO]}];
+    [[EaseMob sharedInstance] registerSDKWithAppKey:@"yaopao#yaopao" apnsCertName:@"yaopao_push_dev" otherConfig:@{kSDKConfigEnableConsoleLogger:[NSNumber numberWithBool:NO]}];
+    //注册推送
+    application.applicationIconBadgeNumber = 0;
+    if([application respondsToSelector:@selector(registerUserNotificationSettings:)])
+    {
+        UIUserNotificationType notificationTypes = UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
+        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:notificationTypes categories:nil];
+        [application registerUserNotificationSettings:settings];
+    }
+    //iOS8 注册APNS
+    if ([application respondsToSelector:@selector(registerForRemoteNotifications)]) {
+        [application registerForRemoteNotifications];
+        UIUserNotificationType notificationTypes = UIUserNotificationTypeBadge |
+        UIUserNotificationTypeSound |
+        UIUserNotificationTypeAlert;
+        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:notificationTypes categories:nil];
+        [application registerUserNotificationSettings:settings];
+    }
+    else{
+        UIRemoteNotificationType notificationTypes = UIRemoteNotificationTypeBadge |
+        UIRemoteNotificationTypeSound |
+        UIRemoteNotificationTypeAlert;
+        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:notificationTypes];
+    }
+    //注册
+    [[EaseMob sharedInstance].chatManager addDelegate:self delegateQueue:nil];
+    
 //    [[EaseMob sharedInstance] registerSDKWithAppKey:@"yaopao#yaopao" apnsCertName:@""];
-    [[EaseMob sharedInstance] application:application didFinishLaunchingWithOptions:launchOptions];
+//    [[EaseMob sharedInstance] application:application didFinishLaunchingWithOptions:launchOptions];
     //google map
     [GMSServices provideAPIKey:@"AIzaSyCyYR5Ih3xP0rpYMaF1qAsInxFyqvaCJIY"];
     //高德地图
@@ -251,10 +278,17 @@
     [self.window makeKeyAndVisible];
     //屏幕长亮
     [[ UIApplication sharedApplication] setIdleTimerDisabled:YES ];
-    
-    
-
     return YES;
+}
+// 将得到的deviceToken传给SDK
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken{
+    [[EaseMob sharedInstance] application:application didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
+}
+
+// 注册deviceToken失败
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error{
+    [[EaseMob sharedInstance] application:application didFailToRegisterForRemoteNotificationsWithError:error];
+    NSLog(@"error -- %@",error);
 }
 - (void)showTab:(int)index{
     self.window.rootViewController = [self.navVCList objectAtIndex:index];
@@ -276,7 +310,6 @@
             [self.locationHandler stopLocation];
         }
     }
-    
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
@@ -737,5 +770,27 @@
 //                             [alert show];
                          }
                      }];
+}
+
+- (void)didUnreadMessagesCountChanged{
+    [CNAppDelegate howManyMessageToRead];
+}
++ (void)howManyMessageToRead{
+    NSArray *conversations = [[[EaseMob sharedInstance] chatManager] conversations];
+    NSInteger unreadCount = 0;
+    for (EMConversation *conversation in conversations) {
+        unreadCount += conversation.unreadMessagesCount;
+    }
+    //    if (_chatListVC) {
+    //        if (unreadCount > 0) {
+    //            _chatListVC.tabBarItem.badgeValue = [NSString stringWithFormat:@"%i",(int)unreadCount];
+    //        }else{
+    //            _chatListVC.tabBarItem.badgeValue = nil;
+    //        }
+    //    }
+    UIApplication *application = [UIApplication sharedApplication];
+    [application setApplicationIconBadgeNumber:unreadCount];
+    NSLog(@"unreadCount is %i",(int)unreadCount);
+    kApp.unreadMessageCount = (int)unreadCount;
 }
 @end

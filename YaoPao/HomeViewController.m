@@ -151,6 +151,12 @@ NSString* dayOrNight;
 }
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    if(kApp.unreadMessageCount != 0){
+        self.reddot.hidden = NO;
+    }else{
+        self.reddot.hidden = YES;
+    }
+    [kApp addObserver:self forKeyPath:@"unreadMessageCount" options:NSKeyValueObservingOptionNew context:nil];
     [kApp.cloudManager addObserver:self forKeyPath:@"stepDes" options:NSKeyValueObservingOptionNew context:nil];
     [kApp.networkHandler addObserver:self forKeyPath:@"newprogress" options:NSKeyValueObservingOptionNew context:nil];
     [MobClick beginLogPageView:@"mainPage"];
@@ -206,6 +212,7 @@ NSString* dayOrNight;
     [MobClick endLogPageView:@"mainPage"];
     [kApp.cloudManager removeObserver:self forKeyPath:@"stepDes"];
     [kApp.networkHandler removeObserver:self forKeyPath:@"newprogress"];
+    [kApp removeObserver:self forKeyPath:@"unreadMessageCount"];
 }
 - (void)showAlert:(NSString*) content{
     UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:content delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
@@ -366,7 +373,13 @@ NSString* dayOrNight;
             [self.progressview_cloud setProgress:kApp.networkHandler.newprogress];
             self.button_cloud.enabled = NO;
         }
-        
+    }else if([keyPath isEqualToString:@"unreadMessageCount"]){
+        NSLog(@"--------------unreadMessageCount is %i",kApp.unreadMessageCount);
+        if(kApp.unreadMessageCount != 0){
+            self.reddot.hidden = NO;
+        }else{
+            self.reddot.hidden = YES;
+        }
     }
 }
 @end

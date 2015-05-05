@@ -15,8 +15,9 @@
 @class CNRunManager;
 @class CNCloudRecord;
 @class FriendsHandler;
+#import "EMSDKFull.h"
 
-@interface CNAppDelegate : UIResponder <UIApplicationDelegate>
+@interface CNAppDelegate : UIResponder <UIApplicationDelegate,IChatManagerDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 @property (strong, nonatomic) NSMutableArray* navVCList;
@@ -115,6 +116,13 @@
 @property (assign, nonatomic) BOOL hasFinishTeamMatch;
 @property (assign, nonatomic) BOOL match_inMatch;//在比赛中
 @property (assign, nonatomic) BOOL hasCheckTimeFromServer;//已经和服务器同步时间
+
+
+//-----------------好友、聊天----------------
+@property (assign, nonatomic) int unreadMessageCount;
+
++ (void)howManyMessageToRead;
+
 
 + (void)finishThisRun;//结束这次跑步
 + (void)match_save2plist;//每隔几秒写plist

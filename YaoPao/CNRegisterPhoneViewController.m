@@ -358,6 +358,7 @@
         if (!error && loginInfo) {
             NSLog(@"登录环信成功!!");
             kApp.isLoginHX = 1;
+            [CNAppDelegate howManyMessageToRead];
         }
     } onQueue:nil];
     CNUserinfoViewController* userInfoVC = [[CNUserinfoViewController alloc]init];

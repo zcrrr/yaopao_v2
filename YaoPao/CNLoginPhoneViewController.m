@@ -330,8 +330,7 @@
         if (!error && loginInfo) {
             NSLog(@"登录环信成功!!");
             kApp.isLoginHX = 1;
-            NSArray *groupArray = [[EaseMob sharedInstance].chatManager groupList];
-            NSLog(@"groupArray is %@",groupArray);
+            [CNAppDelegate howManyMessageToRead];
         }
     } onQueue:nil];
     

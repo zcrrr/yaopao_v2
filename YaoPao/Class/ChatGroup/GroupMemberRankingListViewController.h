@@ -8,8 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
-@interface GroupMemberRankingListViewController : UIViewController
+@interface GroupMemberRankingListViewController : UIViewController<UIWebViewDelegate>
+@property (strong, nonatomic) NSString* groupid;
 @property (strong, nonatomic) NSString* type;
 - (IBAction)button_clicked:(id)sender;
+@property (weak, nonatomic) IBOutlet UIWebView *webview;
+@property (strong, nonatomic) IBOutlet UIActivityIndicatorView *indicator;
+@property (strong, nonatomic) IBOutlet UIImageView *loadingImage;
+@property (weak, nonatomic) IBOutlet UILabel *label_title;
 
 @end

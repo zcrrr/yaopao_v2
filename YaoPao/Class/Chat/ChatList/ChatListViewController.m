@@ -109,7 +109,7 @@
     [self.view addSubview:topbar];
     UILabel* label_title = [[UILabel alloc]initWithFrame:CGRectMake(87, 20, 146, 35)];
     [label_title setTextAlignment:NSTextAlignmentCenter];
-    label_title.text = @"会话";
+    label_title.text = @"跑团";
     label_title.font = [UIFont systemFontOfSize:16];
     label_title.textColor = [UIColor whiteColor];
     [topbar addSubview:label_title];
@@ -145,6 +145,9 @@
     [super viewWillDisappear:animated];
     self.view_pop.hidden = YES;
     [self unregisterNotifications];
+    [super viewWillDisappear:animated];
+    [kApp removeObserver:self forKeyPath:@"unreadMessageCount"];
+    
 }
 - (void)hidePopView:(id)sender
 {
@@ -214,6 +217,12 @@
         self.view.userInteractionEnabled = NO;
         NSLog(@"开始请求");
     }
+    if(kApp.unreadMessageCount != 0){
+        self.reddot.hidden = NO;
+    }else{
+        self.reddot.hidden = YES;
+    }
+    [kApp addObserver:self forKeyPath:@"unreadMessageCount" options:NSKeyValueObservingOptionNew context:nil];
 }
 
 - (void)removeEmptyConversationsFromDB
@@ -688,5 +697,14 @@
     NSLog(NSLocalizedString(@"message.endReceiveOffine", @"End to receive offline messages"));
     [self refreshDataSource];
 }
-
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+    if([keyPath isEqualToString:@"unreadMessageCount"]){
+        NSLog(@"--------------unreadMessageCount is %i",kApp.unreadMessageCount);
+        if(kApp.unreadMessageCount != 0){
+            self.reddot.hidden = NO;
+        }else{
+            self.reddot.hidden = YES;
+        }
+    }
+}
 @end

@@ -10,4 +10,5 @@
 
 @interface FirstLevelViewController : UIViewController
 @property (assign, nonatomic) int selectIndex;
+@property (strong, nonatomic) UIImageView* reddot;
 @end

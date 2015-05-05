@@ -367,12 +367,16 @@
         case 0:
         {
             GroupMemberRankingListViewController* gmrlVC = [[GroupMemberRankingListViewController alloc]init];
+            gmrlVC.groupid = self.chatGroupId;
+            gmrlVC.type = @"ranklist";
             [self.navigationController pushViewController:gmrlVC animated:YES];
             break;
         }
         case 1:
         {
             GroupMemberRankingListViewController* gmrlVC = [[GroupMemberRankingListViewController alloc]init];
+            gmrlVC.groupid = self.chatGroupId;
+            gmrlVC.type = @"ranklist";
             [self.navigationController pushViewController:gmrlVC animated:YES];
             break;
         }
@@ -470,60 +474,84 @@
 }
 - (void)delMemberDidSuccess:(NSDictionary *)resultDic{
     NSString* nickname = [[self.dataSource objectAtIndex:self.handleIndex] objectForKey:@"nickname"];
-    NSString* phone = [[self.dataSource objectAtIndex:self.handleIndex] objectForKey:@"phone"];
-    NSArray* occupants = [[NSArray alloc]initWithObjects:phone, nil];
-    [[EaseMob sharedInstance].chatManager asyncRemoveOccupants:occupants fromGroup:self.chatGroupId completion:^(EMGroup *group, EMError *error) {
-        __weak ZCGroupSettingViewController *weakSelf = self;
-        [self hideLoading];
-        if (!error) {
-            self.chatGroup = group;
-            [kApp.window makeToast:[NSString stringWithFormat:@"已删除%@",nickname]];
-            [self.dataSource removeObjectAtIndex:self.handleIndex];
-            self.label_title.text = [NSString stringWithFormat:@"%@/%i",self.chatGroup.groupSubject,(int)(self.chatGroup.groupOccupantsCount)];
-            [self refreshMemberView];
-            
-        }
-        else{
-            [kApp.window makeToast:@"删除成员失败"];
-        }
+//    NSString* phone = [[self.dataSource objectAtIndex:self.handleIndex] objectForKey:@"phone"];
+//    NSArray* occupants = [[NSArray alloc]initWithObjects:phone, nil];
+//    [[EaseMob sharedInstance].chatManager asyncRemoveOccupants:occupants fromGroup:self.chatGroupId completion:^(EMGroup *group, EMError *error) {
+//        __weak ZCGroupSettingViewController *weakSelf = self;
+//        if (!error) {
+//            self.chatGroup = group;
+//            [kApp.window makeToast:[NSString stringWithFormat:@"已删除%@",nickname]];
+//            [self.dataSource removeObjectAtIndex:self.handleIndex];
+//            self.label_title.text = [NSString stringWithFormat:@"%@/%i",self.chatGroup.groupSubject,(int)(self.chatGroup.groupOccupantsCount)];
+//            [self refreshMemberView];
+//        }
+//        else{
+//            [kApp.window makeToast:@"删除成员失败"];
+//        }
+//    } onQueue:nil];
+    
+    
+    [[EaseMob sharedInstance].chatManager asyncFetchGroupInfo:self.chatGroupId completion:^(EMGroup *group, EMError *error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self hideLoading];
+            if (!error) {
+                self.chatGroup = group;
+                [kApp.window makeToast:[NSString stringWithFormat:@"已删除%@",nickname]];
+                [self.dataSource removeObjectAtIndex:self.handleIndex];
+                self.label_title.text = [NSString stringWithFormat:@"%@/%i",self.chatGroup.groupSubject,(int)(self.chatGroup.groupOccupantsCount)];
+                [self refreshMemberView];
+            }
+            else{
+                NSLog(@"获取群详细信息出错");
+                [self hideLoading];
+            }
+        });
     } onQueue:nil];
+    
 }
 - (void)exitGroupDidFailed:(NSString *)mes{
     [self hideLoading];
     NSLog(@"退出跑团失败");
 }
 - (void)exitGroupDidSuccess:(NSDictionary *)resultDic{
-    [[EaseMob sharedInstance].chatManager asyncLeaveGroup:self.chatGroupId completion:^(EMGroup *group, EMGroupLeaveReason reason, EMError *error) {
-        if (error) {
-            [kApp.window makeToast:@"退出跑团失败"];
-            [self hideLoading];
-        }
-        else{
-            [self hideLoading];
-            [kApp.window makeToast:@"您已退出跑团！"];
-            kApp.friendHandler.friendList1NeedRefresh = YES;
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"ExitGroup" object:nil];
-        }
-    } onQueue:nil];
+//    [[EaseMob sharedInstance].chatManager asyncLeaveGroup:self.chatGroupId completion:^(EMGroup *group, EMGroupLeaveReason reason, EMError *error) {
+//        if (error) {
+//            [kApp.window makeToast:@"退出跑团失败"];
+//            [self hideLoading];
+//        }
+//        else{
+//            [self hideLoading];
+//            [kApp.window makeToast:@"您已退出跑团！"];
+//            kApp.friendHandler.friendList1NeedRefresh = YES;
+//            [[NSNotificationCenter defaultCenter] postNotificationName:@"ExitGroup" object:nil];
+//        }
+//    } onQueue:nil];
+    [self hideLoading];
+    [kApp.window makeToast:@"您已退出跑团！"];
+    kApp.friendHandler.friendList1NeedRefresh = YES;
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"ExitGroup" object:nil];
 }
 - (void)deleteGroupDidFailed:(NSString *)mes{
     [self hideLoading];
     NSLog(@"解散跑团失败");
 }
 - (void)deleteGroupDidSuccess:(NSDictionary *)resultDic{
-    [[EaseMob sharedInstance].chatManager asyncDestroyGroup:self.chatGroupId completion:^(EMGroup *group, EMGroupLeaveReason reason, EMError *error) {
-        if (error) {
-            NSLog(@"解散跑团失败");
-            [self hideLoading];
-        }
-        else{
-            __weak ZCGroupSettingViewController *weakSelf = self;
-            [self hideLoading];
-            [kApp.window makeToast:@"成功解散跑团！"];
-            kApp.friendHandler.friendList1NeedRefresh = YES;
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"ExitGroup" object:nil];
-        }
-    } onQueue:nil];
+//    [[EaseMob sharedInstance].chatManager asyncDestroyGroup:self.chatGroupId completion:^(EMGroup *group, EMGroupLeaveReason reason, EMError *error) {
+//        if (error) {
+//            NSLog(@"解散跑团失败");
+//            [self hideLoading];
+//        }
+//        else{
+//            [self hideLoading];
+//            [kApp.window makeToast:@"成功解散跑团！"];
+//            kApp.friendHandler.friendList1NeedRefresh = YES;
+//            [[NSNotificationCenter defaultCenter] postNotificationName:@"ExitGroup" object:nil];
+//        }
+//    } onQueue:nil];
+    [self hideLoading];
+    [kApp.window makeToast:@"成功解散跑团！"];
+    kApp.friendHandler.friendList1NeedRefresh = YES;
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"ExitGroup" object:nil];
 }
 - (void)viewController:(EMChooseViewController *)viewController didFinishSelectedSources:(NSArray *)selectedSources{
     NSLog(@"选好了");
@@ -553,9 +581,9 @@
                 self.chatGroup = group;
                 //获取所有成员，刷新列表
                 [self refreshGroupinfo];
-                [self displayLoading];
             }
             else{
+                [self displayLoading];
                 NSLog(@"获取群详细信息出错");
             }
         });

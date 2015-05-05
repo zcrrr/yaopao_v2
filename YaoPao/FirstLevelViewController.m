@@ -16,6 +16,7 @@
 
 @implementation FirstLevelViewController
 @synthesize selectIndex;
+@synthesize reddot;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -25,9 +26,9 @@
     [bottomBar setBackgroundColor:[UIColor colorWithRed:55.0/255.0 green:53.0/255.0 blue:69.0/255.0 alpha:1]];
     [self.view addSubview:bottomBar];
     int i = 0;
-    int offsize = 27;
+    int offsize = 21;
     for(i = 0;i<4;i++){
-        UIImageView* imageview = [[UIImageView alloc]initWithFrame:CGRectMake(offsize, 2.5, 26, 26)];
+        UIImageView* imageview = [[UIImageView alloc]initWithFrame:CGRectMake(offsize, 2.5, 37, 26)];
         NSString* imagename;
         if(self.selectIndex == i){//当前页面高亮显示button
             imagename = [NSString stringWithFormat:@"menu%i_on.png",i];
@@ -38,6 +39,11 @@
         [bottomBar addSubview:imageview];
         offsize += 80;
     }
+    self.reddot = [[UIImageView alloc]initWithFrame:CGRectMake(207, 2, 10, 10)];
+    self.reddot.image = [UIImage imageNamed:@"bg_rednum.png"];
+    self.reddot.hidden = YES;
+    [bottomBar addSubview:self.reddot];
+    
     offsize = 27;
     NSArray* titles = [[NSArray alloc]initWithObjects:@"首页",@"运动记录",@"跑团",@"设置",nil];
     for(i = 0;i<4;i++){
@@ -81,6 +87,10 @@
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES];
+    
+}
+- (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
 }
 /*
 #pragma mark - Navigation
@@ -91,5 +101,4 @@
     // Pass the selected object to the new view controller.
 }
 */
-
 @end
