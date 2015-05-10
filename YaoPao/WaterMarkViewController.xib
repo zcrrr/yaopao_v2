@@ -11,6 +11,7 @@
                 <outlet property="imageview" destination="xb4-4k-ZIW" id="XqL-o2-QX8"/>
                 <outlet property="imageview_logo_cn" destination="f0Y-fg-Naf" id="KRp-ro-5cL"/>
                 <outlet property="imageview_water3_weather" destination="O8j-Kr-RHi" id="sxI-Xr-RGK"/>
+                <outlet property="imageview_water5" destination="Guo-8E-thj" id="qLq-3h-F5a"/>
                 <outlet property="imageview_yaopaoyiqipao" destination="gPi-K3-UUy" id="SYk-3l-omz"/>
                 <outlet property="label_water1_km" destination="psg-tP-Dnj" id="faJ-LN-Jxg"/>
                 <outlet property="label_water2_km" destination="av5-iJ-iSG" id="EQV-wr-pOY"/>
@@ -20,6 +21,7 @@
                 <outlet property="label_water3_km" destination="seT-HJ-SsZ" id="ira-7l-ih1"/>
                 <outlet property="label_water3_time" destination="5QQ-BZ-nwW" id="w1Q-2W-9WU"/>
                 <outlet property="label_water4_km" destination="u6L-A7-bSy" id="0LK-cZ-mGU"/>
+                <outlet property="label_water5_km" destination="R8J-zM-gDZ" id="0db-7o-coD"/>
                 <outlet property="pageControl" destination="7gw-c5-6Ac" id="BYq-ID-8FV"/>
                 <outlet property="scrollview" destination="uWt-mi-Aun" id="liG-WY-hpg"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -186,6 +188,24 @@
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
+                                <view contentMode="scaleToFill" id="kd8-Qw-HYc" userLabel="View_water5">
+                                    <rect key="frame" x="1375" y="238" width="131" height="51"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <subviews>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="shaoxing_water_white.png" id="Guo-8E-thj">
+                                            <rect key="frame" x="0.0" y="0.0" width="131" height="28"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        </imageView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="6.01KM" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="R8J-zM-gDZ">
+                                            <rect key="frame" x="0.0" y="30" width="131" height="21"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="26"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
                             </subviews>
                         </scrollView>
                     </subviews>
@@ -202,8 +222,8 @@
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="4" id="7gw-c5-6Ac">
-                            <rect key="frame" x="130" y="-10" width="60" height="36"/>
+                        <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="5" id="7gw-c5-6Ac">
+                            <rect key="frame" x="125" y="-10" width="70" height="36"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </pageControl>
                         <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="ZpV-lk-2Zs">
@@ -238,6 +258,7 @@
         <image name="back_v2.png" width="48" height="68"/>
         <image name="bg_home.png" width="750" height="628"/>
         <image name="black_white.png" width="36" height="36"/>
+        <image name="shaoxing_water_white.png" width="308" height="66"/>
         <image name="start_v2.png" width="684" height="100"/>
         <image name="weather.png" width="108" height="108"/>
         <image name="yaopao_cn_logo_white.png" width="110" height="50"/>

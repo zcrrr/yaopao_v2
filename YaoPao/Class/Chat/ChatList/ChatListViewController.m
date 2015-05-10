@@ -38,11 +38,19 @@
 @property (nonatomic, strong) UIView                *networkStateView;
 @property (nonatomic, strong) UIView                *view_pop;
 
+
 @property (strong, nonatomic) EMSearchDisplayController *searchController;
 
 @end
 
 @implementation ChatListViewController
+@synthesize selectTab;
+@synthesize button_myGroup;
+@synthesize button_otherGroup;
+@synthesize view_line_select1;
+@synthesize view_line_select2;
+@synthesize webView;
+@synthesize imageview_tip;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -62,34 +70,35 @@
         CNLoginPhoneViewController* loginVC = [[CNLoginPhoneViewController alloc]init];
         [self.navigationController pushViewController:loginVC animated:YES];
     }
+    self.view.backgroundColor = RGBACOLOR(246, 246, 247, 1);
     self.view_pop = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 568)];
     self.view_pop.backgroundColor = [UIColor clearColor];
-    UIView* view_content = [[UIView alloc]initWithFrame:CGRectMake(218, 55, 102, 51)];
+    UIView* view_content = [[UIView alloc]initWithFrame:CGRectMake(170, 55, 150, 73)];
     view_content.backgroundColor = [UIColor colorWithRed:58.0/255.0 green:166.0/255.0 blue:1 alpha:1];
-    UIImageView* imageview_chat = [[UIImageView alloc]initWithFrame:CGRectMake(8, 6, 16, 14)];
+    UIImageView* imageview_chat = [[UIImageView alloc]initWithFrame:CGRectMake(20, 11, 16, 14)];
     imageview_chat.image = [UIImage imageNamed:@"create_chat.png"];
-    UILabel* label_chat = [[UILabel alloc]initWithFrame:CGRectMake(32, 6, 60, 14)];
+    UILabel* label_chat = [[UILabel alloc]initWithFrame:CGRectMake(40, 11, 110, 14)];
     label_chat.text = @"发起聊天";
     label_chat.textColor = [UIColor whiteColor];
     [label_chat setFont:[UIFont systemFontOfSize:14]];
     label_chat.textAlignment = NSTextAlignmentCenter;
-    UIView* view_line = [[UIView alloc]initWithFrame:CGRectMake(0, 26, 102, 1)];
+    UIView* view_line = [[UIView alloc]initWithFrame:CGRectMake(0, 36, 150, 1)];
     view_line.backgroundColor = [UIColor colorWithRed:121.0/255.0 green:194.0/255.0 blue:1 alpha:1];
-    UIImageView* imageview_group = [[UIImageView alloc]initWithFrame:CGRectMake(8, 32, 16, 14)];
+    UIImageView* imageview_group = [[UIImageView alloc]initWithFrame:CGRectMake(20, 48, 16, 14)];
     imageview_group.image = [UIImage imageNamed:@"create_group.png"];
-    UILabel* label_group = [[UILabel alloc]initWithFrame:CGRectMake(32, 32, 60, 14)];
+    UILabel* label_group = [[UILabel alloc]initWithFrame:CGRectMake(40, 48, 110, 14)];
     label_group.text = @"创建跑团";
     label_group.textColor = [UIColor whiteColor];
     [label_group setFont:[UIFont systemFontOfSize:14]];
     label_group.textAlignment = NSTextAlignmentCenter;
     
     UIButton * button_startChat = [UIButton buttonWithType:UIButtonTypeCustom];
-    button_startChat.frame = CGRectMake(0, 0, 102, 25);
+    button_startChat.frame = CGRectMake(0, 0, 150, 36);
     button_startChat.tag = 2;
     [button_startChat addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
     
     UIButton * button_createGroup = [UIButton buttonWithType:UIButtonTypeCustom];
-    button_createGroup.frame = CGRectMake(0, 26, 102, 25);
+    button_createGroup.frame = CGRectMake(0, 37, 102, 36);
     button_createGroup.tag = 3;
     [button_createGroup addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
     
@@ -130,9 +139,64 @@
     
     
     [self removeEmptyConversationsFromDB];
-    [self.view addSubview:self.searchBar];
+//    [self.view addSubview:self.searchBar];
+    
+    //添加tab按钮
+    UIView* tabBar = [[UIView alloc]initWithFrame:CGRectMake(0, 55, 320, 43)];
+    tabBar.backgroundColor = [UIColor whiteColor];
+    
+    self.button_myGroup = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.button_myGroup.frame = CGRectMake(0, 0, 160, 43);
+    [self.button_myGroup setTitle:@"我的跑团" forState:UIControlStateNormal];
+    [self.button_myGroup setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    self.button_myGroup.titleLabel.font = [UIFont systemFontOfSize:13];
+    self.button_myGroup.tag = 4;
+    [self.button_myGroup addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    
+    self.view_line_select1 = [[UIView alloc]initWithFrame:CGRectMake(0, 42, 160, 1)];
+    self.view_line_select1.backgroundColor = RGBACOLOR(58, 165, 255, 1);
+    
+    self.button_otherGroup = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.button_otherGroup.frame = CGRectMake(160, 0, 160, 43);
+    [self.button_otherGroup setTitle:@"其他跑团" forState:UIControlStateNormal];
+    [self.button_otherGroup setTitleColor:RGBACOLOR(153, 153, 153, 1) forState:UIControlStateNormal];
+    self.button_otherGroup.titleLabel.font = [UIFont systemFontOfSize:13];
+    self.button_otherGroup.tag = 5;
+    [self.button_otherGroup addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    
+    self.view_line_select2 = [[UIView alloc]initWithFrame:CGRectMake(160, 42, 160, 1)];
+    self.view_line_select2.backgroundColor = RGBACOLOR(58, 165, 255, 1);
+    self.view_line_select2.hidden = YES;
+    
+    UIView* view_line_tab = [[UIView alloc]initWithFrame:CGRectMake(160, 0, 0.5, 43)];
+    view_line_tab.backgroundColor = RGBACOLOR(246, 246, 247, 1);
+    
+    
+    
+    [tabBar addSubview:self.button_myGroup];
+    [tabBar addSubview:self.view_line_select1];
+    [tabBar addSubview:self.button_otherGroup];
+    [tabBar addSubview:self.view_line_select2];
+    [tabBar addSubview:view_line_tab];
+    
+    [self.view addSubview:tabBar];
+    
     [self.view addSubview:self.tableView];
+    
+    self.webView=[[UIWebView alloc] initWithFrame:CGRectMake(0, 55+43+9, self.view.frame.size.width, self.view.frame.size.height-43-9-55-42)];
+    self.webView.delegate = self;
+    [self.view addSubview:self.webView];
+    self.webView.hidden = YES;
+    
     [self.tableView addSubview:self.slimeView];
+    self.imageview_tip = [[UIImageView alloc]initWithFrame:CGRectMake(82, 50, 157, 94)];
+    self.imageview_tip.image = [UIImage imageNamed:@"tip_start_talk.png"];
+    [self.tableView addSubview:self.imageview_tip];
+    self.imageview_tip.hidden = YES;
+    
+    
+    
+    
     [self networkStateView];
     [self searchController];
     //添加弹出框
@@ -194,9 +258,52 @@
             [self.navigationController pushViewController:createChatroom animated:YES];
             break;
         }
+        case 4:
+        {
+            NSLog(@"我的跑团");
+            if(self.selectTab == 0){
+                return;
+            }else{
+                [self.button_myGroup setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+                [self.button_otherGroup setTitleColor:RGBACOLOR(153, 153, 153, 1) forState:UIControlStateNormal];
+                self.view_line_select1.hidden = NO;
+                self.view_line_select2.hidden = YES;
+                self.tableView.hidden = NO;
+                self.webView.hidden = YES;
+                self.selectTab = 0;
+            }
+            break;
+        }
+        case 5:
+        {
+            NSLog(@"其他跑团");
+            if(self.selectTab == 1){
+                return;
+            }else{
+                [self.button_myGroup setTitleColor:RGBACOLOR(153, 153, 153, 1) forState:UIControlStateNormal];
+                [self.button_otherGroup setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+                self.view_line_select1.hidden = YES;
+                self.view_line_select2.hidden = NO;
+                self.tableView.hidden = YES;
+                self.webView.hidden = NO;
+                self.selectTab = 1;
+                //加载url
+                NSString* uid = [NSString stringWithFormat:@"%@",[kApp.userInfoDic objectForKey:@"uid"]];
+                NSString* urlString = [NSString stringWithFormat:@"%@chSports/group/other.htm?uid=%@&X-PID=%@&version=1.0",ENDPOINTS,uid,kApp.pid];
+                NSURLRequest *request =[NSURLRequest requestWithURL:[NSURL URLWithString:urlString]];
+                [self.webView loadRequest:request];
+                [self showHudInView:self.view hint:@"请稍后..."];
+                
+            }
+            break;
+        }
         default:
             break;
     }
+}
+- (void)webViewDidFinishLoad:(UIWebView *)webView{
+    __weak ChatListViewController *weakSelf = self;
+    [weakSelf hideHud];
 }
 - (void)didReceiveMemoryWarning
 {
@@ -281,7 +388,7 @@
 - (UITableView *)tableView
 {
     if (_tableView == nil) {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 55+self.searchBar.frame.size.height, self.view.frame.size.width, self.view.frame.size.height - self.searchBar.frame.size.height-55-42) style:UITableViewStylePlain];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 55+43+9, self.view.frame.size.width, self.view.frame.size.height-43-9-55-42) style:UITableViewStylePlain];
         _tableView.backgroundColor = [UIColor whiteColor];
         _tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
         _tableView.delegate = self;
@@ -290,7 +397,6 @@
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         [_tableView registerClass:[ChatListCell class] forCellReuseIdentifier:@"chatListCell"];
     }
-    
     return _tableView;
 }
 
@@ -521,6 +627,11 @@
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    if(self.dataSource.count == 0){
+        self.imageview_tip.hidden = NO;
+    }else{
+        self.imageview_tip.hidden = YES;
+    }
     return  self.dataSource.count;
 }
 

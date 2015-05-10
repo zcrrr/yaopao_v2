@@ -20,6 +20,7 @@
 #import <AdobeCreativeSDKImage/AdobeCreativeSDKImage.h>
 #import "UIImage+Rescale.h"
 #import "WaterMarkViewController.h"
+#import "CNChooseModelViewController.h"
 
 @interface FeelingViewController ()
 
@@ -83,7 +84,6 @@ extern NSMutableArray* imageArray;
     }
     [self.scrollview setContentOffset:CGPointMake(self.currentpage*320, 0) animated:YES];
     [self howControllerDisplay];
-    
 }
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
     if(scrollView==self.scrollview){
@@ -195,14 +195,35 @@ extern NSMutableArray* imageArray;
         }
         case 6:
         {
-            [self displayEditorForImage:[imageArray objectAtIndex:self.currentpage]];
             NSLog(@"美化");
+            ChooseEditImageViewController* ceiVC = [[ChooseEditImageViewController alloc]init];
+            ceiVC.delegate_buttonClick = self;
+            [self presentViewController:ceiVC animated:YES completion:nil];
             break;
         }
         default:
             break;
     }
 }
+#pragma -mark buttonClick delegate
+- (void)buttonClickDidSuccess:(NSString *)type{
+    [self dismissViewControllerAnimated:NO completion:nil];
+    if([type isEqualToString:@"beautify"]){
+        NSLog(@"pop adobe");
+        [self displayEditorForImage:[imageArray objectAtIndex:self.currentpage]];
+    }else{
+        NSLog(@"拼图");
+        CNChooseModelViewController* cmVC = [[CNChooseModelViewController alloc]init];
+        cmVC.delegate_combineImage = self;
+        UINavigationController* navVC = [[UINavigationController alloc]initWithRootViewController:cmVC];
+        cmVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+        navVC.modalPresentationStyle = UIModalPresentationCustom;
+        UIViewController* rootViewController =  [[UIApplication sharedApplication] keyWindow].rootViewController;
+        rootViewController.modalPresentationStyle = UIModalPresentationCurrentContext;
+        [rootViewController presentViewController:navVC animated:YES completion:^(void){NSLog(@"pop");}];
+    }
+}
+
 #pragma -mark actionSheet delegate
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
     switch (buttonIndex) {
@@ -245,7 +266,6 @@ extern NSMutableArray* imageArray;
         [imageArray addObject:imageScaled];
         [picker dismissViewControllerAnimated:YES completion:nil];
     }
-    
 }
 - (void)takePhoto{
     self.cameraPicker = [[UIImagePickerController alloc]init];
@@ -287,6 +307,9 @@ extern NSMutableArray* imageArray;
 - (void)addWaterDidSuccess:(UIImage *)image{
     [imageArray removeObjectAtIndex:self.currentpage];
     [imageArray insertObject:image atIndex:self.currentpage];
+}
+- (void)combineImageDidSuccess:(UIImage *)image{
+    [self whichImageShouldDisplay];
 }
 - (void)photoEditorCanceled:(AdobeUXImageEditorViewController *)editor
 {

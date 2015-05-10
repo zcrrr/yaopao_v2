@@ -376,14 +376,13 @@
         {
             GroupMemberRankingListViewController* gmrlVC = [[GroupMemberRankingListViewController alloc]init];
             gmrlVC.groupid = self.chatGroupId;
-            gmrlVC.type = @"ranklist";
+            gmrlVC.type = @"latestRecords";
             [self.navigationController pushViewController:gmrlVC animated:YES];
             break;
         }
         case 2:
         {
             break;
-            
         }
         case 3:
         {

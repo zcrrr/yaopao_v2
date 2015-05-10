@@ -242,7 +242,11 @@
 - (void)changeGroupNameDidSuccess:(NSDictionary*)resultDic;
 - (void)changeGroupNameDidFailed:(NSString*)mes;
 @end
-
+@protocol memberLocationsDelegate<NSObject>
+//获取成员位置
+- (void)memberLocationsDidSuccess:(NSDictionary*)resultDic;
+- (void)memberLocationsDidFailed:(NSString*)mes;
+@end
 
 
 
@@ -300,6 +304,7 @@
 @property (nonatomic, strong) id<addMemberDelegate> delegate_addMember;
 @property (nonatomic, strong) id<delMemberDelegate> delegate_delMember;
 @property (nonatomic, strong) id<changeGroupNameDelegate> delegate_changeGroupName;
+@property (nonatomic, strong) id<memberLocationsDelegate> delegate_memberLocations;
 
 //定义每个请求的request
 @property (nonatomic, strong) ASIFormDataRequest* verifyCodeRequest;
@@ -342,6 +347,7 @@
 @property (nonatomic, strong) ASIFormDataRequest* addMemberRequest;
 @property (nonatomic, strong) ASIFormDataRequest* delMemberRequest;
 @property (nonatomic, strong) ASIFormDataRequest* changeGroupNameRequest;
+@property (nonatomic, strong) ASIFormDataRequest* memberLocationsRequest;
 //每个请求的实现
 - (void)doRequest_verifyCode:(NSString*)phoneNO;
 - (void)doRequest_registerPhone:(NSMutableDictionary*)params;
@@ -383,5 +389,6 @@
 - (void)doRequest_addMember:(NSMutableDictionary*)params;
 - (void)doRequest_delMember:(NSMutableDictionary*)params;
 - (void)doRequest_changeGroupName:(NSMutableDictionary*)params;
+- (void)doRequest_memberLocations:(NSMutableDictionary*)params;
 
 @end

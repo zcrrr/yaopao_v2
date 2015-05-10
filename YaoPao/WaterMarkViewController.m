@@ -31,12 +31,12 @@ extern NSString* dayOrNight;
     self.imageview.image = self.image_datasource;
     // Do any additional setup after loading the view from its nib.
     self.scrollview.delegate = self;
-    self.scrollview.contentSize = CGSizeMake(320*4, 320);
+    self.scrollview.contentSize = CGSizeMake(320*5, 320);
     self.scrollview.showsHorizontalScrollIndicator=NO; //不显示水平滑动线
     self.scrollview.showsVerticalScrollIndicator=NO;//不显示垂直滑动线
     self.scrollview.pagingEnabled=YES;
     
-    self.pageControl.numberOfPages=4; //设置页数为3
+    self.pageControl.numberOfPages=5; //设置页数为3
     self.pageControl.currentPage=0; //初始页码为 0
     self.pageControl.userInteractionEnabled = NO;//pagecontroller不响应点击操作
     self.pageControl.currentPageIndicatorTintColor = [UIColor greenColor];
@@ -62,6 +62,7 @@ extern NSString* dayOrNight;
     NSString* wob = self.whiteOrBlack == 0?@"w":@"b";
     NSString* imageName = [NSString stringWithFormat:@"weather_marker_%@_%@_%@.png",wob,dayOrNight,weatherCode];
     self.imageview_water3_weather.image = [UIImage imageNamed:imageName];
+    self.label_water5_km.text = [NSString stringWithFormat:@"%0.2fKM",kApp.runManager.distance/1000.0];
 }
 - (void)trackWater{
     self.mapView=[[MAMapView alloc] initWithFrame:CGRectMake(0, 0, self.view_hidemap.bounds.size.width, self.view_hidemap.bounds.size.height)];
@@ -155,7 +156,6 @@ extern NSString* dayOrNight;
             NSLog(@"image_height is %f",image_height);
             UIImage* image_water = [self imageWithUIView:self.view_water1];
             NSLog(@"image_water width is %f",image_water.size.width);
-//            UIImage* saveImage = [self addImage:image_water toImage:self.image_datasource];
             
             
             UIImage* saveImage = [self snapshot:self.view_savaImage];
@@ -191,23 +191,6 @@ extern NSString* dayOrNight;
     UIGraphicsEndImageContext();
     return image;
 }
--(UIImage *)addImage:(UIImage *)image1 toImage:(UIImage *)image2
-{
-    float scale = 1024.0/320.0;
-    
-    UIGraphicsBeginImageContext(image2.size);
-    
-    //Draw image2
-    [image2 drawInRect:CGRectMake(0, 0, image2.size.width, image2.size.height)];
-    //Draw image1
-    [image1 drawInRect:CGRectMake(50,50, image1.size.width*scale, image1.size.height*scale)];
-    
-    UIImage *resultImage=UIGraphicsGetImageFromCurrentImageContext();
-    
-    UIGraphicsEndImageContext();
-    
-    return resultImage;
-}
 - (void)image: (UIImage *) image didFinishSavingWithError: (NSError *) error contextInfo: (void *) contextInfo{
     NSString *msg = nil ;
     if(error != NULL){
@@ -233,6 +216,8 @@ extern NSString* dayOrNight;
         self.label_water4_km.textColor = [UIColor colorWithRed:28.0/255.0 green:28.0/255.0 blue:28.0/255.0 alpha:1];
         self.view_water3_line.backgroundColor = [UIColor colorWithRed:28.0/255.0 green:28.0/255.0 blue:28.0/255.0 alpha:1];
         self.view_onlyTrack.color = @"black";
+        self.label_water5_km.textColor = [UIColor colorWithRed:28.0/255.0 green:28.0/255.0 blue:28.0/255.0 alpha:1];
+        self.imageview_water5.image = [UIImage imageNamed:@"shaoxing_water_black.png"];
         [self.view_onlyTrack setNeedsDisplay];
     }else{
         self.whiteOrBlack = 0;
@@ -249,6 +234,8 @@ extern NSString* dayOrNight;
         self.label_water4_km.textColor = [UIColor whiteColor];
         self.view_water3_line.backgroundColor = [UIColor whiteColor];
         self.view_onlyTrack.color = @"white";
+        self.label_water5_km.textColor = [UIColor whiteColor];
+        self.imageview_water5.image = [UIImage imageNamed:@"shaoxing_water_white.png"];
         [self.view_onlyTrack setNeedsDisplay];
     }
     NSString* wob = self.whiteOrBlack == 0?@"w":@"b";

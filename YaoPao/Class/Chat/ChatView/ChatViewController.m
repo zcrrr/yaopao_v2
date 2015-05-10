@@ -352,7 +352,6 @@
         lpgr.minimumPressDuration = .5;
         [_tableView addGestureRecognizer:lpgr];
     }
-    
     return _tableView;
 }
 

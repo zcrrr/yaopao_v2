@@ -10,13 +10,15 @@
 #import <AdobeCreativeSDKImage/AdobeCreativeSDKImage.h>
 #import "WaterMarkViewController.h"
 #import "CNImagePreviewViewController.h"
+#import "ChooseEditImageViewController.h"
+#import "CombineImagePreviewViewController.h"
 
 @class CNCustomButton;
 @class CNOverlayViewController;
 @class AdobeUXImageEditorViewController;
 @class RunClass;
 
-@interface CNImageEditerViewController : UIViewController<UIScrollViewDelegate,AdobeUXImageEditorViewControllerDelegate,addWaternDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,saveImageDelegate>
+@interface CNImageEditerViewController : UIViewController<UIScrollViewDelegate,AdobeUXImageEditorViewControllerDelegate,addWaternDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,saveImageDelegate,buttonClickDelegate,combineImageDelegate>
 
 @property (strong ,nonatomic) RunClass* oneRun;
 @property (strong, nonatomic) NSMutableArray* editImageArray;

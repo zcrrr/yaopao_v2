@@ -280,6 +280,7 @@ updatingLocation:(BOOL)updatingLocation
             kApp.isRunning = 0;
             [kApp.runManager finishOneRun];
             [kApp.timer_playVoice invalidate];
+            [kApp.timer_udp_running invalidate];
             if(kApp.runManager.distance < 50){
                 kApp.gpsLevel = 1;
                 //弹出框，距离小于50

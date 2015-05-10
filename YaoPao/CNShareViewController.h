@@ -47,5 +47,6 @@
 @property (weak, nonatomic) IBOutlet UIImageView *imageview_trackonly;
 @property (weak, nonatomic) IBOutlet UIImageView *imageview_page;
 @property (weak, nonatomic) IBOutlet UIView *view_sharePart2;
+@property (weak, nonatomic) IBOutlet UIView *view_water;
 
 @end

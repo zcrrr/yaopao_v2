@@ -521,8 +521,9 @@
         [recordData setObject:runclass.score forKey:@"score"];
         [recordData setObject:runclass.secondPerKm forKey:@"secondPerKm"];
         [recordData setObject:runclass.serverBinaryFilePath forKey:@"serverBinaryFilePath"];
-        [recordData setObject:runclass.serverImagePaths forKey:@"serverImagePaths"];
-        [recordData setObject:runclass.serverImagePathsSmall forKey:@"serverImagePathsSmall"];
+        //这里加一个冗余，删除serverImagePaths中的placeholder再上传
+        [recordData setObject:[self deletePlaceholderInString:runclass.serverImagePaths] forKey:@"serverImagePaths"];
+        [recordData setObject:[self deletePlaceholderInString:runclass.serverImagePathsSmall] forKey:@"serverImagePathsSmall"];
         [recordData setObject:runclass.startTime forKey:@"startTime"];
         [recordData setObject:runclass.targetType forKey:@"targetType"];
         [recordData setObject:runclass.targetValue forKey:@"targetValue"];
@@ -676,6 +677,7 @@
             NSLog(@"存在一个已有的记录");
             RunClass* runClass = [mutableFetchResult objectAtIndex:0];
             [kApp.managedObjectContext deleteObject:runClass];
+            [CNCloudRecord deletePlistRecord:runClass];
         }
         
         RunClass * runClass  = [NSEntityDescription insertNewObjectForEntityForName:@"RunClass" inManagedObjectContext:kApp.managedObjectContext];
@@ -848,6 +850,7 @@
 }
 - (void)setupSocket
 {
+    NSLog(@"一进入程序肯定会初始化---------------");
     self.udpSocket = [[GCDAsyncUdpSocket alloc] initWithDelegate:self delegateQueue:dispatch_get_main_queue()];
     NSError *error = nil;
     
@@ -949,12 +952,27 @@ withFilterContext:(id)filterContext
     if([array count] == 0)return @"";
     NSMutableString* arrayStr = [NSMutableString stringWithString:@""];
     for(NSString* onePath in array){
-        [arrayStr appendString:onePath];
-        [arrayStr appendString:@"|"];
+        if(![onePath isEqualToString:@""]){
+            [arrayStr appendString:onePath];
+            [arrayStr appendString:@"|"];
+        }
     }
     if([arrayStr hasSuffix:@"|"]){
         arrayStr = [NSMutableString stringWithString:[arrayStr substringToIndex:arrayStr.length - 1]];
     }
     return arrayStr;
+}
+- (NSString*)deletePlaceholderInString:(NSString*)srcString{
+    if([srcString isEqualToString:@""]){
+        return @"";
+    }else{
+        NSMutableArray* array = [[NSMutableArray alloc]initWithArray:[srcString componentsSeparatedByString:@"|"]];
+        for (int i = 0;i<[array count];i++){
+            if([[array objectAtIndex:i] isEqualToString:@"placeholder"]){
+                [array replaceObjectAtIndex:i withObject:@""];
+            }
+        }
+        return [self arrayToString:array];
+    }
 }
 @end

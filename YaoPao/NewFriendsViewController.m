@@ -88,7 +88,8 @@
     int i = 0;
     for(i = 0;i<[kApp.myContactUseApp count];i++){
         FriendInfo* oneObject = [kApp.myContactUseApp objectAtIndex:i];
-        if([phoneNO containsString:oneObject.phoneNO]){
+        NSRange range = [phoneNO rangeOfString:oneObject.phoneNO];
+        if(range.length > 0){
             oneObject.nameInPhone = friend.nameInPhone;
             return YES;
         }
@@ -212,11 +213,13 @@
         }else{
             cell.button_action.tag = row;
         }
+        [cell.button_action setEnabled:YES];
         [cell.button_action addTarget:self action:@selector(actionButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         [cell.button_action setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [cell.button_action setBackgroundImage:[UIImage imageNamed:@"action_buttonbg.png"] forState:UIControlStateNormal];
     }else{
         [cell.button_action setEnabled:NO];
-        [cell.button_action setBackgroundImage:[UIImage imageNamed:@"action_button_no.png"] forState:UIControlStateNormal];
+        [cell.button_action setBackgroundImage:[UIImage imageNamed:@"action_buttonbg_no.png"] forState:UIControlStateNormal];
         [cell.button_action setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
     }
     

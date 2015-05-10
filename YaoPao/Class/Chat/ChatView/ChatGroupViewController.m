@@ -35,6 +35,10 @@
 #import "ZCGroupSettingViewController.h"
 #import "FriendInfo.h"
 #import "FriendsHandler.h"
+#import "ChatDemoUIDefine.h"
+#import "CNEncryption.h"
+#import "GroupLocationAnnotationView.h"
+#import "CNUtil.h"
 #define KPageCount 20
 
 @interface ChatGroupViewController ()<UITableViewDataSource, UITableViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, SRRefreshDelegate, IChatManagerDelegate, DXChatBarMoreViewDelegate, DXMessageToolBarDelegate, LocationViewDelegate, IDeviceManagerDelegate>
@@ -77,7 +81,16 @@
 @implementation ChatGroupViewController
 @synthesize from;
 @synthesize groupname;
-
+@synthesize selectTab;
+@synthesize button_myGroup;
+@synthesize button_otherGroup;
+@synthesize view_line_select1;
+@synthesize view_line_select2;
+@synthesize mapView;
+@synthesize timer_update;
+@synthesize annoArray;
+@synthesize locations;
+@synthesize isSetRegion;
 - (instancetype)initWithChatter:(NSString *)chatter isGroup:(BOOL)isGroup
 {
     self = [super initWithNibName:nil bundle:nil];
@@ -144,10 +157,59 @@
     _messageQueue = dispatch_queue_create("easemob.com", NULL);
     _isScrollToBottom = YES;
     
-    [self setupBarButtonItem];
+//    [self setupBarButtonItem];
+    
+    //添加tab按钮
+    UIView* tabBar = [[UIView alloc]initWithFrame:CGRectMake(0, 55, 320, 43)];
+    tabBar.backgroundColor = [UIColor whiteColor];
+    
+    self.button_myGroup = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.button_myGroup.frame = CGRectMake(0, 0, 160, 43);
+    [self.button_myGroup setTitle:@"会话" forState:UIControlStateNormal];
+    [self.button_myGroup setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    self.button_myGroup.titleLabel.font = [UIFont systemFontOfSize:13];
+    self.button_myGroup.tag = 2;
+    [self.button_myGroup addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    
+    self.view_line_select1 = [[UIView alloc]initWithFrame:CGRectMake(0, 42, 160, 1)];
+    self.view_line_select1.backgroundColor = RGBACOLOR(58, 165, 255, 1);
+    
+    self.button_otherGroup = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.button_otherGroup.frame = CGRectMake(160, 0, 160, 43);
+    [self.button_otherGroup setTitle:@"地图" forState:UIControlStateNormal];
+    [self.button_otherGroup setTitleColor:RGBACOLOR(153, 153, 153, 1) forState:UIControlStateNormal];
+    self.button_otherGroup.titleLabel.font = [UIFont systemFontOfSize:13];
+    self.button_otherGroup.tag = 3;
+    [self.button_otherGroup addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    
+    self.view_line_select2 = [[UIView alloc]initWithFrame:CGRectMake(160, 42, 160, 1)];
+    self.view_line_select2.backgroundColor = RGBACOLOR(58, 165, 255, 1);
+    self.view_line_select2.hidden = YES;
+    
+    UIView* view_line_tab = [[UIView alloc]initWithFrame:CGRectMake(160, 0, 0.5, 43)];
+    view_line_tab.backgroundColor = RGBACOLOR(246, 246, 247, 1);
+    
+    
+    
+    [tabBar addSubview:self.button_myGroup];
+    [tabBar addSubview:self.view_line_select1];
+    [tabBar addSubview:self.button_otherGroup];
+    [tabBar addSubview:self.view_line_select2];
+    [tabBar addSubview:view_line_tab];
+    
+    [self.view addSubview:tabBar];
+    
     [self.view addSubview:self.tableView];
     [self.tableView addSubview:self.slimeView];
     [self.view addSubview:self.chatToolBar];
+    
+    self.mapView=[[MAMapView alloc] initWithFrame:CGRectMake(0, 55+43, self.view.frame.size.width, self.view.frame.size.height-43-55)];
+    self.mapView.hidden = YES;
+    self.mapView.delegate = self;
+    self.mapView.showsCompass = NO;
+    self.mapView.showsScale = NO;
+    self.mapView.showsUserLocation = YES;
+    [self.view addSubview:self.mapView];
     
     //将self注册为chatToolBar的moreView的代理
     if ([self.chatToolBar.moreView isKindOfClass:[DXChatBarMoreView class]]) {
@@ -183,11 +245,156 @@
             }
             break;
         }
-            
+        case 2:
+        {
+            NSLog(@"会话");
+            [self.view endEditing:YES];
+            if(self.selectTab == 0){
+                return;
+            }else{
+                [self.button_myGroup setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+                [self.button_otherGroup setTitleColor:RGBACOLOR(153, 153, 153, 1) forState:UIControlStateNormal];
+                self.view_line_select1.hidden = NO;
+                self.view_line_select2.hidden = YES;
+                self.tableView.hidden = NO;
+                self.mapView.hidden = YES;
+                self.selectTab = 0;
+                [self.timer_update invalidate];
+            }
+            break;
+        }
+        case 3:
+        {
+            NSLog(@"地图");
+            [self.view endEditing:YES];
+            if(self.selectTab == 1){
+                return;
+            }else{
+                [self.button_myGroup setTitleColor:RGBACOLOR(153, 153, 153, 1) forState:UIControlStateNormal];
+                [self.button_otherGroup setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+                self.view_line_select1.hidden = YES;
+                self.view_line_select2.hidden = NO;
+                self.tableView.hidden = YES;
+                self.mapView.hidden = NO;
+                self.selectTab = 1;
+                [self updataMemberLocations];
+                self.timer_update = [NSTimer scheduledTimerWithTimeInterval:20 target:self selector:@selector(updataMemberLocations) userInfo:nil repeats:YES];
+            }
+            break;
+        }
         default:
             break;
     }
 }
+- (void)updataMemberLocations{
+    NSMutableDictionary* params = [[NSMutableDictionary alloc]init];
+    NSString* uid = [NSString stringWithFormat:@"%@",[kApp.userInfoDic objectForKey:@"uid"]];
+    [params setObject:uid forKey:@"uid"];
+    [params setObject:_chatter forKey:@"groupid"];
+    [params setObject:@"1.0" forKey:@"version"];
+    kApp.networkHandler.delegate_memberLocations = self;
+    [kApp.networkHandler doRequest_memberLocations:params];
+    [self showHudInView:self.view hint:@"请稍后..."];
+}
+- (void)memberLocationsDidFailed:(NSString *)mes{
+    __weak ChatGroupViewController *weakSelf = self;
+    [weakSelf hideHud];
+}
+- (void)memberLocationsDidSuccess:(NSDictionary *)resultDic{
+    __weak ChatGroupViewController *weakSelf = self;
+    [weakSelf hideHud];
+    [self.mapView removeAnnotations:self.annoArray];
+    [self.annoArray removeAllObjects];
+    self.locations = [resultDic objectForKey:@"locations"];
+    double min_lon = 0;
+    double min_lat = 0;
+    double max_lon = 0;
+    double max_lat = 0;
+    
+    for(int i = 0 ; i<[self.locations count];i++){
+        NSDictionary* dic = [self.locations objectAtIndex:i];
+        double lon = [[dic objectForKey:@"lon"]doubleValue];
+        double lat = [[dic objectForKey:@"lat"]doubleValue];
+        if(i == 0){
+            min_lon = lon;
+            min_lat = lat;
+            max_lon = lon;
+            max_lat = lat;
+        }
+        MAPointAnnotation* annotation = [[MAPointAnnotation alloc] init];
+        CLLocationCoordinate2D wgs84Point = CLLocationCoordinate2DMake(lat, lon);
+        CLLocationCoordinate2D encryptionPoint = [CNEncryption encrypt:wgs84Point];
+        annotation.coordinate = CLLocationCoordinate2DMake(encryptionPoint.latitude, encryptionPoint.longitude);
+        annotation.title = [NSString stringWithFormat:@"%i",i];
+        [self.mapView addAnnotation:annotation];
+        [self.annoArray addObject:annotation];
+        
+        if(annotation.coordinate.longitude < min_lon){
+            min_lon = annotation.coordinate.longitude;
+        }
+        if(annotation.coordinate.latitude < min_lat){
+            min_lat = annotation.coordinate.latitude;
+        }
+        if(annotation.coordinate.longitude > max_lon){
+            max_lon = annotation.coordinate.longitude;
+        }
+        if(annotation.coordinate.latitude > max_lat){
+            max_lat = annotation.coordinate.latitude;
+        }
+    }
+    if(!self.isSetRegion && min_lon > 1){
+        CLLocationCoordinate2D center = CLLocationCoordinate2DMake((min_lat+max_lat)/2, (min_lon+max_lon)/2);
+        MACoordinateSpan span = MACoordinateSpanMake(max_lat-min_lat+0.005, max_lon-min_lon+0.005);
+        MACoordinateRegion region = MACoordinateRegionMake(center, span);
+        [self.mapView setRegion:region animated:NO];
+        self.isSetRegion = YES;
+    }
+}
+- (MAAnnotationView *)mapView:(MAMapView *)mapView viewForAnnotation:(id<MAAnnotation>)annotation
+{
+    if ([annotation isKindOfClass:[MAPointAnnotation class]])
+    {
+        static NSString *customReuseIndetifier = @"customReuseIndetifier";
+        GroupLocationAnnotationView *annotationView = (GroupLocationAnnotationView*)[self.mapView dequeueReusableAnnotationViewWithIdentifier:customReuseIndetifier];
+        
+        if (annotationView == nil)
+        {
+            annotationView = [[GroupLocationAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:customReuseIndetifier];
+            // must set to NO, so we can show the custom callout view.
+            annotationView.centerOffset = CGPointMake(0, -20.6);
+        }
+        int tag = [((MAPointAnnotation*)annotation).title intValue];
+        NSDictionary* dic = [self.locations objectAtIndex:tag];
+        ((MAPointAnnotation*)annotation).title = [dic objectForKey:@"nickname"];
+        ((MAPointAnnotation*)annotation).subtitle = [CNUtil getTimeFromTimestamp_ymdhm:[[dic objectForKey:@"timestamp"]longLongValue]/1000];
+        annotationView.canShowCallout = NO;
+        
+        NSString* imgpath = [dic objectForKey:@"imgpath"];
+        if(imgpath != nil && ![imgpath isEqualToString:@""]){//有头像url
+            NSString* fullurl = [NSString stringWithFormat:@"%@%@",kApp.imageurl,imgpath];
+            __block UIImage* image = [kApp.avatarDic objectForKey:fullurl];
+            if(image != nil){//缓存中有
+                annotationView.imageview.image = image;
+            }else{//下载
+                NSURL *url = [NSURL URLWithString:fullurl];
+                __block ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
+                [request setCompletionBlock :^{
+                    image = [[UIImage alloc] initWithData:[request responseData]];
+                    if(image != nil){
+                        if(annotationView != nil){
+                            annotationView.imageview.image = image;
+                        }
+                        [kApp.avatarDic setObject:image forKey:fullurl];
+                    }
+                }];
+                [request startAsynchronous ];
+            }
+        }
+        return annotationView;
+    }
+    return nil;
+}
+
 - (void)setupBarButtonItem
 {
     UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
@@ -235,6 +442,7 @@
     // 设置当前conversation的所有message为已读
     [_conversation markAllMessagesAsRead:YES];
     [[EaseMob sharedInstance].deviceManager disableProximitySensor];
+    [self.timer_update invalidate];
     
 }
 
@@ -346,7 +554,7 @@
 - (UITableView *)tableView
 {
     if (_tableView == nil) {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 55, self.view.frame.size.width, self.view.frame.size.height - 55-36) style:UITableViewStylePlain];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 55+43, self.view.frame.size.width, self.view.frame.size.height - 55-43-36) style:UITableViewStylePlain];
         _tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
         _tableView.delegate = self;
         _tableView.dataSource = self;
@@ -417,14 +625,17 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    NSLog(@"numberOfRowsInSection");
     return self.dataSource.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row < [self.dataSource count]) {
+        NSLog(@"indexPath.row is %i",indexPath.row);
         id obj = [self.dataSource objectAtIndex:indexPath.row];
         if ([obj isKindOfClass:[NSString class]]) {
+            NSLog(@"time");
             EMChatTimeCell *timeCell = (EMChatTimeCell *)[tableView dequeueReusableCellWithIdentifier:@"MessageCellTime"];
             if (timeCell == nil) {
                 timeCell = [[EMChatTimeCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"MessageCellTime"];
@@ -457,12 +668,12 @@
             }else{
                 model.headImageURL = nil;
             }
+            model.nickName = friend.nameInYaoPao;
+            NSLog(@"username is %@",model.username);
             cell.messageModel = model;
-            
             return cell;
         }
     }
-    
     return nil;
 }
 
@@ -951,8 +1162,8 @@
     NSLog(@"didChangeFrameToHeight--");
     [UIView animateWithDuration:0.3 animations:^{
         CGRect rect = self.tableView.frame;
-        rect.origin.y = 55;
-        rect.size.height = self.view.frame.size.height - toHeight-55;
+        rect.origin.y = 55+43;
+        rect.size.height = self.view.frame.size.height - toHeight-55-43;
         self.tableView.frame = rect;
     }];
     [self scrollViewToBottom:YES];
@@ -1139,9 +1350,11 @@
             
             NSInteger currentCount = [weakSelf.dataSource count];
             weakSelf.dataSource = [[weakSelf formatMessages:messages] mutableCopy];
+            [weakSelf.tableView reloadData];
+            
+//            [weakSelf.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[weakSelf.dataSource count] - currentCount - 1 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
             dispatch_async(dispatch_get_main_queue(), ^{
                 [weakSelf.tableView reloadData];
-                
                 [weakSelf.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[weakSelf.dataSource count] - currentCount - 1 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
             });
             

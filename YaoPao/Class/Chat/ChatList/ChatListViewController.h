@@ -15,7 +15,15 @@
 #import "EMSDKFull.h"
 #import "FriendsHandler.h"
 
-@interface ChatListViewController : FirstLevelViewController<requestFriendsDelegate>;
+@interface ChatListViewController : FirstLevelViewController<requestFriendsDelegate,UIWebViewDelegate>
+
+@property (assign, nonatomic) int selectTab;
+@property (strong, nonatomic) UIButton * button_myGroup;
+@property (strong, nonatomic) UIButton * button_otherGroup;
+@property (strong, nonatomic) UIView* view_line_select1;
+@property (strong, nonatomic) UIView* view_line_select2;
+@property (nonatomic, strong) UIWebView *webView;
+@property (nonatomic, strong) UIImageView* imageview_tip;
 
 - (void)refreshDataSource;
 

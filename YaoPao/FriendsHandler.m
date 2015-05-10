@@ -113,6 +113,7 @@
         [self.myGroups addObject:groupInfo];
     }
     [[EaseMob sharedInstance].chatManager fetchBuddyListWithError:nil];
+    //测试代码：加上环信好友获取
     NSArray *buddyList = [[EaseMob sharedInstance].chatManager buddyList];
     NSLog(@"环信---好友获取成功： %@",buddyList);
     if([kApp.myContactUseApp count] > 0){//已经获取过通讯录中使用app的人
@@ -127,6 +128,12 @@
              {
                  for(NSDictionary* oneContact in array){
                      NSString* phoneNO = [oneContact objectForKey:@"phone"];
+                     NSString* myphone = [kApp.userInfoDic objectForKey:@"phone"];
+                     NSRange range = [phoneNO rangeOfString:myphone];
+                     if(range.length > 0){
+                         continue;
+                     }
+                     
                      NSString* nameInYaoPao = [oneContact objectForKey:@"nickname"];
                      NSString* avatarUrlInYaoPao = [oneContact objectForKey:@"avatar"];
                      NSString* uid = [oneContact objectForKey:@"uid"];
@@ -164,19 +171,23 @@
     int i = 0;
     for(i = 0;i<[self.friends count];i++){
         FriendInfo* oneObject = [self.friends objectAtIndex:i];
-        if([phoneNO containsString:oneObject.phoneNO]){
+        
+        NSRange range = [phoneNO rangeOfString:oneObject.phoneNO];
+        if(range.length > 0){
             return YES;
         }
     }
     for(i = 0;i<[self.friendsIWant count];i++){
         FriendInfo* oneObject = [self.friendsIWant objectAtIndex:i];
-        if([phoneNO containsString:oneObject.phoneNO]){
+        NSRange range = [phoneNO rangeOfString:oneObject.phoneNO];
+        if(range.length > 0){
             return YES;
         }
     }
     for(i = 0;i<[self.frinedsWantMe count];i++){
         FriendInfo* oneObject = [self.frinedsWantMe objectAtIndex:i];
-        if([phoneNO containsString:oneObject.phoneNO]){
+        NSRange range = [phoneNO rangeOfString:oneObject.phoneNO];
+        if(range.length > 0){
             return YES;
         }
     }
@@ -200,7 +211,8 @@
     }else{
         NSString* newFriendStringOld = [newFriendsDic objectForKey:@"newFriends"];
         for(FriendInfo* friend in self.friendsNew){
-            if(![newFriendStringOld containsString:friend.phoneNO]){//出现了不同电话号码
+            NSRange range = [newFriendStringOld rangeOfString:friend.phoneNO];
+            if(range.length > 0){
                 NSLog(@"有新的朋友");
                 self.haveNewFriends = YES;
                 return;

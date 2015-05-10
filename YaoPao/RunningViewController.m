@@ -19,6 +19,8 @@
 #import "CNOverlayViewController.h"
 #import "CircleView.h"
 #import "CNLocationHandler.h"
+#import "SBJson.h"
+#import "GCDAsyncUdpSocket.h"
 
 @interface RunningViewController ()
 
@@ -103,6 +105,25 @@ extern NSMutableArray* imageArray;
         self.button_takephoto.frame = CGRectMake(72, 350, 65, 65);
         self.button_map.frame = CGRectMake(183, 350, 65, 65);
     }
+    //开始上报udp
+    kApp.timer_udp_running = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(sendMessageByUdp) userInfo:nil repeats:YES];
+}
+- (void)sendMessageByUdp{
+    NSMutableDictionary* udpParamDic = [[NSMutableDictionary alloc]init];
+    NSString* uid = [NSString stringWithFormat:@"%@",[kApp.userInfoDic objectForKey:@"uid"]];
+    [udpParamDic setObject:uid forKey:@"uid"];
+    [udpParamDic setObject:[NSString stringWithFormat:@"%f",kApp.locationHandler.userLocation_lon] forKey:@"lon"];
+    [udpParamDic setObject:[NSString stringWithFormat:@"%f",kApp.locationHandler.userLocation_lat] forKey:@"lat"];
+    [udpParamDic setObject:[NSString stringWithFormat:@"%i",kApp.runManager.howToMove] forKey:@"howtomove"];
+    [udpParamDic setObject:[NSString stringWithFormat:@"%i",[kApp.runManager during]] forKey:@"duration"];
+    [udpParamDic setObject:[NSString stringWithFormat:@"%i",kApp.runManager.distance] forKey:@"distance"];
+    [udpParamDic setObject:@"1.0" forKey:@"version"];
+    SBJsonWriter *jsonWriter = [[SBJsonWriter alloc] init];
+    NSString* jsonString = [jsonWriter stringWithObject:udpParamDic];
+    NSLog(@"jsonstring is %@",jsonString);
+    NSData *data = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+    [kApp.udpSocket sendData:data toHost:@"182.92.97.144" port:28888 withTimeout:-1 tag:0];
+    [kApp.udpSocket sendData:data toHost:@"182.92.97.144" port:18888 withTimeout:-1 tag:0];
 }
 - (void)checkPlayVoice{
     int distance = kApp.runManager.distance;
@@ -248,6 +269,7 @@ extern NSMutableArray* imageArray;
             kApp.isRunning = 0;
             [kApp.runManager finishOneRun];
             [kApp.timer_playVoice invalidate];
+            [kApp.timer_udp_running invalidate];
             if(kApp.runManager.distance < 50){
                 kApp.gpsLevel = 1;
                 //弹出框，距离小于50

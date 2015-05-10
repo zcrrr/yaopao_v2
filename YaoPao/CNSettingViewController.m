@@ -7,7 +7,6 @@
 //
 
 #import "CNSettingViewController.h"
-#import "CNAboutViewController.h"
 #import "CNRegisterPhoneViewController.h"
 #import "CNUserinfoViewController.h"
 #import "CNADViewController.h"

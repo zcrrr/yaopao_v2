@@ -18,7 +18,7 @@
     #import "CNPersistenceHandler.h"
 #endif
 
-#define ClIENT_VERSION @"2.0.1"
+#define ClIENT_VERSION @"2.1.0"
 //#define ENDPOINTS kApp.mainurl
 #define ENDPOINTS @"http://182.92.97.144:8888/"
 #define IOS7OFFSIZE (IOS7?20:0)
@@ -81,3 +81,4 @@
 #define TAG_ADD_MEMBER 37
 #define TAG_DEL_MEMBER 38
 #define TAG_CHANGE_GROUP_NAME 39
+#define TAG_MEMBER_LOCATIONS 40

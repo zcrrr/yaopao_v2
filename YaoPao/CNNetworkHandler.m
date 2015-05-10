@@ -63,6 +63,7 @@
 @synthesize delegate_deleteGroup;
 @synthesize delegate_delMember;
 @synthesize delegate_changeGroupName;
+@synthesize delegate_memberLocations;
 
 @synthesize verifyCodeRequest;
 @synthesize registerPhoneRequest;
@@ -102,6 +103,7 @@
 @synthesize addMemberRequest;
 @synthesize delMemberRequest;
 @synthesize changeGroupNameRequest;
+@synthesize memberLocationsRequest;
 
 - (void)startQueue{
     //    self.handler = self;//持有自己的引用，这样就不会被释放,在delegate里面有了强引用，这里可以注释了
@@ -230,6 +232,7 @@
         case TAG_AUTO_LOGIN:
         {
             NSString* phoneNO = [kApp.userInfoDic objectForKey:@"phone"];
+            NSLog(@"phoneNO is %@",phoneNO);
             [[EaseMob sharedInstance].chatManager asyncLoginWithUsername:phoneNO password:phoneNO completion:^(NSDictionary *loginInfo, EMError *error) {
                 if (!error && loginInfo) {
                     NSLog(@"登录环信成功!!");
@@ -514,6 +517,15 @@
             }
             break;
         }
+        case TAG_MEMBER_LOCATIONS:
+        {
+            if(isSuccess){
+                [self.delegate_memberLocations memberLocationsDidSuccess:result];
+            }else{
+                [self.delegate_memberLocations memberLocationsDidFailed:desc];
+            }
+            break;
+        }
         
         default:
             break;
@@ -530,7 +542,7 @@
 }
 - (void)requestFailedByQueue:(ASIHTTPRequest *)request{
     if(request.tag != TAG_MATCH_UPLOAD || request.tag != TAG_MATCH_ONEKM || request.tag != TAG_SIMPLE_TEAM_INFO){
-        [self showAlert:@"请检查网络"];
+//        [self showAlert:@"请检查网络"];
     }
     switch (request.tag) {
         case TAG_REGISTER_PHONE:
@@ -693,6 +705,11 @@
         case TAG_CHANGE_GROUP_NAME:
         {
             [self.delegate_changeGroupName changeGroupNameDidFailed:@""];
+            break;
+        }
+        case TAG_MEMBER_LOCATIONS:
+        {
+            [self.delegate_memberLocations memberLocationsDidFailed:@""];
             break;
         }
             
@@ -1354,6 +1371,22 @@
     NSLog(@"修改跑团名称url:%@",str_url);
     NSLog(@"修改跑团名称参数:%@",params);
     [[self networkQueue]addOperation:self.changeGroupNameRequest];
+}
+- (void)doRequest_memberLocations:(NSMutableDictionary*)params{
+    NSString* str_url = [NSString stringWithFormat:@"%@chSports/group/locations.htm",ENDPOINTS];
+    NSURL* url = [NSURL URLWithString:str_url];
+    self.memberLocationsRequest =  [ASIFormDataRequest requestWithURL:url];
+    self.memberLocationsRequest.tag = TAG_MEMBER_LOCATIONS;
+    [self.memberLocationsRequest setNumberOfTimesToRetryOnTimeout:3];
+    [self.memberLocationsRequest setTimeOutSeconds:15];
+    [self.memberLocationsRequest addRequestHeader:@"X-PID" value:kApp.pid];
+    [self.memberLocationsRequest addRequestHeader:@"ua" value:kApp.ua];
+    for (id oneKey in [params allKeys]){
+        [self.memberLocationsRequest setPostValue:[params objectForKey:oneKey] forKey:oneKey];
+    }
+    NSLog(@"成员位置url:%@",str_url);
+    NSLog(@"成员位置参数:%@",params);
+    [[self networkQueue]addOperation:self.memberLocationsRequest];
 }
 - (void)showAlert:(NSString*) content{
     UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:content delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];

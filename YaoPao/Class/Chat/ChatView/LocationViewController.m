@@ -60,15 +60,41 @@ static LocationViewController *defaultLocation = nil;
 {
     [super viewDidLoad];
     
-    self.title = NSLocalizedString(@"location.messageType", @"location message");
+//    self.title = NSLocalizedString(@"location.messageType", @"location message");
+//    
+//    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
+//    [backButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
+//    [backButton addTarget:self.navigationController action:@selector(popViewControllerAnimated:) forControlEvents:UIControlEventTouchUpInside];
+//    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+//    [self.navigationItem setLeftBarButtonItem:backItem];
     
-    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
-    [backButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
-    [backButton addTarget:self.navigationController action:@selector(popViewControllerAnimated:) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
-    [self.navigationItem setLeftBarButtonItem:backItem];
     
-    _mapView = [[MKMapView alloc] initWithFrame:self.view.bounds];
+    //zc
+    UIView* topbar = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 55)];
+    topbar.backgroundColor = [UIColor colorWithRed:58.0/255.0 green:166.0/255.0 blue:1 alpha:1];
+    [self.view addSubview:topbar];
+    UILabel* label_title = [[UILabel alloc]initWithFrame:CGRectMake(87, 20, 146, 35)];
+    [label_title setTextAlignment:NSTextAlignmentCenter];
+    label_title.text = @"地图";
+    label_title.font = [UIFont systemFontOfSize:16];
+    label_title.textColor = [UIColor whiteColor];
+    [topbar addSubview:label_title];
+    UIButton * button_back = [UIButton buttonWithType:UIButtonTypeCustom];
+    button_back.frame = CGRectMake(6, 23, 21, 29);
+    [button_back setBackgroundImage:[UIImage imageNamed:@"back_v2.png"] forState:UIControlStateNormal];
+    button_back.tag = 0;
+    [button_back addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    [topbar addSubview:button_back];
+    
+    UIButton * button_detail = [UIButton buttonWithType:UIButtonTypeCustom];
+    button_detail.frame = CGRectMake(270, 23, 50, 30);
+    [button_detail setTitle:@"发送" forState:UIControlStateNormal];
+    button_detail.tag = 1;
+    [button_detail addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    [topbar addSubview:button_detail];
+    
+    
+    _mapView = [[MKMapView alloc] initWithFrame:CGRectMake(0, 55, self.view.bounds.size.width, self.view.bounds.size.height-55)];
     _mapView.delegate = self;
     _mapView.mapType = MKMapTypeStandard;
     _mapView.zoomEnabled = YES;
@@ -77,13 +103,13 @@ static LocationViewController *defaultLocation = nil;
     if (_isSendLocation) {
         _mapView.showsUserLocation = YES;//显示当前位置
         
-        UIButton *sendButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 60, 44)];
-        [sendButton setTitle:NSLocalizedString(@"send", @"Send") forState:UIControlStateNormal];
-        [sendButton setTitleColor:[UIColor colorWithRed:32 / 255.0 green:134 / 255.0 blue:158 / 255.0 alpha:1.0] forState:UIControlStateNormal];
-        [sendButton setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
-        [sendButton addTarget:self action:@selector(sendLocation) forControlEvents:UIControlEventTouchUpInside];
-        [self.navigationItem setRightBarButtonItem:[[UIBarButtonItem alloc] initWithCustomView:sendButton]];
-        self.navigationItem.rightBarButtonItem.enabled = NO;
+//        UIButton *sendButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 60, 44)];
+//        [sendButton setTitle:NSLocalizedString(@"send", @"Send") forState:UIControlStateNormal];
+//        [sendButton setTitleColor:[UIColor colorWithRed:32 / 255.0 green:134 / 255.0 blue:158 / 255.0 alpha:1.0] forState:UIControlStateNormal];
+//        [sendButton setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
+//        [sendButton addTarget:self action:@selector(sendLocation) forControlEvents:UIControlEventTouchUpInside];
+//        [self.navigationItem setRightBarButtonItem:[[UIBarButtonItem alloc] initWithCustomView:sendButton]];
+//        self.navigationItem.rightBarButtonItem.enabled = NO;
         
         [self startLocation];
     }
@@ -91,7 +117,25 @@ static LocationViewController *defaultLocation = nil;
         [self removeToLocation:_currentLocationCoordinate];
     }
 }
-
+- (void)buttonClicked:(id)sender{
+    switch ([sender tag]) {
+        case 0:
+        {
+            NSLog(@"返回");
+            [self.navigationController popViewControllerAnimated:YES];
+            break;
+        }
+        case 1:
+        {
+            NSLog(@"发送");
+            [self sendLocation];
+            break;
+        }
+            
+        default:
+            break;
+    }
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

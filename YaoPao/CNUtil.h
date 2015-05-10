@@ -26,5 +26,6 @@
 + (NSMutableDictionary*)getPersonalSummary;
 + (NSString*)getTimeFromTimestamp_ymd:(long long)timestamp;
 + (NSString*)getTimeFromTimestamp_ms:(long long)timestamp;
++ (NSString*)getTimeFromTimestamp_ymdhm:(long long)timestamp;
 + (NSString*)dayOrNight;
 @end

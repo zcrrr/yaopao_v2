@@ -21,6 +21,7 @@
 #import "UIImage+Rescale.h"
 #import "WaterMarkViewController.h"
 #import "RunClass.h"
+#import "CNChooseModelViewController.h"
 
 @interface CNImageEditerViewController ()
 
@@ -227,8 +228,10 @@ extern NSMutableArray* imageArray;
         }
         case 6:
         {
-            [self displayEditorForImage:[imageArray objectAtIndex:self.currentpage]];
             NSLog(@"美化");
+            ChooseEditImageViewController* ceiVC = [[ChooseEditImageViewController alloc]init];
+            ceiVC.delegate_buttonClick = self;
+            [self presentViewController:ceiVC animated:YES completion:nil];
             break;
         }
         default:
@@ -526,7 +529,26 @@ extern NSMutableArray* imageArray;
     NSMutableDictionary* cloudDiary = [NSMutableDictionary dictionaryWithContentsOfFile:filePath_cloud];
     NSMutableArray* editImageLaterArray = [cloudDiary objectForKey:@"editImageLaterArray"];
     NSLog(@"editImageLaterArray is %@",editImageLaterArray);
-    
+}
+#pragma -mark buttonClick delegate
+- (void)buttonClickDidSuccess:(NSString *)type{
+    if([type isEqualToString:@"beautify"]){
+        [self displayEditorForImage:[imageArray objectAtIndex:self.currentpage]];
+    }else{
+        NSLog(@"拼图");
+        CNChooseModelViewController* cmVC = [[CNChooseModelViewController alloc]init];
+        cmVC.delegate_combineImage = self;
+        UINavigationController* navVC = [[UINavigationController alloc]initWithRootViewController:cmVC];
+        cmVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+        navVC.modalPresentationStyle = UIModalPresentationCustom;
+        UIViewController* rootViewController =  [[UIApplication sharedApplication] keyWindow].rootViewController;
+        rootViewController.modalPresentationStyle = UIModalPresentationCurrentContext;
+        [rootViewController presentViewController:navVC animated:YES completion:^(void){NSLog(@"pop");}];
+    }
+}
+- (void)combineImageDidSuccess:(UIImage *)image{
+    [self whichImageShouldDisplay];
+    [self addOneNewImage:image];
 }
 
 @end

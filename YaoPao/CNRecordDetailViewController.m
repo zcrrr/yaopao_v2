@@ -200,7 +200,7 @@ extern NSMutableArray* imageArray;
     NSString* img_name_way = [NSString stringWithFormat:@"way%i_hd.png",way];
     self.image_way.image = [UIImage imageNamed:img_name_way];
     
-    if(kApp.runManager.runway == 0){//没选道路
+    if(way == 0){//没选道路
         self.image_mood.frame = self.image_way.frame;
     }
     //判断是否有图片

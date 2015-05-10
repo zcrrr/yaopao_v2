@@ -51,6 +51,7 @@
 #import "EMSDKFull.h"
 #import "ChatListViewController.h"
 #import "FriendsHandler.h"
+#import "GCDAsyncUdpSocket.h"
 
 @implementation CNAppDelegate
 @synthesize navVCList;
@@ -130,6 +131,8 @@
 @synthesize timer_playVoice;
 @synthesize myContactUseApp;
 @synthesize unreadMessageCount;
+@synthesize udpSocket;
+@synthesize timer_udp_running;
 
 @synthesize managedObjectModel=_managedObjectModel;
 @synthesize managedObjectContext=_managedObjectContext;
@@ -420,6 +423,21 @@
     kApp.geosHandler = [[CNTestGEOS alloc]init];
     [kApp.geosHandler initFromFile:kTrackName];
     self.avatarDic = [[NSMutableDictionary alloc]init];
+    //初始化udp
+    self.udpSocket = [[GCDAsyncUdpSocket alloc] initWithDelegate:self delegateQueue:dispatch_get_main_queue()];
+    NSError *error = nil;
+    
+    if (![self.udpSocket bindToPort:0 error:&error])
+    {
+        NSLog(@"Error binding: %@", error);
+        return;
+    }
+    if (![self.udpSocket beginReceiving:&error])
+    {
+        NSLog(@"Error receiving: %@", error);
+        return;
+    }
+    NSLog(@"这里也新建了一个udp实例");
 }
 + (CNAppDelegate*)getApplicationDelegate{
     return (CNAppDelegate*)[[UIApplication sharedApplication] delegate];
@@ -530,8 +548,6 @@
     }else{
         [kApp.cloudManager startCloud];
     }
-    
-    
 }
 
 + (CNGPSPoint4Match*)test_getOnePoint{
@@ -792,5 +808,16 @@
     [application setApplicationIconBadgeNumber:unreadCount];
     NSLog(@"unreadCount is %i",(int)unreadCount);
     kApp.unreadMessageCount = (int)unreadCount;
+}
+//udp回调
+- (void)udpSocket:(GCDAsyncUdpSocket *)sock didReceiveData:(NSData *)data
+      fromAddress:(NSData *)address
+withFilterContext:(id)filterContext
+{
+    NSString *msg = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    if (msg)
+    {
+        NSLog(@"接收服务器响应:%@",msg);
+    }
 }
 @end

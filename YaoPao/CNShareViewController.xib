@@ -34,6 +34,7 @@
                 <outlet property="view_onlytrack" destination="and-ZK-eHA" id="Xr8-5H-dHG"/>
                 <outlet property="view_sharePart2" destination="5yB-zy-zyW" id="6zf-YS-FJ9"/>
                 <outlet property="view_shareview" destination="5Sy-jV-jpa" id="HIi-wp-5gd"/>
+                <outlet property="view_water" destination="Mud-3b-DWs" id="PR0-QO-70T"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -278,7 +279,7 @@
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </view>
                     </subviews>
-                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <color key="backgroundColor" red="0.96470588239999999" green="0.96470588239999999" blue="0.97254901959999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="OYz-1W-pFA">

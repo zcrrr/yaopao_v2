@@ -94,10 +94,10 @@
     [button_back addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
     [topbar addSubview:button_back];
     
-    [self.view addSubview:self.searchBar];
+//    [self.view addSubview:self.searchBar];
     [self.view addSubview:self.footerView];
     self.tableView.editing = YES;
-    self.tableView.frame = CGRectMake(0, self.searchBar.frame.size.height+55, self.view.frame.size.width, self.view.frame.size.height - self.searchBar.frame.size.height - self.footerView.frame.size.height-55);
+    self.tableView.frame = CGRectMake(0, 55, self.view.frame.size.width, self.view.frame.size.height - self.footerView.frame.size.height-55);
     [self searchController];
     
     if ([_blockSelectedUsernames count] > 0) {

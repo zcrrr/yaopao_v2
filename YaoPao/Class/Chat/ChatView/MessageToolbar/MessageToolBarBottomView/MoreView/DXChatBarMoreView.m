@@ -62,20 +62,20 @@
     [self addSubview:_videoButton];
     
     CGRect frame = self.frame;
-    if (type == ChatMoreTypeChat) {
-        frame.size.height = 150;
-        
-        _audioCallButton =[UIButton buttonWithType:UIButtonTypeCustom];
-        [_audioCallButton setFrame:CGRectMake(insets, 10 * 2 + CHAT_BUTTON_SIZE, CHAT_BUTTON_SIZE , CHAT_BUTTON_SIZE)];
-        [_audioCallButton setImage:[UIImage imageNamed:@"chatBar_colorMore_audioCall"] forState:UIControlStateNormal];
-        [_audioCallButton setImage:[UIImage imageNamed:@"chatBar_colorMore_audioCallSelected"] forState:UIControlStateHighlighted];
-        [_audioCallButton addTarget:self action:@selector(takeAudioCallAction) forControlEvents:UIControlEventTouchUpInside];
-        [self addSubview:_audioCallButton];
-    }
-    else if (type == ChatMoreTypeGroupChat)
-    {
+//    if (type == ChatMoreTypeChat) {
+//        frame.size.height = 150;
+//        
+//        _audioCallButton =[UIButton buttonWithType:UIButtonTypeCustom];
+//        [_audioCallButton setFrame:CGRectMake(insets, 10 * 2 + CHAT_BUTTON_SIZE, CHAT_BUTTON_SIZE , CHAT_BUTTON_SIZE)];
+//        [_audioCallButton setImage:[UIImage imageNamed:@"chatBar_colorMore_audioCall"] forState:UIControlStateNormal];
+//        [_audioCallButton setImage:[UIImage imageNamed:@"chatBar_colorMore_audioCallSelected"] forState:UIControlStateHighlighted];
+//        [_audioCallButton addTarget:self action:@selector(takeAudioCallAction) forControlEvents:UIControlEventTouchUpInside];
+//        [self addSubview:_audioCallButton];
+//    }
+//    else if (type == ChatMoreTypeGroupChat)
+//    {
         frame.size.height = 80;
-    }
+//    }
     self.frame = frame;
 }
 

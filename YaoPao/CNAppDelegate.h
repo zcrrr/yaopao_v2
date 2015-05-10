@@ -16,6 +16,7 @@
 @class CNCloudRecord;
 @class FriendsHandler;
 #import "EMSDKFull.h"
+@class GCDAsyncUdpSocket;
 
 @interface CNAppDelegate : UIResponder <UIApplicationDelegate,IChatManagerDelegate>
 
@@ -118,10 +119,14 @@
 @property (assign, nonatomic) BOOL hasCheckTimeFromServer;//已经和服务器同步时间
 
 
+
+
 //-----------------好友、聊天----------------
 @property (assign, nonatomic) int unreadMessageCount;
 
 + (void)howManyMessageToRead;
+@property (nonatomic, strong) GCDAsyncUdpSocket *udpSocket;
+@property (strong, nonatomic) NSTimer* timer_udp_running;//上报位置udp的计时器
 
 
 + (void)finishThisRun;//结束这次跑步

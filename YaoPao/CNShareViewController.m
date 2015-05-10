@@ -169,7 +169,7 @@ extern NSMutableArray* imageArray;
         self.image_way.image = [UIImage imageNamed:img_name_way];
         self.imageview_way2.image = [UIImage imageNamed:img_name_way];
         
-        if(kApp.runManager.runway == 0){//没选道路
+        if(way == 0){//没选道路
             self.image_mood.frame = self.image_way.frame;
             self.imageview_mood2.frame = self.imageview_way2.frame;
         }
@@ -438,50 +438,36 @@ extern NSMutableArray* imageArray;
                             }];
 }
 - (UIImage *)getWeiboImage{
-    UIImage* image_background = [self snapshot:self.view_shareview];
+    UIImage* image_background = [self snapshot2:self.view_shareview];
     if(self.currentpage != 0){//不是第一页
         return image_background;
     }
     UIImage *image_map = [self.mapView takeSnapshotInRect:self.view_map_container.frame];
-    UIImage* image_combine = [self addImage:image_map toImage:image_background];
-    
-    //画logo
-    UIGraphicsBeginImageContext(image_combine.size);
-    
-    //Draw image2
-    [image_combine drawInRect:CGRectMake(0, 0, image_combine.size.width, image_combine.size.height)];
-    //Draw image1
+    UIImage* image_type = self.imageview_type.image;
     UIImage* image_logo = [UIImage imageNamed:@"yaopao_cn_logo_black.png"];
-    [image_logo drawInRect:CGRectMake(274, 54, 38, 17)];
+    UIImage* image_mood2share = self.image_mood.image;
+    UIImage* image_way2share = self.image_way.image;
+    UIImage* image_water = [self snapshot2:self.view_water];
+    UIGraphicsBeginImageContext(image_background.size);
     
+    //背景
+    [image_background drawInRect:CGRectMake(0, 0, image_background.size.width, image_background.size.height)];
+    //地图
+    [image_map drawInRect:CGRectMake(0, self.view_sharePart2.frame.origin.y, image_map.size.width, image_map.size.height)];
+    [image_type drawInRect:CGRectMake(0, self.view_sharePart2.frame.origin.y+5, self.imageview_type.frame.size.width, self.imageview_type.frame.size.height)];
+    [image_mood2share drawInRect:CGRectMake(self.image_mood.frame.origin.x, self.view_sharePart2.frame.origin.y+5, self.image_mood.frame.size.width, self.image_mood.frame.size.height)];
+    [image_way2share drawInRect:CGRectMake(self.image_way.frame.origin.x, self.view_sharePart2.frame.origin.y+5, self.image_way.frame.size.width, self.image_way.frame.size.height)];
+    [image_logo drawInRect:CGRectMake(141, self.view_sharePart2.frame.origin.y+5, 38, 17)];
+    [image_water drawInRect:CGRectMake(15, self.view_sharePart2.frame.origin.y+235, 105, 57)];
     UIImage *resultImage=UIGraphicsGetImageFromCurrentImageContext();
-    
     UIGraphicsEndImageContext();
-    
     return resultImage;
 }
-- (UIImage *)snapshot:(UIView *)view
-{
-    UIGraphicsBeginImageContextWithOptions(view.bounds.size, YES, 0);
-    [view drawViewHierarchyInRect:view.bounds afterScreenUpdates:YES];
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+- (UIImage*)snapshot2:(UIView*)view{
+    UIGraphicsBeginImageContext(view.bounds.size); //currentView 当前的view
+    [view.layer renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage *viewImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    return image;
-}
--(UIImage *)addImage:(UIImage *)image1 toImage:(UIImage *)image2
-{
-    UIGraphicsBeginImageContext(image2.size);
-    
-    //Draw image2
-    [image2 drawInRect:CGRectMake(0, 0, image2.size.width, image2.size.height)];
-    NSLog(@"y is %f",self.scrollview.frame.origin.y);
-    //Draw image1
-    [image1 drawInRect:CGRectMake(0, self.view_sharePart2.frame.origin.y, image1.size.width, image1.size.height)];
-    
-    UIImage *resultImage=UIGraphicsGetImageFromCurrentImageContext();
-    
-    UIGraphicsEndImageContext();
-    
-    return resultImage;
+    return viewImage;
 }
 @end
