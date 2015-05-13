@@ -28,6 +28,7 @@
 @synthesize friendsNew;
 @synthesize haveNewFriends;
 @synthesize friendsDicByPhone;
+@synthesize groupNeedRefresh;
 
 
 - (void)dorequest{
@@ -114,8 +115,8 @@
     }
     [[EaseMob sharedInstance].chatManager fetchBuddyListWithError:nil];
     //测试代码：加上环信好友获取
-    NSArray *buddyList = [[EaseMob sharedInstance].chatManager buddyList];
-    NSLog(@"环信---好友获取成功： %@",buddyList);
+//    NSArray *buddyList = [[EaseMob sharedInstance].chatManager buddyList];
+//    NSLog(@"环信---好友获取成功： %@",buddyList);
     if([kApp.myContactUseApp count] > 0){//已经获取过通讯录中使用app的人
         NSLog(@"已经获取过通讯录中使用app的人,无需重新获取");
         [self makeNewFriendsList];

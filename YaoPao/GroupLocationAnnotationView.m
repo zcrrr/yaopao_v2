@@ -62,9 +62,15 @@
             self.calloutView.center = CGPointMake(CGRectGetWidth(self.bounds) / 2.f + self.calloutOffset.x,
                                                   -CGRectGetHeight(self.calloutView.bounds) / 2.f + self.calloutOffset.y);
         }
+        NSArray* array = [self.annotation.subtitle componentsSeparatedByString:@"+"];
+        if([array count] == 2){
+            self.calloutView.nickname = [array objectAtIndex:0];
+            self.calloutView.time = [array objectAtIndex:1];
+        }else{
+            self.calloutView.nickname = @"暂无数据";
+            self.calloutView.time = @"暂无数据";
+        }
         
-        self.calloutView.nickname = self.annotation.title;
-        self.calloutView.time = self.annotation.subtitle;
         
         [self addSubview:self.calloutView];
     }

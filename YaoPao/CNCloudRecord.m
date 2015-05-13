@@ -32,6 +32,7 @@
 @synthesize fileCount;
 @synthesize userCancel;
 @synthesize editImageAddArray;
+@synthesize udpRes;
 
 + (void)ClearRecordAfterUserLogin{
     NSString* uid = [NSString stringWithFormat:@"%i",[[kApp.userInfoDic objectForKey:@"uid"] intValue]];
@@ -876,12 +877,22 @@
     self.startRequestTime = [CNUtil getNowTime1000];
     NSLog(@"----------------------------------------");
     NSLog(@"startRequestTime is %lli",self.startRequestTime);
+    [self performSelector:@selector(checkUDPRes) withObject:nil afterDelay:10];
+}
+- (void)checkUDPRes{
+    if(self.udpRes == nil||[self.udpRes isEqualToString:@""]){//服务器没有响应同步时间udp
+        NSLog(@"同步时间udp未响应------------------");
+        [self cloudFailed:@"未能同步时间"];
+    }else{
+        NSLog(@"同步时间udp有相应------------------");
+    }
 }
 - (void)udpSocket:(GCDAsyncUdpSocket *)sock didReceiveData:(NSData *)data
       fromAddress:(NSData *)address
 withFilterContext:(id)filterContext
 {
     NSString *msg = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    self.udpRes = msg;
     if (msg)
     {
         NSLog(@"接收服务器响应:%@",msg);
@@ -900,6 +911,7 @@ withFilterContext:(id)filterContext
         if(self.endRequestTime - self.startRequestTime < 1000){//间隔小于800毫秒,就直接使用算出来的deltaTime
             self.deltaMiliSecond = deltaTime;
             self.isSynServerTime = YES;
+            [self amIInEventTime];
             if(self.forCloud == 1){
                 [self cloud_step0];
                 self.forCloud = 0;
@@ -922,6 +934,7 @@ withFilterContext:(id)filterContext
                 self.deltaMiliSecond = [[[[self.deltaTimeArray objectAtIndex:minIndex] componentsSeparatedByString:@","]objectAtIndex:1]intValue];
                 NSLog(@"取得的deltaMiliSecond是%i",self.deltaMiliSecond);
                 self.isSynServerTime = YES;
+                [self amIInEventTime];
                 if(self.forCloud == 1){
                     [self cloud_step0];
                     self.forCloud = 0;
@@ -934,6 +947,23 @@ withFilterContext:(id)filterContext
     }else{
         NSLog(@"------------------------未收到服务器响应");
         [self sendMessage];
+    }
+}
+- (void)amIInEventTime{
+    long long nowTime = [CNUtil getNowTimeDelta];
+    NSArray* array = [kApp.eventTimeString componentsSeparatedByString:@","];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm"];
+    NSDate* startDate_start = [dateFormatter dateFromString:[array objectAtIndex:0]];
+    long long startTime = [startDate_start timeIntervalSince1970];
+    NSDate* startDate_end = [dateFormatter dateFromString:[array objectAtIndex:1]];
+    long long endTime = [startDate_end timeIntervalSince1970];
+    NSLog(@"nowtime is %lli",nowTime);
+    NSLog(@"startTime is %lli",startTime);
+    NSLog(@"endTime is %lli",endTime);
+    if(nowTime >= startTime && nowTime <= endTime){
+        kApp.isInEvent = YES;
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"eventIcon" object:nil];
     }
 }
 - (NSString*)replacePlaceHolder:(NSMutableArray*)array :(NSString*)str{

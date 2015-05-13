@@ -252,6 +252,7 @@
                     if(i == [kApp.friendHandler.myContactUseAppButNotFriend count]){
                         break;
                     }
+                    ((UIImageView*)[arraytemp objectAtIndex:i]).hidden = NO;
                     FriendInfo* friend = [kApp.friendHandler.myContactUseAppButNotFriend objectAtIndex:i];
                     if(friend.avatarUrlInYaoPao != nil && ![friend.avatarUrlInYaoPao isEqualToString:@""]){//有头像url
                         NSString* fullurl = [NSString stringWithFormat:@"%@%@",kApp.imageurl,friend.avatarUrlInYaoPao];

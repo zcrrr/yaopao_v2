@@ -10,10 +10,16 @@
 #import "EMSDKFull.h"
 #import "CNNetworkHandler.h"
 
+@protocol changeNameDelegate <NSObject>
+//修改跑团名
+- (void)changeNameDidSuccess:(NSString*)name;
+@end
+
 @interface ChangeGroupNameViewController : UIViewController<changeGroupNameDelegate>
 @property (strong, nonatomic) EMGroup *chatGroup;
 @property (weak, nonatomic) IBOutlet UITextField *textfield;
 - (IBAction)button_clicked:(id)sender;
 @property (strong, nonatomic) IBOutlet UIActivityIndicatorView *indicator;
 @property (strong, nonatomic) IBOutlet UIImageView *loadingImage;
+@property (strong, nonatomic) id<changeNameDelegate> delegate_changename;
 @end

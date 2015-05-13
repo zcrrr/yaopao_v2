@@ -14,10 +14,16 @@
 
 @implementation ChooseEditImageViewController
 @synthesize delegate_buttonClick;
+extern NSMutableArray* imageArray;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    if([imageArray count] == 0){
+        self.button_edit.enabled = NO;
+    }else{
+        self.button_edit.enabled = YES;
+    }
 }
 
 - (void)didReceiveMemoryWarning {

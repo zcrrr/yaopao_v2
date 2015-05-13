@@ -92,7 +92,7 @@
                     if(self.agree == 1){
                         //先验证验证码
                         //测试代码
-                        self.isVerify = YES;
+//                        self.isVerify = YES;
                         if(self.isVerify){//已经验证
                             //登录
                             NSMutableDictionary* params = [[NSMutableDictionary alloc]init];

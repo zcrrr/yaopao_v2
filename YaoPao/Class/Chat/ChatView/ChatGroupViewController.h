@@ -10,7 +10,7 @@
 #import <MAMapKit/MAMapKit.h>
 #import "CNNetworkHandler.h"
 
-@interface ChatGroupViewController : UIViewController<memberLocationsDelegate>
+@interface ChatGroupViewController : UIViewController<memberLocationsDelegate,MAMapViewDelegate,groupMemberDelegate>
 
 - (instancetype)initWithChatter:(NSString *)chatter isGroup:(BOOL)isGroup;
 - (void)reloadData;
@@ -20,6 +20,7 @@
 @property (nonatomic, strong) NSMutableArray* annoArray;
 @property (strong, nonatomic) NSMutableArray* locations;
 @property (assign, nonatomic) BOOL isSetRegion;
+@property (strong, nonatomic) NSMutableDictionary* groupMemberDic;
 
 @property (assign, nonatomic) int selectTab;
 @property (strong, nonatomic) UIButton * button_myGroup;

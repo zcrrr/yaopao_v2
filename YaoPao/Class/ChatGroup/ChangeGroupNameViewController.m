@@ -8,6 +8,7 @@
 
 #import "ChangeGroupNameViewController.h"
 #import "Toast+UIView.h"
+#import "FriendsHandler.h"
 
 @interface ChangeGroupNameViewController ()
 
@@ -15,6 +16,7 @@
 
 @implementation ChangeGroupNameViewController
 @synthesize chatGroup;
+@synthesize delegate_changename;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -71,7 +73,9 @@
 }
 - (void)changeGroupNameDidSuccess:(NSDictionary *)resultDic{
     [self hideLoading];
+    [self.delegate_changename changeNameDidSuccess:self.textfield.text];
     [self.navigationController popViewControllerAnimated:YES];
+    kApp.friendHandler.friendList1NeedRefresh = YES;
 }
 - (void)displayLoading{
     self.loadingImage.hidden = NO;

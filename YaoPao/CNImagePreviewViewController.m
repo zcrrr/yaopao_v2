@@ -64,6 +64,7 @@ NSMutableArray* imageArray;
         }
         case 2:
         {
+            self.button_save.enabled = NO;
             UIImageWriteToSavedPhotosAlbum(self.image, self, @selector(image:didFinishSavingWithError:contextInfo:), NULL);
             extern NSMutableArray* imageArray;
             if(imageArray == nil){

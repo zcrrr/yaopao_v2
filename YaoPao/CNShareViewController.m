@@ -84,7 +84,7 @@ extern NSMutableArray* imageArray;
         switch (type) {
             case 1:
             {
-                typeDes = @"跑步";
+                typeDes = @"跑";
                 self.imageview_type.image = [UIImage imageNamed:@"howToMove1.png"];
                 self.imageview_type2.image = [UIImage imageNamed:@"howToMove1.png"];
                 break;
@@ -132,7 +132,7 @@ extern NSMutableArray* imageArray;
         switch (type) {
             case 1:
             {
-                typeDes = @"跑步";
+                typeDes = @"跑";
                 self.imageview_type.image = [UIImage imageNamed:@"howToMove1.png"];
                 self.imageview_type2.image = [UIImage imageNamed:@"howToMove1.png"];
                 break;

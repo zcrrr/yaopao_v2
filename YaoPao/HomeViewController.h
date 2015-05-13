@@ -47,5 +47,6 @@
 @property (weak, nonatomic) IBOutlet UIImageView *imageview_part2;
 @property (weak, nonatomic) IBOutlet UIImageView *imageview_part3;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *weather_progress;
+@property (weak, nonatomic) IBOutlet UIImageView *imageview_matchlogo;
 
 @end

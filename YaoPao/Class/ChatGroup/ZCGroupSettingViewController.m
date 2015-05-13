@@ -104,6 +104,14 @@
     [self refreshMemberView];
     [self hideLoading];
     
+    //同时更新下缓存
+    NSMutableDictionary* groupMemberDic = [[NSMutableDictionary alloc]init];
+    for(NSDictionary* dic in self.dataSource){
+        NSString* phone = [dic objectForKey:@"phone"];
+        [groupMemberDic setObject:dic forKey:phone];
+    }
+    [kApp.friendHandler.groupNeedRefresh setObject:groupMemberDic forKey:self.chatGroupId];
+    
 }
 - (void)refreshMemberView{
     //先删除所有按钮
@@ -135,7 +143,7 @@
         [self.view_member addSubview:memButton];
         
         UIButton *delButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        delButton.frame = CGRectMake(originx, originy, 10, 10);
+        delButton.frame = CGRectMake(originx-5, originy-5, 21, 21);
         [delButton setBackgroundImage:[UIImage imageNamed:@"remove_member_small.png"] forState:UIControlStateNormal];
         [delButton setBackgroundImage:[UIImage imageNamed:@"remove_member_small_on.png"] forState:UIControlStateHighlighted];
         [delButton addTarget:self action:@selector(delOneMember:) forControlEvents:UIControlEventTouchUpInside];
@@ -345,6 +353,7 @@
         {
             cell.label_title.text = @"接收并提示跑团消息";
             cell.myswitch.hidden = NO;
+            cell.myswitch.on = self.chatGroup.isPushNotificationEnabled;
             cell.accessoryType = UITableViewCellAccessoryNone;
             [cell.myswitch addTarget:self action:@selector(switchValueChanged:) forControlEvents:UIControlEventValueChanged];
             break;
@@ -387,6 +396,7 @@
         case 3:
         {
             ChangeGroupNameViewController* cgnVC = [[ChangeGroupNameViewController alloc]init];
+            cgnVC.delegate_changename = self;
             cgnVC.chatGroup = self.chatGroup;
             [self.navigationController pushViewController:cgnVC animated:YES];
             
@@ -591,6 +601,9 @@
 - (void)addMemberDidFailed:(NSString *)mes{
     [kApp.window makeToast:@"添加失败"];
     [self hideLoading];
+}
+- (void)changeNameDidSuccess:(NSString *)name{
+    self.label_title.text = [NSString stringWithFormat:@"%@/%i",name,(int)(self.chatGroup.groupOccupantsCount)];
 }
 - (void)displayLoading{
     self.loadingImage.hidden = NO;

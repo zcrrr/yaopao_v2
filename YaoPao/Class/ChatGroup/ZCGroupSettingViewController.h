@@ -11,9 +11,10 @@
 #import "ContactSelectionViewController.h"
 #import "GroupSettingViewController.h"
 #import "CNNetworkHandler.h"
+#import "ChangeGroupNameViewController.h"
 
 
-@interface ZCGroupSettingViewController : UIViewController<IChatManagerDelegate, EMChooseViewDelegate,groupMemberDelegate,UITableViewDataSource,UITableViewDelegate,exitGroupDelegate,deleteGroupDelegate,addMemberDelegate,delMemberDelegate>
+@interface ZCGroupSettingViewController : UIViewController<IChatManagerDelegate, EMChooseViewDelegate,groupMemberDelegate,UITableViewDataSource,UITableViewDelegate,exitGroupDelegate,deleteGroupDelegate,addMemberDelegate,delMemberDelegate,changeNameDelegate>
 @property (strong, nonatomic) NSString* chatGroupId;
 @property (strong, nonatomic) EMGroup *chatGroup;
 @property (assign, nonatomic) BOOL isOwner;

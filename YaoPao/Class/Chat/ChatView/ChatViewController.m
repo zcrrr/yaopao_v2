@@ -229,7 +229,7 @@
     // 设置当前conversation的所有message为已读
     [_conversation markAllMessagesAsRead:YES];
     [[EaseMob sharedInstance].deviceManager disableProximitySensor];
-    
+    [self.view endEditing:YES];
 }
 
 - (void)dealloc

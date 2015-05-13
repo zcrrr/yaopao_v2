@@ -86,12 +86,7 @@ static LocationViewController *defaultLocation = nil;
     [button_back addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
     [topbar addSubview:button_back];
     
-    UIButton * button_detail = [UIButton buttonWithType:UIButtonTypeCustom];
-    button_detail.frame = CGRectMake(270, 23, 50, 30);
-    [button_detail setTitle:@"发送" forState:UIControlStateNormal];
-    button_detail.tag = 1;
-    [button_detail addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
-    [topbar addSubview:button_detail];
+    
     
     
     _mapView = [[MKMapView alloc] initWithFrame:CGRectMake(0, 55, self.view.bounds.size.width, self.view.bounds.size.height-55)];
@@ -102,6 +97,13 @@ static LocationViewController *defaultLocation = nil;
     
     if (_isSendLocation) {
         _mapView.showsUserLocation = YES;//显示当前位置
+        
+        UIButton * button_detail = [UIButton buttonWithType:UIButtonTypeCustom];
+        button_detail.frame = CGRectMake(270, 23, 50, 30);
+        [button_detail setTitle:@"发送" forState:UIControlStateNormal];
+        button_detail.tag = 1;
+        [button_detail addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        [topbar addSubview:button_detail];
         
 //        UIButton *sendButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 60, 44)];
 //        [sendButton setTitle:NSLocalizedString(@"send", @"Send") forState:UIControlStateNormal];

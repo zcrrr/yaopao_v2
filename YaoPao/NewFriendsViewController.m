@@ -38,6 +38,9 @@
     self.friendsToInvite = [[NSMutableArray alloc]init];
     // Do any additional setup after loading the view from its nib.
     ABAddressBookRef addressBook = ABAddressBookCreateWithOptions(NULL, NULL);
+    if(addressBook == nil){
+        return;
+    }
     CFArrayRef results = ABAddressBookCopyArrayOfAllPeople(addressBook);
     int i = 0;
     int k = 0;

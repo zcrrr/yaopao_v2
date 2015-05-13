@@ -39,6 +39,7 @@
 #import "CNEncryption.h"
 #import "GroupLocationAnnotationView.h"
 #import "CNUtil.h"
+#import "FriendsHandler.h"
 #define KPageCount 20
 
 @interface ChatGroupViewController ()<UITableViewDataSource, UITableViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, SRRefreshDelegate, IChatManagerDelegate, DXChatBarMoreViewDelegate, DXMessageToolBarDelegate, LocationViewDelegate, IDeviceManagerDelegate>
@@ -91,6 +92,7 @@
 @synthesize annoArray;
 @synthesize locations;
 @synthesize isSetRegion;
+@synthesize groupMemberDic;
 - (instancetype)initWithChatter:(NSString *)chatter isGroup:(BOOL)isGroup
 {
     self = [super initWithNibName:nil bundle:nil];
@@ -114,7 +116,7 @@
     [self registerBecomeActive];
     // Do any additional setup after loading the view.
     [self.view setBackgroundColor:[UIColor colorWithRed:246.0/255.0 green:246.0/255.0 blue:247.0/255.0 alpha:1]];
-    
+    self.annoArray = [[NSMutableArray alloc]init];
     //zc
     UIView* topbar = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 55)];
     topbar.backgroundColor = [UIColor colorWithRed:58.0/255.0 green:166.0/255.0 blue:1 alpha:1];
@@ -218,9 +220,46 @@
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(keyBoardHidden)];
     [self.view addGestureRecognizer:tap];
+    //请求组信息
+    if(kApp.friendHandler.groupNeedRefresh == nil){
+        kApp.friendHandler.groupNeedRefresh = [[NSMutableDictionary alloc]init];
+        [self requestGroupMember];
+    }else{//判断是否有该组信息
+        self.groupMemberDic = [kApp.friendHandler.groupNeedRefresh objectForKey:_chatter];
+        if(self.groupMemberDic == nil){//没有该组信息同样需要刷新
+            [self requestGroupMember];
+        }
+    }
     
     //通过会话管理者获取已收发消息
     [self loadMoreMessages];
+}
+- (void)requestGroupMember{
+    //获取所有成员
+    NSMutableDictionary* params = [[NSMutableDictionary alloc]init];
+    NSString* uid = [NSString stringWithFormat:@"%@",[kApp.userInfoDic objectForKey:@"uid"]];
+    [params setObject:uid forKey:@"uid"];
+    [params setObject:_chatter forKey:@"groupid"];
+    kApp.networkHandler.delegate_groupMember = self;
+    [kApp.networkHandler doRequest_groupMember:params];
+    [self showHudInView:self.view hint:@"请稍后..."];
+}
+- (void)groupMemberDidFailed:(NSString *)mes{
+    __weak ChatGroupViewController *weakSelf = self;
+    [weakSelf hideHud];
+}
+- (void)groupMemberDidSuccess:(NSDictionary *)resultDic{
+    self.groupMemberDic = [[NSMutableDictionary alloc]init];
+    NSArray* array = [resultDic objectForKey:@"users"];
+    for(NSDictionary* dic in array){
+        NSString* phone = [dic objectForKey:@"phone"];
+        [self.groupMemberDic setObject:dic forKey:phone];
+    }
+    [kApp.friendHandler.groupNeedRefresh setObject:self.groupMemberDic forKey:_chatter];
+    [self.tableView reloadData];
+    __weak ChatGroupViewController *weakSelf = self;
+    [weakSelf hideHud];
+    
 }
 - (void)buttonClicked:(id)sender{
     switch ([sender tag]) {
@@ -295,12 +334,15 @@
     kApp.networkHandler.delegate_memberLocations = self;
     [kApp.networkHandler doRequest_memberLocations:params];
     [self showHudInView:self.view hint:@"请稍后..."];
+    self.view.userInteractionEnabled = NO;
 }
 - (void)memberLocationsDidFailed:(NSString *)mes{
+    self.view.userInteractionEnabled = YES;
     __weak ChatGroupViewController *weakSelf = self;
     [weakSelf hideHud];
 }
 - (void)memberLocationsDidSuccess:(NSDictionary *)resultDic{
+    self.view.userInteractionEnabled = YES;
     __weak ChatGroupViewController *weakSelf = self;
     [weakSelf hideHud];
     [self.mapView removeAnnotations:self.annoArray];
@@ -365,8 +407,9 @@
         }
         int tag = [((MAPointAnnotation*)annotation).title intValue];
         NSDictionary* dic = [self.locations objectAtIndex:tag];
-        ((MAPointAnnotation*)annotation).title = [dic objectForKey:@"nickname"];
-        ((MAPointAnnotation*)annotation).subtitle = [CNUtil getTimeFromTimestamp_ymdhm:[[dic objectForKey:@"timestamp"]longLongValue]/1000];
+        NSString* nickname = [dic objectForKey:@"nickname"];
+        NSString* time = [CNUtil getTimeFromTimestamp_ymdhm:[[dic objectForKey:@"timestamp"]longLongValue]/1000];
+        ((MAPointAnnotation*)annotation).subtitle = [NSString stringWithFormat:@"%@+%@",nickname,time];
         annotationView.canShowCallout = NO;
         
         NSString* imgpath = [dic objectForKey:@"imgpath"];
@@ -385,10 +428,14 @@
                             annotationView.imageview.image = image;
                         }
                         [kApp.avatarDic setObject:image forKey:fullurl];
+                    }else{
+                        annotationView.imageview.image = [UIImage imageNamed:@"avatar_default.png"];
                     }
                 }];
                 [request startAsynchronous ];
             }
+        }else{
+            annotationView.imageview.image = [UIImage imageNamed:@"avatar_default.png"];
         }
         return annotationView;
     }
@@ -443,6 +490,7 @@
     [_conversation markAllMessagesAsRead:YES];
     [[EaseMob sharedInstance].deviceManager disableProximitySensor];
     [self.timer_update invalidate];
+    [self.view endEditing:YES];
     
 }
 
@@ -625,17 +673,14 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSLog(@"numberOfRowsInSection");
     return self.dataSource.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row < [self.dataSource count]) {
-        NSLog(@"indexPath.row is %i",indexPath.row);
         id obj = [self.dataSource objectAtIndex:indexPath.row];
         if ([obj isKindOfClass:[NSString class]]) {
-            NSLog(@"time");
             EMChatTimeCell *timeCell = (EMChatTimeCell *)[tableView dequeueReusableCellWithIdentifier:@"MessageCellTime"];
             if (timeCell == nil) {
                 timeCell = [[EMChatTimeCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"MessageCellTime"];
@@ -658,18 +703,17 @@
             }
             //byzc
             NSString* phoneno = model.username;
-            FriendInfo* friend = [kApp.friendHandler.friendsDicByPhone objectForKey:phoneno];
-            if(friend != nil){
-                if(friend.avatarUrlInYaoPao != nil&&![friend.avatarUrlInYaoPao isEqualToString:@""]){
-                    model.headImageURL = [NSURL URLWithString:friend.avatarUrlInYaoPao];
+            NSDictionary* dic = [self.groupMemberDic objectForKey:phoneno];
+            if(dic != nil){
+                if([dic objectForKey:@"imgpath"] != nil&&![[dic objectForKey:@"imgpath"] isEqualToString:@""]){
+                    model.headImageURL = [NSURL URLWithString:[dic objectForKey:@"imgpath"]];
                 }else{
                     model.headImageURL = nil;
                 }
             }else{
                 model.headImageURL = nil;
             }
-            model.nickName = friend.nameInYaoPao;
-            NSLog(@"username is %@",model.username);
+            model.nickName = [dic objectForKey:@"nickname"];
             cell.messageModel = model;
             return cell;
         }

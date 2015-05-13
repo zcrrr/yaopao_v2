@@ -137,7 +137,7 @@
             }
             NSString* filePath = [CNPersistenceHandler getDocument:@"runSetting.plist"];
             [runSettingDic writeToFile:filePath atomically:YES];
-            if ([self prepareRun]) {
+//            if ([self prepareRun]) {
                 kApp.isRunning = 1;
                 kApp.gpsLevel = 4;
                 NSMutableDictionary* settingDic = [CNUtil getRunSettingWhole];
@@ -157,7 +157,7 @@
                     RunningViewController* runningVC = [[RunningViewController alloc]init];
                     [self.navigationController pushViewController:runningVC animated:YES];
                 }
-            }
+//            }
             break;
         }
         default:

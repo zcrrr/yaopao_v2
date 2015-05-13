@@ -22,6 +22,7 @@
 #import "WaterMarkViewController.h"
 #import "RunClass.h"
 #import "CNChooseModelViewController.h"
+#import <MobileCoreServices/MobileCoreServices.h>
 
 @interface CNImageEditerViewController ()
 
@@ -223,15 +224,28 @@ extern NSMutableArray* imageArray;
             NSLog(@"再拍一张");
             UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:@"选取来自" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"拍照",@"用户相册", nil];
             [actionSheet showInView:self.view];
-            
             break;
         }
         case 6:
         {
             NSLog(@"美化");
-            ChooseEditImageViewController* ceiVC = [[ChooseEditImageViewController alloc]init];
-            ceiVC.delegate_buttonClick = self;
-            [self presentViewController:ceiVC animated:YES completion:nil];
+//            ChooseEditImageViewController* ceiVC = [[ChooseEditImageViewController alloc]init];
+//            ceiVC.delegate_buttonClick = self;
+//            [self presentViewController:ceiVC animated:YES completion:nil];
+            [self displayEditorForImage:[imageArray objectAtIndex:self.currentpage]];
+            break;
+        }
+        case 7:
+        {
+            NSLog(@"拼图");
+            CNChooseModelViewController* cmVC = [[CNChooseModelViewController alloc]init];
+            cmVC.delegate_combineImage = self;
+            UINavigationController* navVC = [[UINavigationController alloc]initWithRootViewController:cmVC];
+            cmVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+            navVC.modalPresentationStyle = UIModalPresentationCustom;
+            UIViewController* rootViewController =  [[UIApplication sharedApplication] keyWindow].rootViewController;
+            rootViewController.modalPresentationStyle = UIModalPresentationCurrentContext;
+            [rootViewController presentViewController:navVC animated:YES completion:^(void){NSLog(@"pop");}];
             break;
         }
         default:
@@ -251,7 +265,8 @@ extern NSMutableArray* imageArray;
         {
             NSLog(@"相册");
             self.cameraPicker = [[UIImagePickerController alloc]init];
-            self.cameraPicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+            self.cameraPicker.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
+            self.cameraPicker.mediaTypes = @[(NSString *)kUTTypeImage];
             self.cameraPicker.allowsEditing = NO;
             self.cameraPicker.delegate = self;
             [self presentViewController:self.cameraPicker animated:YES completion:^{
@@ -532,6 +547,7 @@ extern NSMutableArray* imageArray;
 }
 #pragma -mark buttonClick delegate
 - (void)buttonClickDidSuccess:(NSString *)type{
+    [self dismissViewControllerAnimated:NO completion:nil];
     if([type isEqualToString:@"beautify"]){
         [self displayEditorForImage:[imageArray objectAtIndex:self.currentpage]];
     }else{

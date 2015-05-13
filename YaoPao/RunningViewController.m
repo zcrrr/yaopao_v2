@@ -109,8 +109,14 @@ extern NSMutableArray* imageArray;
     kApp.timer_udp_running = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(sendMessageByUdp) userInfo:nil repeats:YES];
 }
 - (void)sendMessageByUdp{
+    if(kApp.locationHandler.userLocation_lon < 1||kApp.locationHandler.userLocation_lat<1){
+        return;
+    }
     NSMutableDictionary* udpParamDic = [[NSMutableDictionary alloc]init];
     NSString* uid = [NSString stringWithFormat:@"%@",[kApp.userInfoDic objectForKey:@"uid"]];
+    if(kApp.userInfoDic == nil){
+        uid = @"0";
+    }
     [udpParamDic setObject:uid forKey:@"uid"];
     [udpParamDic setObject:[NSString stringWithFormat:@"%f",kApp.locationHandler.userLocation_lon] forKey:@"lon"];
     [udpParamDic setObject:[NSString stringWithFormat:@"%f",kApp.locationHandler.userLocation_lat] forKey:@"lat"];
@@ -122,8 +128,13 @@ extern NSMutableArray* imageArray;
     NSString* jsonString = [jsonWriter stringWithObject:udpParamDic];
     NSLog(@"jsonstring is %@",jsonString);
     NSData *data = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
-    [kApp.udpSocket sendData:data toHost:@"182.92.97.144" port:28888 withTimeout:-1 tag:0];
-    [kApp.udpSocket sendData:data toHost:@"182.92.97.144" port:18888 withTimeout:-1 tag:0];
+    if(kApp.isLogin == 1){
+        [kApp.udpSocket sendData:data toHost:ENDPOINTS_UDP port:28888 withTimeout:-1 tag:0];
+    }
+    if(kApp.isInEvent){
+        [kApp.udpSocket sendData:data toHost:ENDPOINTS_UDP port:18888 withTimeout:-1 tag:0];
+    }
+    
 }
 - (void)checkPlayVoice{
     int distance = kApp.runManager.distance;

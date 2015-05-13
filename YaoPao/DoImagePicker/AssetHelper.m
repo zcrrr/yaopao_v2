@@ -62,7 +62,7 @@
     };
     
     _assetGroups = [[NSMutableArray alloc] init];
-    [_assetsLibrary enumerateGroupsWithTypes:ALAssetsGroupAll
+    [_assetsLibrary enumerateGroupsWithTypes:ALAssetsGroupSavedPhotos
                                   usingBlock:assetGroupEnumerator
                                 failureBlock:assetGroupEnumberatorFailure];
 }

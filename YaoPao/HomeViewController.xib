@@ -12,6 +12,7 @@
                 <outlet property="button_running" destination="zBf-Ks-ErQ" id="l9u-9k-ELm"/>
                 <outlet property="button_setting" destination="SFo-Hy-ALv" id="gbW-br-eW2"/>
                 <outlet property="image_avatar" destination="jt2-Pr-GFy" id="dN3-8A-MGL"/>
+                <outlet property="imageview_matchlogo" destination="f9Y-R9-U6a" id="VKl-aI-fxj"/>
                 <outlet property="imageview_part1" destination="G4d-n7-4Zc" id="u4D-Je-DUH"/>
                 <outlet property="imageview_part2" destination="qLw-NF-hBb" id="fvR-r4-qWh"/>
                 <outlet property="imageview_part3" destination="MQ2-ll-9nD" id="D3P-gL-BxF"/>
@@ -361,6 +362,10 @@
                     <rect key="frame" x="141" y="266" width="37" height="37"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </activityIndicatorView>
+                <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="f9Y-R9-U6a">
+                    <rect key="frame" x="250" y="436" width="35" height="35"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                </imageView>
             </subviews>
             <color key="backgroundColor" red="0.1960784314" green="0.18823529410000001" blue="0.23921568630000001" alpha="1" colorSpace="calibratedRGB"/>
             <point key="canvasLocation" x="200" y="368"/>

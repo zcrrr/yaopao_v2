@@ -29,6 +29,7 @@
 @property (assign, nonatomic) int fileCount;
 @property (assign, nonatomic) BOOL userCancel;
 @property (strong, nonatomic) NSString* stepDes;
+@property (strong, nonatomic) NSString* udpRes;
 
 + (void)ClearRecordAfterUserLogin;
 + (void)deletePlistRecord:(RunClass*)runclass;

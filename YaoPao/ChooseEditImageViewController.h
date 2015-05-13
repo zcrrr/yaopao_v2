@@ -16,5 +16,6 @@
 @interface ChooseEditImageViewController : UIViewController
 @property (strong, nonatomic) id<buttonClickDelegate> delegate_buttonClick;
 - (IBAction)button_clicked:(id)sender;
+@property (weak, nonatomic) IBOutlet UIButton *button_edit;
 
 @end

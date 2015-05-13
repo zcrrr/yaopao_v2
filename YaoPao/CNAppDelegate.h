@@ -127,6 +127,8 @@
 + (void)howManyMessageToRead;
 @property (nonatomic, strong) GCDAsyncUdpSocket *udpSocket;
 @property (strong, nonatomic) NSTimer* timer_udp_running;//上报位置udp的计时器
+@property (strong, nonatomic) NSString* eventTimeString;//赛事的时间间隔信息
+@property (assign, nonatomic) BOOL isInEvent;//是否正在赛事期间
 
 
 + (void)finishThisRun;//结束这次跑步
@@ -136,6 +138,7 @@
 + (void)saveMatchToRecord;//把比赛记到记录里
 + (void)check_start_match;
 + (BOOL)isInStartZone;//判断是否在出发区
+
 
 
 

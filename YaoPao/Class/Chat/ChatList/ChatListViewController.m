@@ -73,32 +73,32 @@
     self.view.backgroundColor = RGBACOLOR(246, 246, 247, 1);
     self.view_pop = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 568)];
     self.view_pop.backgroundColor = [UIColor clearColor];
-    UIView* view_content = [[UIView alloc]initWithFrame:CGRectMake(170, 55, 150, 73)];
+    UIView* view_content = [[UIView alloc]initWithFrame:CGRectMake(220, 55, 100, 110)];
     view_content.backgroundColor = [UIColor colorWithRed:58.0/255.0 green:166.0/255.0 blue:1 alpha:1];
-    UIImageView* imageview_chat = [[UIImageView alloc]initWithFrame:CGRectMake(20, 11, 16, 14)];
+    UIImageView* imageview_chat = [[UIImageView alloc]initWithFrame:CGRectMake(8, 20, 16, 14)];
     imageview_chat.image = [UIImage imageNamed:@"create_chat.png"];
-    UILabel* label_chat = [[UILabel alloc]initWithFrame:CGRectMake(40, 11, 110, 14)];
+    UILabel* label_chat = [[UILabel alloc]initWithFrame:CGRectMake(32, 20, 68, 14)];
     label_chat.text = @"发起聊天";
     label_chat.textColor = [UIColor whiteColor];
     [label_chat setFont:[UIFont systemFontOfSize:14]];
     label_chat.textAlignment = NSTextAlignmentCenter;
-    UIView* view_line = [[UIView alloc]initWithFrame:CGRectMake(0, 36, 150, 1)];
+    UIView* view_line = [[UIView alloc]initWithFrame:CGRectMake(0, 55, 100, 1)];
     view_line.backgroundColor = [UIColor colorWithRed:121.0/255.0 green:194.0/255.0 blue:1 alpha:1];
-    UIImageView* imageview_group = [[UIImageView alloc]initWithFrame:CGRectMake(20, 48, 16, 14)];
+    UIImageView* imageview_group = [[UIImageView alloc]initWithFrame:CGRectMake(8, 75, 16, 14)];
     imageview_group.image = [UIImage imageNamed:@"create_group.png"];
-    UILabel* label_group = [[UILabel alloc]initWithFrame:CGRectMake(40, 48, 110, 14)];
+    UILabel* label_group = [[UILabel alloc]initWithFrame:CGRectMake(32, 75, 68, 14)];
     label_group.text = @"创建跑团";
     label_group.textColor = [UIColor whiteColor];
     [label_group setFont:[UIFont systemFontOfSize:14]];
     label_group.textAlignment = NSTextAlignmentCenter;
     
     UIButton * button_startChat = [UIButton buttonWithType:UIButtonTypeCustom];
-    button_startChat.frame = CGRectMake(0, 0, 150, 36);
+    button_startChat.frame = CGRectMake(0, 0, 100, 55);
     button_startChat.tag = 2;
     [button_startChat addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
     
     UIButton * button_createGroup = [UIButton buttonWithType:UIButtonTypeCustom];
-    button_createGroup.frame = CGRectMake(0, 37, 102, 36);
+    button_createGroup.frame = CGRectMake(0, 55, 100, 55);
     button_createGroup.tag = 3;
     [button_createGroup addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
     
@@ -124,14 +124,14 @@
     [topbar addSubview:label_title];
     
     UIButton * button_contact = [UIButton buttonWithType:UIButtonTypeCustom];
-    button_contact.frame = CGRectMake(254, 30, 20, 14);
+    button_contact.frame = CGRectMake(254, 23, 29, 29);
     [button_contact setBackgroundImage:[UIImage imageNamed:@"chat_home_contact.png"] forState:UIControlStateNormal];
     button_contact.tag = 0;
     [button_contact addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
     [topbar addSubview:button_contact];
     
     UIButton * button_add = [UIButton buttonWithType:UIButtonTypeCustom];
-    button_add.frame = CGRectMake(293, 30, 14, 14);
+    button_add.frame = CGRectMake(285, 23, 29, 29);
     [button_add setBackgroundImage:[UIImage imageNamed:@"chat_home_add.png"] forState:UIControlStateNormal];
     button_add.tag = 1;
     [button_add addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
@@ -290,10 +290,10 @@
                 //加载url
                 NSString* uid = [NSString stringWithFormat:@"%@",[kApp.userInfoDic objectForKey:@"uid"]];
                 NSString* urlString = [NSString stringWithFormat:@"%@chSports/group/other.htm?uid=%@&X-PID=%@&version=1.0",ENDPOINTS,uid,kApp.pid];
+                NSLog(@"urlString is %@",urlString);
                 NSURLRequest *request =[NSURLRequest requestWithURL:[NSURL URLWithString:urlString]];
                 [self.webView loadRequest:request];
                 [self showHudInView:self.view hint:@"请稍后..."];
-                
             }
             break;
         }

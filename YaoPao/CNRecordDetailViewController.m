@@ -224,7 +224,10 @@ extern NSMutableArray* imageArray;
                 [self.scrollview addSubview:photo];
                 NSData *data = [NSData dataWithContentsOfFile:filePath];
                 photo.image = [[UIImage alloc] initWithData:data];
-                [imageArray addObject:photo.image];
+                if(photo.image != nil){
+                    [imageArray addObject:photo.image];
+                }
+                
             }
         }
     }

@@ -143,7 +143,7 @@
 //        _textField.leftViewMode = UITextFieldViewModeAlways;
         _textField.clearButtonMode = UITextFieldViewModeWhileEditing;
         _textField.font = [UIFont systemFontOfSize:14.0];
-        _textField.textColor = [UIColor colorWithRed:201.0/255.0 green:201.0/255.0 blue:201.0/255.0 alpha:1];
+        _textField.textColor = [UIColor blackColor];
         _textField.placeholder = NSLocalizedString(@"group.create.inputName", @"please enter the group name");
         _textField.returnKeyType = UIReturnKeyDone;
         _textField.delegate = self;
@@ -160,7 +160,7 @@
 //        _textView.layer.borderWidth = 0.5;
 //        _textView.layer.cornerRadius = 3;
         _textView.font = [UIFont systemFontOfSize:14.0];
-        _textView.textColor = [UIColor colorWithRed:201.0/255.0 green:201.0/255.0 blue:201.0/255.0 alpha:1];
+        _textView.textColor = [UIColor blackColor];
         _textView.placeholder = NSLocalizedString(@"group.create.inputDescribe", @"please enter a group description");
         _textView.returnKeyType = UIReturnKeyDone;
         _textView.delegate = self;

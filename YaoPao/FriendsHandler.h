@@ -30,6 +30,8 @@
 @property (strong, nonatomic) NSMutableArray* friendsNew;//新的朋友列表myContactUseAppButNotFriend+frinedsWantMe+friendsIWant
 @property (strong, nonatomic) NSMutableDictionary* friendsDicByPhone;//dictionary表示的朋友集合，key为手机号
 @property (assign, nonatomic) BOOL haveNewFriends;//和上次比较是否有新的朋友
+@property (strong, nonatomic) NSMutableDictionary* groupNeedRefresh;//key:groupid value:groupdicbyphone
+
 
 - (void)dorequest;
 

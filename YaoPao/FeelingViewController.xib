@@ -123,17 +123,17 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <view contentMode="scaleToFill" id="VoI-et-1PO">
-                            <rect key="frame" x="107" y="7" width="1" height="29"/>
+                            <rect key="frame" x="80" y="7" width="1" height="29"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <color key="backgroundColor" red="0.19607843137254902" green="0.19607843137254902" blue="0.19607843137254902" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         </view>
                         <view contentMode="scaleToFill" id="HpY-FY-Li5">
-                            <rect key="frame" x="213" y="7" width="1" height="29"/>
+                            <rect key="frame" x="160" y="7" width="1" height="29"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <color key="backgroundColor" red="0.1960784314" green="0.1960784314" blue="0.1960784314" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         </view>
                         <button opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="05v-j9-iAe">
-                            <rect key="frame" x="38" y="7" width="29" height="29"/>
+                            <rect key="frame" x="25" y="7" width="29" height="29"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" backgroundImage="delete_edit.png">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -144,7 +144,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" tag="5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="fRL-qg-x8y">
-                            <rect key="frame" x="145" y="7" width="29" height="29"/>
+                            <rect key="frame" x="105" y="7" width="29" height="29"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" backgroundImage="take_photo2.png">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -154,8 +154,24 @@
                                 <action selector="button_clicked:" destination="-1" eventType="touchUpInside" id="eoM-gt-M1R"/>
                             </connections>
                         </button>
+                        <view contentMode="scaleToFill" id="B3A-uf-Mjb">
+                            <rect key="frame" x="240" y="7" width="1" height="29"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <color key="backgroundColor" red="0.1960784314" green="0.1960784314" blue="0.1960784314" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </view>
+                        <button opaque="NO" tag="7" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="vhx-Uk-YpV">
+                            <rect key="frame" x="265" y="7" width="29" height="29"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" backgroundImage="sx_pintu.png">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <state key="highlighted" backgroundImage="sx_pintu_on.png"/>
+                            <connections>
+                                <action selector="button_clicked:" destination="-1" eventType="touchUpInside" id="RAv-fl-YiU"/>
+                            </connections>
+                        </button>
                         <button opaque="NO" tag="6" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Hwb-1g-82Z">
-                            <rect key="frame" x="251" y="7" width="29" height="29"/>
+                            <rect key="frame" x="185" y="6" width="29" height="29"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" backgroundImage="edit.png">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -329,6 +345,8 @@
         <image name="scroll_right.png" width="52" height="100"/>
         <image name="scroll_right_on.png" width="52" height="100"/>
         <image name="show_page.png" width="120" height="40"/>
+        <image name="sx_pintu.png" width="68" height="68"/>
+        <image name="sx_pintu_on.png" width="68" height="68"/>
         <image name="take_photo2.png" width="68" height="68"/>
         <image name="take_photo2_on.png" width="68" height="68"/>
         <image name="way1.png" width="54" height="54"/>

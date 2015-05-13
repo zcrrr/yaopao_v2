@@ -171,6 +171,9 @@
 - (void)updateDate
 {
     CNGPSPoint* gpsPoint = [self getOnePoint];
+    if(gpsPoint.lon <1 || gpsPoint.lat < 1){
+        return;
+    }
     if ([self.GPSList count] == 0) {
         [self.GPSList addObject:gpsPoint];
         return;

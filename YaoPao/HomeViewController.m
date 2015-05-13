@@ -44,7 +44,9 @@ NSString* dayOrNight;
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(initData) name:@"REFRESH" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(setGPSImage) name:@"gps" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(tellWeather) name:@"weather" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(displayEventIcon) name:@"eventIcon" object:nil];
     [self setGPSImage];
+    [self displayEventIcon];
     if(kApp.isLogin == 2){//正在登录
         [self displayLoading];
     }else{
@@ -85,7 +87,21 @@ NSString* dayOrNight;
         self.imageview_part3.frame = CGRectMake(9, 3, 40, 40);
     }
 }
-
+- (void)displayEventIcon{
+    if(kApp.isInEvent){
+        self.imageview_matchlogo.hidden = NO;
+        NSString* urlString = [[kApp.eventTimeString componentsSeparatedByString:@","] objectAtIndex:2];
+        NSURL *url = [NSURL URLWithString:urlString];
+        __block ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
+        [request setCompletionBlock :^{
+            UIImage* image = [[UIImage alloc] initWithData:[request responseData]];
+            if(image != nil){
+                self.imageview_matchlogo.image = image;
+            }
+        }];
+        [request startAsynchronous ];
+    }
+}
 - (void)tellWeather{
     //请求天气
     self.weather_progress.hidden = NO;
@@ -213,6 +229,7 @@ NSString* dayOrNight;
     [kApp.cloudManager removeObserver:self forKeyPath:@"stepDes"];
     [kApp.networkHandler removeObserver:self forKeyPath:@"newprogress"];
     [kApp removeObserver:self forKeyPath:@"unreadMessageCount"];
+    self.progressview_cloud.hidden = YES;
 }
 - (void)showAlert:(NSString*) content{
     UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:content delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
@@ -298,7 +315,7 @@ NSString* dayOrNight;
         case 3:
         {
             NSLog(@"开始运动");
-            if ([self prepareRun]) {
+//            if ([self prepareRun]) {
                 kApp.isRunning = 1;
                 kApp.gpsLevel = 4;
                 NSMutableDictionary* settingDic = [CNUtil getRunSettingWhole];
@@ -324,7 +341,7 @@ NSString* dayOrNight;
                     RunningViewController* runningVC = [[RunningViewController alloc]init];
                     [self.navigationController pushViewController:runningVC animated:YES];
                 }
-            }
+//            }
             break;
         }
         default:
@@ -363,7 +380,8 @@ NSString* dayOrNight;
 }
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
     if([keyPath isEqualToString:@"stepDes"]){
-        if([kApp.cloudManager.stepDes isEqualToString:@"同步完毕！"]){
+        
+        if([kApp.cloudManager.stepDes isEqualToString:@"同步完毕！"]||[kApp.cloudManager.stepDes hasPrefix:@"同步失败"]){
             self.progressview_cloud.hidden = YES;
             self.button_cloud.enabled = YES;
         }

@@ -172,25 +172,25 @@
             }
         }
         if(request.tag == TAG_AUTO_LOGIN||request.tag == TAG_LOGIN_PHONE||request.tag == TAG_FIND_PWD){
-            if([result objectForKey:@"match"]){
-                kApp.matchDic = [result objectForKey:@"match"];
-                //比赛信息就不保存到本地了，因为认为比赛前必须要经历登录或者手动登录这个过程
-                kApp.uid = [kApp.userInfoDic objectForKey:@"uid"];
-                NSLog(@"uid is %@",kApp.uid);
-                kApp.gid = [kApp.matchDic objectForKey:@"gid"];
-                kApp.mid = [kApp.matchDic objectForKey:@"mid"];
-                kApp.isMatch = [[kApp.matchDic objectForKey:@"ismatch"]intValue];
-                kApp.isbaton = [[kApp.matchDic objectForKey:@"isbaton"]intValue];
-                int gstate = [[kApp.matchDic objectForKey:@"gstate"]intValue];
-                if(gstate == 2){//已经结束比赛了且时间在比赛进行中
-                    kApp.hasFinishTeamMatch = YES;
-                }else{
-                    if(kApp.isMatch == 1){
-                        [self doRequest_checkServerTime];
-                        [CNAppDelegate popupWarningCheckTime];
-                    }
-                }
-            }
+//            if([result objectForKey:@"match"]){
+//                kApp.matchDic = [result objectForKey:@"match"];
+//                //比赛信息就不保存到本地了，因为认为比赛前必须要经历登录或者手动登录这个过程
+//                kApp.uid = [kApp.userInfoDic objectForKey:@"uid"];
+//                NSLog(@"uid is %@",kApp.uid);
+//                kApp.gid = [kApp.matchDic objectForKey:@"gid"];
+//                kApp.mid = [kApp.matchDic objectForKey:@"mid"];
+//                kApp.isMatch = [[kApp.matchDic objectForKey:@"ismatch"]intValue];
+//                kApp.isbaton = [[kApp.matchDic objectForKey:@"isbaton"]intValue];
+//                int gstate = [[kApp.matchDic objectForKey:@"gstate"]intValue];
+//                if(gstate == 2){//已经结束比赛了且时间在比赛进行中
+//                    kApp.hasFinishTeamMatch = YES;
+//                }else{
+//                    if(kApp.isMatch == 1){
+//                        [self doRequest_checkServerTime];
+//                        [CNAppDelegate popupWarningCheckTime];
+//                    }
+//                }
+//            }
         }
     }
     switch (request.tag) {

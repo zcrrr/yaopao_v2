@@ -21,6 +21,8 @@
 #import "UIImage+Rescale.h"
 #import "WaterMarkViewController.h"
 #import "CNChooseModelViewController.h"
+#import "Toast+UIView.h"
+#import <MobileCoreServices/MobileCoreServices.h>
 
 @interface FeelingViewController ()
 
@@ -182,6 +184,9 @@ extern NSMutableArray* imageArray;
         {
             NSLog(@"删除图片");
             [imageArray removeObjectAtIndex:self.currentpage];
+            if(self.currentpage = [imageArray count]){//最后一张
+                self.currentpage --;
+            }
             [self whichImageShouldDisplay];
             break;
         }
@@ -196,9 +201,27 @@ extern NSMutableArray* imageArray;
         case 6:
         {
             NSLog(@"美化");
-            ChooseEditImageViewController* ceiVC = [[ChooseEditImageViewController alloc]init];
-            ceiVC.delegate_buttonClick = self;
-            [self presentViewController:ceiVC animated:YES completion:nil];
+//            ChooseEditImageViewController* ceiVC = [[ChooseEditImageViewController alloc]init];
+//            ceiVC.delegate_buttonClick = self;
+//            [self presentViewController:ceiVC animated:YES completion:nil];
+            
+            [self displayEditorForImage:[imageArray objectAtIndex:self.currentpage]];
+            break;
+        }
+        case 7:
+        {
+            NSLog(@"拼图");
+//            ChooseEditImageViewController* ceiVC = [[ChooseEditImageViewController alloc]init];
+//            ceiVC.delegate_buttonClick = self;
+//            [self presentViewController:ceiVC animated:YES completion:nil];
+            CNChooseModelViewController* cmVC = [[CNChooseModelViewController alloc]init];
+            cmVC.delegate_combineImage = self;
+            UINavigationController* navVC = [[UINavigationController alloc]initWithRootViewController:cmVC];
+            cmVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+            navVC.modalPresentationStyle = UIModalPresentationCustom;
+            UIViewController* rootViewController =  [[UIApplication sharedApplication] keyWindow].rootViewController;
+            rootViewController.modalPresentationStyle = UIModalPresentationCurrentContext;
+            [rootViewController presentViewController:navVC animated:YES completion:^(void){NSLog(@"pop");}];
             break;
         }
         default:
@@ -237,8 +260,9 @@ extern NSMutableArray* imageArray;
         {
             NSLog(@"相册");
             self.cameraPicker = [[UIImagePickerController alloc]init];
-            self.cameraPicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+            self.cameraPicker.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
             self.cameraPicker.allowsEditing = NO;
+            self.cameraPicker.mediaTypes = @[(NSString *)kUTTypeImage];
             self.cameraPicker.delegate = self;
             [self presentViewController:self.cameraPicker animated:YES completion:^{
                 
@@ -252,6 +276,10 @@ extern NSMutableArray* imageArray;
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
     if([picker isEqual:self.cameraPicker]){
         UIImage *image = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
+        if(image == nil){
+            [kApp.window makeToast:@"无法使用该图片，请选择其他图片~"];
+            return;
+        }
         float width = image.size.width;
         float height = image.size.height;
         UIImage* imageScaled;

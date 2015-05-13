@@ -133,6 +133,8 @@
 @synthesize unreadMessageCount;
 @synthesize udpSocket;
 @synthesize timer_udp_running;
+@synthesize eventTimeString;
+@synthesize isInEvent;
 
 @synthesize managedObjectModel=_managedObjectModel;
 @synthesize managedObjectContext=_managedObjectContext;
@@ -146,7 +148,7 @@
     [CNCloudRecord deleteAllRecordWhenFirstInstall];
     //环信
     //注册 APNS文件的名字, 需要与后台上传证书时的名字一一对应
-    [[EaseMob sharedInstance] registerSDKWithAppKey:@"yaopao#yaopao" apnsCertName:@"yaopao_push_dev" otherConfig:@{kSDKConfigEnableConsoleLogger:[NSNumber numberWithBool:NO]}];
+    [[EaseMob sharedInstance] registerSDKWithAppKey:@"yaopao#yaopao" apnsCertName:@"dis_push_yaopao" otherConfig:@{kSDKConfigEnableConsoleLogger:[NSNumber numberWithBool:NO]}];
     //注册推送
     application.applicationIconBadgeNumber = 0;
     if([application respondsToSelector:@selector(registerUserNotificationSettings:)])
@@ -190,7 +192,6 @@
     
     //友盟
     [MobClick startWithAppkey:@"53fd6e13fd98c561b903e002" reportPolicy:BATCH   channelId:@""];
-    [MobClick checkUpdate];
     [MobClick updateOnlineConfig];
     [MobClick setLogEnabled:YES];
     self.mainurl = [MobClick getConfigParams:@"mainurl"];
@@ -209,6 +210,12 @@
     if (self.showad == nil || ([NSNull null] == (NSNull *)self.showad)) {
         self.showad = @"2.0.1,1";
     }
+    self.eventTimeString = [MobClick getConfigParams:@"event"];
+    NSLog(@"self.eventTimeString is %@",self.eventTimeString);
+    if (self.eventTimeString == nil || ([NSNull null] == (NSNull *)self.eventTimeString)) {
+        self.eventTimeString = @"2015-05-30 00:00,2015-05-30 59:59,http://image.yaopao.net/event/icon.png";
+    }
+    
 //#ifdef SIMULATORTEST
 //
 //#else
