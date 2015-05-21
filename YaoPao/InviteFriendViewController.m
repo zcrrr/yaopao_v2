@@ -51,7 +51,7 @@
             break;
         case 1:
         {
-            [SMS_SDK sendSMS:self.friend.phoneNO AndMessage:@"一起来跑步吧"];
+            [SMS_SDK sendSMS:self.friend.phoneNO AndMessage:@"一起加入要跑，来跑步吧！！"];
             break;
         }
         default:

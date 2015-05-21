@@ -148,7 +148,7 @@
     [CNCloudRecord deleteAllRecordWhenFirstInstall];
     //环信
     //注册 APNS文件的名字, 需要与后台上传证书时的名字一一对应
-    [[EaseMob sharedInstance] registerSDKWithAppKey:@"yaopao#yaopao" apnsCertName:@"dis_push_yaopao" otherConfig:@{kSDKConfigEnableConsoleLogger:[NSNumber numberWithBool:NO]}];
+    [[EaseMob sharedInstance] registerSDKWithAppKey:@"yaopao#yaopao" apnsCertName:@"yaopao_inhouse_push" otherConfig:@{kSDKConfigEnableConsoleLogger:[NSNumber numberWithBool:NO]}];
     [[EaseMob sharedInstance].chatManager setIsUseIp:YES];
     [self registerEaseMobNotification];
     //注册推送
@@ -182,9 +182,9 @@
     //google map
     [GMSServices provideAPIKey:@"AIzaSyCyYR5Ih3xP0rpYMaF1qAsInxFyqvaCJIY"];
     //高德地图
-    [MAMapServices sharedServices].apiKey =@"0f3dad31deac3acd29ce27c3c2a265f2";
+//    [MAMapServices sharedServices].apiKey =@"0f3dad31deac3acd29ce27c3c2a265f2";
     //inhouse
-//    [MAMapServices sharedServices].apiKey =@"e46925db02f9c24a1323a8b900e56346";
+    [MAMapServices sharedServices].apiKey =@"e46925db02f9c24a1323a8b900e56346";
     //adobe creative
     NSString* const CreativeSDKClientId = @"b8ae54f2e0084b789790003fda5127e1";
     NSString* const CreativeSDKClientSecret = @"581b3dc8-5946-491e-88e4-ce258e94c5f4";

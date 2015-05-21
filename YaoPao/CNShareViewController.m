@@ -17,6 +17,7 @@
 #import "CNCustomButton.h"
 #import "ColorValue.h"
 #import "OnlyTrackView4share.h"
+#import "Toast+UIView.h"
 
 @interface CNShareViewController ()
 
@@ -430,6 +431,7 @@ extern NSMutableArray* imageArray;
                                 if (state == SSResponseStateSuccess)
                                 {
                                     NSLog(@"分享成功");
+                                    [kApp.window makeToast:@"分享成功"];
                                 }
                                 else if (state == SSResponseStateFail)
                                 {

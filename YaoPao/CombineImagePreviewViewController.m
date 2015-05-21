@@ -9,6 +9,7 @@
 #import "CombineImagePreviewViewController.h"
 #import <ShareSDK/ShareSDK.h>
 #import "Toast+UIView.h"
+#import "UIImage+Rescale.h"
 
 @interface CombineImagePreviewViewController ()
 
@@ -72,8 +73,8 @@
 - (void)sharetest{
     id<ISSContent> publishContent = [ShareSDK content:@"2015绍兴穿越古城路跑定向赛"
                                        defaultContent:@"2015绍兴穿越古城路跑定向赛"
-                                                image:[ShareSDK pngImageWithImage:self.image]
-                                                title:@"2015绍兴穿越古城路跑定向赛"
+                                                image:[ShareSDK pngImageWithImage:[self.image rescaleImageToSize:CGSizeMake(640, 640)]]
+                                                title:@"要跑"
                                                   url:@"http://image.yaopao.net/html/redirect.html"
                                           description:@"2015绍兴穿越古城路跑定向赛"
                                             mediaType:SSPublishContentMediaTypeImage];
@@ -87,6 +88,7 @@
                                 if (state == SSResponseStateSuccess)
                                 {
                                     NSLog(@"分享成功");
+                                    [kApp.window makeToast:@"分享成功"];
                                 }
                                 else if (state == SSResponseStateFail)
                                 {
