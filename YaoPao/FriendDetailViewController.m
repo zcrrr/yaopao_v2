@@ -169,7 +169,7 @@
     [[EaseMob sharedInstance].chatManager removeConversationByChatter:friend.phoneNO deleteMessages:YES append2Chat:YES];
     [self hideLoading];
     self.friend.status = 2;
-    //如果此时回到list1，应该刷新
+    //如果此时回到list1，应该刷新，删除好友，必刷新
     kApp.friendHandler.friendList1NeedRefresh = YES;
     //如果此时回到list2，应该刷新
     kApp.friendHandler.friendList2NeedRefresh = YES;

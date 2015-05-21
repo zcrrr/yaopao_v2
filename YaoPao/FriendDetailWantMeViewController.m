@@ -108,7 +108,7 @@
     [kApp.window makeToast:@"添加成功"];
     self.friend.status = 5;
     [self hideLoading];
-    //如果此时回到list1，应该刷新
+    //如果此时回到list1，应该刷新，添加好友，必刷新
     kApp.friendHandler.friendList1NeedRefresh = YES;
     kApp.friendHandler.friendList2NeedRefresh = YES;
     [self.navigationController popViewControllerAnimated:YES];
@@ -121,7 +121,7 @@
     [kApp.window makeToast:@"已忽略好友请求"];
     self.friend.status = 6;
     [self hideLoading];
-    //如果此时回到list1，应该刷新
+    //如果此时回到list1，应该刷新，忽略好友请求，4个数组改变、刷新
     kApp.friendHandler.friendList1NeedRefresh = YES;
     kApp.friendHandler.friendList2NeedRefresh = YES;
     [self.navigationController popViewControllerAnimated:YES];

@@ -350,7 +350,7 @@
     self.friendOnHandle.status = 5;
     [self.tableview reloadData];
     [self hideLoading];
-    //如果此时回到list1，应该刷新
+    //如果此时回到list1，应该刷新，添加好友，比刷新
     kApp.friendHandler.friendList1NeedRefresh = YES;
 }
 - (void)displayLoading{

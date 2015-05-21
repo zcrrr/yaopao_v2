@@ -73,6 +73,7 @@
     [self hideLoading];
     self.friend.status = 4;
     //如果此时回到list1，应该刷新
+    //发送请求好友申请，4个数组必改变，刷新之
     kApp.friendHandler.friendList1NeedRefresh = YES;
     //如果此时回到list2，应该刷新
     kApp.friendHandler.friendList2NeedRefresh = YES;

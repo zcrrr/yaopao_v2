@@ -317,7 +317,7 @@
                 self.mapView.hidden = NO;
                 self.selectTab = 1;
                 [self updataMemberLocations];
-                self.timer_update = [NSTimer scheduledTimerWithTimeInterval:20 target:self selector:@selector(updataMemberLocations) userInfo:nil repeats:YES];
+                self.timer_update = [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(updataMemberLocations) userInfo:nil repeats:YES];
             }
             break;
         }

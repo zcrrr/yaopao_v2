@@ -75,6 +75,7 @@
     [self hideLoading];
     [self.delegate_changename changeNameDidSuccess:self.textfield.text];
     [self.navigationController popViewControllerAnimated:YES];
+    //跑团名称改变，需要刷新4个数组
     kApp.friendHandler.friendList1NeedRefresh = YES;
 }
 - (void)displayLoading{

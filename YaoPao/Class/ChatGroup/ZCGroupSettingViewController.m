@@ -537,6 +537,7 @@
 //    } onQueue:nil];
     [self hideLoading];
     [kApp.window makeToast:@"您已退出跑团！"];
+    //退出跑团，肯定要刷新
     kApp.friendHandler.friendList1NeedRefresh = YES;
     [[NSNotificationCenter defaultCenter] postNotificationName:@"ExitGroup" object:nil];
 }
@@ -559,6 +560,7 @@
 //    } onQueue:nil];
     [self hideLoading];
     [kApp.window makeToast:@"成功解散跑团！"];
+    //参与跑团发生变化，，必刷新
     kApp.friendHandler.friendList1NeedRefresh = YES;
     [[NSNotificationCenter defaultCenter] postNotificationName:@"ExitGroup" object:nil];
 }

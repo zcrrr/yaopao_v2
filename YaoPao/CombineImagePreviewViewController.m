@@ -70,12 +70,12 @@
     }
 }
 - (void)sharetest{
-    id<ISSContent> publishContent = [ShareSDK content:@"绍兴跑步"
-                                       defaultContent:@"绍兴跑步"
+    id<ISSContent> publishContent = [ShareSDK content:@"2015绍兴穿越古城路跑定向赛"
+                                       defaultContent:@"2015绍兴穿越古城路跑定向赛"
                                                 image:[ShareSDK pngImageWithImage:self.image]
-                                                title:@"绍兴跑步"
+                                                title:@"2015绍兴穿越古城路跑定向赛"
                                                   url:@"http://image.yaopao.net/html/redirect.html"
-                                          description:@"绍兴跑步"
+                                          description:@"2015绍兴穿越古城路跑定向赛"
                                             mediaType:SSPublishContentMediaTypeImage];
     [ShareSDK showShareActionSheet:nil
                          shareList:nil

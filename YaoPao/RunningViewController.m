@@ -106,7 +106,8 @@ extern NSMutableArray* imageArray;
         self.button_map.frame = CGRectMake(183, 350, 65, 65);
     }
     //开始上报udp
-    kApp.timer_udp_running = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(sendMessageByUdp) userInfo:nil repeats:YES];
+    [self sendMessageByUdp];
+    kApp.timer_udp_running = [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(sendMessageByUdp) userInfo:nil repeats:YES];
 }
 - (void)sendMessageByUdp{
     if(kApp.locationHandler.userLocation_lon < 1||kApp.locationHandler.userLocation_lat<1){

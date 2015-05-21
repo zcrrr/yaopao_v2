@@ -233,7 +233,10 @@
         {
             NSString* phoneNO = [kApp.userInfoDic objectForKey:@"phone"];
             NSLog(@"phoneNO is %@",phoneNO);
+            NSLog(@"开启登录");
+            NSLog(@"[EaseMob sharedInstance].sdkVersion is %@",[EaseMob sharedInstance].sdkVersion);
             [[EaseMob sharedInstance].chatManager asyncLoginWithUsername:phoneNO password:phoneNO completion:^(NSDictionary *loginInfo, EMError *error) {
+                NSLog(@"进入回调");
                 if (!error && loginInfo) {
                     NSLog(@"登录环信成功!!");
                     kApp.isLoginHX = 1;

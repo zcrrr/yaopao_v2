@@ -149,6 +149,8 @@
     //环信
     //注册 APNS文件的名字, 需要与后台上传证书时的名字一一对应
     [[EaseMob sharedInstance] registerSDKWithAppKey:@"yaopao#yaopao" apnsCertName:@"dis_push_yaopao" otherConfig:@{kSDKConfigEnableConsoleLogger:[NSNumber numberWithBool:NO]}];
+    [[EaseMob sharedInstance].chatManager setIsUseIp:YES];
+    [self registerEaseMobNotification];
     //注册推送
     application.applicationIconBadgeNumber = 0;
     if([application respondsToSelector:@selector(registerUserNotificationSettings:)])
@@ -213,7 +215,7 @@
     self.eventTimeString = [MobClick getConfigParams:@"event"];
     NSLog(@"self.eventTimeString is %@",self.eventTimeString);
     if (self.eventTimeString == nil || ([NSNull null] == (NSNull *)self.eventTimeString)) {
-        self.eventTimeString = @"2015-05-30 00:00,2015-05-30 59:59,http://image.yaopao.net/event/icon.png";
+        self.eventTimeString = @"2015-05-30 00:00,2015-05-30 23:59,http://image.yaopao.net/event/icon.png";
     }
     
 //#ifdef SIMULATORTEST
@@ -770,6 +772,7 @@
                      result:^(enum SMS_ResponseState state) {
                          if (state == SMS_ResponseStateSuccess)
                          {
+                             NSLog(@"mob提交成功--------");
 //                             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提交成功"
 //                                                                             message:nil
 //                                                                            delegate:self
@@ -785,6 +788,7 @@
                          }
                          else if (state == SMS_ResponseStateFail)
                          {
+                             NSLog(@"mob提交失败--------");
 //                             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提交失败"
 //                                                                             message:nil
 //                                                                            delegate:self
@@ -827,4 +831,53 @@ withFilterContext:(id)filterContext
         NSLog(@"接收服务器响应:%@",msg);
     }
 }
+#pragma mark - registerEaseMobNotification
+- (void)registerEaseMobNotification{
+    [self unRegisterEaseMobNotification];
+    // 将self 添加到SDK回调中，以便本类可以收到SDK回调
+    [[EaseMob sharedInstance].chatManager addDelegate:self delegateQueue:nil];
+}
+
+- (void)unRegisterEaseMobNotification{
+    [[EaseMob sharedInstance].chatManager removeDelegate:self];
+}
+// 已经同意并且加入群组后的回调
+- (void)didAcceptInvitationFromGroup:(EMGroup *)group
+                               error:(EMError *)error
+{
+    if(error)
+    {
+        return;
+    }
+    
+    NSString *groupTag = group.groupSubject;
+    if ([groupTag length] == 0) {
+        groupTag = group.groupId;
+    }
+    
+    NSLog(@"您已加入跑团:%@",groupTag);
+    friendHandler.friendList1NeedRefresh = YES;
+}
+// 离开群组回调
+- (void)group:(EMGroup *)group didLeave:(EMGroupLeaveReason)reason error:(EMError *)error
+{
+    NSString *tmpStr = group.groupSubject;
+    if (!tmpStr || tmpStr.length == 0) {
+        NSArray *groupArray = [[EaseMob sharedInstance].chatManager groupList];
+        for (EMGroup *obj in groupArray) {
+            if ([obj.groupId isEqualToString:group.groupId]) {
+                tmpStr = obj.groupSubject;
+                break;
+            }
+        }
+    }
+    if (reason == eGroupLeaveReason_BeRemoved) {
+        NSLog(@"您已被跑团:%@移出！",tmpStr);
+    }else if (reason == eGroupLeaveReason_Destroyed) {
+        NSLog(@"跑团%@已经被解散",tmpStr);
+    }
+    friendHandler.friendList1NeedRefresh = YES;
+}
+
+
 @end

@@ -6886,7 +6886,7 @@
 				ORGANIZATIONNAME = "张 驰";
 				TargetAttributes = {
 					9A4A13B01973FFD500F2EF04 = {
-						DevelopmentTeam = DRTM6N857E;
+						DevelopmentTeam = AFVH63GD5S;
 					};
 					9A4A13D11973FFD500F2EF04 = {
 						TestTargetID = 9A4A13B01973FFD500F2EF04;
@@ -8275,8 +8275,8 @@
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Lu Li (JK69KECQMM)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Lu Li (JK69KECQMM)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Shan Dong (385C8B4E53)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Shan Dong (385C8B4E53)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/YaoPao/ShareSDK/Connection",
 					"$(PROJECT_DIR)/YaoPao/ShareSDK/Core",
@@ -8327,8 +8327,8 @@
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Starz Sports International Management Co., Ltd (DRTM6N857E)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Starz Sports International Management Co., Ltd (DRTM6N857E)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Starz Sports International Management Co., Ltd";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Starz Sports International Management Co., Ltd";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/YaoPao/ShareSDK/Connection",
 					"$(PROJECT_DIR)/YaoPao/ShareSDK/Core",
