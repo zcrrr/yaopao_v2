@@ -149,7 +149,10 @@
     [CNCloudRecord deleteAllRecordWhenFirstInstall];
     //环信
     //注册 APNS文件的名字, 需要与后台上传证书时的名字一一对应
-    [[EaseMob sharedInstance] registerSDKWithAppKey:@"yaopao#yaopao" apnsCertName:@"yaopao_inhouse_push" otherConfig:@{kSDKConfigEnableConsoleLogger:[NSNumber numberWithBool:NO]}];
+    //net.yaopao.yaopao开发：yaopao_push_dev
+    //net.yaopao.yaopao生产：dis_push_yaopao
+    //net.yaopao.enterprise生产：yaopao_inhouse_push
+    [[EaseMob sharedInstance] registerSDKWithAppKey:@"yaopao#yaopao" apnsCertName:@"yaopao_push_dev" otherConfig:@{kSDKConfigEnableConsoleLogger:[NSNumber numberWithBool:NO]}];
     [[EaseMob sharedInstance].chatManager setIsUseIp:YES];
     [self registerEaseMobNotification];
     //注册推送

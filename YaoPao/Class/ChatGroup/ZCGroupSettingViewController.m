@@ -210,6 +210,7 @@
     //重新移动按钮
     self.button_clear.frame = CGRectMake(self.button_clear.frame.origin.x, self.tableview.frame.origin.y + self.tableview.frame.size.height + 21, self.button_clear.frame.size.width, self.button_clear.frame.size.height);
     self.button_exit.frame = CGRectMake(self.button_exit.frame.origin.x, self.button_clear.frame.origin.y + self.button_clear.frame.size.height + 13, self.button_exit.frame.size.width, self.button_exit.frame.size.height);
+    self.scrollview.contentSize = CGSizeMake(320, self.button_exit.frame.origin.y + self.button_exit.frame.size.height + 10);
 }
 - (void)displayDelButton{
     if(self.isDelBtnDisplay){//正在显示，隐藏

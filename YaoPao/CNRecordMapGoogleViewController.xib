@@ -175,7 +175,7 @@
         </view>
     </objects>
     <resources>
-        <image name="runtype_run.png" width="110" height="110"/>
+        <image name="runtype_run.png" width="48" height="68"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

@@ -124,24 +124,24 @@
     [self.view setBackgroundColor:[UIColor colorWithRed:246.0/255.0 green:246.0/255.0 blue:247.0/255.0 alpha:1]];
     self.annoArray = [[NSMutableArray alloc]init];
     //zc
-    UIView* topbar = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 55)];
+    UIView* topbar = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 63)];
     topbar.backgroundColor = [UIColor colorWithRed:58.0/255.0 green:166.0/255.0 blue:1 alpha:1];
     [self.view addSubview:topbar];
-    UILabel* label_title = [[UILabel alloc]initWithFrame:CGRectMake(87, 20, 146, 35)];
+    UILabel* label_title = [[UILabel alloc]initWithFrame:CGRectMake(87, 23, 146, 35)];
     [label_title setTextAlignment:NSTextAlignmentCenter];
     label_title.text = self.groupname;
     label_title.font = [UIFont systemFontOfSize:16];
     label_title.textColor = [UIColor whiteColor];
     [topbar addSubview:label_title];
     UIButton * button_back = [UIButton buttonWithType:UIButtonTypeCustom];
-    button_back.frame = CGRectMake(6, 23, 21, 29);
+    button_back.frame = CGRectMake(6, 26, 21, 29);
     [button_back setBackgroundImage:[UIImage imageNamed:@"back_v2.png"] forState:UIControlStateNormal];
     button_back.tag = 0;
     [button_back addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
     [topbar addSubview:button_back];
     
     UIButton * button_detail = [UIButton buttonWithType:UIButtonTypeCustom];
-    button_detail.frame = CGRectMake(270, 23, 50, 30);
+    button_detail.frame = CGRectMake(270, 26, 50, 30);
     [button_detail setTitle:@"详情" forState:UIControlStateNormal];
     button_detail.tag = 1;
     [button_detail addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
@@ -171,7 +171,7 @@
 //    [self setupBarButtonItem];
     
     //添加tab按钮
-    UIView* tabBar = [[UIView alloc]initWithFrame:CGRectMake(0, 55, 320, 43)];
+    UIView* tabBar = [[UIView alloc]initWithFrame:CGRectMake(0, 63, 320, 43)];
     tabBar.backgroundColor = [UIColor whiteColor];
     
     self.button_myGroup = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -215,7 +215,7 @@
     [self.view addSubview:self.chatToolBar];
     
     
-    self.mapContainer = [[UIView alloc]initWithFrame:CGRectMake(0, 55+43, self.view.frame.size.width, self.view.frame.size.height-43-55)];
+    self.mapContainer = [[UIView alloc]initWithFrame:CGRectMake(0, 63+43, self.view.frame.size.width, self.view.frame.size.height-43-63)];
     self.mapContainer.backgroundColor = [UIColor whiteColor];
     self.mapView=[[MAMapView alloc] initWithFrame:CGRectMake(0, 0, self.mapContainer.frame.size.width, self.mapContainer.frame.size.height-55)];
     self.mapView.delegate = self;
@@ -641,6 +641,7 @@ updatingLocation:(BOOL)updatingLocation
     [[EaseMob sharedInstance].deviceManager disableProximitySensor];
     [self.timer_update invalidate];
     [self.view endEditing:YES];
+    self.mapView.delegate = nil;
     
 }
 
@@ -752,7 +753,7 @@ updatingLocation:(BOOL)updatingLocation
 - (UITableView *)tableView
 {
     if (_tableView == nil) {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 55+43, self.view.frame.size.width, self.view.frame.size.height - 55-43-36) style:UITableViewStylePlain];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 63+43, self.view.frame.size.width, self.view.frame.size.height - 63-43-36) style:UITableViewStylePlain];
         _tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
         _tableView.delegate = self;
         _tableView.dataSource = self;
@@ -1356,8 +1357,8 @@ updatingLocation:(BOOL)updatingLocation
     NSLog(@"didChangeFrameToHeight--");
     [UIView animateWithDuration:0.3 animations:^{
         CGRect rect = self.tableView.frame;
-        rect.origin.y = 55+43;
-        rect.size.height = self.view.frame.size.height - toHeight-55-43;
+        rect.origin.y = 63+43;
+        rect.size.height = self.view.frame.size.height - toHeight-63-43;
         self.tableView.frame = rect;
     }];
     [self scrollViewToBottom:YES];

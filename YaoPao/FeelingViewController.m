@@ -52,17 +52,18 @@ extern NSMutableArray* imageArray;
     self.scrollview.showsVerticalScrollIndicator=NO;//不显示垂直滑动线
     self.scrollview.pagingEnabled=YES;
     if(!iPhone5){//4、4s
-        self.view_part1.frame = CGRectMake(0, 336, 320, 47);
-        self.view_part2.frame = CGRectMake(0, 384, 320, 47);
-        self.view_bottom.frame = CGRectMake(0, 432, 320, 40);
+        self.view_part1.frame = CGRectMake(0, 344, 320, 47);
+        self.view_part2.frame = CGRectMake(0, 392, 320, 47);
+        self.view_bottom.frame = CGRectMake(0, 440, 320, 40);
         
-        self.imageview_nophoto.frame = CGRectMake(0, 55, 320, 238);
-        self.scrollview.frame = CGRectMake(0, 55, 320, 238);
-        self.button_left.frame = CGRectMake(0, 153, 22, 43);
-        self.button_right.frame = CGRectMake(298, 153, 22, 43);
-        self.imageview_page.frame = CGRectMake(135, 260, 51, 17);
-        self.label_whichpage.frame = CGRectMake(135, 260, 51, 17);
-        self.view_middle.frame = CGRectMake(0, 293, 320, 43);
+        self.imageview_nophoto.frame = CGRectMake(0, 63, 320, 238);
+//        self.imageview_nophoto.contentMode = UIViewContentModeScaleAspectFill;
+        self.scrollview.frame = CGRectMake(0, 63, 320, 238);
+        self.button_left.frame = CGRectMake(0, 161, 22, 43);
+        self.button_right.frame = CGRectMake(298, 161, 22, 43);
+        self.imageview_page.frame = CGRectMake(135, 268, 51, 17);
+        self.label_whichpage.frame = CGRectMake(135, 268, 51, 17);
+        self.view_middle.frame = CGRectMake(0, 301, 320, 43);
     }
 }
 - (void)viewWillAppear:(BOOL)animated{

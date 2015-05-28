@@ -33,5 +33,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *button_addMember;
 @property (weak, nonatomic) IBOutlet UIButton *button_showDelButtons;
 @property (assign, nonatomic) BOOL isShareLocation;
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollview;
 
 @end

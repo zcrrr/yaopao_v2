@@ -73,7 +73,7 @@
     self.view.backgroundColor = RGBACOLOR(246, 246, 247, 1);
     self.view_pop = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 568)];
     self.view_pop.backgroundColor = [UIColor clearColor];
-    UIView* view_content = [[UIView alloc]initWithFrame:CGRectMake(220, 55, 100, 110)];
+    UIView* view_content = [[UIView alloc]initWithFrame:CGRectMake(220, 63, 100, 110)];
     view_content.backgroundColor = [UIColor colorWithRed:58.0/255.0 green:166.0/255.0 blue:1 alpha:1];
     UIImageView* imageview_chat = [[UIImageView alloc]initWithFrame:CGRectMake(8, 20, 16, 14)];
     imageview_chat.image = [UIImage imageNamed:@"create_chat.png"];
@@ -113,10 +113,10 @@
     
     [self.view_pop addSubview:view_content];
     
-    UIView* topbar = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 55)];
+    UIView* topbar = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 63)];
     topbar.backgroundColor = [UIColor colorWithRed:58.0/255.0 green:166.0/255.0 blue:1 alpha:1];
     [self.view addSubview:topbar];
-    UILabel* label_title = [[UILabel alloc]initWithFrame:CGRectMake(87, 20, 146, 35)];
+    UILabel* label_title = [[UILabel alloc]initWithFrame:CGRectMake(87, 23, 146, 35)];
     [label_title setTextAlignment:NSTextAlignmentCenter];
     label_title.text = @"跑团";
     label_title.font = [UIFont systemFontOfSize:16];
@@ -124,14 +124,14 @@
     [topbar addSubview:label_title];
     
     UIButton * button_contact = [UIButton buttonWithType:UIButtonTypeCustom];
-    button_contact.frame = CGRectMake(254, 23, 29, 29);
+    button_contact.frame = CGRectMake(254, 26, 29, 29);
     [button_contact setBackgroundImage:[UIImage imageNamed:@"chat_home_contact.png"] forState:UIControlStateNormal];
     button_contact.tag = 0;
     [button_contact addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
     [topbar addSubview:button_contact];
     
     UIButton * button_add = [UIButton buttonWithType:UIButtonTypeCustom];
-    button_add.frame = CGRectMake(285, 23, 29, 29);
+    button_add.frame = CGRectMake(285, 26, 29, 29);
     [button_add setBackgroundImage:[UIImage imageNamed:@"chat_home_add.png"] forState:UIControlStateNormal];
     button_add.tag = 1;
     [button_add addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
@@ -142,7 +142,7 @@
 //    [self.view addSubview:self.searchBar];
     
     //添加tab按钮
-    UIView* tabBar = [[UIView alloc]initWithFrame:CGRectMake(0, 55, 320, 43)];
+    UIView* tabBar = [[UIView alloc]initWithFrame:CGRectMake(0, 63, 320, 43)];
     tabBar.backgroundColor = [UIColor whiteColor];
     
     self.button_myGroup = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -183,7 +183,7 @@
     
     [self.view addSubview:self.tableView];
     
-    self.webView=[[UIWebView alloc] initWithFrame:CGRectMake(0, 55+43+9, self.view.frame.size.width, self.view.frame.size.height-43-9-55-42)];
+    self.webView=[[UIWebView alloc] initWithFrame:CGRectMake(0, 63+43+9, self.view.frame.size.width, self.view.frame.size.height-43-9-63-42)];
     self.webView.delegate = self;
     [self.view addSubview:self.webView];
     self.webView.hidden = YES;
@@ -376,7 +376,7 @@
 - (UISearchBar *)searchBar
 {
     if (!_searchBar) {
-        _searchBar = [[EMSearchBar alloc] initWithFrame: CGRectMake(0, 55, self.view.frame.size.width, 44)];
+        _searchBar = [[EMSearchBar alloc] initWithFrame: CGRectMake(0, 63, self.view.frame.size.width, 44)];
         _searchBar.delegate = self;
         _searchBar.placeholder = NSLocalizedString(@"search", @"Search");
         _searchBar.backgroundColor = [UIColor colorWithRed:0.747 green:0.756 blue:0.751 alpha:1.000];
@@ -388,7 +388,7 @@
 - (UITableView *)tableView
 {
     if (_tableView == nil) {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 55+9, self.view.frame.size.width, self.view.frame.size.height-9-55-42) style:UITableViewStylePlain];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 63+9, self.view.frame.size.width, self.view.frame.size.height-9-63-42) style:UITableViewStylePlain];
         _tableView.backgroundColor = [UIColor whiteColor];
         _tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
         _tableView.delegate = self;

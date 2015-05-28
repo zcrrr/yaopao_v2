@@ -52,7 +52,7 @@ extern NSMutableArray* imageArray;
         self.scrollview.frame = CGRectMake(0, 0, 320, 260);
         self.view_sharePart2.frame = CGRectMake(0, 38, 320, 302);
         
-        self.view_shareview.frame = CGRectMake(0, 55, 320, 340);
+        self.view_shareview.frame = CGRectMake(0, 63, 320, 340);
 //        self.imageview_page.frame = CGRectMake(134, 306, 51, 17);
 //        self.label_whichpage.frame  = CGRectMake(134, 306, 51, 17);
     }

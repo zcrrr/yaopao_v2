@@ -40,7 +40,7 @@
 #define kDuringMinute 24*60
 #define kBoundary1 10
 #define kBoundary2 60
-#define SIMULATORTEST
+//#define SIMULATORTEST
 
 
 #define TAG_VERIFY_CODE 1

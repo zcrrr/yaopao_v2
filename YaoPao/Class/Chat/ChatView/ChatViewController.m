@@ -100,10 +100,10 @@
     [self.view setBackgroundColor:[UIColor colorWithRed:246.0/255.0 green:246.0/255.0 blue:247.0/255.0 alpha:1]];
     
     //zc
-    UIView* topbar = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 55)];
+    UIView* topbar = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 63)];
     topbar.backgroundColor = [UIColor colorWithRed:58.0/255.0 green:166.0/255.0 blue:1 alpha:1];
     [self.view addSubview:topbar];
-    UILabel* label_title = [[UILabel alloc]initWithFrame:CGRectMake(87, 20, 146, 35)];
+    UILabel* label_title = [[UILabel alloc]initWithFrame:CGRectMake(87, 23, 146, 35)];
     [label_title setTextAlignment:NSTextAlignmentCenter];
     FriendInfo* friend = [kApp.friendHandler.friendsDicByPhone objectForKey:self.chatter];
     label_title.text = friend.nameInYaoPao;
@@ -111,14 +111,14 @@
     label_title.textColor = [UIColor whiteColor];
     [topbar addSubview:label_title];
     UIButton * button_back = [UIButton buttonWithType:UIButtonTypeCustom];
-    button_back.frame = CGRectMake(6, 23, 21, 29);
+    button_back.frame = CGRectMake(6, 26, 21, 29);
     [button_back setBackgroundImage:[UIImage imageNamed:@"back_v2.png"] forState:UIControlStateNormal];
     button_back.tag = 0;
     [button_back addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
     [topbar addSubview:button_back];
     
     UIButton * button_detail = [UIButton buttonWithType:UIButtonTypeCustom];
-    button_detail.frame = CGRectMake(270, 23, 50, 30);
+    button_detail.frame = CGRectMake(270, 26, 50, 30);
     [button_detail setTitle:@"详情" forState:UIControlStateNormal];
     button_detail.tag = 1;
     [button_detail addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
@@ -342,7 +342,7 @@
 - (UITableView *)tableView
 {
     if (_tableView == nil) {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 55, self.view.frame.size.width, self.view.frame.size.height - 55-36) style:UITableViewStylePlain];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 63, self.view.frame.size.width, self.view.frame.size.height - 63-36) style:UITableViewStylePlain];
         _tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
         _tableView.delegate = self;
         _tableView.dataSource = self;
@@ -946,8 +946,8 @@
     NSLog(@"didChangeFrameToHeight--");
     [UIView animateWithDuration:0.3 animations:^{
         CGRect rect = self.tableView.frame;
-        rect.origin.y = 55;
-        rect.size.height = self.view.frame.size.height - toHeight-55;
+        rect.origin.y = 63;
+        rect.size.height = self.view.frame.size.height - toHeight-63;
         self.tableView.frame = rect;
     }];
     [self scrollViewToBottom:YES];

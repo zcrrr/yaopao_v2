@@ -223,7 +223,7 @@ extern NSMutableArray* imageArray;
         case 1:
         {
             NSLog(@"地图");
-//            kApp.isInChina = NO;
+//            kApp.isInChina = YES;
             if(kApp.isInChina){
                 CNRunMapViewController* mapVC = [[CNRunMapViewController alloc]init];
                 [self.navigationController pushViewController:mapVC animated:YES];
