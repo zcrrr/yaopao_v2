@@ -15,6 +15,7 @@
 #import "CNVoiceHandler.h"
 #import "CNRunManager.h"
 #import "ColorValue.h"
+#import "CircularLock.h"
 #define kIntervalMap 2
 
 @interface CNRunMapViewController ()
@@ -25,6 +26,7 @@
 @synthesize mapView;
 @synthesize timer_map;
 @synthesize lastDrawPoint;
+@synthesize pauseButoon;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -37,18 +39,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self.button_reset fillColor:kClear :[UIColor colorWithRed:17.0/255.0 green:17.0/255.0 blue:17.0/255.0 alpha:1] :kWhite :kWhite];
-    [self.button_complete fillColor:kClear :[UIColor colorWithRed:17.0/255.0 green:17.0/255.0 blue:17.0/255.0 alpha:1] :kWhite :kWhite];
     // Do any additional setup after loading the view from its nib.
     NSString* NOTIFICATION_GPS = @"gps";
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(setGPSImage) name:NOTIFICATION_GPS object:nil];
-    int map_height;
-    if(iPhone5){
-        map_height = 568-IOS7OFFSIZE-50;
-    }else{
-        map_height = 568-IOS7OFFSIZE-50;
-    }
-    self.mapView=[[MAMapView alloc] initWithFrame:CGRectMake(0, IOS7OFFSIZE, 320, map_height)];
+    self.mapView=[[MAMapView alloc] initWithFrame:CGRectMake(0, 0, 320, 568)];
     self.mapView.delegate = self;
     self.mapView.showsCompass = NO;
     self.mapView.showsScale = NO;
@@ -56,9 +50,6 @@
     self.mapView.userTrackingMode = MAUserTrackingModeFollow;
     [self.view addSubview:self.mapView];
     [self.view sendSubviewToBack:self.mapView];
-    self.sliderview.delegate = self;
-    [self.sliderview setBackgroundColor:[UIColor clearColor]];
-    [self.sliderview setText:@"滑动暂停"];
     //将当前数组中的数据画到地图上
     self.lastDrawPoint = [kApp.runManager.GPSList lastObject];
     [self drawRunTrack];
@@ -94,22 +85,70 @@
 }
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    switch (kApp.runManager.runStatus) {
-        case 1:
-        {
-            self.view_bottom_slider.hidden = NO;
-            self.view_bottom_bar.hidden = YES;
-            break;
-        }
-        case 2:
-        {
-            self.view_bottom_slider.hidden = YES;
-            self.view_bottom_bar.hidden = NO;
-            break;
-        }
-        default:
-            break;
+//    switch (kApp.runManager.runStatus) {
+//        case 1:
+//        {
+//            //todo 根据状态显示暂停or继续
+//            [self initPauseButton:NO];
+//            self.button_complete.hidden = YES;
+//            break;
+//        }
+//        case 2:
+//        {
+//            //todo 根据状态显示暂停or继续
+//            [self initPauseButton:YES];
+//            self.button_complete.hidden = NO;
+//            break;
+//        }
+//        default:
+//            break;
+//    }
+}
+- (void)initPauseButton:(BOOL)isPause{
+    int certer_x;
+    if(isPause){
+        certer_x = 109;
+    }else{
+        certer_x = self.view.center.x;
     }
+    [self.pauseButoon removeFromSuperview];
+    self.pauseButoon = [[CircularLock alloc] initWithCenter:CGPointMake(certer_x, self.view.frame.size.height - 70)
+                                                     radius:45
+                                                   duration:1
+                                                strokeWidth:4
+                                                  ringColor:[UIColor greenColor]
+                                                strokeColor:[UIColor whiteColor]
+                                                lockedImage:[UIImage imageNamed:@"running_start.png"]
+                                              unlockedImage:[UIImage imageNamed:@"running_pause.png"]
+                                                   isLocked:isPause
+                                          didlockedCallback:^{
+                                              NSLog(@"暂停");
+                                              [self pauseRun];
+                                          }
+                                        didUnlockedCallback:^{
+                                            NSLog(@"继续");
+                                            [self continueRun];
+                                        }];
+    [self.view addSubview:self.pauseButoon];
+}
+- (void)continueRun{
+    [kApp.voiceHandler voiceOfapp:@"run_continue" :nil];
+    [kApp.runManager changeRunStatus:1];
+    self.button_complete.hidden = YES;
+    CGRect oldFrame = self.pauseButoon.frame;
+    CGRect newFrame = CGRectMake(115, oldFrame.origin.y, oldFrame.size.width, oldFrame.size.height);
+    self.pauseButoon.frame = newFrame;
+    
+}
+- (void)pauseRun{
+    [kApp.voiceHandler voiceOfapp:@"run_pause" :nil];
+    // Customization example
+    [kApp.runManager changeRunStatus:2];
+    self.button_complete.hidden = NO;
+    CGRect oldFrame = self.pauseButoon.frame;
+    CGRect newFrame = CGRectMake(64, oldFrame.origin.y, oldFrame.size.width, oldFrame.size.height);
+    self.pauseButoon.frame = newFrame;
+    
 }
 - (void)didReceiveMemoryWarning
 {
@@ -258,16 +297,6 @@ updatingLocation:(BOOL)updatingLocation
 - (void)viewDidDisappear:(BOOL)animated{
     [super viewDidDisappear:animated];
 }
-// MBSliderViewDelegate
-- (void) sliderDidSlide:(MBSliderView *)slideView {
-    [kApp.voiceHandler voiceOfapp:@"run_pause" :nil];
-    // Customization example
-    NSLog(@"滑动");
-    [kApp.runManager changeRunStatus:2];
-    self.view_bottom_slider.hidden = YES;
-    self.view_bottom_bar.hidden = NO;
-}
-
 - (void)setGPSImage{
     
 }
@@ -280,7 +309,6 @@ updatingLocation:(BOOL)updatingLocation
             kApp.isRunning = 0;
             [kApp.runManager finishOneRun];
             [kApp.timer_playVoice invalidate];
-            [kApp.timer_udp_running invalidate];
             if(kApp.runManager.distance < 50){
                 kApp.gpsLevel = 1;
                 //弹出框，距离小于50
@@ -320,16 +348,6 @@ updatingLocation:(BOOL)updatingLocation
             self.button_complete.backgroundColor = [UIColor colorWithRed:143.0/255.0 green:195.0/255.0 blue:31.0/255.0 alpha:1];
             UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:@"你已经完成这次的运动了吗?" delegate:self cancelButtonTitle:@"不，还没完成" destructiveButtonTitle:nil otherButtonTitles:@"是的，完成了", nil];
             [actionSheet showInView:self.view];
-            break;
-        }
-        case 3:
-        {
-            self.button_reset.backgroundColor = [UIColor colorWithRed:0 green:123.0/255.0 blue:199.0/255.0 alpha:1];
-            [kApp.voiceHandler voiceOfapp:@"run_continue" :nil];
-            [kApp.runManager changeRunStatus:1];
-            self.view_bottom_slider.hidden = NO;
-            self.view_bottom_bar.hidden = YES;
-            NSLog(@"恢复");
             break;
         }
         default:

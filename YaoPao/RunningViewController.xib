@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6751" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="RunningViewController">
             <connections>
-                <outlet property="button_complete" destination="bbC-GY-Ar2" id="SOw-f1-qFm"/>
+                <outlet property="button_complete" destination="B7x-d3-Ut4" id="3fm-Fg-VlQ"/>
+                <outlet property="button_group" destination="ToO-Y4-UEw" id="QV9-LQ-apW"/>
                 <outlet property="button_map" destination="aUZ-E3-gDO" id="hst-hm-oOZ"/>
-                <outlet property="button_reset" destination="GtI-Yi-TpG" id="tc4-jN-fyr"/>
                 <outlet property="button_takephoto" destination="cmh-GU-O1s" id="tpe-m2-zXC"/>
                 <outlet property="image_gps1" destination="E3W-n4-W5v" id="C2q-uV-XHu"/>
                 <outlet property="image_gps2" destination="thV-ga-m5J" id="vDn-Ds-3L3"/>
@@ -22,10 +22,7 @@
                 <outlet property="label_during_small" destination="05b-zC-iMw" id="iEC-wM-hm8"/>
                 <outlet property="label_secondPerKm" destination="KuA-qq-qo2" id="w5O-B9-AmR"/>
                 <outlet property="label_time" destination="PbB-N6-nIs" id="NC0-SI-nCx"/>
-                <outlet property="sliderview" destination="xXI-Zu-ui2" id="YPp-IF-Gah"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
-                <outlet property="view_bottom_bar" destination="nzV-pr-deK" id="mBv-y4-Fok"/>
-                <outlet property="view_bottom_slider" destination="Hgh-BF-GBE" id="1dR-w7-Vdw"/>
                 <outlet property="view_circle" destination="ING-cX-Z72" id="X3w-bC-C26"/>
                 <outlet property="view_middle" destination="csp-6W-ATW" id="g6j-IQ-jhm"/>
             </connections>
@@ -127,7 +124,7 @@
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="cmh-GU-O1s">
-                    <rect key="frame" x="72" y="394" width="65" height="65"/>
+                    <rect key="frame" x="28" y="370" width="65" height="65"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <state key="normal" backgroundImage="go_takephoto.png">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -138,7 +135,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="aUZ-E3-gDO">
-                    <rect key="frame" x="183" y="394" width="65" height="65"/>
+                    <rect key="frame" x="128" y="370" width="65" height="65"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <state key="normal" backgroundImage="go_map.png">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -148,60 +145,33 @@
                         <action selector="button_clicked:" destination="-1" eventType="touchUpInside" id="Y5Z-Zk-oQl"/>
                     </connections>
                 </button>
-                <view contentMode="scaleToFill" id="X5G-mX-Z7M">
-                    <rect key="frame" x="0.0" y="517" width="320" height="1"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <color key="backgroundColor" red="0.1960784314" green="0.1960784314" blue="0.1960784314" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                </view>
-                <view contentMode="scaleToFill" id="nzV-pr-deK">
-                    <rect key="frame" x="0.0" y="518" width="320" height="50"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <subviews>
-                        <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="bbC-GY-Ar2" customClass="CNCustomButton">
-                            <rect key="frame" x="0.0" y="0.0" width="160" height="50"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" title="完成">
-                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <connections>
-                                <action selector="button_clicked:" destination="-1" eventType="touchUpInside" id="7BE-0t-XPa"/>
-                            </connections>
-                        </button>
-                        <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="GtI-Yi-TpG" customClass="CNCustomButton">
-                            <rect key="frame" x="160" y="0.0" width="160" height="50"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" title="恢复">
-                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <connections>
-                                <action selector="button_clicked:" destination="-1" eventType="touchUpInside" id="pTw-os-GhD"/>
-                            </connections>
-                        </button>
-                        <view contentMode="scaleToFill" id="OQV-UX-PTG">
-                            <rect key="frame" x="159" y="0.0" width="1" height="50"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" red="0.1960784314" green="0.1960784314" blue="0.1960784314" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        </view>
-                    </subviews>
-                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                </view>
-                <view contentMode="scaleToFill" id="Hgh-BF-GBE">
-                    <rect key="frame" x="0.0" y="518" width="320" height="50"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <subviews>
-                        <view contentMode="scaleToFill" id="xXI-Zu-ui2" customClass="MBSliderView">
-                            <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                        </view>
-                    </subviews>
-                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                </view>
                 <view contentMode="scaleToFill" id="ING-cX-Z72" customClass="CircleView">
                     <rect key="frame" x="70" y="79" width="180" height="180"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </view>
+                <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="ToO-Y4-UEw">
+                    <rect key="frame" x="229" y="370" width="65" height="65"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <state key="normal" backgroundImage="running_group.png">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <state key="highlighted" backgroundImage="running_group_on.png"/>
+                    <connections>
+                        <action selector="button_clicked:" destination="-1" eventType="touchUpInside" id="izN-z4-LCI"/>
+                    </connections>
+                </button>
+                <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="B7x-d3-Ut4">
+                    <rect key="frame" x="166" y="453" width="90" height="90"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <state key="normal" backgroundImage="running_finish.png">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <state key="highlighted" backgroundImage="running_finish_on.png"/>
+                    <connections>
+                        <action selector="button_clicked:" destination="-1" eventType="touchUpInside" id="xMT-Az-Kxw"/>
+                    </connections>
+                </button>
             </subviews>
             <color key="backgroundColor" red="0.094117647060000004" green="0.094117647060000004" blue="0.094117647060000004" alpha="1" colorSpace="calibratedRGB"/>
             <point key="canvasLocation" x="200" y="353"/>
@@ -212,6 +182,10 @@
         <image name="go_map_on.png" width="154" height="154"/>
         <image name="go_takephoto.png" width="154" height="154"/>
         <image name="go_takephoto_on.png" width="154" height="154"/>
+        <image name="running_finish.png" width="154" height="154"/>
+        <image name="running_finish_on.png" width="154" height="154"/>
+        <image name="running_group.png" width="154" height="154"/>
+        <image name="running_group_on.png" width="154" height="154"/>
         <image name="sig_green.png" width="12" height="12"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

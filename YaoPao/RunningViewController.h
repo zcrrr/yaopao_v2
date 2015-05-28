@@ -7,12 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MBSliderView.h"
-#import "CNCustomButton.h"
 @class CNOverlayViewController;
 @class CircleView;
+@class CircularLock;
 
-@interface RunningViewController : UIViewController<MBSliderViewDelegate,UIAlertViewDelegate,UIActionSheetDelegate>
+@interface RunningViewController : UIViewController<UIAlertViewDelegate,UIActionSheetDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *label_dis_big;
 @property (weak, nonatomic) IBOutlet UILabel *label_during_big;
@@ -25,14 +24,10 @@
 @property (weak, nonatomic) IBOutlet UIImageView *image_gps3;
 @property (weak, nonatomic) IBOutlet UIImageView *image_gps4;
 
-@property (strong, nonatomic) IBOutlet MBSliderView *sliderview;
-@property (strong, nonatomic) IBOutlet UIView *view_bottom_bar;
-@property (strong, nonatomic) IBOutlet CNCustomButton *button_complete;
-@property (strong, nonatomic) IBOutlet CNCustomButton *button_reset;
+@property (strong, nonatomic) IBOutlet UIButton *button_complete;
 
 @property (strong, nonatomic) IBOutlet UILabel *label_dis;
 @property (strong, nonatomic) IBOutlet UILabel *label_time;
-@property (strong, nonatomic) IBOutlet UIView *view_bottom_slider;
 @property (strong, nonatomic) NSTimer* timer_dispalyTime;
 
 
@@ -58,5 +53,7 @@
 @property (weak, nonatomic) IBOutlet UIView *view_middle;
 @property (weak, nonatomic) IBOutlet UIButton *button_takephoto;
 @property (weak, nonatomic) IBOutlet UIButton *button_map;
+@property (weak, nonatomic) IBOutlet UIButton *button_group;
+@property (strong, nonatomic) CircularLock *pauseButoon;
 
 @end

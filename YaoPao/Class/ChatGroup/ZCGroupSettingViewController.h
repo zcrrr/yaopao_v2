@@ -14,7 +14,7 @@
 #import "ChangeGroupNameViewController.h"
 
 
-@interface ZCGroupSettingViewController : UIViewController<IChatManagerDelegate, EMChooseViewDelegate,groupMemberDelegate,UITableViewDataSource,UITableViewDelegate,exitGroupDelegate,deleteGroupDelegate,addMemberDelegate,delMemberDelegate,changeNameDelegate>
+@interface ZCGroupSettingViewController : UIViewController<IChatManagerDelegate, EMChooseViewDelegate,groupMemberDelegate,enableMyLocationInGroupDelegate,UITableViewDataSource,UITableViewDelegate,exitGroupDelegate,deleteGroupDelegate,addMemberDelegate,delMemberDelegate,changeNameDelegate>
 @property (strong, nonatomic) NSString* chatGroupId;
 @property (strong, nonatomic) EMGroup *chatGroup;
 @property (assign, nonatomic) BOOL isOwner;
@@ -32,5 +32,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *button_clear;
 @property (weak, nonatomic) IBOutlet UIButton *button_addMember;
 @property (weak, nonatomic) IBOutlet UIButton *button_showDelButtons;
+@property (assign, nonatomic) BOOL isShareLocation;
 
 @end

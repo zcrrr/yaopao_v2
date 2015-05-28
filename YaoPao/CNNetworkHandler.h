@@ -247,6 +247,16 @@
 - (void)memberLocationsDidSuccess:(NSDictionary*)resultDic;
 - (void)memberLocationsDidFailed:(NSString*)mes;
 @end
+@protocol enableMyLocationInGroupDelegate<NSObject>
+//设置该跑团显示我的位置
+- (void)enableMyLocationInGroupDidSuccess:(NSDictionary*)resultDic;
+- (void)enableMyLocationInGroupDidFailed:(NSString*)mes;
+@end
+@protocol resetGroupSettingDelegate<NSObject>
+//重置所有跑团设置
+- (void)resetGroupSettingGroupDidSuccess:(NSDictionary*)resultDic;
+- (void)resetGroupSettingGroupDidFailed:(NSString*)mes;
+@end
 
 
 
@@ -305,6 +315,8 @@
 @property (nonatomic, strong) id<delMemberDelegate> delegate_delMember;
 @property (nonatomic, strong) id<changeGroupNameDelegate> delegate_changeGroupName;
 @property (nonatomic, strong) id<memberLocationsDelegate> delegate_memberLocations;
+@property (nonatomic, strong) id<enableMyLocationInGroupDelegate> delegate_enableMyLocationInGroup;
+@property (nonatomic, strong) id<resetGroupSettingDelegate> delegate_resetGroupSetting;
 
 //定义每个请求的request
 @property (nonatomic, strong) ASIFormDataRequest* verifyCodeRequest;
@@ -348,6 +360,8 @@
 @property (nonatomic, strong) ASIFormDataRequest* delMemberRequest;
 @property (nonatomic, strong) ASIFormDataRequest* changeGroupNameRequest;
 @property (nonatomic, strong) ASIFormDataRequest* memberLocationsRequest;
+@property (nonatomic, strong) ASIFormDataRequest* enableMyLocationInGroupRequest;
+@property (nonatomic, strong) ASIFormDataRequest* resetGroupSettingRequest;
 //每个请求的实现
 - (void)doRequest_verifyCode:(NSString*)phoneNO;
 - (void)doRequest_registerPhone:(NSMutableDictionary*)params;
@@ -390,5 +404,7 @@
 - (void)doRequest_delMember:(NSMutableDictionary*)params;
 - (void)doRequest_changeGroupName:(NSMutableDictionary*)params;
 - (void)doRequest_memberLocations:(NSMutableDictionary*)params;
+- (void)doRequest_enableMyLocationInGroup:(NSMutableDictionary*)params;
+- (void)doRequest_resetGroupSetting:(NSMutableDictionary*)params;
 
 @end

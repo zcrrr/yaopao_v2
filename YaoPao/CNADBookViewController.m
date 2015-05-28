@@ -20,6 +20,7 @@
 #import "FriendsHandler.h"
 #import "ColorValue.h"
 #import "CNCustomButton.h"
+#import "ChatViewController.h"
 
 @interface CNADBookViewController ()
 
@@ -29,12 +30,16 @@
 @synthesize keys;
 @synthesize groupedMap;
 @synthesize keysJustFriend;
+@synthesize isFromRunning;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     self.tableview.sectionIndexBackgroundColor = [UIColor clearColor];
     [self.button_add fillColor:kClear :kClear :kWhite :kWhiteHalfAlpha];
+    if(self.isFromRunning){
+        self.button_add.hidden = YES;
+    }
 }
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
@@ -85,19 +90,18 @@
         [nameStartWithSameLetter addObject:friend];
         [self.groupedMap setValue:nameStartWithSameLetter forKey:oneKey];
     }
-
-    
-    
-    
-    
+    self.keysJustFriend = [NSMutableArray arrayWithArray:[self.keysJustFriend sortedArrayUsingSelector:@selector(compare:)]];
     self.keys = [[NSMutableArray alloc]init];
-    [self.keys addObject:@"推荐好友"];
+    if(!self.isFromRunning){
+        [self.keys addObject:@"好友推荐"];
+    }
+    
     if([kApp.friendHandler.myGroups count]>0){
         //在dic里加上跑团的信息
         [self.keys addObject:@"跑团"];
         [self.groupedMap setValue:kApp.friendHandler.myGroups forKey:@"跑团"];
     }
-    [self.keys addObjectsFromArray:[self.keysJustFriend sortedArrayUsingSelector:@selector(compare:)]];
+    [self.keys addObjectsFromArray:self.keysJustFriend];
     [self.tableview reloadData];
 }
 - (void)didReceiveMemoryWarning {
@@ -119,7 +123,7 @@
     return [self.keys count];
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    if(section == 0){//第一行
+    if([[self.keys objectAtIndex:section] isEqualToString:@"好友推荐"]){//推荐好友
         return 1;
     }else{
         return [[self.groupedMap objectForKey:[self.keys objectAtIndex:section]] count];
@@ -131,11 +135,11 @@
     UILabel* headerLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, 0, 300, 22)];
     headerLabel.textColor = [UIColor colorWithRed:137.0/255.0 green:137.0/255.0 blue:137.0/255.0 alpha:1];
     [headerLabel setFont:[UIFont systemFontOfSize:12]];
-    if(section == 0){//第一行
-        headerLabel.text = @"好友推荐";
-    }else{
+//    if(section == 0){//第一行
+//        headerLabel.text = @"好友推荐";
+//    }else{
         headerLabel.text = [self.keys objectAtIndex:section];
-    }
+//    }
     [customView addSubview:headerLabel];
     return customView;
 }
@@ -151,7 +155,7 @@
 {
     NSInteger row = [indexPath row];
     NSInteger section = [indexPath section];
-    if(section == 0){//第一行
+    if([[self.keys objectAtIndex:section] isEqualToString:@"好友推荐"]){//第一行
         int condition = 2;
         NSInteger suggestFriendCount = [kApp.friendHandler.myContactUseAppButNotFriend count];//推荐的好友数（手机里使用app的人-其中已经是好友的人）
         if([kApp.friendHandler.frinedsWantMe count]>0){//有验证的好友
@@ -223,7 +227,7 @@
                     cell.button_num.hidden = YES;
                 }
                 if(friend.avatarUrlInYaoPao != nil && ![friend.avatarUrlInYaoPao isEqualToString:@""]){//有头像url
-                    NSString* fullurl = [NSString stringWithFormat:@"%@%@",kApp.imageurl,friend.avatarUrlInYaoPao];
+                    NSString* fullurl = friend.avatarUrlInYaoPao;
                     __block UIImage* image = [kApp.avatarDic objectForKey:fullurl];
                     if(image != nil){//缓存中有
                         cell.imageview_avatar.image = image;
@@ -255,7 +259,7 @@
                     ((UIImageView*)[arraytemp objectAtIndex:i]).hidden = NO;
                     FriendInfo* friend = [kApp.friendHandler.myContactUseAppButNotFriend objectAtIndex:i];
                     if(friend.avatarUrlInYaoPao != nil && ![friend.avatarUrlInYaoPao isEqualToString:@""]){//有头像url
-                        NSString* fullurl = [NSString stringWithFormat:@"%@%@",kApp.imageurl,friend.avatarUrlInYaoPao];
+                        NSString* fullurl = friend.avatarUrlInYaoPao;
                         __block UIImage* image = [kApp.avatarDic objectForKey:fullurl];
                         if(image != nil){//缓存中有
                             ((UIImageView*)[arraytemp objectAtIndex:i]).image = image;
@@ -343,7 +347,7 @@
     NSInteger row = [indexPath row];
     NSInteger section = [indexPath section];
     NSString* key = [self.keys objectAtIndex:section];
-    if(section == 0){//点击推荐好友
+    if([[self.keys objectAtIndex:section] isEqualToString:@"好友推荐"]){//点击推荐好友
         NewFriendsViewController* nfVC = [[NewFriendsViewController alloc]init];
         [self.navigationController pushViewController:nfVC animated:YES];
         [self writeNewFriendsStringToPlist];
@@ -351,12 +355,20 @@
         CNGroupInfo* group = [kApp.friendHandler.myGroups objectAtIndex:row];
         ChatGroupViewController* chatController = [[ChatGroupViewController alloc] initWithChatter:group.groupId isGroup:YES];
         chatController.groupname = group.groupName;
+        chatController.isFromRunning = self.isFromRunning;
         [self.navigationController pushViewController:chatController animated:YES];
     }else{
         FriendInfo* friend = [[groupedMap objectForKey:key]objectAtIndex:row];
-        FriendDetailViewController* fdVC = [[FriendDetailViewController alloc]init];
-        fdVC.friend = friend;
-        [self.navigationController pushViewController:fdVC animated:YES];
+        if(self.isFromRunning){
+            ChatViewController *chatVC = [[ChatViewController alloc] initWithChatter:friend.phoneNO isGroup:NO];
+            chatVC.title = friend.phoneNO;
+            chatVC.isFromRunning = self.isFromRunning;
+            [self.navigationController pushViewController:chatVC animated:YES];
+        }else{
+            FriendDetailViewController* fdVC = [[FriendDetailViewController alloc]init];
+            fdVC.friend = friend;
+            [self.navigationController pushViewController:fdVC animated:YES];
+        }
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }

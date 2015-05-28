@@ -323,6 +323,10 @@
             [CNAppDelegate howManyMessageToRead];
         }
     } onQueue:nil];
+    //重置一下跑团位置上报
+    NSString* uid = [NSString stringWithFormat:@"%@",[kApp.userInfoDic objectForKey:@"uid"]];
+    NSMutableDictionary* param = [[NSMutableDictionary alloc]initWithObjectsAndKeys:uid,@"uid",nil];
+    [kApp.networkHandler doRequest_resetGroupSetting:param];
     //用户登录之后先同步
     [CNAppDelegate popupWarningCloud:NO];
 }

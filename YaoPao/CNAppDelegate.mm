@@ -135,6 +135,7 @@
 @synthesize timer_udp_running;
 @synthesize eventTimeString;
 @synthesize isInEvent;
+@synthesize isOpenShareLocation;
 
 @synthesize managedObjectModel=_managedObjectModel;
 @synthesize managedObjectContext=_managedObjectContext;
@@ -182,9 +183,9 @@
     //google map
     [GMSServices provideAPIKey:@"AIzaSyCyYR5Ih3xP0rpYMaF1qAsInxFyqvaCJIY"];
     //高德地图
-//    [MAMapServices sharedServices].apiKey =@"0f3dad31deac3acd29ce27c3c2a265f2";
+    [MAMapServices sharedServices].apiKey =@"0f3dad31deac3acd29ce27c3c2a265f2";
     //inhouse
-    [MAMapServices sharedServices].apiKey =@"e46925db02f9c24a1323a8b900e56346";
+//    [MAMapServices sharedServices].apiKey =@"e46925db02f9c24a1323a8b900e56346";
     //adobe creative
     NSString* const CreativeSDKClientId = @"b8ae54f2e0084b789790003fda5127e1";
     NSString* const CreativeSDKClientSecret = @"581b3dc8-5946-491e-88e4-ce258e94c5f4";
@@ -210,7 +211,7 @@
     self.showad = [MobClick getConfigParams:@"showad"];
     NSLog(@"self.showad is %@",self.showad);
     if (self.showad == nil || ([NSNull null] == (NSNull *)self.showad)) {
-        self.showad = @"2.0.1,1";
+        self.showad = @"2.2.0,1";
     }
     self.eventTimeString = [MobClick getConfigParams:@"event"];
     NSLog(@"self.eventTimeString is %@",self.eventTimeString);
@@ -763,7 +764,12 @@
     user.phone = [self.userInfoDic objectForKey:@"phone"];
     user.nickname = [self.userInfoDic objectForKey:@"nickname"];
     user.uid = [NSString stringWithFormat:@"%@",[self.userInfoDic objectForKey:@"uid"]];
-    user.avatar = [NSString stringWithFormat:@"%@%@",kApp.imageurl,[self.userInfoDic objectForKey:@"imgpath"]];
+    if([[self.userInfoDic allKeys] containsObject:@"imgpath"]){
+        user.avatar = [NSString stringWithFormat:@"%@%@",kApp.imageurl,[self.userInfoDic objectForKey:@"imgpath"]];
+    }else{
+        user.avatar = @"";
+    }
+    
     NSLog(@"phone is %@",user.phone);
     NSLog(@"nickname is %@",user.nickname);
     NSLog(@"uid is %@",user.uid);
@@ -878,6 +884,50 @@ withFilterContext:(id)filterContext
     }
     friendHandler.friendList1NeedRefresh = YES;
 }
+#pragma mark - IChatManagerDelegate 好友变化
+
+- (void)didReceiveBuddyRequest:(NSString *)username
+                       message:(NSString *)message
+{
+    NSLog(@"%@请求加您为好友！",username);
+    friendHandler.friendList1NeedRefresh = YES;
+    friendHandler.friendList2NeedRefresh = YES;
+}
+
+- (void)didUpdateBuddyList:(NSArray *)buddyList
+            changedBuddies:(NSArray *)changedBuddies
+                     isAdd:(BOOL)isAdd
+{
+    NSLog(@"好友数量发生变化");
+    //这个对删除好友起作用
+    friendHandler.friendList1NeedRefresh = YES;
+}
+//由于测试中这个为其作用不用
+//- (void)didRemovedByBuddy:(NSString *)username
+//{
+//    NSLog(@"%@将您从好友列表里删除",username);
+//    friendHandler.friendList1NeedRefresh = YES;
+//}
+
+//经测试发现会收到请求加您为好友回调
+//- (void)didAcceptedByBuddy:(NSString *)username
+//{
+//    NSLog(@"%@接受了您的好友请求",username);
+//    friendHandler.friendList1NeedRefresh = YES;
+//}
+
+- (void)didRejectedByBuddy:(NSString *)username
+{
+    NSLog(@"%@忽略了您的好友请求",username);
+    friendHandler.friendList1NeedRefresh = YES;
+    friendHandler.friendList2NeedRefresh = YES;
+}
+
+//- (void)didAcceptBuddySucceed:(NSString *)username
+//{
+//    NSLog(@"您接受了%@的好友请求",username);
+//    friendHandler.friendList1NeedRefresh = YES;
+//}
 
 
 @end

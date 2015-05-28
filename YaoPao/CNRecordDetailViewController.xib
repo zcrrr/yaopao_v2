@@ -8,6 +8,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CNRecordDetailViewController">
             <connections>
                 <outlet property="button_back" destination="xga-RJ-fYV" id="2nX-zb-ydy"/>
+                <outlet property="button_details" destination="5p7-bb-TtM" id="vRI-n2-bph"/>
                 <outlet property="button_left" destination="lQ4-Fs-7rf" id="jvO-cA-0ch"/>
                 <outlet property="button_right" destination="el2-z5-g4N" id="gmV-c4-enV"/>
                 <outlet property="button_share" destination="YCq-Rb-Xub" id="PSJ-i8-AqP"/>
@@ -131,19 +132,19 @@
                             </subviews>
                             <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         </view>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="5p7-bb-TtM">
+                            <rect key="frame" x="0.0" y="0.0" width="320" height="320"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="button_gotoMap_clicked:" destination="-1" eventType="touchUpInside" id="nrG-jL-tAR"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
                 </scrollView>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="5p7-bb-TtM">
-                    <rect key="frame" x="30" y="55" width="260" height="320"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal">
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="button_gotoMap_clicked:" destination="-1" eventType="touchUpInside" id="nrG-jL-tAR"/>
-                    </connections>
-                </button>
                 <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="lQ4-Fs-7rf">
                     <rect key="frame" x="0.0" y="193" width="22" height="43"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>

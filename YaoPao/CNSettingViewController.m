@@ -20,6 +20,7 @@
 
 @implementation CNSettingViewController
 @synthesize bannerView_;
+@synthesize label_adhd;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -154,6 +155,7 @@
     }
 }
 - (void)addAd{
+    self.label_adhd.hidden = NO;
     self.bannerView_ = [[GADBannerView alloc] initWithAdSize:kGADAdSizeBanner];
     if(iPhone5){
         self.bannerView_.frame = CGRectMake(0, 476, 320, 50);

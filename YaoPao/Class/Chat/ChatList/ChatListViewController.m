@@ -179,7 +179,7 @@
     [tabBar addSubview:self.view_line_select2];
     [tabBar addSubview:view_line_tab];
     
-    [self.view addSubview:tabBar];
+//    [self.view addSubview:tabBar];
     
     [self.view addSubview:self.tableView];
     
@@ -388,7 +388,7 @@
 - (UITableView *)tableView
 {
     if (_tableView == nil) {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 55+43+9, self.view.frame.size.width, self.view.frame.size.height-43-9-55-42) style:UITableViewStylePlain];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 55+9, self.view.frame.size.width, self.view.frame.size.height-9-55-42) style:UITableViewStylePlain];
         _tableView.backgroundColor = [UIColor whiteColor];
         _tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
         _tableView.delegate = self;

@@ -42,7 +42,11 @@
         }
     }
     self.label_nameInPhone.text =  self.friend.nameInPhone;
-    self.label_nameInYaoPao.text =  [NSString stringWithFormat:@"昵称:%@",self.friend.nameInYaoPao];
+    if([self.friend.nameInYaoPao hasPrefix:@"通讯录"]){
+        self.label_nameInYaoPao.hidden = YES;
+    }else{
+        self.label_nameInYaoPao.text =  [NSString stringWithFormat:@"昵称:%@",self.friend.nameInYaoPao];
+    }
     self.label_phone.text = self.friend.phoneNO;
     NSString* imageName = [NSString stringWithFormat:@"sex_%@.png",self.friend.sex];
     self.imageview_sex.image = [UIImage imageNamed:imageName];

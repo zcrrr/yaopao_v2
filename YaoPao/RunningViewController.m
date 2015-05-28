@@ -19,8 +19,8 @@
 #import "CNOverlayViewController.h"
 #import "CircleView.h"
 #import "CNLocationHandler.h"
-#import "SBJson.h"
-#import "GCDAsyncUdpSocket.h"
+#import "CircularLock.h"
+#import "CNADBookViewController.h"
 
 @interface RunningViewController ()
 
@@ -41,6 +41,7 @@
 @synthesize play5munite;
 @synthesize cameraPicker;
 @synthesize overlayVC;
+@synthesize pauseButoon;
 extern NSMutableArray* imageArray;
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -49,15 +50,17 @@ extern NSMutableArray* imageArray;
     switch (kApp.runManager.runStatus) {
         case 1:
         {
-            self.view_bottom_slider.hidden = NO;
-            self.view_bottom_bar.hidden = YES;
+            //todo 根据状态显示暂停or继续
+            [self initPauseButton:NO];
+            self.button_complete.hidden = YES;
             self.timer_dispalyTime = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(displayTime) userInfo:nil repeats:YES];
             break;
         }
         case 2:
         {
-            self.view_bottom_slider.hidden = YES;
-            self.view_bottom_bar.hidden = NO;
+            //todo 根据状态显示暂停or继续
+            [self initPauseButton:YES];
+            self.button_complete.hidden = NO;
             break;
         }
         default:
@@ -73,15 +76,16 @@ extern NSMutableArray* imageArray;
     //启动runmanager跑步
     [kApp.runManager startRun];
     
-    [self.button_reset fillColor:kClear :[UIColor colorWithRed:17.0/255.0 green:17.0/255.0 blue:17.0/255.0 alpha:1] :kWhite :kWhite];
-    [self.button_complete fillColor:kClear :[UIColor colorWithRed:17.0/255.0 green:17.0/255.0 blue:17.0/255.0 alpha:1] :kWhite :kWhite];
     [kApp.voiceHandler voiceOfapp:@"run_start" :nil];
     // Do any additional setup after loading the view from its nib.
     NSString* NOTIFICATION_GPS = @"gps";
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(setGPSImage) name:NOTIFICATION_GPS object:nil];
-    self.sliderview.delegate = self;
-    [self.sliderview setBackgroundColor:[UIColor clearColor]];
-    [self.sliderview setText:@"滑动暂停"];
+//    self.sliderview.delegate = self;
+//    [self.sliderview setBackgroundColor:[UIColor clearColor]];
+//    [self.sliderview setText:@"滑动暂停"];
+    [self initPauseButton:NO];
+    
+    
     [self setGPSImage];
     
     if(kApp.runManager.targetType == 1 || kApp.runManager.targetType == 2){//目标是距离
@@ -102,41 +106,42 @@ extern NSMutableArray* imageArray;
     kApp.timer_playVoice = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(checkPlayVoice) userInfo:nil repeats:YES];
     if(!iPhone5){//4、4s
         self.view_middle.frame = CGRectMake(0, 270, 320, 44);
-        self.button_takephoto.frame = CGRectMake(72, 350, 65, 65);
-        self.button_map.frame = CGRectMake(183, 350, 65, 65);
+        self.button_takephoto.frame = CGRectMake(28, 315, 65, 65);
+        self.button_map.frame = CGRectMake(128, 315, 65, 65);
+        self.button_group.frame = CGRectMake(229, 315, 65, 65);
+        self.button_complete.frame = CGRectMake(166, 385, 90, 90);
     }
-    //开始上报udp
-    [self sendMessageByUdp];
-    kApp.timer_udp_running = [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(sendMessageByUdp) userInfo:nil repeats:YES];
 }
-- (void)sendMessageByUdp{
-    if(kApp.locationHandler.userLocation_lon < 1||kApp.locationHandler.userLocation_lat<1){
-        return;
+- (void)initPauseButton:(BOOL)isPause{
+    int certer_x;
+    if(isPause){
+        certer_x = 109;
+    }else{
+        certer_x = self.view.center.x;
     }
-    NSMutableDictionary* udpParamDic = [[NSMutableDictionary alloc]init];
-    NSString* uid = [NSString stringWithFormat:@"%@",[kApp.userInfoDic objectForKey:@"uid"]];
-    if(kApp.userInfoDic == nil){
-        uid = @"0";
-    }
-    [udpParamDic setObject:uid forKey:@"uid"];
-    [udpParamDic setObject:[NSString stringWithFormat:@"%f",kApp.locationHandler.userLocation_lon] forKey:@"lon"];
-    [udpParamDic setObject:[NSString stringWithFormat:@"%f",kApp.locationHandler.userLocation_lat] forKey:@"lat"];
-    [udpParamDic setObject:[NSString stringWithFormat:@"%i",kApp.runManager.howToMove] forKey:@"howtomove"];
-    [udpParamDic setObject:[NSString stringWithFormat:@"%i",[kApp.runManager during]] forKey:@"duration"];
-    [udpParamDic setObject:[NSString stringWithFormat:@"%i",kApp.runManager.distance] forKey:@"distance"];
-    [udpParamDic setObject:@"1.0" forKey:@"version"];
-    SBJsonWriter *jsonWriter = [[SBJsonWriter alloc] init];
-    NSString* jsonString = [jsonWriter stringWithObject:udpParamDic];
-    NSLog(@"jsonstring is %@",jsonString);
-    NSData *data = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
-    if(kApp.isLogin == 1){
-        [kApp.udpSocket sendData:data toHost:ENDPOINTS_UDP port:28888 withTimeout:-1 tag:0];
-    }
-    if(kApp.isInEvent){
-        [kApp.udpSocket sendData:data toHost:ENDPOINTS_UDP port:18888 withTimeout:-1 tag:0];
-    }
-    
+    [self.pauseButoon removeFromSuperview];
+    int bottomMargin = iPhone5?70:50;
+    self.pauseButoon = [[CircularLock alloc] initWithCenter:CGPointMake(certer_x, self.view.frame.size.height - bottomMargin)
+                                                     radius:45
+                                                   duration:1
+                                                strokeWidth:4
+                                                  ringColor:[UIColor greenColor]
+                                                strokeColor:[UIColor whiteColor]
+                                                lockedImage:[UIImage imageNamed:@"running_start.png"]
+                                              unlockedImage:[UIImage imageNamed:@"running_pause.png"]
+                                                   isLocked:isPause
+                                          didlockedCallback:^{
+                                              NSLog(@"暂停");
+                                              [self pauseRun];
+                                          }
+                                        didUnlockedCallback:^{
+                                            NSLog(@"继续");
+                                            [self continueRun];
+                                        }];
+    [self.view addSubview:self.pauseButoon];
 }
+
+
 - (void)checkPlayVoice{
     int distance = kApp.runManager.distance;
     if(kApp.runManager.targetType == 1 || kApp.runManager.targetType == 2){//目标是距离
@@ -230,35 +235,47 @@ extern NSMutableArray* imageArray;
         }
         case 2:
         {
-            NSLog(@"完成");
-            self.button_complete.backgroundColor = [UIColor colorWithRed:143.0/255.0 green:195.0/255.0 blue:31.0/255.0 alpha:1];
-            UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:@"你已经完成这次的运动了吗?" delegate:self cancelButtonTitle:@"不，还没完成" destructiveButtonTitle:nil otherButtonTitles:@"是的，完成了", nil];
-            [actionSheet showInView:self.view];
+            NSLog(@"跑团");
+            if(kApp.isLogin == 0){
+                [kApp.window makeToast:@"请先登录~"];
+                return;
+            }
+            CNADBookViewController* adbookVC = [[CNADBookViewController alloc]init];
+            adbookVC.isFromRunning = YES;
+            [self.navigationController pushViewController:adbookVC animated:YES];
             break;
         }
         case 3:
         {
-            NSLog(@"恢复");
-            self.button_reset.backgroundColor = [UIColor colorWithRed:0 green:123.0/255.0 blue:199.0/255.0 alpha:1];
-            [kApp.voiceHandler voiceOfapp:@"run_continue" :nil];
-            [kApp.runManager changeRunStatus:1];
-            self.view_bottom_slider.hidden = NO;
-            self.view_bottom_bar.hidden = YES;
-            self.timer_dispalyTime = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(displayTime) userInfo:nil repeats:YES];
+            NSLog(@"完成");
+            UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:@"你已经完成这次的运动了吗?" delegate:self cancelButtonTitle:@"不，还没完成" destructiveButtonTitle:nil otherButtonTitles:@"是的，完成了", nil];
+            [actionSheet showInView:self.view];
             break;
         }
         default:
             break;
     }
 }
-- (void) sliderDidSlide:(MBSliderView *)slideView {
+- (void)continueRun{
+    [kApp.voiceHandler voiceOfapp:@"run_continue" :nil];
+    [kApp.runManager changeRunStatus:1];
+    self.button_complete.hidden = YES;
+    self.timer_dispalyTime = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(displayTime) userInfo:nil repeats:YES];
+    CGRect oldFrame = self.pauseButoon.frame;
+    CGRect newFrame = CGRectMake(115, oldFrame.origin.y, oldFrame.size.width, oldFrame.size.height);
+    self.pauseButoon.frame = newFrame;
+    
+}
+- (void)pauseRun{
     [kApp.voiceHandler voiceOfapp:@"run_pause" :nil];
     // Customization example
-    NSLog(@"滑动");
     [kApp.runManager changeRunStatus:2];
-    self.view_bottom_slider.hidden = YES;
-    self.view_bottom_bar.hidden = NO;
+    self.button_complete.hidden = NO;
     [self.timer_dispalyTime invalidate];
+    CGRect oldFrame = self.pauseButoon.frame;
+    CGRect newFrame = CGRectMake(64, oldFrame.origin.y, oldFrame.size.width, oldFrame.size.height);
+    self.pauseButoon.frame = newFrame;
+    
 }
 - (void)setGPSImage{
     int i = 0;
@@ -281,7 +298,6 @@ extern NSMutableArray* imageArray;
             kApp.isRunning = 0;
             [kApp.runManager finishOneRun];
             [kApp.timer_playVoice invalidate];
-            [kApp.timer_udp_running invalidate];
             if(kApp.runManager.distance < 50){
                 kApp.gpsLevel = 1;
                 //弹出框，距离小于50

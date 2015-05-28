@@ -215,6 +215,7 @@ extern NSMutableArray* imageArray;
             BOOL blHave=[[NSFileManager defaultManager] fileExistsAtPath:filePath];
             if (blHave) {//图片存在
                 [self.scrollview setContentSize:CGSizeMake(320+(i+1)*320, 320)];
+                self.button_details.frame = CGRectMake(0, 0, 320+(i+1)*320, 320);
                 self.scrollview.showsHorizontalScrollIndicator=NO; //不显示水平滑动线
                 self.scrollview.showsVerticalScrollIndicator=NO;//不显示垂直滑动线
                 self.scrollview.pagingEnabled=YES;

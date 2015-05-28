@@ -29,6 +29,7 @@
 @synthesize haveNewFriends;
 @synthesize friendsDicByPhone;
 @synthesize groupNeedRefresh;
+@synthesize groupIsShareLocation;
 
 
 - (void)dorequest{
@@ -40,6 +41,7 @@
     self.frinedsWantMe = [[NSMutableArray alloc]init];
     self.myGroups = [[NSMutableArray alloc]init];
     self.friendsDicByPhone = [[NSMutableDictionary alloc]init];
+    self.groupIsShareLocation = [[NSMutableArray alloc]init];
     //好友列表
     NSMutableDictionary* params = [[NSMutableDictionary alloc]init];
     NSString* uid = [NSString stringWithFormat:@"%@",[kApp.userInfoDic objectForKey:@"uid"]];
@@ -152,7 +154,13 @@
     self.myContactUseAppButNotFriend = [[NSMutableArray alloc]init];
     for(FriendInfo* friend in kApp.myContactUseApp){
         if(![self isAlreadyFriend:friend]){//是我通讯录里用app的人，而且已经是好友
-            [self.myContactUseAppButNotFriend addObject:friend];
+            if([friend.avatarUrlInYaoPao isEqualToString:@""]){//如果没有头像，则加到数组后面
+                [self.myContactUseAppButNotFriend addObject:friend];
+            }else{//如果有头像，则加到数组第一个
+                [self.myContactUseAppButNotFriend insertObject:friend atIndex:0];
+                
+            }
+            
         }
     }
     NSLog(@"self.myContactUseAppButNotFriend is:");

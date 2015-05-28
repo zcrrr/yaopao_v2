@@ -8,22 +8,18 @@
 
 #import <UIKit/UIKit.h>
 #import <MAMapKit/MAMapKit.h>
-#import "MBSliderView.h"
-#import "CNCustomButton.h"
 @class CNGPSPoint;
+@class CircularLock;
 
-@interface CNRunMapViewController : UIViewController<MAMapViewDelegate,MBSliderViewDelegate,UIActionSheetDelegate>
+@interface CNRunMapViewController : UIViewController<MAMapViewDelegate,UIActionSheetDelegate>
 
 @property (nonatomic, strong) MAMapView *mapView;
 @property (nonatomic, strong) NSTimer* timer_map;
 @property (nonatomic, strong) CNGPSPoint* lastDrawPoint;
+@property (strong, nonatomic) CircularLock *pauseButoon;
 
-@property (strong, nonatomic) IBOutlet MBSliderView *sliderview;
-@property (strong, nonatomic) IBOutlet UIView *view_bottom_bar;
-@property (strong, nonatomic) IBOutlet UIView *view_bottom_slider;
 
-@property (strong, nonatomic) IBOutlet CNCustomButton *button_complete;
-@property (strong, nonatomic) IBOutlet CNCustomButton *button_reset;
+@property (strong, nonatomic) IBOutlet UIButton *button_complete;
 
 - (IBAction)button_clicked:(id)sender;
 

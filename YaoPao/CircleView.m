@@ -23,7 +23,7 @@
     CGContextAddEllipseInRect(context, aRect); //椭圆
     CGContextDrawPath(context, kCGPathStroke);
     
-    NSLog(@"progress is %f",progress);
+//    NSLog(@"progress is %f",progress);
     CGContextSetRGBStrokeColor(context, 116.0/255.0,198.0/255.0,62.0/255.0,1.0);
     CGContextSetLineWidth(context, 3.0);
     CGMutablePathRef path = CGPathCreateMutable();

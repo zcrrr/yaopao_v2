@@ -40,6 +40,7 @@
 #import "GroupLocationAnnotationView.h"
 #import "CNUtil.h"
 #import "FriendsHandler.h"
+#import "Toast+UIView.h"
 #define KPageCount 20
 
 @interface ChatGroupViewController ()<UITableViewDataSource, UITableViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, SRRefreshDelegate, IChatManagerDelegate, DXChatBarMoreViewDelegate, DXMessageToolBarDelegate, LocationViewDelegate, IDeviceManagerDelegate>
@@ -93,6 +94,11 @@
 @synthesize locations;
 @synthesize isSetRegion;
 @synthesize groupMemberDic;
+@synthesize isFromRunning;
+@synthesize mapContainer;
+@synthesize switchButton;
+@synthesize isRequestingLocation;
+@synthesize annotation_me;
 - (instancetype)initWithChatter:(NSString *)chatter isGroup:(BOOL)isGroup
 {
     self = [super initWithNibName:nil bundle:nil];
@@ -139,7 +145,10 @@
     [button_detail setTitle:@"详情" forState:UIControlStateNormal];
     button_detail.tag = 1;
     [button_detail addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
-    [topbar addSubview:button_detail];
+    if(!self.isFromRunning){
+        [topbar addSubview:button_detail];
+    }
+    
     
     if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0) {
         self.edgesForExtendedLayout =  UIRectEdgeNone;
@@ -205,13 +214,29 @@
     [self.tableView addSubview:self.slimeView];
     [self.view addSubview:self.chatToolBar];
     
-    self.mapView=[[MAMapView alloc] initWithFrame:CGRectMake(0, 55+43, self.view.frame.size.width, self.view.frame.size.height-43-55)];
-    self.mapView.hidden = YES;
+    
+    self.mapContainer = [[UIView alloc]initWithFrame:CGRectMake(0, 55+43, self.view.frame.size.width, self.view.frame.size.height-43-55)];
+    self.mapContainer.backgroundColor = [UIColor whiteColor];
+    self.mapView=[[MAMapView alloc] initWithFrame:CGRectMake(0, 0, self.mapContainer.frame.size.width, self.mapContainer.frame.size.height-55)];
     self.mapView.delegate = self;
     self.mapView.showsCompass = NO;
     self.mapView.showsScale = NO;
     self.mapView.showsUserLocation = YES;
-    [self.view addSubview:self.mapView];
+    [self.mapContainer addSubview:self.mapView];
+    
+    UILabel* label_switch_des = [[UILabel alloc]initWithFrame:CGRectMake(10, self.mapContainer.frame.size.height-55, 250, 55)];
+    label_switch_des.text = @"向跑团上报我的位置";
+    label_switch_des.font = [UIFont systemFontOfSize:14];
+    label_switch_des.textColor = [UIColor blackColor];
+    [self.mapContainer addSubview:label_switch_des];
+    
+    self.switchButton = [[UISwitch alloc] initWithFrame:CGRectMake(260, self.mapContainer.frame.size.height-55+13, 20, 10)];
+    [self.switchButton addTarget:self action:@selector(switchAction:) forControlEvents:UIControlEventValueChanged];
+    [self.mapContainer addSubview:self.switchButton];
+    
+    
+    [self.view addSubview:self.mapContainer];
+    self.mapContainer.hidden = YES;
     
     //将self注册为chatToolBar的moreView的代理
     if ([self.chatToolBar.moreView isKindOfClass:[DXChatBarMoreView class]]) {
@@ -230,9 +255,63 @@
             [self requestGroupMember];
         }
     }
-    
     //通过会话管理者获取已收发消息
     [self loadMoreMessages];
+}
+- (void)switchAction:(id)sender{
+    if(self.switchButton.on == YES){
+        NSLog(@"打开位置");
+        [self setShareLocation:YES];
+    }else{
+        NSLog(@"关闭位置");
+        [self setShareLocation:NO];
+    }
+}
+- (void)setShareLocation:(BOOL)isShare{
+    NSString* des = isShare?@"true":@"false";
+    NSMutableDictionary* params = [[NSMutableDictionary alloc]init];
+    NSString* uid = [NSString stringWithFormat:@"%@",[kApp.userInfoDic objectForKey:@"uid"]];
+    [params setObject:uid forKey:@"uid"];
+    [params setObject:_chatter forKey:@"groupid"];
+    [params setObject:des forKey:@"enable"];
+    kApp.networkHandler.delegate_enableMyLocationInGroup = self;
+    [kApp.networkHandler doRequest_enableMyLocationInGroup:params];
+    [self showHudInView:self.view hint:@"请稍后..."];
+}
+- (void)enableMyLocationInGroupDidFailed:(NSString *)mes{
+    __weak ChatGroupViewController *weakSelf = self;
+    [weakSelf hideHud];
+    if(self.switchButton.on){
+        self.switchButton.on = NO;
+    }else{
+        self.switchButton.on = YES;
+    }
+    [kApp.window makeToast:@"设置失败，请稍后重试！"];
+}
+- (void)enableMyLocationInGroupDidSuccess:(NSDictionary *)resultDic{
+    __weak ChatGroupViewController *weakSelf = self;
+    [weakSelf hideHud];
+    [kApp.window makeToast:@"设置成功！"];
+    //本地记录最新的设置：
+    if(self.switchButton.on){
+        if(!kApp.isOpenShareLocation){
+            kApp.isOpenShareLocation = YES;
+        }
+        if(![kApp.friendHandler.groupIsShareLocation containsObject:_chatter]){
+            [kApp.friendHandler.groupIsShareLocation addObject:_chatter];
+        }
+        [self.mapView addAnnotation:self.annotation_me];
+    }else{
+        if([kApp.friendHandler.groupIsShareLocation containsObject:_chatter]){
+            [kApp.friendHandler.groupIsShareLocation removeObject:_chatter];
+            if([kApp.friendHandler.groupIsShareLocation count] == 0){//如果一个也么有了，就不用上报了
+                if(kApp.isOpenShareLocation){
+                    kApp.isOpenShareLocation = NO;
+                }
+            }
+        }
+        [self.mapView removeAnnotation:self.annotation_me];
+    }
 }
 - (void)requestGroupMember{
     //获取所有成员
@@ -255,7 +334,14 @@
         NSString* phone = [dic objectForKey:@"phone"];
         [self.groupMemberDic setObject:dic forKey:phone];
     }
+    NSString* isShareLocation = [NSString stringWithFormat:@"%@",[resultDic objectForKey:@"enable"]];
+    NSLog(@"isShareLocation is %@",isShareLocation);
     [kApp.friendHandler.groupNeedRefresh setObject:self.groupMemberDic forKey:_chatter];
+    if([isShareLocation isEqualToString:@"1"]){//上报
+        if(![kApp.friendHandler.groupIsShareLocation containsObject:_chatter]){
+            [kApp.friendHandler.groupIsShareLocation addObject:_chatter];
+        }
+    }
     [self.tableView reloadData];
     __weak ChatGroupViewController *weakSelf = self;
     [weakSelf hideHud];
@@ -296,7 +382,7 @@
                 self.view_line_select1.hidden = NO;
                 self.view_line_select2.hidden = YES;
                 self.tableView.hidden = NO;
-                self.mapView.hidden = YES;
+                self.mapContainer.hidden = YES;
                 self.selectTab = 0;
                 [self.timer_update invalidate];
             }
@@ -309,12 +395,18 @@
             if(self.selectTab == 1){
                 return;
             }else{
+                if(self.annotation_me == nil && self.mapView.userLocation.coordinate.latitude > 0){
+                    self.annotation_me = [[MAPointAnnotation alloc] init];
+                    self.annotation_me.coordinate = CLLocationCoordinate2DMake(self.mapView.userLocation.coordinate.latitude, self.mapView.userLocation.coordinate.longitude);
+                    self.annotation_me.title = @"1000";
+                }
                 [self.button_myGroup setTitleColor:RGBACOLOR(153, 153, 153, 1) forState:UIControlStateNormal];
                 [self.button_otherGroup setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
                 self.view_line_select1.hidden = YES;
                 self.view_line_select2.hidden = NO;
                 self.tableView.hidden = YES;
-                self.mapView.hidden = NO;
+                self.mapContainer.hidden = NO;
+                [self setShareLocationSwitch];
                 self.selectTab = 1;
                 [self updataMemberLocations];
                 self.timer_update = [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(updataMemberLocations) userInfo:nil repeats:YES];
@@ -325,7 +417,18 @@
             break;
     }
 }
+- (void)setShareLocationSwitch{
+    if([kApp.friendHandler.groupIsShareLocation containsObject:_chatter]){
+        self.switchButton.on = YES;
+        [self.mapView addAnnotation:annotation_me];
+    }else{
+        self.switchButton.on = NO;
+    }
+}
 - (void)updataMemberLocations{
+    if(self.isRequestingLocation){//正在请求。。。就不用请求了
+        return;
+    }
     NSMutableDictionary* params = [[NSMutableDictionary alloc]init];
     NSString* uid = [NSString stringWithFormat:@"%@",[kApp.userInfoDic objectForKey:@"uid"]];
     [params setObject:uid forKey:@"uid"];
@@ -335,13 +438,16 @@
     [kApp.networkHandler doRequest_memberLocations:params];
     [self showHudInView:self.view hint:@"请稍后..."];
     self.view.userInteractionEnabled = NO;
+    self.isRequestingLocation = YES;
 }
 - (void)memberLocationsDidFailed:(NSString *)mes{
+    self.isRequestingLocation = NO;
     self.view.userInteractionEnabled = YES;
     __weak ChatGroupViewController *weakSelf = self;
     [weakSelf hideHud];
 }
 - (void)memberLocationsDidSuccess:(NSDictionary *)resultDic{
+    self.isRequestingLocation = NO;
     self.view.userInteractionEnabled = YES;
     __weak ChatGroupViewController *weakSelf = self;
     [weakSelf hideHud];
@@ -355,6 +461,10 @@
     
     for(int i = 0 ; i<[self.locations count];i++){
         NSDictionary* dic = [self.locations objectAtIndex:i];
+        //剔除自己
+        NSString* uid = [NSString stringWithFormat:@"%@",[dic objectForKey:@"id"]];
+        NSString* myuid = [NSString stringWithFormat:@"%@",[kApp.userInfoDic objectForKey:@"uid"]];
+        if([uid isEqualToString:myuid])continue;
         double lon = [[dic objectForKey:@"lon"]doubleValue];
         double lat = [[dic objectForKey:@"lat"]doubleValue];
         if(i == 0){
@@ -406,40 +516,69 @@
             annotationView.centerOffset = CGPointMake(0, -20.6);
         }
         int tag = [((MAPointAnnotation*)annotation).title intValue];
-        NSDictionary* dic = [self.locations objectAtIndex:tag];
-        NSString* nickname = [dic objectForKey:@"nickname"];
-        NSString* time = [CNUtil getTimeFromTimestamp_ymdhm:[[dic objectForKey:@"timestamp"]longLongValue]/1000];
-        ((MAPointAnnotation*)annotation).subtitle = [NSString stringWithFormat:@"%@+%@",nickname,time];
-        annotationView.canShowCallout = NO;
         
-        NSString* imgpath = [dic objectForKey:@"imgpath"];
-        if(imgpath != nil && ![imgpath isEqualToString:@""]){//有头像url
-            NSString* fullurl = [NSString stringWithFormat:@"%@%@",kApp.imageurl,imgpath];
-            __block UIImage* image = [kApp.avatarDic objectForKey:fullurl];
-            if(image != nil){//缓存中有
-                annotationView.imageview.image = image;
-            }else{//下载
-                NSURL *url = [NSURL URLWithString:fullurl];
-                __block ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
-                [request setCompletionBlock :^{
-                    image = [[UIImage alloc] initWithData:[request responseData]];
-                    if(image != nil){
-                        if(annotationView != nil){
-                            annotationView.imageview.image = image;
+        if(tag != 1000){
+            NSDictionary* dic = [self.locations objectAtIndex:tag];
+            NSString* nickname = [dic objectForKey:@"nickname"];
+            NSString* time = [CNUtil getTimeFromTimestamp_ymdhm:[[dic objectForKey:@"timestamp"]longLongValue]/1000];
+            ((MAPointAnnotation*)annotation).subtitle = [NSString stringWithFormat:@"%@+%@",nickname,time];
+            annotationView.canShowCallout = NO;
+            
+            NSString* imgpath = [dic objectForKey:@"imgpath"];
+            if(imgpath != nil && ![imgpath isEqualToString:@""]){//有头像url
+                NSString* fullurl = [NSString stringWithFormat:@"%@%@",kApp.imageurl,imgpath];
+                __block UIImage* image = [kApp.avatarDic objectForKey:fullurl];
+                if(image != nil){//缓存中有
+                    annotationView.imageview.image = image;
+                }else{//下载
+                    NSURL *url = [NSURL URLWithString:fullurl];
+                    __block ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
+                    [request setCompletionBlock :^{
+                        image = [[UIImage alloc] initWithData:[request responseData]];
+                        if(image != nil){
+                            if(annotationView != nil){
+                                annotationView.imageview.image = image;
+                            }
+                            [kApp.avatarDic setObject:image forKey:fullurl];
+                        }else{
+                            annotationView.imageview.image = [UIImage imageNamed:@"avatar_default.png"];
                         }
-                        [kApp.avatarDic setObject:image forKey:fullurl];
-                    }else{
-                        annotationView.imageview.image = [UIImage imageNamed:@"avatar_default.png"];
-                    }
-                }];
-                [request startAsynchronous ];
+                    }];
+                    [request startAsynchronous ];
+                }
+            }else{
+                annotationView.imageview.image = [UIImage imageNamed:@"avatar_default.png"];
             }
-        }else{
-            annotationView.imageview.image = [UIImage imageNamed:@"avatar_default.png"];
+            return annotationView;
+        }else{//我自己
+            NSString* nickname = [kApp.userInfoDic objectForKey:@"nickname"];
+            NSString* time = @"刚刚";
+            ((MAPointAnnotation*)annotation).subtitle = [NSString stringWithFormat:@"%@+%@",nickname,time];
+            annotationView.imageview.image = kApp.imageData == nil?[UIImage imageNamed:@"avatar_default.png"]:[UIImage imageWithData:kApp.imageData];
+            return annotationView;
+                                                                
         }
-        return annotationView;
+        
     }
     return nil;
+}
+-(void)mapView:(MAMapView *)mapView didUpdateUserLocation:(MAUserLocation *)userLocation
+updatingLocation:(BOOL)updatingLocation
+{
+    if(updatingLocation)
+    {
+        //取出当前位置的坐标
+        NSLog(@"当前位置latitude : %f,longitude: %f",userLocation.coordinate.latitude,userLocation.coordinate.longitude);
+        if(self.switchButton.on){
+            if(self.annotation_me == nil){
+                self.annotation_me = [[MAPointAnnotation alloc] init];
+                self.annotation_me.coordinate = CLLocationCoordinate2DMake(userLocation.coordinate.latitude, userLocation.coordinate.longitude);
+                self.annotation_me.title = @"1000";
+            }else{
+                self.annotation_me.coordinate = CLLocationCoordinate2DMake(userLocation.coordinate.latitude, userLocation.coordinate.longitude);
+            }
+        }
+    }
 }
 
 - (void)setupBarButtonItem
@@ -479,6 +618,17 @@
     }
     else{
         _isScrollToBottom = YES;
+    }
+    [self setShareLocationSwitch];
+    if(self.mapContainer.hidden == NO){//地图显示着就继续刷新
+        [self updataMemberLocations];
+        self.timer_update = [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(updataMemberLocations) userInfo:nil repeats:YES];
+        if(!self.switchButton.on){
+            [self.mapView removeAnnotation:annotation_me];
+        }else{
+            [self.mapView removeAnnotation:annotation_me];
+            [self.mapView addAnnotation:annotation_me];
+        }
     }
 }
 

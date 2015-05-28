@@ -10,7 +10,7 @@
 #import <MAMapKit/MAMapKit.h>
 #import "CNNetworkHandler.h"
 
-@interface ChatGroupViewController : UIViewController<memberLocationsDelegate,MAMapViewDelegate,groupMemberDelegate>
+@interface ChatGroupViewController : UIViewController<memberLocationsDelegate,MAMapViewDelegate,groupMemberDelegate,enableMyLocationInGroupDelegate>
 
 - (instancetype)initWithChatter:(NSString *)chatter isGroup:(BOOL)isGroup;
 - (void)reloadData;
@@ -28,5 +28,10 @@
 @property (strong, nonatomic) UIView* view_line_select1;
 @property (strong, nonatomic) UIView* view_line_select2;
 @property (nonatomic, strong) MAMapView *mapView;
+@property (assign, nonatomic) BOOL isFromRunning;
+@property (nonatomic, strong) UIView* mapContainer;
+@property (nonatomic, strong) UISwitch* switchButton;
+@property (nonatomic, assign) BOOL isRequestingLocation;
+@property (nonatomic, strong) MAPointAnnotation* annotation_me;
 
 @end

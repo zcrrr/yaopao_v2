@@ -26,6 +26,8 @@
 #import <SMS_SDK/SMS_SDK.h>
 #import "CNADBookViewController.h"
 #import "CNCloudRecord.h"
+#import "SBJson.h"
+#import "GCDAsyncUdpSocket.h"
 
 @interface HomeViewController ()
 
@@ -86,6 +88,37 @@ NSString* dayOrNight;
         self.imageview_part2.frame = CGRectMake(9, 3, 40, 40);
         self.imageview_part3.frame = CGRectMake(9, 3, 40, 40);
     }
+    //开始上报udp
+    kApp.timer_udp_running = [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(sendMessageByUdp) userInfo:nil repeats:YES];
+    
+}
+- (void)sendMessageByUdp{
+    if(kApp.locationHandler.userLocation_lon < 1||kApp.locationHandler.userLocation_lat<1){
+        NSLog(@"没定位点不上报udp");
+        return;
+    }
+    if(kApp.isLogin != 1){
+        NSLog(@"没登录不上报udp");
+        return;
+    }
+    if(!kApp.isOpenShareLocation){
+        NSLog(@"从没打开过分享不上报udp");
+        return;
+    }
+    NSMutableDictionary* udpParamDic = [[NSMutableDictionary alloc]init];
+    NSString* uid = [NSString stringWithFormat:@"%@",[kApp.userInfoDic objectForKey:@"uid"]];
+    [udpParamDic setObject:uid forKey:@"uid"];
+    [udpParamDic setObject:[NSString stringWithFormat:@"%f",kApp.locationHandler.userLocation_lon] forKey:@"lon"];
+    [udpParamDic setObject:[NSString stringWithFormat:@"%f",kApp.locationHandler.userLocation_lat] forKey:@"lat"];
+    [udpParamDic setObject:[NSString stringWithFormat:@"%i",kApp.runManager.howToMove] forKey:@"howtomove"];
+    [udpParamDic setObject:[NSString stringWithFormat:@"%i",[kApp.runManager during]] forKey:@"duration"];
+    [udpParamDic setObject:[NSString stringWithFormat:@"%i",kApp.runManager.distance] forKey:@"distance"];
+    [udpParamDic setObject:@"1.0" forKey:@"version"];
+    SBJsonWriter *jsonWriter = [[SBJsonWriter alloc] init];
+    NSString* jsonString = [jsonWriter stringWithObject:udpParamDic];
+    NSLog(@"jsonstring is %@",jsonString);
+    NSData *data = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+    [kApp.udpSocket sendData:data toHost:ENDPOINTS_UDP port:28888 withTimeout:-1 tag:0];
 }
 - (void)displayEventIcon{
     if(kApp.isInEvent){

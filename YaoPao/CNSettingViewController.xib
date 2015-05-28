@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6751" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CNSettingViewController">
@@ -13,6 +13,7 @@
                 <outlet property="button_service" destination="6jQ-Y9-gp4" id="GvG-Y9-2Su"/>
                 <outlet property="button_system" destination="C6P-72-455" id="MCy-gJ-79q"/>
                 <outlet property="button_update" destination="dz0-LH-Fg3" id="1aF-wv-bqR"/>
+                <outlet property="label_adhd" destination="8Nh-9d-ICv" id="ier-Bw-26Z"/>
                 <outlet property="view" destination="2oq-O3-LxX" id="Ob4-VG-oUX"/>
                 <outlet property="view_about" destination="IFJ-iu-dK1" id="ira-IY-ZaC"/>
                 <outlet property="view_feedback" destination="l1O-5p-n1V" id="MTd-VE-8f9"/>
@@ -260,6 +261,13 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="0.13725490196078433" green="0.13333333333333333" blue="0.16862745098039217" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
+                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="    广告加载中..." lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="8Nh-9d-ICv">
+                    <rect key="frame" x="0.0" y="478" width="320" height="50"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <color key="textColor" red="0.2274509804" green="0.65098039220000004" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <color key="backgroundColor" red="0.19607843137254902" green="0.18823529411764706" blue="0.23921568627450979" alpha="1" colorSpace="calibratedRGB"/>
             <point key="canvasLocation" x="455" y="377"/>

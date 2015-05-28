@@ -35,6 +35,7 @@
 @synthesize delButtonList;
 @synthesize isDelBtnDisplay;
 @synthesize handleIndex;
+@synthesize isShareLocation;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -54,7 +55,7 @@
                     NSLog(@"我是群主");
                     CGRect frame_tableview = self.tableview.frame;
                     [self.button_exit setTitle:@"解散跑团" forState:UIControlStateNormal];
-                    self.tableview.frame = CGRectMake(frame_tableview.origin.x, frame_tableview.origin.y, 320, 44*4);
+                    self.tableview.frame = CGRectMake(frame_tableview.origin.x, frame_tableview.origin.y, 320, 44*5);
                 }
                 
                 if (!self.isOwner) {
@@ -64,7 +65,7 @@
                             NSLog(@"我是成员");
                             CGRect frame_tableview = self.tableview.frame;
                             [self.button_exit setTitle:@"退出跑团" forState:UIControlStateNormal];
-                            self.tableview.frame = CGRectMake(frame_tableview.origin.x, frame_tableview.origin.y, 320, 44*3);
+                            self.tableview.frame = CGRectMake(frame_tableview.origin.x, frame_tableview.origin.y, 320, 44*4);
                             break;
                         }
                     }
@@ -110,7 +111,14 @@
         NSString* phone = [dic objectForKey:@"phone"];
         [groupMemberDic setObject:dic forKey:phone];
     }
+    NSString* isShareLocation = [NSString stringWithFormat:@"%@",[resultDic objectForKey:@"enable"]];
+    NSLog(@"isShareLocation is %@",isShareLocation);
     [kApp.friendHandler.groupNeedRefresh setObject:groupMemberDic forKey:self.chatGroupId];
+    if([isShareLocation isEqualToString:@"1"]){//上报
+        if(![kApp.friendHandler.groupIsShareLocation containsObject:self.chatGroupId]){
+            [kApp.friendHandler.groupIsShareLocation addObject:self.chatGroupId];
+        }
+    }
     
 }
 - (void)refreshMemberView{
@@ -317,9 +325,9 @@
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     if(self.isOwner){
-        return 4;
+        return 5;
     }else{
-        return 3;
+        return 4;
     }
     
 }
@@ -360,6 +368,22 @@
         }
         case 3:
         {
+            cell.label_title.text = @"向跑团上报我的位置";
+            cell.myswitch.hidden = NO;
+            if([kApp.friendHandler.groupIsShareLocation containsObject:self.chatGroupId]){
+                cell.myswitch.on = YES;
+                self.isShareLocation = YES;
+            }else{
+                cell.myswitch.on = NO;
+                self.isShareLocation = NO;
+            }
+            
+            cell.accessoryType = UITableViewCellAccessoryNone;
+            [cell.myswitch addTarget:self action:@selector(switchAction:) forControlEvents:UIControlEventValueChanged];
+            break;
+        }
+        case 4:
+        {
             cell.label_title.text = @"修改跑团名称";
             cell.myswitch.hidden = YES;
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -369,6 +393,54 @@
             break;
     }
     return cell;
+}
+- (void)switchAction:(id)sender{
+    if(!self.isShareLocation){
+        NSLog(@"打开位置");
+        [self setShareLocation:YES];
+        if(!kApp.isOpenShareLocation){
+            kApp.isOpenShareLocation = YES;
+        }
+    }else{
+        NSLog(@"关闭位置");
+        [self setShareLocation:NO];
+    }
+}
+- (void)setShareLocation:(BOOL)isShare{
+    NSString* des = isShare?@"true":@"false";
+    NSMutableDictionary* params = [[NSMutableDictionary alloc]init];
+    NSString* uid = [NSString stringWithFormat:@"%@",[kApp.userInfoDic objectForKey:@"uid"]];
+    [params setObject:uid forKey:@"uid"];
+    [params setObject:self.chatGroupId forKey:@"groupid"];
+    [params setObject:des forKey:@"enable"];
+    kApp.networkHandler.delegate_enableMyLocationInGroup = self;
+    [kApp.networkHandler doRequest_enableMyLocationInGroup:params];
+    [self displayLoading];
+}
+- (void)enableMyLocationInGroupDidFailed:(NSString *)mes{
+    [self hideLoading];
+    [kApp.window makeToast:@"设置失败，请稍后重试！"];
+}
+- (void)enableMyLocationInGroupDidSuccess:(NSDictionary *)resultDic{
+    [self hideLoading];
+    [kApp.window makeToast:@"设置成功！"];
+    //本地记录最新的设置：
+    if(!self.isShareLocation){
+        self.isShareLocation = YES;
+        if(![kApp.friendHandler.groupIsShareLocation containsObject:self.chatGroupId]){
+            [kApp.friendHandler.groupIsShareLocation addObject:self.chatGroupId];
+        }
+    }else{
+        self.isShareLocation = NO;
+        if([kApp.friendHandler.groupIsShareLocation containsObject:self.chatGroupId]){
+            [kApp.friendHandler.groupIsShareLocation removeObject:self.chatGroupId];
+            if([kApp.friendHandler.groupIsShareLocation count] == 0){//如果一个也么有了，就不用上报了
+                if(kApp.isOpenShareLocation){
+                    kApp.isOpenShareLocation = NO;
+                }
+            }
+        }
+    }
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     NSInteger row = [indexPath row];
@@ -394,6 +466,10 @@
             break;
         }
         case 3:
+        {
+            break;
+        }
+        case 4:
         {
             ChangeGroupNameViewController* cgnVC = [[ChangeGroupNameViewController alloc]init];
             cgnVC.delegate_changename = self;

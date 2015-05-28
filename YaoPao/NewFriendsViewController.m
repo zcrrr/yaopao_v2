@@ -94,6 +94,9 @@
         NSRange range = [phoneNO rangeOfString:oneObject.phoneNO];
         if(range.length > 0){
             oneObject.nameInPhone = friend.nameInPhone;
+            if([oneObject.nameInYaoPao isEqualToString:@"Jimmy"]||[oneObject.nameInYaoPao isEqualToString:oneObject.phoneNO]){
+                oneObject.nameInYaoPao = [NSString stringWithFormat:@"通讯录:%@",friend.nameInPhone];
+            }
             return YES;
         }
     }
@@ -115,7 +118,8 @@
 #pragma mark - TableviewDelegate
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 2;
+//    return 2;//去掉了邀请列表
+    return 1;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     if(section == 0){
@@ -155,7 +159,10 @@
         friend = [kApp.friendHandler.friendsNew objectAtIndex:row];
         cell.label_username.text = friend.nameInYaoPao;
         if(friend.avatarUrlInYaoPao != nil && ![friend.avatarUrlInYaoPao isEqualToString:@""]){//有头像url
-            NSString* fullurl = [NSString stringWithFormat:@"%@%@",kApp.imageurl,friend.avatarUrlInYaoPao];
+            NSString* fullurl = friend.avatarUrlInYaoPao;
+            if(![fullurl hasPrefix:@"http"]){
+                fullurl = [NSString stringWithFormat:@"%@%@",kApp.imageurl,friend.avatarUrlInYaoPao];
+            }
             __block UIImage* image = [kApp.avatarDic objectForKey:fullurl];
             if(image != nil){//缓存中有
                 cell.imageview_avatar.image = image;

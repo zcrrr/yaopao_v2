@@ -69,6 +69,7 @@
     [self hideLoading];
 }
 - (void)sendMakeFriendsRequestDidSuccess:(NSDictionary *)resultDic{
+    [[EaseMob sharedInstance].chatManager addBuddy:self.friend.phoneNO message:@"我想加您为好友" error:nil];
     [kApp.window makeToast:@"发送好友请求成功"];
     [self hideLoading];
     self.friend.status = 4;

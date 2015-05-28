@@ -14,6 +14,8 @@
 
 @interface ChatViewController : UIViewController
 
+
+@property (assign, nonatomic) BOOL isFromRunning;
 - (instancetype)initWithChatter:(NSString *)chatter isGroup:(BOOL)isGroup;
 - (void)reloadData;
 @end

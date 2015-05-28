@@ -1,18 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6751" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CNRunMapViewController">
             <connections>
-                <outlet property="button_complete" destination="CN6-7g-Ot1" id="zKi-b1-d8z"/>
-                <outlet property="button_reset" destination="Hyg-eK-dby" id="WJ7-0c-ar7"/>
-                <outlet property="sliderview" destination="EcE-Hg-JJE" id="jhf-J4-fBf"/>
+                <outlet property="button_complete" destination="bdf-7x-YTx" id="ASG-po-m8D"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
-                <outlet property="view_bottom_bar" destination="A9L-Bg-8xP" id="BRj-o8-Oxg"/>
-                <outlet property="view_bottom_slider" destination="fFN-w0-1k4" id="CJq-Yi-Sj4"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -21,18 +17,29 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="x4L-Qa-NC1">
-                    <rect key="frame" x="17" y="467" width="34" height="34"/>
+                    <rect key="frame" x="17" y="517" width="34" height="34"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <state key="normal" backgroundImage="location.png">
+                    <state key="normal" backgroundImage="running_location.png">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
-                    <state key="highlighted" backgroundImage="location_on.png"/>
+                    <state key="highlighted" backgroundImage="running_location_on.png"/>
                     <connections>
                         <action selector="button_clicked:" destination="-1" eventType="touchUpInside" id="rXb-ss-XqX"/>
                     </connections>
                 </button>
+                <button hidden="YES" opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="bdf-7x-YTx">
+                    <rect key="frame" x="171" y="453" width="90" height="90"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <state key="normal" backgroundImage="running_finish.png">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <state key="highlighted" backgroundImage="running_finish_on.png"/>
+                    <connections>
+                        <action selector="button_clicked:" destination="-1" eventType="touchUpInside" id="k1h-10-agO"/>
+                    </connections>
+                </button>
                 <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="vPg-sy-tlt">
-                    <rect key="frame" x="269" y="467" width="34" height="34"/>
+                    <rect key="frame" x="269" y="517" width="34" height="34"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <state key="normal" backgroundImage="back_map.png">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -42,50 +49,6 @@
                         <action selector="button_clicked:" destination="-1" eventType="touchUpInside" id="rpv-Pi-7EA"/>
                     </connections>
                 </button>
-                <view contentMode="scaleToFill" id="A9L-Bg-8xP">
-                    <rect key="frame" x="0.0" y="518" width="320" height="50"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <subviews>
-                        <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="CN6-7g-Ot1" customClass="CNCustomButton">
-                            <rect key="frame" x="0.0" y="0.0" width="160" height="50"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" title="完成">
-                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <connections>
-                                <action selector="button_clicked:" destination="-1" eventType="touchUpInside" id="gwQ-uZ-bJ5"/>
-                            </connections>
-                        </button>
-                        <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Hyg-eK-dby" customClass="CNCustomButton">
-                            <rect key="frame" x="160" y="0.0" width="160" height="50"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" title="恢复">
-                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <connections>
-                                <action selector="button_clicked:" destination="-1" eventType="touchUpInside" id="ahX-Hr-Qxk"/>
-                            </connections>
-                        </button>
-                        <view contentMode="scaleToFill" id="Fws-im-G6f">
-                            <rect key="frame" x="159" y="0.0" width="1" height="50"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" red="0.1960784314" green="0.1960784314" blue="0.1960784314" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        </view>
-                    </subviews>
-                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                </view>
-                <view contentMode="scaleToFill" id="fFN-w0-1k4">
-                    <rect key="frame" x="0.0" y="518" width="320" height="50"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <subviews>
-                        <view contentMode="scaleToFill" id="EcE-Hg-JJE" customClass="MBSliderView">
-                            <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                        </view>
-                    </subviews>
-                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                </view>
             </subviews>
             <color key="backgroundColor" red="0.094117647060000004" green="0.094117647060000004" blue="0.094117647060000004" alpha="1" colorSpace="calibratedRGB"/>
         </view>
@@ -93,8 +56,10 @@
     <resources>
         <image name="back_map.png" width="80" height="80"/>
         <image name="back_map_on.png" width="80" height="80"/>
-        <image name="location.png" width="7" height="12"/>
-        <image name="location_on.png" width="80" height="80"/>
+        <image name="running_finish.png" width="154" height="154"/>
+        <image name="running_finish_on.png" width="154" height="154"/>
+        <image name="running_location.png" width="80" height="80"/>
+        <image name="running_location_on.png" width="80" height="80"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

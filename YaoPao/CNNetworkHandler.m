@@ -64,6 +64,8 @@
 @synthesize delegate_delMember;
 @synthesize delegate_changeGroupName;
 @synthesize delegate_memberLocations;
+@synthesize delegate_enableMyLocationInGroup;
+@synthesize delegate_resetGroupSetting;
 
 @synthesize verifyCodeRequest;
 @synthesize registerPhoneRequest;
@@ -104,6 +106,8 @@
 @synthesize delMemberRequest;
 @synthesize changeGroupNameRequest;
 @synthesize memberLocationsRequest;
+@synthesize enableMyLocationInGroupRequest;
+@synthesize resetGroupSettingRequest;
 
 - (void)startQueue{
     //    self.handler = self;//持有自己的引用，这样就不会被释放,在delegate里面有了强引用，这里可以注释了
@@ -246,6 +250,10 @@
             [[NSNotificationCenter defaultCenter] postNotificationName:@"loginDone" object:nil];
 //            [kApp.cloudManager synTimeWithServer];
             [kApp needRegisterMobUser];
+            //重置所有跑团设置
+            NSString* uid = [NSString stringWithFormat:@"%@",[kApp.userInfoDic objectForKey:@"uid"]];
+            NSMutableDictionary* param = [[NSMutableDictionary alloc]initWithObjectsAndKeys:uid,@"uid",nil];
+            [kApp.networkHandler doRequest_resetGroupSetting:param];
             //用户登录之后先同步
             [CNAppDelegate popupWarningCloud:NO];
             break;
@@ -529,6 +537,24 @@
             }
             break;
         }
+        case TAG_ENABLE_MY_LOCATION_IN_GROUP:
+        {
+            if(isSuccess){
+                [self.delegate_enableMyLocationInGroup enableMyLocationInGroupDidSuccess:result];
+            }else{
+                [self.delegate_enableMyLocationInGroup enableMyLocationInGroupDidFailed:desc];
+            }
+            break;
+        }
+        case TAG_RESET_GROUP_SETTING:
+        {
+            if(isSuccess){
+                [self.delegate_resetGroupSetting resetGroupSettingGroupDidSuccess:result];
+            }else{
+                [self.delegate_resetGroupSetting resetGroupSettingGroupDidFailed:desc];
+            }
+            break;
+        }
         
         default:
             break;
@@ -713,6 +739,16 @@
         case TAG_MEMBER_LOCATIONS:
         {
             [self.delegate_memberLocations memberLocationsDidFailed:@""];
+            break;
+        }
+        case TAG_ENABLE_MY_LOCATION_IN_GROUP:
+        {
+            [self.delegate_enableMyLocationInGroup enableMyLocationInGroupDidFailed:@""];
+            break;
+        }
+        case TAG_RESET_GROUP_SETTING:
+        {
+            [self.delegate_resetGroupSetting resetGroupSettingGroupDidFailed:@""];
             break;
         }
             
@@ -1390,6 +1426,38 @@
     NSLog(@"成员位置url:%@",str_url);
     NSLog(@"成员位置参数:%@",params);
     [[self networkQueue]addOperation:self.memberLocationsRequest];
+}
+- (void)doRequest_enableMyLocationInGroup:(NSMutableDictionary*)params{
+    NSString* str_url = [NSString stringWithFormat:@"%@chSports/group/uploadlocation.htm",ENDPOINTS];
+    NSURL* url = [NSURL URLWithString:str_url];
+    self.enableMyLocationInGroupRequest =  [ASIFormDataRequest requestWithURL:url];
+    self.enableMyLocationInGroupRequest.tag = TAG_ENABLE_MY_LOCATION_IN_GROUP;
+    [self.enableMyLocationInGroupRequest setNumberOfTimesToRetryOnTimeout:3];
+    [self.enableMyLocationInGroupRequest setTimeOutSeconds:15];
+    [self.enableMyLocationInGroupRequest addRequestHeader:@"X-PID" value:kApp.pid];
+    [self.enableMyLocationInGroupRequest addRequestHeader:@"ua" value:kApp.ua];
+    for (id oneKey in [params allKeys]){
+        [self.enableMyLocationInGroupRequest setPostValue:[params objectForKey:oneKey] forKey:oneKey];
+    }
+    NSLog(@"显示我的位置url:%@",str_url);
+    NSLog(@"显示我的位置参数:%@",params);
+    [[self networkQueue]addOperation:self.enableMyLocationInGroupRequest];
+}
+- (void)doRequest_resetGroupSetting:(NSMutableDictionary*)params{
+    NSString* str_url = [NSString stringWithFormat:@"%@chSports/group/inituploadlocation.htm",ENDPOINTS];
+    NSURL* url = [NSURL URLWithString:str_url];
+    self.resetGroupSettingRequest =  [ASIFormDataRequest requestWithURL:url];
+    self.resetGroupSettingRequest.tag = TAG_ENABLE_MY_LOCATION_IN_GROUP;
+    [self.resetGroupSettingRequest setNumberOfTimesToRetryOnTimeout:3];
+    [self.resetGroupSettingRequest setTimeOutSeconds:15];
+    [self.resetGroupSettingRequest addRequestHeader:@"X-PID" value:kApp.pid];
+    [self.resetGroupSettingRequest addRequestHeader:@"ua" value:kApp.ua];
+    for (id oneKey in [params allKeys]){
+        [self.resetGroupSettingRequest setPostValue:[params objectForKey:oneKey] forKey:oneKey];
+    }
+    NSLog(@"重置跑团设置url:%@",str_url);
+    NSLog(@"重置跑团设置参数:%@",params);
+    [[self networkQueue]addOperation:self.resetGroupSettingRequest];
 }
 - (void)showAlert:(NSString*) content{
     UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:content delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];

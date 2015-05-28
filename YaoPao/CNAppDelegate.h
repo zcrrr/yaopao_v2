@@ -129,6 +129,7 @@
 @property (strong, nonatomic) NSTimer* timer_udp_running;//上报位置udp的计时器
 @property (strong, nonatomic) NSString* eventTimeString;//赛事的时间间隔信息
 @property (assign, nonatomic) BOOL isInEvent;//是否正在赛事期间
+@property (assign, nonatomic) BOOL isOpenShareLocation;//是否打开过上报位置开关
 
 
 + (void)finishThisRun;//结束这次跑步

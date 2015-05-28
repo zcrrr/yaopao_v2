@@ -21,5 +21,6 @@
 @property (strong, nonatomic) IBOutlet UIImageView *loadingImage;
 @property (strong, nonatomic) NSMutableArray* keysJustFriend;
 - (IBAction)button_clicked:(id)sender;
+@property (assign, nonatomic) BOOL isFromRunning;
 
 @end

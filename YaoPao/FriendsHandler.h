@@ -31,6 +31,7 @@
 @property (strong, nonatomic) NSMutableDictionary* friendsDicByPhone;//dictionary表示的朋友集合，key为手机号
 @property (assign, nonatomic) BOOL haveNewFriends;//和上次比较是否有新的朋友
 @property (strong, nonatomic) NSMutableDictionary* groupNeedRefresh;//key:groupid value:groupdicbyphone
+@property (strong, nonatomic) NSMutableArray* groupIsShareLocation;//groupid array，如果里面有，则上报位置，否则不上报我的位置
 
 
 - (void)dorequest;

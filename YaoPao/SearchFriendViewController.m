@@ -63,6 +63,8 @@
             [self.textfield resignFirstResponder];
             if(self.textfield.text == nil || [self.textfield.text isEqualToString:@""]){
                 [kApp.window makeToast:@"手机号不能为空，支持模糊查询"];
+            }else if(self.textfield.text.length < 3){
+                [kApp.window makeToast:@"至少输入3位手机号！"];
             }else{
                 NSMutableDictionary* params = [[NSMutableDictionary alloc]init];
                 NSString* uid = [NSString stringWithFormat:@"%@",[kApp.userInfoDic objectForKey:@"uid"]];
@@ -124,10 +126,13 @@
     cell.button_action.tag = row;
     if(friend.status <= 3){
         [cell.button_action addTarget:self action:@selector(actionButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        [cell.button_action setEnabled:YES];
+        [cell.button_action setBackgroundImage:[UIImage imageNamed:@"action_buttonbg.png"] forState:UIControlStateNormal];
         [cell.button_action setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        
     }else{
         [cell.button_action setEnabled:NO];
-        [cell.button_action setBackgroundImage:[UIImage imageNamed:@"action_button_no.png"] forState:UIControlStateNormal];
+        [cell.button_action setBackgroundImage:[UIImage imageNamed:@"action_buttonbg_no.png"] forState:UIControlStateNormal];
         [cell.button_action setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
     }
     NSString* action = @"";

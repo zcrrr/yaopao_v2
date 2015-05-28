@@ -161,7 +161,6 @@
 - (void)deleteFriendDidFailed:(NSString *)mes{
     [kApp.window makeToast:@"删除好友失败"];
     [self hideLoading];
-    
 }
 - (void)deleteFriendDidSuccess:(NSDictionary *)resultDic{
     [kApp.window makeToast:@"删除好友成功"];

@@ -18,7 +18,7 @@
     #import "CNPersistenceHandler.h"
 #endif
 
-#define ClIENT_VERSION @"2.1.0"
+#define ClIENT_VERSION @"2.2.0"
 #define ENDPOINTS kApp.mainurl
 #define ENDPOINTS_UDP @"udp.yaopao.net"
 
@@ -40,7 +40,7 @@
 #define kDuringMinute 24*60
 #define kBoundary1 10
 #define kBoundary2 60
-//#define SIMULATORTEST
+#define SIMULATORTEST
 
 
 #define TAG_VERIFY_CODE 1
@@ -89,3 +89,6 @@
 #define TAG_DEL_MEMBER 38
 #define TAG_CHANGE_GROUP_NAME 39
 #define TAG_MEMBER_LOCATIONS 40
+#define TAG_ENABLE_MY_LOCATION_IN_GROUP 41
+#define TAG_RESET_GROUP_SETTING 42
+

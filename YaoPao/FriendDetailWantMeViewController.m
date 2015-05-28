@@ -118,6 +118,7 @@
     [self hideLoading];
 }
 - (void)rejectMakeFriendsDidSuccess:(NSDictionary *)resultDic{
+    [[EaseMob sharedInstance].chatManager rejectBuddyRequest:self.friend.phoneNO reason:@"" error:nil];
     [kApp.window makeToast:@"已忽略好友请求"];
     self.friend.status = 6;
     [self hideLoading];

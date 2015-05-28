@@ -73,6 +73,7 @@
 @end
 
 @implementation ChatViewController
+@synthesize isFromRunning;
 
 - (instancetype)initWithChatter:(NSString *)chatter isGroup:(BOOL)isGroup
 {
@@ -121,8 +122,9 @@
     [button_detail setTitle:@"详情" forState:UIControlStateNormal];
     button_detail.tag = 1;
     [button_detail addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
-    [topbar addSubview:button_detail];
-    
+    if(!self.isFromRunning){
+        [topbar addSubview:button_detail];
+    }    
     if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0) {
         self.edgesForExtendedLayout =  UIRectEdgeNone;
     }

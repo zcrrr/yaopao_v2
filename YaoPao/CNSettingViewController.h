@@ -30,5 +30,6 @@
 @property (weak, nonatomic) IBOutlet UIView *view_line2;
 @property (weak, nonatomic) IBOutlet UIView *view_line3;
 @property (weak, nonatomic) IBOutlet UIView *view_line4;
+@property (weak, nonatomic) IBOutlet UILabel *label_adhd;
 
 @end
