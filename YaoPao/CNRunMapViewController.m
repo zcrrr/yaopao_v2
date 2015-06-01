@@ -159,7 +159,7 @@
     int j = 0;
     int i = 0;
     int n = 0;
-    int pointCount = [kApp.runManager.GPSList count];
+    int pointCount = (int)[kApp.runManager.GPSList count];
     
     
     CLLocationCoordinate2D polylineCoords_backgound[pointCount];

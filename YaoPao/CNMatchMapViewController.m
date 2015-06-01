@@ -129,7 +129,7 @@
     NSArray* tracklist = [kApp.match_stringTrackZone componentsSeparatedByString:@":"];
     for(int i=0;i<[tracklist count];i++){
         NSArray* oneTrackStrlist = [[tracklist objectAtIndex:i] componentsSeparatedByString:@", "];
-        int count = [oneTrackStrlist count];
+        int count = (int)[oneTrackStrlist count];
         CLLocationCoordinate2D polylineCoords[count];
         for(int j=0;j<[oneTrackStrlist count];j++){
             NSArray* lonlat = [[oneTrackStrlist objectAtIndex:j] componentsSeparatedByString:@" "];
@@ -190,7 +190,7 @@
     int j = 0;
     int i = 0;
     int n = 0;
-    int pointCount = [kApp.match_pointList count];
+    int pointCount = (int)[kApp.match_pointList count];
     
     for(i=0;i<pointCount;i++){
         CNGPSPoint4Match* gpsPoint = [kApp.match_pointList objectAtIndex:i];

@@ -14,6 +14,7 @@
 @class CNCustomButton;
 @class CNOverlayViewController;
 @class AdobeUXImageEditorViewController;
+@class RunClass;
 @interface FeelingViewController : UIViewController<UITextFieldDelegate,UIScrollViewDelegate,AdobeUXImageEditorViewControllerDelegate,addWaternDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,buttonClickDelegate,combineImageDelegate>
 @property (assign, nonatomic) int currentpage;
 @property (strong, nonatomic) UIImagePickerController* cameraPicker;
@@ -48,5 +49,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *button_edit;
 @property (weak, nonatomic) IBOutlet UIImageView *imageview_nophoto;
 @property (weak, nonatomic) IBOutlet UIView *view_middle;
+@property (strong, nonatomic) RunClass * runClass;
 
 @end

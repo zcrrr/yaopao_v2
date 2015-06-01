@@ -56,7 +56,6 @@
     
     self.title = NSLocalizedString(@"title.group", @"Group");
     
-#warning 把self注册为SDK的delegate
     [[EaseMob sharedInstance].chatManager removeDelegate:self];
     [[EaseMob sharedInstance].chatManager addDelegate:self delegateQueue:nil];
     

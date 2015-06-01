@@ -152,7 +152,7 @@
     //net.yaopao.yaopao开发：yaopao_push_dev
     //net.yaopao.yaopao生产：dis_push_yaopao
     //net.yaopao.enterprise生产：yaopao_inhouse_push
-    [[EaseMob sharedInstance] registerSDKWithAppKey:@"yaopao#yaopao" apnsCertName:@"yaopao_push_dev" otherConfig:@{kSDKConfigEnableConsoleLogger:[NSNumber numberWithBool:NO]}];
+    [[EaseMob sharedInstance] registerSDKWithAppKey:@"yaopao#yaopao" apnsCertName:@"dis_push_yaopao" otherConfig:@{kSDKConfigEnableConsoleLogger:[NSNumber numberWithBool:NO]}];
     [[EaseMob sharedInstance].chatManager setIsUseIp:YES];
     [self registerEaseMobNotification];
     //注册推送
@@ -548,8 +548,6 @@
     [rootViewController presentViewController:navVC animated:NO completion:^(void){NSLog(@"pop");}];
 }
 + (void)popupWarningCloud:(BOOL)visible{
-    //测试代码
-//    return;
     if(visible){
         CNWarningCloudingViewController* warningVC = [[CNWarningCloudingViewController alloc]init];
         UINavigationController* navVC = [[UINavigationController alloc]initWithRootViewController:warningVC];
@@ -566,7 +564,7 @@
 + (CNGPSPoint4Match*)test_getOnePoint{
     NSMutableArray* testlist = [[NSMutableArray alloc]init];
     NSArray* pointlist = [kApp.match_track_line componentsSeparatedByString:@", "];
-    kApp.matchtestdatalength = [pointlist count];
+    kApp.matchtestdatalength = (int)[pointlist count];
     int i=0;
     for(i=0;i<[pointlist count];i++){
         CNGPSPoint4Match* point = [[CNGPSPoint4Match alloc]init];

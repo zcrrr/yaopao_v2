@@ -104,7 +104,7 @@
         self.view_back.hidden = NO;
         self.view_run_user.hidden = YES;
         NSDictionary* longitude = [resultDic objectForKey:@"longitude"];
-        int keycount = [[longitude allKeys] count];
+        int keycount = (int)[[longitude allKeys] count];
         if(longitude&&keycount>0){//被确认接棒
             kApp.match_totalDisTeam = [[longitude objectForKey:@"distancegr"]doubleValue];
             [self startAnimation];

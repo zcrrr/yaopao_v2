@@ -92,7 +92,7 @@
                                 }
                                 else if (state == SSResponseStateFail)
                                 {
-                                    NSLog(@"分享失败,错误码:%d,错误描述:%@", [error errorCode], [error errorDescription]);
+                                    NSLog(@"分享失败,错误描述:%@", [error errorDescription]);
                                 }
                             }];
 }

@@ -19,10 +19,10 @@
 - (void)writeBinary:(NSString*)filename{
     int version = 1;
     int i = 0;
-    int pointCount = [kApp.runManager.GPSList count];
-    int kmCount = [kApp.runManager.dataKm count];
-    int mileCount = [kApp.runManager.dataMile count];
-    int minCount = [kApp.runManager.dataMin count];
+    int pointCount = (int)[kApp.runManager.GPSList count];
+    int kmCount = (int)[kApp.runManager.dataKm count];
+    int mileCount = (int)[kApp.runManager.dataMile count];
+    int minCount = (int)[kApp.runManager.dataMin count];
     
 //    NSLog(@"------------------------写之前:");
 //    for(i=0;i<pointCount;i++){

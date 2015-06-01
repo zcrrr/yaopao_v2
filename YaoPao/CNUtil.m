@@ -56,7 +56,7 @@
 + (NSString*)dateStringFromTimeStamp:(long long)timestamp{
     NSDate *date = [NSDate dateWithTimeIntervalSince1970:timestamp];
     NSDateComponents *componets = [[NSCalendar autoupdatingCurrentCalendar] components:NSWeekdayCalendarUnit fromDate:date];
-    int weekday = [componets weekday];
+    int weekday = (int)[componets weekday];
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:[NSString stringWithFormat:@"yyyy年M月d日 周%@ HH:mm",[CNUtil weekday2chinese:weekday]]];
     return [dateFormatter stringFromDate:date];

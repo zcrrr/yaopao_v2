@@ -276,32 +276,22 @@
     setting.groupStyle = eGroupStyle_PublicJoinNeedApproval;
     setting.groupStyle = eGroupStyle_PrivateMemberCanInvite;
     setting.groupMaxUsersCount = 50;
-    __weak CreateGroupViewController *weakSelf = self;
-    NSDictionary *loginInfo = [[[EaseMob sharedInstance] chatManager] loginInfo];
-    NSString *username = [loginInfo objectForKey:kSDKUsername];
-    NSString *messageStr = [NSString stringWithFormat:NSLocalizedString(@"group.somebodyInvite", @"%@ invite you to join groups \'%@\'"), username, self.textField.text];
-//    [[EaseMob sharedInstance].chatManager asyncCreateGroupWithSubject:self.textField.text description:self.textView.text invitees:source initialWelcomeMessage:messageStr styleSetting:setting completion:^(EMGroup *group, EMError *error) {
-//        if (group && !error) {
-            //建群成功，调用yaopao接口，建群
-            NSString* groupDesc = [self.textView.text isEqualToString:@""]?@"没有添加描述":self.textView.text;
-            NSMutableDictionary* params = [[NSMutableDictionary alloc]init];
-            NSString* uid = [NSString stringWithFormat:@"%@",[kApp.userInfoDic objectForKey:@"uid"]];
-            [params setObject:uid forKey:@"uid"];
-            [params setObject:self.textField.text forKey:@"groupname"];
-            [params setObject:groupDesc forKey:@"desc"];
-            [params setObject:@"false" forKey:@"ispublic"];
-            [params setObject:@"50" forKey:@"maxusers"];
-            [params setObject:@"false" forKey:@"approval"];
-            [params setObject:[kApp.userInfoDic objectForKey:@"phone"] forKey:@"owner"];
-            [params setObject:invitePersons forKey:@"members"];
-            kApp.networkHandler.delegate_createGroup = self;
-            [kApp.networkHandler doRequest_createGroup:params];
-//            self.groupId = group.groupId;
-//        }
-//        else{
-//            [weakSelf showHint:NSLocalizedString(@"group.create.fail", @"Failed to create a group, please operate again")];
-//        }
-//    } onQueue:nil];
+   
+    //建群成功，调用yaopao接口，建群
+    NSString* groupDesc = [self.textView.text isEqualToString:@""]?@"没有添加描述":self.textView.text;
+    NSMutableDictionary* params = [[NSMutableDictionary alloc]init];
+    NSString* uid = [NSString stringWithFormat:@"%@",[kApp.userInfoDic objectForKey:@"uid"]];
+    [params setObject:uid forKey:@"uid"];
+    [params setObject:self.textField.text forKey:@"groupname"];
+    [params setObject:groupDesc forKey:@"desc"];
+    [params setObject:@"false" forKey:@"ispublic"];
+    [params setObject:@"50" forKey:@"maxusers"];
+    [params setObject:@"false" forKey:@"approval"];
+    [params setObject:[kApp.userInfoDic objectForKey:@"phone"] forKey:@"owner"];
+    [params setObject:invitePersons forKey:@"members"];
+    kApp.networkHandler.delegate_createGroup = self;
+    [kApp.networkHandler doRequest_createGroup:params];
+
 }
 - (void)createGroupDidFailed:(NSString *)mes{
     __weak CreateGroupViewController *weakSelf = self;

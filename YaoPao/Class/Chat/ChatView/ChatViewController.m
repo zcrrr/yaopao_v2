@@ -129,7 +129,6 @@
         self.edgesForExtendedLayout =  UIRectEdgeNone;
     }
     
-    #warning 以下三行代码必须写，注册为SDK的ChatManager的delegate
     [[[EaseMob sharedInstance] deviceManager] addDelegate:self onQueue:nil];
     [[EaseMob sharedInstance].chatManager removeDelegate:self];
     //注册为SDK的ChatManager的delegate
@@ -249,7 +248,6 @@
     [[EaseMob sharedInstance].chatManager stopPlayingAudio];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-#warning 以下第一行代码必须写，将self从ChatManager的代理中移除
     [[EaseMob sharedInstance].chatManager removeDelegate:self];
     [[[EaseMob sharedInstance] deviceManager] removeDelegate:self];
 }

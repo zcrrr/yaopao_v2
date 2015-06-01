@@ -387,6 +387,11 @@
     [self resetViewFrame];
     return YES;
 }
+- (void)textFieldDidEndEditing:(UITextField *)textField{
+    NSLog(@"编辑结束");
+    [textField resignFirstResponder];
+    [self resetViewFrame];
+}
 - (void)keyboardWillShow:(NSNotification *)noti
 {
     //键盘输入的界面调整

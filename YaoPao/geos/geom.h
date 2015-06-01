@@ -142,7 +142,6 @@ namespace geom { // geos::geom
 //#include <geos/geom/Triangle.h>
 
 #ifdef __GNUC__
-#warning *** DEPRECATED: You are using deprecated header geom.h. Please, update your sources according to new layout of GEOS headers and namespaces
 #endif
 
 using namespace geos::geom;

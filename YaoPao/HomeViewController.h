@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "FirstLevelViewController.h"
 #import "CNCustomButton.h"
-#import "CNNetworkHandler.h";
+#import "CNNetworkHandler.h"
 
 @interface HomeViewController : FirstLevelViewController<weatherDelegate>
 @property (weak, nonatomic) IBOutlet CNCustomButton *button_cloud;

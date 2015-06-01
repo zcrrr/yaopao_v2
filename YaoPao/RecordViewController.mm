@@ -133,7 +133,7 @@
 }
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     static NSString *CellIdentifier = @"TableViewCell";
-    int row = [indexPath row];
+    int row = (int)[indexPath row];
     //自定义cell类
     CNResultTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
@@ -183,7 +183,7 @@
     long long stamp = [runClass.startTime longLongValue];
     NSDate *date = [NSDate dateWithTimeIntervalSince1970:stamp/1000];
     NSDateComponents *componets = [[NSCalendar autoupdatingCurrentCalendar] components:NSWeekdayCalendarUnit fromDate:date];
-    int weekday = [componets weekday];
+    int weekday = (int)[componets weekday];
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:[NSString stringWithFormat:@"M月d日 周%@ HH:mm",[CNUtil weekday2chinese:weekday]]];
     NSString *strDate = [dateFormatter stringFromDate:date];
@@ -227,7 +227,7 @@
     return cell;
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    int row = [indexPath row];
+    int row = (int)[indexPath row];
     RunClass* oneRun = [self.recordList objectAtIndex:row];
     BinaryIOManager* ioManager = [[BinaryIOManager alloc]init];
     [ioManager readBinary:oneRun.clientBinaryFilePath :[oneRun.gpsCount intValue] :[oneRun.kmCount intValue] :[oneRun.mileCount intValue] :[oneRun.minCount intValue]];
@@ -252,7 +252,7 @@
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         // Delete the row from the data source.
-        int row = [indexPath row];
+        int row = (int)[indexPath row];
         RunClass* runclass = [self.recordList objectAtIndex:row];
         if(![runclass.uid isEqualToString:@""]){//uid有值说明该记录有可能存在于服务器，所以需要通知一下服务器要删除
             NSString* filePath_cloud = [CNPersistenceHandler getDocument:@"cloudDiary.plist"];

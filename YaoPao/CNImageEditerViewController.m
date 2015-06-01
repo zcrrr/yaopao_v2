@@ -213,7 +213,7 @@ extern NSMutableArray* imageArray;
             NSLog(@"删除图片");
             [self deleteOneImage:self.currentpage];
             [imageArray removeObjectAtIndex:self.currentpage];
-            if(self.currentpage = [imageArray count]){//最后一张
+            if(self.currentpage == [imageArray count]){//最后一张
                 self.currentpage --;
             }
             [self whichImageShouldDisplay];

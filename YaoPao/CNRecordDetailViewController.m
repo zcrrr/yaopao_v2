@@ -142,7 +142,7 @@ extern NSMutableArray* imageArray;
 - (void)initUI{
     NSDate *date = [NSDate dateWithTimeIntervalSince1970:[self.oneRun.startTime longLongValue]/1000];
     NSDateComponents *componets = [[NSCalendar autoupdatingCurrentCalendar] components:NSWeekdayCalendarUnit fromDate:date];
-    int weekday = [componets weekday];
+    int weekday = (int)[componets weekday];
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:[NSString stringWithFormat:@"yyyy年M月d日 周%@ HH:mm",[CNUtil weekday2chinese:weekday]]];
     NSString *strDate = [dateFormatter stringFromDate:date];
@@ -241,7 +241,7 @@ extern NSMutableArray* imageArray;
     int j = 0;
     int i = 0;
     int n = 0;
-    int pointCount = [kApp.runManager.GPSList count];
+    int pointCount = (int)[kApp.runManager.GPSList count];
     
     //画起点和终点
     CNGPSPoint* startPoint = [kApp.runManager.GPSList firstObject];
@@ -427,7 +427,7 @@ extern NSMutableArray* imageArray;
     int j = 0;
     int i = 0;
     int n = 0;
-    int pointCount = [kApp.match_pointList count];
+    int pointCount = (int)[kApp.match_pointList count];
     
     for(i=0;i<pointCount;i++){
         CNGPSPoint4Match* gpsPoint = [kApp.match_pointList objectAtIndex:i];
@@ -506,6 +506,11 @@ extern NSMutableArray* imageArray;
     [self.view setFrame:frame];
     [UIView commitAnimations];
     
+}
+- (void)textFieldDidEndEditing:(UITextField *)textField{
+    NSLog(@"编辑结束");
+    [textField resignFirstResponder];
+    [self resetViewFrame];
 }
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {

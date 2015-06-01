@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 @class ASINetworkQueue;
 @class ASIFormDataRequest;
-#import "ASIHTTPRequest.h";
+#import "ASIHTTPRequest.h"
 
 @protocol verifyCodeDelegate <NSObject>
 //获取验证码

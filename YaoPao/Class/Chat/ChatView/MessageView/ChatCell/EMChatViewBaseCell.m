@@ -74,7 +74,6 @@ NSString *const kRouterEventChatHeadImageTapEventName = @"kRouterEventChatHeadIm
     _nameLabel.hidden = !messageModel.isChatGroup;
     
     
-    UIImage *placeholderImage = [UIImage imageNamed:@"chatListCellHead"];
     if(messageModel.headImageURL == nil){
         _headImageView.image = [UIImage imageNamed:@"avatar_default.png"];
         return;

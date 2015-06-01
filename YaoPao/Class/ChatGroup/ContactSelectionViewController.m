@@ -103,7 +103,6 @@
     if ([_blockSelectedUsernames count] > 0) {
         for (NSString *username in _blockSelectedUsernames) {
             NSInteger section = [self sectionForString:username];
-            NSLog(@"_dataSource count is %i,section is %i",[_dataSource count],section);
             NSMutableArray *tmpArray = [_dataSource objectAtIndex:section];
             if (tmpArray && [tmpArray count] > 0) {
                 for (int i = 0; i < [tmpArray count]; i++) {

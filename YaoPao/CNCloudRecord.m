@@ -309,7 +309,7 @@
         [self cloud_step2];
         return;
     }
-    self.fileCount = [self.editImageAddArray count];
+    self.fileCount = (int)[self.editImageAddArray count];
     [self uploadOneImage];
 }
 - (void)uploadOneImage{
@@ -334,7 +334,7 @@
         [params setObject:binaryData forKey:@"avatar"];
         kApp.networkHandler.delegate_cloudData = self;
         [kApp.networkHandler doRequest_cloudData:params];
-        self.stepDes = [NSString stringWithFormat:@"正在上传后期修改的图片%i/%i",(self.fileCount-[self.editImageAddArray count]+1),self.fileCount];
+        self.stepDes = [NSString stringWithFormat:@"正在上传后期修改的图片%i/%i",(self.fileCount-(int)[self.editImageAddArray count]+1),self.fileCount];
     }else{
         binaryData = nil;
         [self deleteOneLineToPlist:oneAction];
@@ -359,7 +359,7 @@
         [self cloud_step3];
     }else{
         NSMutableArray* tempArray = [[NSMutableArray alloc]init];
-        NSLog(@"需要删除记录个数:%i",[deleteArray count]);
+        NSLog(@"需要删除记录个数:%i",(int)[deleteArray count]);
         for(int i=0;i<[deleteArray count];i++){
             [tempArray addObject:[NSString stringWithFormat:@"%@_%@",uid,[deleteArray objectAtIndex:i]]];
         }
@@ -370,7 +370,7 @@
         [params setObject:deleteArrayJSON forKey:@"delrids"];
         kApp.networkHandler.delegate_deleteRecord = self;
         [kApp.networkHandler doRequest_DeleteRecord:params];
-        self.stepDes = [NSString stringWithFormat:@"正在删除%i条记录",[deleteArray count]];
+        self.stepDes = [NSString stringWithFormat:@"正在删除%i条记录",(int)[deleteArray count]];
     }
 }
 - (NSMutableArray*)getRecordsByFilter:(NSString*)filter{
@@ -403,7 +403,7 @@
     }else{
         self.stepDes = @"正在查找要上传的文件";
         self.addRecordArray = mutableFetchResult;
-        NSLog(@"新增记录个数：%i",[mutableFetchResult count]);
+        NSLog(@"新增记录个数：%i",(int)[mutableFetchResult count]);
         for(int i = 0;i<[mutableFetchResult count];i++){
             RunClass* runclass = [mutableFetchResult objectAtIndex:i];
             if([runclass.serverBinaryFilePath isEqualToString:@""] && ![runclass.clientBinaryFilePath isEqualToString:@""]){//未上传服务器，并且二进制客户端路径有值
@@ -423,8 +423,8 @@
                 }
             }
         }
-        self.fileCount = [self.fileArray count];
-        NSLog(@"需上传文件个数：%i",[self.fileArray count]);
+        self.fileCount = (int)[self.fileArray count];
+        NSLog(@"需上传文件个数：%i",self.fileCount);
         if([self.fileArray count]>0){
             [self uploadOneFile];
         }else{
@@ -458,7 +458,7 @@
     [params setObject:binaryData forKey:@"avatar"];
     kApp.networkHandler.delegate_cloudData = self;
     [kApp.networkHandler doRequest_cloudData:params];
-    self.stepDes = [NSString stringWithFormat:@"正在上传记录相关文件%i/%i",(self.fileCount-[self.fileArray count]+1),self.fileCount];
+    self.stepDes = [NSString stringWithFormat:@"正在上传记录相关文件%i/%i",(self.fileCount-(int)[self.fileArray count]+1),self.fileCount];
 }
 - (void)cloud_step4{//上传记录
     if(self.userCancel){
@@ -627,10 +627,10 @@
     NSArray* downrecordIDs = [resultDic objectForKey:@"downrecordIDs"];
     self.synTimeNew = [[resultDic objectForKey:@"synTimeNew"]longLongValue];
     //先删除：
-    NSLog(@"删除文件，个数:%i",[delrids count]);
+    NSLog(@"删除文件，个数:%i",(int)[delrids count]);
     int i = 0;
     NSError* error=nil;
-    self.stepDes = [NSString stringWithFormat:@"正在删除本地记录:共%i条",[delrids count]];
+    self.stepDes = [NSString stringWithFormat:@"正在删除本地记录:共%i条",(int)[delrids count]];
     for(i=0;i<[delrids count];i++){
         NSString* rid = [[[delrids objectAtIndex:i]componentsSeparatedByString:@"_"] objectAtIndex:1];
         NSString* filter = [NSString stringWithFormat:@"rid=%@",rid];
@@ -645,7 +645,7 @@
         }
     }
     //再下载
-    NSLog(@"下载文件，个数:%i",[downrecordIDs count]);
+    NSLog(@"下载文件，个数:%i",(int)[downrecordIDs count]);
     if([downrecordIDs count]>0){
         SBJsonWriter *jsonWriter = [[SBJsonWriter alloc] init];
         NSString* jsonString = [jsonWriter stringWithObject:downrecordIDs];
@@ -718,18 +718,18 @@
         runClass.weather = [dic objectForKey:@"weather"];
         [self.downLoadRecordArray addObject:runClass];
         if(![runClass.serverBinaryFilePath isEqualToString:@""]){
-            [self.fileArray addObject:[NSString stringWithFormat:@"%i,%@,%@,3",[self.downLoadRecordArray count]-1,runClass.rid,runClass.serverBinaryFilePath]];
+            [self.fileArray addObject:[NSString stringWithFormat:@"%i,%@,%@,3",(int)[self.downLoadRecordArray count]-1,runClass.rid,runClass.serverBinaryFilePath]];
         }
         if(![runClass.serverImagePaths isEqualToString:@""]){
             NSArray* imagePaths = [runClass.serverImagePaths componentsSeparatedByString:@"|"];
             for(int j=0;j<[imagePaths count];j++){
-                [self.fileArray addObject:[NSString stringWithFormat:@"%i,%@,%@,21",[self.downLoadRecordArray count]-1,runClass.rid,[imagePaths objectAtIndex:j]]];
+                [self.fileArray addObject:[NSString stringWithFormat:@"%i,%@,%@,21",(int)[self.downLoadRecordArray count]-1,runClass.rid,[imagePaths objectAtIndex:j]]];
             }
         }
         if(![runClass.serverImagePathsSmall isEqualToString:@""]){
             NSArray* imagePaths = [runClass.serverImagePathsSmall componentsSeparatedByString:@"|"];
             for(int j=0;j<[imagePaths count];j++){
-                [self.fileArray addObject:[NSString stringWithFormat:@"%i,%@,%@,22",[self.downLoadRecordArray count]-1,runClass.rid,[imagePaths objectAtIndex:j]]];
+                [self.fileArray addObject:[NSString stringWithFormat:@"%i,%@,%@,22",(int)[self.downLoadRecordArray count]-1,runClass.rid,[imagePaths objectAtIndex:j]]];
             }
         }
     }
@@ -758,7 +758,7 @@
     NSString* str_url = [NSString stringWithFormat:@"%@%@",kApp.imageurl,[[fileString componentsSeparatedByString:@","]objectAtIndex:2]];
     kApp.networkHandler.delegate_downloadOneFile = self;
     [kApp.networkHandler doRequest_downloadOneFile:str_url];
-    self.stepDes = [NSString stringWithFormat:@"正在下载记录相关文件%i/%i",(self.fileCount-[self.fileArray count]+1),self.fileCount];
+    self.stepDes = [NSString stringWithFormat:@"正在下载记录相关文件%i/%i",(self.fileCount-(int)[self.fileArray count]+1),self.fileCount];
 }
 - (void)downloadOneFileDidFailed:(NSString *)mes{
     [self cloudFailed:@"下载记录文件失败"];
@@ -781,7 +781,7 @@
     RunClass* runClass = [self.downLoadRecordArray objectAtIndex:index];
     if(type == 21){//大图
         //大图
-        int hasCount = [[runClass.clientImagePaths componentsSeparatedByString:@"|"] count];
+        int hasCount = (int)[[runClass.clientImagePaths componentsSeparatedByString:@"|"] count];
         if([runClass.clientImagePaths isEqualToString:@""]){
             hasCount = 0;
         }
@@ -796,7 +796,7 @@
         
     }else if(type == 22){
         //小图
-        int hasCount = [[runClass.clientImagePathsSmall componentsSeparatedByString:@"|"] count];
+        int hasCount = (int)[[runClass.clientImagePathsSmall componentsSeparatedByString:@"|"] count];
         if([runClass.clientImagePathsSmall isEqualToString:@""]){
             hasCount = 0;
         }

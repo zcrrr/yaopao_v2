@@ -111,10 +111,10 @@
         NSString* phone = [dic objectForKey:@"phone"];
         [groupMemberDic setObject:dic forKey:phone];
     }
-    NSString* isShareLocation = [NSString stringWithFormat:@"%@",[resultDic objectForKey:@"enable"]];
-    NSLog(@"isShareLocation is %@",isShareLocation);
+    NSString* isShareLocation_local = [NSString stringWithFormat:@"%@",[resultDic objectForKey:@"enable"]];
+    NSLog(@"isShareLocation_local is %@",isShareLocation_local);
     [kApp.friendHandler.groupNeedRefresh setObject:groupMemberDic forKey:self.chatGroupId];
-    if([isShareLocation isEqualToString:@"1"]){//上报
+    if([isShareLocation_local isEqualToString:@"1"]){//上报
         if(![kApp.friendHandler.groupIsShareLocation containsObject:self.chatGroupId]){
             [kApp.friendHandler.groupIsShareLocation addObject:self.chatGroupId];
         }
@@ -250,7 +250,7 @@
              [params setObject:phone forKey:@"username"];
              kApp.networkHandler.delegate_delMember = self;
              [kApp.networkHandler doRequest_delMember:params];
-             self.handleIndex = [sender tag];
+             self.handleIndex = (int)[sender tag];
          }
      } cancelButtonTitle:NSLocalizedString(@"cancel", @"Cancel") otherButtonTitles:NSLocalizedString(@"ok", @"OK"), nil];
 }
@@ -554,7 +554,6 @@
      } cancelButtonTitle:NSLocalizedString(@"cancel", @"Cancel") otherButtonTitles:NSLocalizedString(@"ok", @"OK"), nil];
 }
 - (void)delMemberDidFailed:(NSString *)mes{
-    __weak ZCGroupSettingViewController *weakSelf = self;
     [self hideLoading];
     NSLog(@"删除成员失败");
 }

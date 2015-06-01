@@ -171,7 +171,7 @@
                 }
             }
         }
-        int displayNum = [kApp.friendHandler.friendsNew count];
+        int displayNum = (int)[kApp.friendHandler.friendsNew count];
         switch (condition) {
             case 1:
             {

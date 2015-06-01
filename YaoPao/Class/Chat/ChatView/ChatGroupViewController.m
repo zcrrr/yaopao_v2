@@ -154,7 +154,6 @@
         self.edgesForExtendedLayout =  UIRectEdgeNone;
     }
     
-#warning 以下三行代码必须写，注册为SDK的ChatManager的delegate
     [[[EaseMob sharedInstance] deviceManager] addDelegate:self onQueue:nil];
     [[EaseMob sharedInstance].chatManager removeDelegate:self];
     //注册为SDK的ChatManager的delegate
@@ -222,6 +221,7 @@
     self.mapView.showsCompass = NO;
     self.mapView.showsScale = NO;
     self.mapView.showsUserLocation = YES;
+    self.mapView.userTrackingMode = MAUserTrackingModeFollow;
     [self.mapContainer addSubview:self.mapView];
     
     UILabel* label_switch_des = [[UILabel alloc]initWithFrame:CGRectMake(10, self.mapContainer.frame.size.height-55, 250, 55)];
@@ -660,7 +660,6 @@ updatingLocation:(BOOL)updatingLocation
     [[EaseMob sharedInstance].chatManager stopPlayingAudio];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-#warning 以下第一行代码必须写，将self从ChatManager的代理中移除
     [[EaseMob sharedInstance].chatManager removeDelegate:self];
     [[[EaseMob sharedInstance] deviceManager] removeDelegate:self];
 }

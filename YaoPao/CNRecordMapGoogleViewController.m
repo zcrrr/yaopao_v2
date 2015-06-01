@@ -50,7 +50,7 @@
 - (void)initUI{
     NSDate *date = [NSDate dateWithTimeIntervalSince1970:[self.oneRun.startTime longLongValue]/1000];
     NSDateComponents *componets = [[NSCalendar autoupdatingCurrentCalendar] components:NSWeekdayCalendarUnit fromDate:date];
-    int weekday = [componets weekday];
+    int weekday = (int)[componets weekday];
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:[NSString stringWithFormat:@"yyyy年M月d日 周%@ HH:mm",[CNUtil weekday2chinese:weekday]]];
     NSString *strDate = [dateFormatter stringFromDate:date];
@@ -95,7 +95,7 @@
     int j = 0;
     int i = 0;
     int n = 0;
-    int pointCount = [kApp.runManager.GPSList count];
+    int pointCount = (int)[kApp.runManager.GPSList count];
     
     //画起点和终点
     CNGPSPoint* startPoint = [kApp.runManager.GPSList firstObject];

@@ -97,8 +97,8 @@
     if(height != nil){
         tempheight = height;
     }
-    int index_height = [self.height_array indexOfObject:[height stringByReplacingOccurrencesOfString:@"cm" withString:@""]];
-    if(index_height == NSNotFound){
+    int index_height = (int)[self.height_array indexOfObject:[height stringByReplacingOccurrencesOfString:@"cm" withString:@""]];
+    if(index_height == (int)NSNotFound){
         index_height = 0;
     }
     [self.pickerview_height selectRow:index_height inComponent:0 animated:YES];
@@ -119,12 +119,12 @@
         tempweight = weight;
     }
     NSArray* temp = [[tempweight stringByReplacingOccurrencesOfString:@"kg" withString:@""] componentsSeparatedByString:@"."];
-    int index_weight1 = [self.weight_array1 indexOfObject:[temp objectAtIndex:0]];
-    index_weight1 = (index_weight1 == NSNotFound)?0:index_weight1;
+    int index_weight1 = (int)[self.weight_array1 indexOfObject:[temp objectAtIndex:0]];
+    index_weight1 = (index_weight1 == (int)NSNotFound)?0:index_weight1;
     [self.pickerview_weight selectRow:index_weight1 inComponent:0 animated:YES];
     if([temp count]>1){
-        int index_weight2 = [self.weight_array2 indexOfObject:[temp objectAtIndex:1]];
-        index_weight2 = (index_weight2 == NSNotFound)?0:index_weight2;
+        int index_weight2 = (int)[self.weight_array2 indexOfObject:[temp objectAtIndex:1]];
+        index_weight2 = (index_weight2 == (int)NSNotFound)?0:index_weight2;
         [self.pickerview_weight selectRow:index_weight2 inComponent:2 animated:YES];
     }
     
@@ -204,7 +204,7 @@
 }
 
 - (IBAction)button_sex_clicked:(id)sender {
-    [self resetSexButton:[sender tag]];
+    [self resetSexButton:(int)[sender tag]];
 }
 
 
@@ -236,6 +236,11 @@
     [textField resignFirstResponder];
     [self resetViewFrame];
     return YES;
+}
+- (void)textFieldDidEndEditing:(UITextField *)textField{
+    NSLog(@"编辑结束");
+    [textField resignFirstResponder];
+    [self resetViewFrame];
 }
 - (void)keyboardWillShow:(NSNotification *)noti
 {
@@ -379,7 +384,7 @@
 #pragma mark--委托协议方法
 - (NSString *)pickerView:(UIPickerView *)pickerView
              titleForRow:(NSInteger)row forComponent:(NSInteger)component {
-    int tag = [pickerView tag];
+    int tag = (int)[pickerView tag];
     if(tag == 0){
         if(component == 0){
             return [NSString stringWithFormat:@"%@",[height_array objectAtIndex:row]];
@@ -410,7 +415,7 @@
 
 #pragma mark--数据源协议方法
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView {
-    int tag = [pickerView tag];
+    int tag = (int)[pickerView tag];
     if(tag == 0){
         return 2;
     }else{
@@ -418,7 +423,7 @@
     }
 }
 - (CGFloat) pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component{
-    int tag = [pickerView tag];
+    int tag = (int)[pickerView tag];
     if(tag == 1){
         if(component == 1){
             return 20;
@@ -433,7 +438,7 @@
 
 - (NSInteger)pickerView:(UIPickerView *)pickerView
 numberOfRowsInComponent:(NSInteger)component {
-    int tag = [pickerView tag];
+    int tag = (int)[pickerView tag];
     if(tag == 0){
         if(component == 0){
             return [self.height_array count];

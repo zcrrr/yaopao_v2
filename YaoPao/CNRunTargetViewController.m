@@ -78,7 +78,7 @@
     [self.dis_array insertObject:@"21" atIndex:20];
     [self.dis_array insertObject:@"42" atIndex:25];
     self.textfield_choose2.tintColor = [UIColor whiteColor];
-    int index_dis = [self.dis_array indexOfObject:[self.runSettingDic objectForKey:@"distance"]];
+    int index_dis = (int)[self.dis_array indexOfObject:[self.runSettingDic objectForKey:@"distance"]];
     [self.pickview_dis selectRow:index_dis inComponent:0 animated:YES];
     
     self.textfield_choose3.inputView = self.pickview_time;
@@ -89,7 +89,7 @@
         [self.time_array addObject:[NSString stringWithFormat:@"%i",i]];
     }
     self.textfield_choose3.tintColor = [UIColor whiteColor];
-    int index_time = [self.time_array indexOfObject:[self.runSettingDic objectForKey:@"time"]];
+    int index_time = (int)[self.time_array indexOfObject:[self.runSettingDic objectForKey:@"time"]];
     [self.pickview_time selectRow:index_time inComponent:0 animated:YES];
 }
 - (void)didReceiveMemoryWarning
@@ -100,7 +100,7 @@
 #pragma mark--委托协议方法
 - (NSString *)pickerView:(UIPickerView *)pickerView
              titleForRow:(NSInteger)row forComponent:(NSInteger)component {
-    int tag = [pickerView tag];
+    int tag = (int)[pickerView tag];
     if(tag == 0){
         return [NSString stringWithFormat:@"%@km",[dis_array objectAtIndex:row]];
     }else{
@@ -118,7 +118,7 @@
 
 - (NSInteger)pickerView:(UIPickerView *)pickerView
 numberOfRowsInComponent:(NSInteger)component {
-    int tag = [pickerView tag];
+    int tag = (int)[pickerView tag];
     if(tag == 0){
         return [self.dis_array count];
     }else{
@@ -151,7 +151,7 @@ numberOfRowsInComponent:(NSInteger)component {
 }
 
 - (IBAction)button_choose_target:(id)sender {
-    [self selectTarget:([sender tag]+1)];
+    [self selectTarget:(int)([sender tag]+1)];
 }
 
 - (IBAction)view_touched:(id)sender {

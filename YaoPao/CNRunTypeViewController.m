@@ -57,7 +57,7 @@
 }
 
 - (IBAction)button_choose_clicked:(id)sender {
-    [self selectType:[sender tag]];
+    [self selectType:(int)[sender tag]];
 }
 
 - (IBAction)button_back_clicked:(id)sender {

@@ -215,7 +215,7 @@
         self.view_user3.hidden = YES;
         self.label_test.text = @"正在搜索接棒队员，请稍候...";
     }else{
-        self.label_test.text = [NSString stringWithFormat:@"搜索到%i个人",[array count]];
+        self.label_test.text = [NSString stringWithFormat:@"搜索到%i个人",(int)[array count]];
         self.view_user1.hidden = YES;
         self.view_user2.hidden = YES;
         self.view_user3.hidden = YES;
@@ -341,7 +341,7 @@
     [Imagerequest startAsynchronous];
 }
 - (void)requestFinished:(ASIHTTPRequest *)request{
-    int index = request.tag;
+    int index = (int)request.tag;
     UIImage *image = [[UIImage alloc] initWithData:[request responseData]];
     if(image){
         if(index == 1){

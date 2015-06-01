@@ -17,7 +17,7 @@
     double length = 0.0;
     CLLocationCoordinate2D llp1;
     CLLocationCoordinate2D llp2;
-    int count = ls->getNumPoints();
+    int count = (int)(ls->getNumPoints());
     for (int i = 1; i < count; i++) {
         CoordinateSequence *cl = ls->getCoordinates();
         

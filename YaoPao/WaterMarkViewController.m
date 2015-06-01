@@ -67,7 +67,7 @@ extern NSString* dayOrNight;
 - (void)trackWater{
     self.mapView=[[MAMapView alloc] initWithFrame:CGRectMake(0, 0, self.view_hidemap.bounds.size.width, self.view_hidemap.bounds.size.height)];
     [self.view_hidemap addSubview:self.mapView];
-    int pointCount = [kApp.runManager.GPSList count];
+    int pointCount = (int)[kApp.runManager.GPSList count];
     CNGPSPoint* firstPoint = [kApp.runManager.GPSList objectAtIndex:0];
     CLLocationCoordinate2D wgs84Point_first = CLLocationCoordinate2DMake(firstPoint.lat, firstPoint.lon);
     CLLocationCoordinate2D encryptionPoint_first = [CNEncryption encrypt:wgs84Point_first];
@@ -115,8 +115,7 @@ extern NSString* dayOrNight;
     if(scrollView==self.scrollview){
         CGPoint offset = scrollView.contentOffset;
         self.pageControl.currentPage = offset.x/320; //计算当前的页码
-        self.currentPage = self.pageControl.currentPage;
-        NSLog(@"current page is %i",self.pageControl.currentPage);
+        self.currentPage = (int)(self.pageControl.currentPage);
     }
 }
 - (void)didReceiveMemoryWarning {

@@ -80,7 +80,7 @@
 - (void)initUI{
     NSDate *date = [NSDate dateWithTimeIntervalSince1970:[self.oneRun.startTime longLongValue]/1000];
     NSDateComponents *componets = [[NSCalendar autoupdatingCurrentCalendar] components:NSWeekdayCalendarUnit fromDate:date];
-    int weekday = [componets weekday];
+    int weekday = (int)[componets weekday];
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:[NSString stringWithFormat:@"yyyy年M月d日 周%@ HH:mm",[CNUtil weekday2chinese:weekday]]];
     NSString *strDate = [dateFormatter stringFromDate:date];
@@ -128,7 +128,7 @@
     NSString* img_name_way = [NSString stringWithFormat:@"way%i_hd.png",way];
     self.imageview_way.image = [UIImage imageNamed:img_name_way];
     
-    if(kApp.runManager.runway == 0){//没选道路
+    if(self.oneRun.runway == 0){//没选道路
         self.imageview_mood.frame = self.imageview_way.frame;
     }
     
@@ -138,7 +138,7 @@
     int j = 0;
     int i = 0;
     int n = 0;
-    int pointCount = [kApp.runManager.GPSList count];
+    int pointCount = (int)[kApp.runManager.GPSList count];
     
     //画起点和终点
     CNGPSPoint* startPoint = [kApp.runManager.GPSList firstObject];
@@ -324,7 +324,7 @@
 }
 - (void)testDrawOneByOne{
 //    [CNAppDelegate makeTest];
-    int pointCount = [kApp.oneRunPointList count];
+    int pointCount = (int)[kApp.oneRunPointList count];
     for(int i=0;i<pointCount-1;i++){
         CNGPSPoint* point1 = [kApp.oneRunPointList objectAtIndex:i];
         CLLocationCoordinate2D wgs84Point1 = CLLocationCoordinate2DMake(point1.lat, point1.lon);
@@ -379,7 +379,7 @@
     int j = 0;
     int i = 0;
     int n = 0;
-    int pointCount = [kApp.match_pointList count];
+    int pointCount = (int)[kApp.match_pointList count];
     
     for(i=0;i<pointCount;i++){
         CNGPSPoint4Match* gpsPoint = [kApp.match_pointList objectAtIndex:i];

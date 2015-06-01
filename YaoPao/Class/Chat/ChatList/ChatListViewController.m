@@ -124,14 +124,14 @@
     [topbar addSubview:label_title];
     
     UIButton * button_contact = [UIButton buttonWithType:UIButtonTypeCustom];
-    button_contact.frame = CGRectMake(254, 26, 29, 29);
+    button_contact.frame = CGRectMake(250, 23, 34, 34);
     [button_contact setBackgroundImage:[UIImage imageNamed:@"chat_home_contact.png"] forState:UIControlStateNormal];
     button_contact.tag = 0;
     [button_contact addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
     [topbar addSubview:button_contact];
     
     UIButton * button_add = [UIButton buttonWithType:UIButtonTypeCustom];
-    button_add.frame = CGRectMake(285, 26, 29, 29);
+    button_add.frame = CGRectMake(285, 23, 34, 34);
     [button_add setBackgroundImage:[UIImage imageNamed:@"chat_home_add.png"] forState:UIControlStateNormal];
     button_add.tag = 1;
     [button_add addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];

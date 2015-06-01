@@ -75,7 +75,6 @@
     if(scrollView==self.scrollview){
         CGPoint offset = scrollView.contentOffset;
         self.pageControl.currentPage = offset.x/320; //计算当前的页码
-        NSLog(@"current page is %i",self.pageControl.currentPage);
     }
 }
 - (void)didReceiveMemoryWarning {

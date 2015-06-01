@@ -97,7 +97,7 @@
 }
 - (void)finishOneRun{
     //先去掉最后一段暂停的gps点：
-    int count = [self.GPSList count];
+    int count = (int)[self.GPSList count];
     if(count > self.pauseCount){//去掉最后一小段从暂停到完成的距离
         for(int i=self.pauseCount;i<count;i++){
             [self.GPSList removeLastObject];
@@ -135,7 +135,7 @@
         if (self.runStatus == 2 && status == 1) {// 由暂停变运动
             self.pauseSecond += (int)([CNUtil getNowTime1000] - self.startPauseTimeStamp);
         } else if (self.runStatus == 1 && status == 2) {// 由运动变暂停
-            self.pauseCount = [self.GPSList count];
+            self.pauseCount = (int)[self.GPSList count];
             self.startPauseTimeStamp = [CNUtil getNowTime1000];
         }
     }

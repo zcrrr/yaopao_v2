@@ -8,7 +8,7 @@
 
 #import "InviteFriendViewController.h"
 #import "FriendInfo.h"
-#import <SMS_SDK/SMS_SDK.h>;
+#import <SMS_SDK/SMS_SDK.h>
 
 @interface InviteFriendViewController ()
 

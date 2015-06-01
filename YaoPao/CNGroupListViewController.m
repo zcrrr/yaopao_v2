@@ -207,7 +207,7 @@
 }
 #pragma -mark ASIHttpRequest delegate
 - (void)requestFinished:(ASIHTTPRequest *)request{
-    int tag = request.tag;
+    int tag = (int)request.tag;
     UIImage *image = [[UIImage alloc] initWithData:[request responseData]];
     if(image){
         ((UIImageView*)[self.imageviewList objectAtIndex:tag]).image = image;

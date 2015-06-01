@@ -32,6 +32,7 @@
 @synthesize currentpage;
 @synthesize overlayVC;
 @synthesize editorController;
+@synthesize runClass;
 extern NSMutableArray* imageArray;
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -65,6 +66,8 @@ extern NSMutableArray* imageArray;
         self.label_whichpage.frame = CGRectMake(135, 268, 51, 17);
         self.view_middle.frame = CGRectMake(0, 301, 320, 43);
     }
+    //先保存一下：
+    [self saveRun];
 }
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
@@ -148,6 +151,8 @@ extern NSMutableArray* imageArray;
         case 0:
         {
             NSLog(@"删除");
+            //去数据库里删除该次记录
+            [CNCloudRecord deleteOneRecord:self.runClass];
             imageArray = nil;
             [self.navigationController popToRootViewControllerAnimated:YES];
             break;
@@ -156,7 +161,7 @@ extern NSMutableArray* imageArray;
         {
             NSLog(@"保存");
             //先保存，然后跳转
-            [self saveRun];
+            [self updateRun];
             CNShareViewController* shareVC = [[CNShareViewController alloc]init];
             shareVC.dataSource = @"this";
             [self.navigationController pushViewController:shareVC animated:YES];
@@ -185,7 +190,7 @@ extern NSMutableArray* imageArray;
         {
             NSLog(@"删除图片");
             [imageArray removeObjectAtIndex:self.currentpage];
-            if(self.currentpage = [imageArray count]){//最后一张
+            if(self.currentpage == [imageArray count]){//最后一张
                 self.currentpage --;
             }
             [self whichImageShouldDisplay];
@@ -390,51 +395,50 @@ extern NSMutableArray* imageArray;
 }
 - (void)saveRun{
     long long nowTime = [CNUtil getNowTime1000];
-    kApp.runManager.remark = self.textfield.text;
     //存储到数据库
-    RunClass * runClass  = [NSEntityDescription insertNewObjectForEntityForName:@"RunClass" inManagedObjectContext:kApp.managedObjectContext];
-    runClass.averageHeart = [NSNumber numberWithInt:0];
-    runClass.dbVersion = [NSNumber numberWithInt:2];
-    runClass.distance = [NSNumber numberWithFloat:kApp.runManager.distance];
-    runClass.duration = [NSNumber numberWithInt:[kApp.runManager during]];
-    runClass.feeling = [NSNumber numberWithInt:kApp.runManager.feeling];
+    self.runClass  = [NSEntityDescription insertNewObjectForEntityForName:@"RunClass" inManagedObjectContext:kApp.managedObjectContext];
+    self.runClass.averageHeart = [NSNumber numberWithInt:0];
+    self.runClass.dbVersion = [NSNumber numberWithInt:2];
+    self.runClass.distance = [NSNumber numberWithFloat:kApp.runManager.distance];
+    self.runClass.duration = [NSNumber numberWithInt:[kApp.runManager during]];
+    self.runClass.feeling = [NSNumber numberWithInt:kApp.runManager.feeling];
     if(kApp.cloudManager.isSynServerTime){
-        runClass.generateTime = [NSNumber numberWithLongLong:(nowTime+kApp.cloudManager.deltaMiliSecond)];
+        self.runClass.generateTime = [NSNumber numberWithLongLong:(nowTime+kApp.cloudManager.deltaMiliSecond)];
     }else{
-        runClass.generateTime = [NSNumber numberWithLongLong:0];
+        self.runClass.generateTime = [NSNumber numberWithLongLong:0];
     }
-    runClass.gpsCount = [NSNumber numberWithLongLong:[kApp.runManager.GPSList count]];
-    runClass.gpsString = @"";
-    runClass.heat = [NSNumber numberWithInt:0];
-    runClass.howToMove = [NSNumber numberWithInt:kApp.runManager.howToMove];
-    runClass.isMatch = [NSNumber numberWithInt:0];
-    runClass.jsonParam = @"";
-    runClass.kmCount = [NSNumber numberWithLongLong:[kApp.runManager.dataKm count]];
-    runClass.maxHeart = [NSNumber numberWithInt:0];
-    runClass.mileCount = [NSNumber numberWithLongLong:[kApp.runManager.dataMile count]];
-    runClass.minCount = [NSNumber numberWithLongLong:[kApp.runManager.dataMin count]];
-    runClass.remark = kApp.runManager.remark;
-    runClass.rid = [NSString stringWithFormat:@"%lli",nowTime];
-    runClass.runway = [NSNumber numberWithInt:kApp.runManager.runway];
-    runClass.score = [NSNumber numberWithInt:kApp.runManager.score];
-    runClass.secondPerKm = [NSNumber numberWithFloat:kApp.runManager.secondPerKm];
+    self.runClass.gpsCount = [NSNumber numberWithLongLong:[kApp.runManager.GPSList count]];
+    self.runClass.gpsString = @"";
+    self.runClass.heat = [NSNumber numberWithInt:0];
+    self.runClass.howToMove = [NSNumber numberWithInt:kApp.runManager.howToMove];
+    self.runClass.isMatch = [NSNumber numberWithInt:0];
+    self.runClass.jsonParam = @"";
+    self.runClass.kmCount = [NSNumber numberWithLongLong:[kApp.runManager.dataKm count]];
+    self.runClass.maxHeart = [NSNumber numberWithInt:0];
+    self.runClass.mileCount = [NSNumber numberWithLongLong:[kApp.runManager.dataMile count]];
+    self.runClass.minCount = [NSNumber numberWithLongLong:[kApp.runManager.dataMin count]];
+    self.runClass.remark = kApp.runManager.remark;
+    self.runClass.rid = [NSString stringWithFormat:@"%lli",nowTime];
+    self.runClass.runway = [NSNumber numberWithInt:kApp.runManager.runway];
+    self.runClass.score = [NSNumber numberWithInt:kApp.runManager.score];
+    self.runClass.secondPerKm = [NSNumber numberWithFloat:kApp.runManager.secondPerKm];
     CNGPSPoint* firstPoint = [kApp.runManager.GPSList firstObject];
     long long stamp = firstPoint.time;
-    runClass.startTime = [NSNumber numberWithLongLong:stamp];
-    runClass.targetType = [NSNumber numberWithInt:kApp.runManager.targetType];
-    runClass.targetValue = [NSNumber numberWithInt:kApp.runManager.targetValue];
-    runClass.temp = [NSNumber numberWithInt:0];
+    self.runClass.startTime = [NSNumber numberWithLongLong:stamp];
+    self.runClass.targetType = [NSNumber numberWithInt:kApp.runManager.targetType];
+    self.runClass.targetValue = [NSNumber numberWithInt:kApp.runManager.targetValue];
+    self.runClass.temp = [NSNumber numberWithInt:0];
     if(kApp.userInfoDic == nil){
-        runClass.uid = @"";
+        self.runClass.uid = @"";
     }else{
-        runClass.uid = [NSString stringWithFormat:@"%i",[[kApp.userInfoDic objectForKey:@"uid"]intValue]];
+        self.runClass.uid = [NSString stringWithFormat:@"%i",[[kApp.userInfoDic objectForKey:@"uid"]intValue]];
     }
     if(kApp.cloudManager.isSynServerTime){
-        runClass.updateTime = [NSNumber numberWithLongLong:(nowTime+kApp.cloudManager.deltaMiliSecond)];
+        self.runClass.updateTime = [NSNumber numberWithLongLong:(nowTime+kApp.cloudManager.deltaMiliSecond)];
     }else{
-        runClass.updateTime = [NSNumber numberWithLongLong:0];
+        self.runClass.updateTime = [NSNumber numberWithLongLong:0];
     }
-    runClass.weather = [NSNumber numberWithInt:0];
+    self.runClass.weather = [NSNumber numberWithInt:0];
     
     //存储2进制文件
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -446,47 +450,47 @@ extern NSMutableArray* imageArray;
         NSLog(@"filename is %@",filename);
         BinaryIOManager* ioManager = [[BinaryIOManager alloc]init];
         [ioManager writeBinary:filename];
-        runClass.clientBinaryFilePath = filename;
-        runClass.serverBinaryFilePath = @"";
+        self.runClass.clientBinaryFilePath = filename;
+        self.runClass.serverBinaryFilePath = @"";
     }else{
         return;
     }
     //如果有图片，存储到手机
-    if([imageArray count] > 0){
-        NSLog(@"有图片");
-        NSMutableString* clientImagePaths = [NSMutableString stringWithString:@""];
-        NSMutableString* clientImagePathsSmall = [NSMutableString stringWithString:@""];
-        
-        for(int i = 0;i<[imageArray count];i++){
-            NSString *filePath_big = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"/%lli_%i_big.jpg",nowTime,i]];   // 保存文件的名称
-            NSString *filePath_small = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"/%lli_%i_small.jpg",nowTime,i]];
-            NSLog(@"filePath_big is %@",filePath_big);
-            NSLog(@"filePath_small is %@",filePath_small);
-            [UIImagePNGRepresentation((UIImage*)[imageArray objectAtIndex:i]) writeToFile: filePath_big atomically:YES];
-            [clientImagePaths appendString:[NSString stringWithFormat:@"%@/%lli_%i_big.jpg|",[CNUtil getYearMonth:nowTime/1000],nowTime,i]];
-            UIImage* image_small = [(UIImage*)[imageArray objectAtIndex:i] rescaleImageToSize:CGSizeMake(120, 120)];
-            [UIImagePNGRepresentation(image_small) writeToFile: filePath_small atomically:YES];
-            [clientImagePathsSmall appendString:[NSString stringWithFormat:@"%@/%lli_%i_small.jpg|",[CNUtil getYearMonth:nowTime/1000],nowTime,i]];
-        }
-        if([clientImagePaths hasSuffix:@"|"]){
-            clientImagePaths = [NSMutableString stringWithString:[clientImagePaths substringToIndex:clientImagePaths.length - 1]];
-        }
-        if([clientImagePathsSmall hasSuffix:@"|"]){
-            clientImagePathsSmall = [NSMutableString stringWithString:[clientImagePathsSmall substringToIndex:clientImagePathsSmall.length - 1]];
-        }
-        NSLog(@"clientImagePaths is %@",clientImagePaths);
-        NSLog(@"clientImagePathsSmall is %@",clientImagePathsSmall);
-        runClass.clientImagePaths = clientImagePaths;
-        runClass.clientImagePathsSmall = clientImagePathsSmall;
-        runClass.serverImagePaths = @"";
-        runClass.serverImagePathsSmall = @"";
-    }else{
+//    if([imageArray count] > 0){
+//        NSLog(@"有图片");
+//        NSMutableString* clientImagePaths = [NSMutableString stringWithString:@""];
+//        NSMutableString* clientImagePathsSmall = [NSMutableString stringWithString:@""];
+//        
+//        for(int i = 0;i<[imageArray count];i++){
+//            NSString *filePath_big = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"/%lli_%i_big.jpg",nowTime,i]];   // 保存文件的名称
+//            NSString *filePath_small = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"/%lli_%i_small.jpg",nowTime,i]];
+//            NSLog(@"filePath_big is %@",filePath_big);
+//            NSLog(@"filePath_small is %@",filePath_small);
+//            [UIImagePNGRepresentation((UIImage*)[imageArray objectAtIndex:i]) writeToFile: filePath_big atomically:YES];
+//            [clientImagePaths appendString:[NSString stringWithFormat:@"%@/%lli_%i_big.jpg|",[CNUtil getYearMonth:nowTime/1000],nowTime,i]];
+//            UIImage* image_small = [(UIImage*)[imageArray objectAtIndex:i] rescaleImageToSize:CGSizeMake(120, 120)];
+//            [UIImagePNGRepresentation(image_small) writeToFile: filePath_small atomically:YES];
+//            [clientImagePathsSmall appendString:[NSString stringWithFormat:@"%@/%lli_%i_small.jpg|",[CNUtil getYearMonth:nowTime/1000],nowTime,i]];
+//        }
+//        if([clientImagePaths hasSuffix:@"|"]){
+//            clientImagePaths = [NSMutableString stringWithString:[clientImagePaths substringToIndex:clientImagePaths.length - 1]];
+//        }
+//        if([clientImagePathsSmall hasSuffix:@"|"]){
+//            clientImagePathsSmall = [NSMutableString stringWithString:[clientImagePathsSmall substringToIndex:clientImagePathsSmall.length - 1]];
+//        }
+//        NSLog(@"clientImagePaths is %@",clientImagePaths);
+//        NSLog(@"clientImagePathsSmall is %@",clientImagePathsSmall);
+//        runClass.clientImagePaths = clientImagePaths;
+//        runClass.clientImagePathsSmall = clientImagePathsSmall;
+//        runClass.serverImagePaths = @"";
+//        runClass.serverImagePathsSmall = @"";
+//    }else{
         NSLog(@"没有图片");
-        runClass.clientImagePaths = @"";
-        runClass.clientImagePathsSmall = @"";
-        runClass.serverImagePaths = @"";
-        runClass.serverImagePathsSmall = @"";
-    }
+        self.runClass.clientImagePaths = @"";
+        self.runClass.clientImagePathsSmall = @"";
+        self.runClass.serverImagePaths = @"";
+        self.runClass.serverImagePathsSmall = @"";
+//    }
     NSError *error = nil;
     if (![kApp.managedObjectContext save:&error]) {
         NSLog(@"Unresolved error %@", error);
@@ -517,12 +521,58 @@ extern NSMutableArray* imageArray;
     [record_dic setObject:[NSString stringWithFormat:@"%i",total_score] forKey:@"total_score"];
     [record_dic writeToFile:filePath_record atomically:YES];
 }
+- (void)updateRun{
+    kApp.runManager.remark = self.textfield.text;
+    long long nowTime = [self.runClass.rid longLongValue];
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *path = [documentsDirectory stringByAppendingPathComponent:[CNUtil getYearMonth:nowTime/1000]];
+    if([imageArray count] > 0){
+        NSLog(@"有图片");
+        NSMutableString* clientImagePaths = [NSMutableString stringWithString:@""];
+        NSMutableString* clientImagePathsSmall = [NSMutableString stringWithString:@""];
+        
+        for(int i = 0;i<[imageArray count];i++){
+            NSString *filePath_big = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"/%lli_%i_big.jpg",nowTime,i]];   // 保存文件的名称
+            NSString *filePath_small = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"/%lli_%i_small.jpg",nowTime,i]];
+            NSLog(@"filePath_big is %@",filePath_big);
+            NSLog(@"filePath_small is %@",filePath_small);
+            [UIImagePNGRepresentation((UIImage*)[imageArray objectAtIndex:i]) writeToFile: filePath_big atomically:YES];
+            [clientImagePaths appendString:[NSString stringWithFormat:@"%@/%lli_%i_big.jpg|",[CNUtil getYearMonth:nowTime/1000],nowTime,i]];
+            UIImage* image_small = [(UIImage*)[imageArray objectAtIndex:i] rescaleImageToSize:CGSizeMake(120, 120)];
+            [UIImagePNGRepresentation(image_small) writeToFile: filePath_small atomically:YES];
+            [clientImagePathsSmall appendString:[NSString stringWithFormat:@"%@/%lli_%i_small.jpg|",[CNUtil getYearMonth:nowTime/1000],nowTime,i]];
+        }
+        if([clientImagePaths hasSuffix:@"|"]){
+            clientImagePaths = [NSMutableString stringWithString:[clientImagePaths substringToIndex:clientImagePaths.length - 1]];
+        }
+        if([clientImagePathsSmall hasSuffix:@"|"]){
+            clientImagePathsSmall = [NSMutableString stringWithString:[clientImagePathsSmall substringToIndex:clientImagePathsSmall.length - 1]];
+        }
+        NSLog(@"clientImagePaths is %@",clientImagePaths);
+        NSLog(@"clientImagePathsSmall is %@",clientImagePathsSmall);
+        self.runClass.clientImagePaths = clientImagePaths;
+        self.runClass.clientImagePathsSmall = clientImagePathsSmall;
+        self.runClass.serverImagePaths = @"";
+        self.runClass.serverImagePathsSmall = @"";
+    }
+    self.runClass.feeling = [NSNumber numberWithInt:kApp.runManager.feeling];
+    self.runClass.runway = [NSNumber numberWithInt:kApp.runManager.runway];
+    self.runClass.remark = kApp.runManager.remark;
+    NSError *error = nil;
+    [kApp.managedObjectContext save:&error];
+}
 #pragma mark- textfiled delegate
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     [textField resignFirstResponder];
     [self resetViewFrame];
     return YES;
+}
+- (void)textFieldDidEndEditing:(UITextField *)textField{
+    NSLog(@"编辑结束");
+    [textField resignFirstResponder];
+    [self resetViewFrame];
 }
 - (void)keyboardWillShow:(NSNotification *)noti
 {
