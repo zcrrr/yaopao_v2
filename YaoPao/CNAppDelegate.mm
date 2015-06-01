@@ -13,8 +13,6 @@
 #import <MAMapKit/MAMapKit.h>
 #import "RunClass.h"
 #import "CNGPSPoint.h"
-#import "CNMatchCountDownViewController.h"
-#import "CNMatchMainViewController.h"
 #import "MobClick.h"
 #import "CNWarningGPSOpenViewController.h"
 #import "CNWarningGPSWeakViewController.h"
@@ -22,20 +20,14 @@
 #import "CNWarningCloudingViewController.h"
 #import "CNGPSPoint4Match.h"
 #import "CNUtil.h"
-#import "CNGroupInfoViewController.h"
-#import "CNMatchMainViewController.h"
-#import "CNMatchMainRecomeViewController.h"
-#import "CNFinishViewController.h"
 #import <ShareSDK/ShareSDK.h>
 #import "WeiboSDK.h"
 #import "WXApi.h"
 #import <TencentOpenAPI/QQApiInterface.h>
 #import <TencentOpenAPI/TencentOAuth.h>
 #import "CNVoiceHandler.h"
-#import "CNTestGEOS.h"
 #import "CNEncryption.h"
 #import "Toast+UIView.h"
-#import "CNFinishTeamMatchViewController.h"
 #import "CNWarningNotInStartZoneViewController.h"
 #import "CNWarningCheckTimeViewController.h"
 #import <SMS_SDK/SMS_SDK.h>
@@ -433,8 +425,8 @@
     NSLog(@"pid is %@",pid);
     self.ua = [NSString stringWithFormat:@"I_%@,i_%@",[[UIDevice currentDevice] systemVersion],ClIENT_VERSION];
     NSLog(@"ua is %@",self.ua);
-    kApp.geosHandler = [[CNTestGEOS alloc]init];
-    [kApp.geosHandler initFromFile:kTrackName];
+//    kApp.geosHandler = [[CNTestGEOS alloc]init];
+//    [kApp.geosHandler initFromFile:kTrackName];
     self.avatarDic = [[NSMutableDictionary alloc]init];
     //初始化udp
     self.udpSocket = [[GCDAsyncUdpSocket alloc] initWithDelegate:self delegateQueue:dispatch_get_main_queue()];

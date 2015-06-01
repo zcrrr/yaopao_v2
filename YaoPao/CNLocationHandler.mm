@@ -11,7 +11,6 @@
 #import "CNGPSPoint4Match.h"
 #import "SBJson.h"
 #import "CNNetworkHandler.h"
-#import "CNTestGEOS.h"
 
 @implementation CNLocationHandler
 @synthesize userLocation_lat;
@@ -66,7 +65,7 @@
     self.gpsTime = [CNUtil getNowTimeDelta];
     if(kApp.isKnowCountry == NO){
         [[NSNotificationCenter defaultCenter] postNotificationName:@"weather" object:nil];
-        kApp.isInChina = [CNTestGEOS isInChina:newLocation.coordinate.longitude :newLocation.coordinate.latitude];
+        kApp.isInChina = [CNUtil isInChina:newLocation.coordinate.longitude :newLocation.coordinate.latitude];
         kApp.isKnowCountry = YES;
         NSLog(@"是否在中国：%d",kApp.isInChina);
 //        if(kApp.isInChina){

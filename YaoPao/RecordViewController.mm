@@ -13,7 +13,6 @@
 #import "CNGPSPoint.h"
 #import "BinaryIOManager.h"
 #import "CNRunManager.h"
-#import "CNTestGEOS.h"
 #import "CNRecordDetailViewController.h"
 #import "CNRecordDetailGoogleViewController.h"
 #import "CNCloudRecord.h"
@@ -232,7 +231,7 @@
     BinaryIOManager* ioManager = [[BinaryIOManager alloc]init];
     [ioManager readBinary:oneRun.clientBinaryFilePath :[oneRun.gpsCount intValue] :[oneRun.kmCount intValue] :[oneRun.mileCount intValue] :[oneRun.minCount intValue]];
     CNGPSPoint* startPoint = [kApp.runManager.GPSList firstObject];
-    BOOL isInChina = [CNTestGEOS isInChina:startPoint.lon :startPoint.lat];
+    BOOL isInChina = [CNUtil isInChina:startPoint.lon :startPoint.lat];
 //    isInChina = NO;
     if(isInChina){
         CNRecordDetailViewController* recordDetailVC = [[CNRecordDetailViewController alloc]init];
