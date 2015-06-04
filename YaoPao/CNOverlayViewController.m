@@ -55,12 +55,14 @@
             self.button_takephoto.hidden = YES;
             [self.indicator startAnimating];
             [self.cameraPicker takePicture];
+            NSLog(@"开始拍照");
             break;
         default:
             break;
     }
 }
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
+    NSLog(@"得到照片");
     UIImage *image = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
     float width = image.size.width;
     float height = image.size.height;

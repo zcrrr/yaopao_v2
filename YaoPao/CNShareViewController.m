@@ -441,6 +441,10 @@ extern NSMutableArray* imageArray;
 }
 - (UIImage *)getWeiboImage{
     UIImage* image_background = [self snapshot2:self.view_shareview];
+    
+    //保存到本地看看图片分辨率
+    
+    
     if(self.currentpage != 0){//不是第一页
         return image_background;
     }

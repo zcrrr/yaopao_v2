@@ -608,15 +608,15 @@
     }
 }
 + (BOOL)isInStartZone{
-    CLLocationCoordinate2D wgs84Point = CLLocationCoordinate2DMake(kApp.locationHandler.userLocation_lat, kApp.locationHandler.userLocation_lon);
-    CLLocationCoordinate2D encryptionPoint = [CNEncryption encrypt:wgs84Point];
-#ifdef SIMULATORTEST
+//    CLLocationCoordinate2D wgs84Point = CLLocationCoordinate2DMake(kApp.locationHandler.userLocation_lat, kApp.locationHandler.userLocation_lon);
+//    CLLocationCoordinate2D encryptionPoint = [CNEncryption encrypt:wgs84Point];
+//#ifdef SIMULATORTEST
+//    return YES;
+////    return [kApp.geosHandler isInTheStartZone:kApp.locationHandler.userLocation_lon :kApp.locationHandler.userLocation_lat];
+//#else
+//    return [kApp.geosHandler isInTheStartZone:encryptionPoint.longitude :encryptionPoint.latitude];
+//# endif
     return YES;
-//    return [kApp.geosHandler isInTheStartZone:kApp.locationHandler.userLocation_lon :kApp.locationHandler.userLocation_lat];
-#else
-    return [kApp.geosHandler isInTheStartZone:encryptionPoint.longitude :encryptionPoint.latitude];
-# endif
-    
 }
 + (void)check_start_match{
     if([CNUtil getNowTimeDelta] >= kApp.match_before5min_timestamp){//进入了赛前5分钟

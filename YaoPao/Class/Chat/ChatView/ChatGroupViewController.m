@@ -260,10 +260,8 @@
 }
 - (void)switchAction:(id)sender{
     if(self.switchButton.on == YES){
-        NSLog(@"打开位置");
         [self setShareLocation:YES];
     }else{
-        NSLog(@"关闭位置");
         [self setShareLocation:NO];
     }
 }
@@ -612,7 +610,7 @@ updatingLocation:(BOOL)updatingLocation
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
+    self.mapView.delegate = self;
     if (_isScrollToBottom) {
         [self scrollViewToBottom:YES];
     }

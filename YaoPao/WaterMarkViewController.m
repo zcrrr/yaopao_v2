@@ -13,6 +13,7 @@
 #import "CNEncryption.h"
 #import "OnlyTrackView.h"
 #import "CNUtil.h"
+#import "RunClass.h"
 
 @interface WaterMarkViewController ()
 
@@ -24,6 +25,7 @@
 @synthesize mapView;
 @synthesize image_datasource;
 @synthesize delegate_addWater;
+@synthesize oneRun;
 extern NSString* weatherCode;
 extern NSString* dayOrNight;
 - (void)viewDidLoad {
@@ -48,21 +50,36 @@ extern NSString* dayOrNight;
         self.view_savaImage.frame = CGRectMake(0, 55, 320, 320);
         self.view_bottom.frame = CGRectMake(0, 390, 320, 15);
     }
-    
 }
 - (void)initData{
-    self.label_water1_km.text = [NSString stringWithFormat:@"%0.2fKM",kApp.runManager.distance/1000.0];
-    self.label_water2_km.text = [NSString stringWithFormat:@"%0.2fKM",kApp.runManager.distance/1000.0];
-    self.label_water2_time.text = [CNUtil duringTimeStringFromSecond:[kApp.runManager during]/1000];
-    self.label_water2_speed.text = [CNUtil pspeedStringFromSecond:kApp.runManager.secondPerKm];
-    self.label_water3_km.text = [NSString stringWithFormat:@"%0.2fKM",kApp.runManager.distance/1000.0];
-    self.label_water3_date.text = [CNUtil getTimeFromTimestamp_ymd:[CNUtil getNowTime]];
-    self.label_water3_time.text = [CNUtil getTimeFromTimestamp_ms:[CNUtil getNowTime]];
-    self.label_water4_km.text = [NSString stringWithFormat:@"%0.2fKM",kApp.runManager.distance/1000.0];
-    NSString* wob = self.whiteOrBlack == 0?@"w":@"b";
-    NSString* imageName = [NSString stringWithFormat:@"weather_marker_%@_%@_%@.png",wob,dayOrNight,weatherCode];
-    self.imageview_water3_weather.image = [UIImage imageNamed:imageName];
-    self.label_water5_km.text = [NSString stringWithFormat:@"%0.2fKM",kApp.runManager.distance/1000.0];
+    if(self.oneRun == nil){
+        self.label_water1_km.text = [NSString stringWithFormat:@"%0.2fKM",kApp.runManager.distance/1000.0];
+        self.label_water2_km.text = [NSString stringWithFormat:@"%0.2fKM",kApp.runManager.distance/1000.0];
+        self.label_water2_time.text = [CNUtil duringTimeStringFromSecond:[kApp.runManager during]/1000];
+        self.label_water2_speed.text = [CNUtil pspeedStringFromSecond:kApp.runManager.secondPerKm];
+        self.label_water3_km.text = [NSString stringWithFormat:@"%0.2fKM",kApp.runManager.distance/1000.0];
+        self.label_water3_date.text = [CNUtil getTimeFromTimestamp_ymd:[CNUtil getNowTime]];
+        self.label_water3_time.text = [CNUtil getTimeFromTimestamp_ms:[CNUtil getNowTime]];
+        self.label_water4_km.text = [NSString stringWithFormat:@"%0.2fKM",kApp.runManager.distance/1000.0];
+        NSString* wob = self.whiteOrBlack == 0?@"w":@"b";
+        NSString* imageName = [NSString stringWithFormat:@"weather_marker_%@_%@_%@.png",wob,dayOrNight,weatherCode];
+        self.imageview_water3_weather.image = [UIImage imageNamed:imageName];
+        self.label_water5_km.text = [NSString stringWithFormat:@"%0.2fKM",kApp.runManager.distance/1000.0];
+    }else{
+        self.label_water1_km.text = [NSString stringWithFormat:@"%0.2fKM",[self.oneRun.distance doubleValue]/1000.0];
+        self.label_water2_km.text = [NSString stringWithFormat:@"%0.2fKM",[self.oneRun.distance doubleValue]/1000.0];
+        self.label_water2_time.text = [CNUtil duringTimeStringFromSecond:[self.oneRun.duration intValue]/1000];
+        self.label_water2_speed.text = [CNUtil pspeedStringFromSecond:[self.oneRun.secondPerKm intValue]];
+        self.label_water3_km.text = [NSString stringWithFormat:@"%0.2fKM",[self.oneRun.distance doubleValue]/1000.0];
+        self.label_water3_date.text = [CNUtil getTimeFromTimestamp_ymd:[oneRun.rid longLongValue]/1000];
+        self.label_water3_time.text = [CNUtil getTimeFromTimestamp_ms:[oneRun.rid longLongValue]/1000];
+        self.label_water4_km.text = [NSString stringWithFormat:@"%0.2fKM",[self.oneRun.distance doubleValue]/1000.0];
+        NSString* wob = self.whiteOrBlack == 0?@"w":@"b";
+        NSString* imageName = [NSString stringWithFormat:@"weather_marker_%@_%@_%@.png",wob,dayOrNight,weatherCode];
+        self.imageview_water3_weather.image = [UIImage imageNamed:imageName];
+        self.label_water5_km.text = [NSString stringWithFormat:@"%0.2fKM",[self.oneRun.distance doubleValue]/1000.0];
+    }
+    
 }
 - (void)trackWater{
     self.mapView=[[MAMapView alloc] initWithFrame:CGRectMake(0, 0, self.view_hidemap.bounds.size.width, self.view_hidemap.bounds.size.height)];

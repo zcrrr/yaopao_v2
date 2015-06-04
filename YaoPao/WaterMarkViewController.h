@@ -9,12 +9,14 @@
 #import <UIKit/UIKit.h>
 #import <MAMapKit/MAMapKit.h>
 @class OnlyTrackView;
+@class RunClass;
 @protocol addWaternDelegate <NSObject>
 //登录接口成功或者失败的协议，如果失败了会有原因mes
 - (void)addWaterDidSuccess:(UIImage*)image;
 @end
 
 @interface WaterMarkViewController : UIViewController<UIScrollViewDelegate>
+@property (strong ,nonatomic) RunClass* oneRun;
 @property (assign, nonatomic) int whiteOrBlack;
 @property (assign, nonatomic) int currentPage;
 @property (nonatomic, strong) MAMapView *mapView;

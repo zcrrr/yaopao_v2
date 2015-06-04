@@ -138,21 +138,12 @@
     [self.view addGestureRecognizer:tap];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(groupBansChanged) name:@"GroupBansChanged" object:nil];
-    
-//    [[EaseMob sharedInstance].chatManager asyncChangeGroupSubject:@"xieyajie test345678" forGroup:@"1409903855656" completion:^(EMGroup *group, EMError *error) {
-//        NSLog(@"%@", group.groupSubject);
-//        if (!error) {
-//            [self fetchGroupInfo];
-//        }
-//    } onQueue:nil];
-    
     [self fetchGroupInfo];
 }
 - (void)buttonClicked:(id)sender{
     switch ([sender tag]) {
         case 0:
         {
-            NSLog(@"返回");
             [self.navigationController popViewControllerAnimated:YES];
             break;
         }
@@ -677,24 +668,11 @@
         }
     } onQueue:nil];
     
-//    [[EaseMob sharedInstance].chatManager asyncLeaveGroup:_chatGroup.groupId];
 }
 
-//- (void)group:(EMGroup *)group didLeave:(EMGroupLeaveReason)reason error:(EMError *)error {
-//    __weak ChatGroupDetailViewController *weakSelf = self;
-//    [weakSelf hideHud];
-//    if (error) {
-//        if (reason == eGroupLeaveReason_UserLeave) {
-//            [weakSelf showHint:@"退出群组失败"];
-//        } else {
-//            [weakSelf showHint:@"解散群组失败"];
-//        }
-//    }
-//}
 
 - (void)didIgnoreGroupPushNotification:(NSArray *)ignoredGroupList error:(EMError *)error {
-// todo
-    NSLog(@"ignored group list:%@.", ignoredGroupList);
+
 }
 
 #pragma mark - UIActionSheetDelegate

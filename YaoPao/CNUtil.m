@@ -226,5 +226,12 @@
         return @"n";
     }
 }
++ (BOOL)isInChina:(double)lon :(double)lat{
+    if(lon > 73.740192 && lon < 135.039985 && lat > 18.156599 && lat < 53.545317){
+        return YES;
+    }else{
+        return NO;
+    }
+}
 
 @end

@@ -178,16 +178,6 @@ extern NSMutableArray* imageArray;
             break;
     }
     self.label_title.text = [NSString stringWithFormat:@"%@的%@",strDate2,typeDes];
-//    self.label_dis.text = [NSString stringWithFormat:@"%0.2fkm",[self.oneRun.distance floatValue]/1000];
-    CNDistanceImageView* div = [[CNDistanceImageView alloc]initWithFrame:CGRectMake(5, 255+IOS7OFFSIZE, 130, 32)];
-    div.distance = [self.oneRun.distance floatValue]/1000;
-    div.color = @"red";
-    [div fitToSizeLeft];
-    [self.view addSubview:div];
-    UIImageView* image_km = [[UIImageView alloc]initWithFrame:CGRectMake(div.frame.origin.x+div.frame.size.width, 255+IOS7OFFSIZE,26, 32)];
-    image_km.image = [UIImage imageNamed:@"redkm.png"];
-    [self.view addSubview:image_km];
-    
     self.label_during.text = [CNUtil duringTimeStringFromSecond:[self.oneRun.duration intValue]/1000];
     self.label_pspeed.text = [CNUtil pspeedStringFromSecond:[self.oneRun.secondPerKm intValue]];
     self.label_aver_speed.text = [NSString stringWithFormat:@"+%i",[self.oneRun.score intValue]];

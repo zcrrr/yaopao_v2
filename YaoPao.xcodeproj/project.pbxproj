@@ -770,6 +770,7 @@
 		81BEA1B91AF74C630033DEA8 /* ChangeGroupNameViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 81BEA1B71AF74C630033DEA8 /* ChangeGroupNameViewController.xib */; };
 		81BEA1BC1AF760BA0033DEA8 /* delete_friend_on.png in Resources */ = {isa = PBXBuildFile; fileRef = 81BEA1BA1AF760BA0033DEA8 /* delete_friend_on.png */; };
 		81BEA1BD1AF760BA0033DEA8 /* delete_friend.png in Resources */ = {isa = PBXBuildFile; fileRef = 81BEA1BB1AF760BA0033DEA8 /* delete_friend.png */; };
+		81C2CB051B1EDA3A00C7C227 /* yp.png in Resources */ = {isa = PBXBuildFile; fileRef = 81C2CB041B1EDA3A00C7C227 /* yp.png */; };
 		81CF74381AC839A000670DE9 /* map_pop.png in Resources */ = {isa = PBXBuildFile; fileRef = 81CF74371AC839A000670DE9 /* map_pop.png */; };
 		81D762991ADD68A300B79558 /* InviteFriendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 81D762971ADD68A300B79558 /* InviteFriendViewController.m */; };
 		81D7629A1ADD68A300B79558 /* InviteFriendViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 81D762981ADD68A300B79558 /* InviteFriendViewController.xib */; };
@@ -2147,6 +2148,7 @@
 		81BEA1B71AF74C630033DEA8 /* ChangeGroupNameViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChangeGroupNameViewController.xib; sourceTree = "<group>"; };
 		81BEA1BA1AF760BA0033DEA8 /* delete_friend_on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = delete_friend_on.png; sourceTree = "<group>"; };
 		81BEA1BB1AF760BA0033DEA8 /* delete_friend.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = delete_friend.png; sourceTree = "<group>"; };
+		81C2CB041B1EDA3A00C7C227 /* yp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = yp.png; sourceTree = "<group>"; };
 		81CF74371AC839A000670DE9 /* map_pop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = map_pop.png; sourceTree = "<group>"; };
 		81D762961ADD68A300B79558 /* InviteFriendViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InviteFriendViewController.h; sourceTree = "<group>"; };
 		81D762971ADD68A300B79558 /* InviteFriendViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InviteFriendViewController.m; sourceTree = "<group>"; };
@@ -4286,6 +4288,7 @@
 		81750ED81AF9F5D5007DD4AE /* sx_image */ = {
 			isa = PBXGroup;
 			children = (
+				81C2CB041B1EDA3A00C7C227 /* yp.png */,
 				81B8CD091B01EECE006B1263 /* sx_pintu.png */,
 				81B8CD0B1B01EFD0006B1263 /* sx_pintu_on.png */,
 				811EAC581AFF22F1004D1CD0 /* logo_sx.png */,
@@ -5623,6 +5626,7 @@
 				81686BA51ADFBA9E006BA130 /* VoiceSearchFeedback015.png in Resources */,
 				9A11A81C19E290F100937C1B /* 100006.mp3 in Resources */,
 				81686C021ADFBA9E006BA130 /* chat_receiver_audio_playing003.png in Resources */,
+				81C2CB051B1EDA3A00C7C227 /* yp.png in Resources */,
 				816869291ADF96F8006BA130 /* EaseMob.bundle in Resources */,
 				8196B4B81AC94A6C00130F18 /* weather_icon_n_23.png in Resources */,
 				814441B31ACAEF3C00A6067E /* weather_marker_b_n_15.png in Resources */,

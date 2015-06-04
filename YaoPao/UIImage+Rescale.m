@@ -29,9 +29,9 @@
     [image_crop drawInRect:rect];
     UIImage *resImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    NSData* imageData = UIImageJPEGRepresentation(resImage, 0.2);
-    UIImage* image_compressed = [UIImage imageWithData:imageData];
-    return image_compressed;
+//    NSData* imageData = UIImageJPEGRepresentation(resImage, 0.2);
+//    UIImage* image_compressed = [UIImage imageWithData:imageData];
+    return resImage;
 }
 - (UIImage *)fixOrientation:(UIImage *)aImage {
     

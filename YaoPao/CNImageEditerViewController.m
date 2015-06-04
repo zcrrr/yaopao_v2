@@ -338,6 +338,7 @@ extern NSMutableArray* imageArray;
     [self.editorController dismissViewControllerAnimated:NO completion:nil];
     WaterMarkViewController* waterVC = [[WaterMarkViewController alloc]init];
     waterVC.delegate_addWater = self;
+    waterVC.oneRun = self.oneRun;
     waterVC.image_datasource = image;
     [self.navigationController pushViewController:waterVC animated:YES];
 }

@@ -17,6 +17,52 @@
             endingLineNumber = "357"
             landmarkName = "-registerPhoneDidSuccess:"
             landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[CNRegisterPhoneViewController registerPhoneDidSuccess:]"
+                  moduleName = "YaoPao"
+                  urlString = "file:///Users/zhangchi1/Desktop/xcode_projects/yaopao_v2/YaoPao/CNRegisterPhoneViewController.m"
+                  timestampString = "455083271.246778"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "357"
+                  endingLineNumber = "357"
+                  offsetFromSymbolStart = "392">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__57-[CNRegisterPhoneViewController registerPhoneDidSuccess:]_block_invoke"
+                  moduleName = "YaoPao"
+                  urlString = "file:///Users/zhangchi1/Desktop/xcode_projects/yaopao_v2/YaoPao/CNRegisterPhoneViewController.m"
+                  timestampString = "455083271.246953"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "357"
+                  endingLineNumber = "357"
+                  offsetFromSymbolStart = "72">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "YaoPao/CNNetworkHandler.m"
+            timestampString = "454992478.392531"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "594"
+            endingLineNumber = "594"
+            landmarkName = "-requestFailedByQueue:"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

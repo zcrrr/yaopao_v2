@@ -418,9 +418,9 @@
             }
             if([runclass.generateTime intValue] == 0){//当时离线保存
                 runclass.generateTime = [NSNumber numberWithLongLong:([CNUtil getNowTime1000]+kApp.cloudManager.deltaMiliSecond)];
-                if([runclass.updateTime intValue] == 0){//当时离线保存
-                    runclass.updateTime = [NSNumber numberWithLongLong:([CNUtil getNowTime1000]+kApp.cloudManager.deltaMiliSecond)];
-                }
+            }
+            if([runclass.updateTime intValue] == 0){//当时离线保存
+                runclass.updateTime = [NSNumber numberWithLongLong:([CNUtil getNowTime1000]+kApp.cloudManager.deltaMiliSecond)];
             }
         }
         self.fileCount = (int)[self.fileArray count];
