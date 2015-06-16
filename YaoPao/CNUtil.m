@@ -32,6 +32,13 @@
     NSString *strDate = [dateFormatter stringFromDate:date];
     return strDate;
 }
++ (long long)getTimestampFromDate:(NSString*)dateString{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    NSDate *date = [dateFormatter dateFromString:dateString];
+    NSTimeInterval timeinterval = [date timeIntervalSince1970];
+    return timeinterval;
+}
 + (NSString*)getTimeFromTimestamp_ymdhm:(long long)timestamp{
     NSDate *date = [NSDate dateWithTimeIntervalSince1970:timestamp];
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];

@@ -12,6 +12,10 @@
 #import "CNGroupInfo.h"
 #import <SMS_SDK/SMS_SDK.h>
 #import "EMSDKFull.h"
+#import <SMS_SDK/SMS_SDK.h>
+#import <AddressBook/AddressBook.h>
+#import "CNUtil.h"
+#import "ASIDataCompressor.h"
 
 @implementation FriendsHandler
 
@@ -148,6 +152,7 @@
                  [self makeNewFriendsList];
              }
          }];
+//        [self userInADBook];
     }
 }
 - (void)makeNewFriendsList{
@@ -238,6 +243,109 @@
     }
     NSLog(@"-----------------------------------------------------------");
 }
+- (void)checkNeedUploadAD{
+    //无论如何先获取通讯录
+    NSMutableString* phoneNOString = [NSMutableString stringWithString:@""];
+    long long newestTime = 0;
+    ABAddressBookRef addressBook = ABAddressBookCreateWithOptions(NULL, NULL);
+    if(addressBook == nil){
+        return;
+    }
+    CFArrayRef results = ABAddressBookCopyArrayOfAllPeople(addressBook);
+    int i = 0;
+    int k = 0;
+    for(i = 0; i < CFArrayGetCount(results); i++){
+        ABRecordRef person = CFArrayGetValueAtIndex(results, i);
+        NSString *lastknow = [NSString stringWithFormat:@"%@",(__bridge NSString*)ABRecordCopyValue(person, kABPersonModificationDateProperty)];
+        lastknow = [lastknow substringToIndex:18];
+//        NSLog(@"lastKnow is %@",lastknow);
+        long long timestamp = [CNUtil getTimestampFromDate:lastknow];
+//        NSLog(@"timestamp is %llu",timestamp);
+        if(timestamp > newestTime){
+            newestTime = timestamp;
+        }
+        ABMultiValueRef phones = ABRecordCopyValue(person, kABPersonPhoneProperty);
+        for (k = 0; k<ABMultiValueGetCount(phones); k++)
+        {
+            CFTypeRef value = ABMultiValueCopyValueAtIndex(phones, k);
+            NSString* phoneNO = (__bridge NSString*)value;
+            phoneNO = [phoneNO stringByReplacingOccurrencesOfString:@" " withString:@""];
+            phoneNO = [phoneNO stringByReplacingOccurrencesOfString:@"-" withString:@""];
+            if([phoneNO hasPrefix:@"+86"]){
+               phoneNO = [phoneNO stringByReplacingOccurrencesOfString:@"+86" withString:@""];
+            }
+            [phoneNOString appendString:phoneNO];
+            [phoneNOString appendString:@","];
+        }
+    }
+    if([phoneNOString hasSuffix:@","]){
+        phoneNOString = [NSMutableString stringWithString:[phoneNOString substringToIndex:phoneNOString.length - 1]];
+    }
+    newestTime += 8*60*60;
+    NSLog(@"phoneNOString is %@",phoneNOString);
+    NSLog(@"newestTime is %llu",newestTime);
+    NSString* filePath = [CNPersistenceHandler getDocument:@"uploadAD.plist"];
+    NSLog(@"filepath is %@",filePath);
+    NSMutableDictionary* dic = [NSMutableDictionary dictionaryWithContentsOfFile:filePath];
+//    if(dic == nil){//没提交过,提交
+        [self uploadADBook:phoneNOString];
+//    }else{
+//        long long lastUploadTime = [[dic objectForKey:@"lastUploadTime"]longLongValue];
+//        if(newestTime > lastUploadTime){
+//            [self uploadADBook:phoneNOString];
+//        }else{
+//            NSLog(@"已经上传通讯录，且通讯录未发生变化");
+//        }
+//    }
+}
+- (void)uploadADBook:(NSString*)phoneNOString{
+    kApp.networkHandler.delegate_uploadADBook = self;
+    [kApp.networkHandler doRequest_uploadADBook:phoneNOString];
+}
+- (void)uploadADDidFailed:(NSString *)mes{
+    
+}
+- (void)uploadADDidSuccess:(NSDictionary *)resultDic{
+    NSString* filePath = [CNPersistenceHandler getDocument:@"uploadAD.plist"];
+    NSMutableDictionary* dic = [NSMutableDictionary dictionaryWithContentsOfFile:filePath];
+    if(dic == nil){//没提交过,提交
+        dic = [[NSMutableDictionary alloc]init];
+    }
+    NSString* newestTimeString = [NSString stringWithFormat:@"%lli",[CNUtil getNowTimeDelta]];
+    [dic setObject:newestTimeString forKey:@"lastUploadTime"];
+    [dic writeToFile:filePath atomically:YES];
+}
+- (void)userInADBook{
+    NSMutableDictionary* dic = [[NSMutableDictionary alloc]init];
+    NSString* uid = [NSString stringWithFormat:@"%@",[kApp.userInfoDic objectForKey:@"uid"]];
+    [dic setObject:uid forKey:@"uid"];
+    kApp.networkHandler.delegate_userInADBook = self;
+    [kApp.networkHandler doRequest_userInADBook:dic];
+}
+- (void)userInADBookDidFailed:(NSString *)mes{
+    [self makeNewFriendsList];
+}
+- (void)userInADBookDidSuccess:(NSDictionary *)resultDic{
+    NSArray* array = [resultDic objectForKey:@"phonelist"];
+    for(NSDictionary* oneContact in array){
+        NSString* phoneNO = [oneContact objectForKey:@"phone"];
+        NSString* myphone = [kApp.userInfoDic objectForKey:@"phone"];
+        NSRange range = [phoneNO rangeOfString:myphone];
+        if(range.length > 0){
+            continue;
+        }
+        
+        NSString* nameInYaoPao = [oneContact objectForKey:@"nickname"];
+        NSString* avatarUrlInYaoPao = [oneContact objectForKey:@"imgpath"] == nil?@"":[oneContact objectForKey:@"imgpath"];
+        NSString* uid = [NSString stringWithFormat:@"%@",[oneContact objectForKey:@"id"]];
+        FriendInfo* friend = [[FriendInfo alloc]initWithUid:uid phoneNO:phoneNO nameInPhone:@"" nameInYaoPao:nameInYaoPao avatarInPhone:nil avatarUrlInYaoPao:avatarUrlInYaoPao status:2 verifyMessage:@"" sex:@""];
+        [kApp.myContactUseApp addObject:friend];
+    }
+    NSLog(@"kApp.myContactUseApp is:");
+    [self printFriendList:kApp.myContactUseApp];
+    [self makeNewFriendsList];
+}
+
 
 
 @end

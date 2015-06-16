@@ -120,10 +120,10 @@ extern NSMutableArray* imageArray;
         }
         
         [self.button_jump setTitle:@"跳过" forState:UIControlStateNormal];
-        self.label_dis_map1.text = [NSString stringWithFormat:@"%0.1f",kApp.runManager.distance/1000.0];
+        self.label_dis_map1.text = [NSString stringWithFormat:@"%0.2f",kApp.runManager.distance/1000.0];
         self.label_date_map1.text = [CNUtil getTimeFromTimestamp_ymd:[CNUtil getNowTime]];
         self.label_time_map1.text = [CNUtil getTimeFromTimestamp_ms:[CNUtil getNowTime]];
-        self.label_dis_map2.text = [NSString stringWithFormat:@"%0.1f",kApp.runManager.distance/1000.0];
+        self.label_dis_map2.text = [NSString stringWithFormat:@"%0.2f",kApp.runManager.distance/1000.0];
         self.label_date_map2.text = [CNUtil getTimeFromTimestamp_ymd:[CNUtil getNowTime]];
         self.label_time_map2.text = [CNUtil getTimeFromTimestamp_ms:[CNUtil getNowTime]];
     }else{
@@ -176,11 +176,11 @@ extern NSMutableArray* imageArray;
         }
         
         
-        self.label_dis_map1.text = [NSString stringWithFormat:@"%0.1f",[oneRun.distance doubleValue]/1000.0];
+        self.label_dis_map1.text = [NSString stringWithFormat:@"%0.2f",[oneRun.distance doubleValue]/1000.0];
         self.label_date_map1.text = [CNUtil getTimeFromTimestamp_ymd:[oneRun.rid longLongValue]/1000];
         self.label_time_map1.text = [CNUtil getTimeFromTimestamp_ms:[oneRun.rid longLongValue]/1000];
         
-        self.label_dis_map2.text = [NSString stringWithFormat:@"%0.1f",[oneRun.distance doubleValue]/1000.0];
+        self.label_dis_map2.text = [NSString stringWithFormat:@"%0.2f",[oneRun.distance doubleValue]/1000.0];
         self.label_date_map2.text = [CNUtil getTimeFromTimestamp_ymd:[oneRun.rid longLongValue]/1000];
         self.label_time_map2.text = [CNUtil getTimeFromTimestamp_ms:[oneRun.rid longLongValue]/1000];
     }

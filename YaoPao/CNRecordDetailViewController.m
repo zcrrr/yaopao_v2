@@ -218,12 +218,11 @@ extern NSMutableArray* imageArray;
                 if(photo.image != nil){
                     [imageArray addObject:photo.image];
                 }
-                
             }
         }
     }
     [self howControllerDisplay];
-    self.label_dis_map1.text = [NSString stringWithFormat:@"%0.1f",[oneRun.distance doubleValue]/1000.0];
+    self.label_dis_map1.text = [NSString stringWithFormat:@"%0.2f",[oneRun.distance doubleValue]/1000.0];
     self.label_date_map1.text = [CNUtil getTimeFromTimestamp_ymd:[oneRun.rid longLongValue]/1000];
     self.label_time_map1.text = [CNUtil getTimeFromTimestamp_ms:[oneRun.rid longLongValue]/1000];
 }

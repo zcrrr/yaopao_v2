@@ -92,7 +92,7 @@
                     if(self.agree == 1){
                         //先验证验证码
                         //测试代码
-//                        self.isVerify = YES;
+                        self.isVerify = YES;
                         if([self.textfield_phone.text isEqualToString:@"18611101410"]){
                             self.isVerify = YES;
                         }
@@ -328,7 +328,7 @@
     //登录、注册之后的一系列操作
     [self.navigationController popToRootViewControllerAnimated:YES];
     //向mob提交用户信息
-    [kApp needRegisterMobUser];
+//    [kApp needRegisterMobUser];
     NSString* phoneNO = [kApp.userInfoDic objectForKey:@"phone"];
     [[EaseMob sharedInstance].chatManager asyncLoginWithUsername:phoneNO password:phoneNO completion:^(NSDictionary *loginInfo, EMError *error) {
         if (!error && loginInfo) {

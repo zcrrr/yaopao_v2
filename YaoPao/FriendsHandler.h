@@ -15,7 +15,7 @@
 - (void)requestFriendsDidFailed;
 @end
 
-@interface FriendsHandler : NSObject<friendsListDelegate>
+@interface FriendsHandler : NSObject<friendsListDelegate,uploadADBookDelegate,userInADBookDelegate>
 
 @property (strong, nonatomic) id<requestFriendsDelegate> delegete_requestFriends;
 @property (assign, nonatomic) BOOL friendList1NeedRefresh;
@@ -35,5 +35,7 @@
 
 
 - (void)dorequest;
+- (void)checkNeedUploadAD;
+- (void)userInADBook;
 
 @end

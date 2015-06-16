@@ -227,7 +227,7 @@
                     cell.button_num.hidden = YES;
                 }
                 if(friend.avatarUrlInYaoPao != nil && ![friend.avatarUrlInYaoPao isEqualToString:@""]){//有头像url
-                    NSString* fullurl = friend.avatarUrlInYaoPao;
+                    NSString* fullurl = [NSString stringWithFormat:@"%@%@",kApp.imageurl,friend.avatarUrlInYaoPao];
                     __block UIImage* image = [kApp.avatarDic objectForKey:fullurl];
                     if(image != nil){//缓存中有
                         cell.imageview_avatar.image = image;
@@ -259,7 +259,7 @@
                     ((UIImageView*)[arraytemp objectAtIndex:i]).hidden = NO;
                     FriendInfo* friend = [kApp.friendHandler.myContactUseAppButNotFriend objectAtIndex:i];
                     if(friend.avatarUrlInYaoPao != nil && ![friend.avatarUrlInYaoPao isEqualToString:@""]){//有头像url
-                        NSString* fullurl = friend.avatarUrlInYaoPao;
+                        NSString* fullurl = [NSString stringWithFormat:@"%@%@",kApp.imageurl,friend.avatarUrlInYaoPao];
                         __block UIImage* image = [kApp.avatarDic objectForKey:fullurl];
                         if(image != nil){//缓存中有
                             ((UIImageView*)[arraytemp objectAtIndex:i]).image = image;

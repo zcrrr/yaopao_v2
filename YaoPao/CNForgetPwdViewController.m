@@ -314,7 +314,7 @@
     [CNCloudRecord ClearRecordAfterUserLogin];
     [self.navigationController popToRootViewControllerAnimated:YES];
     //向mob注册用户信息
-    [kApp needRegisterMobUser];
+//    [kApp needRegisterMobUser];
     NSString* phoneNO = [kApp.userInfoDic objectForKey:@"phone"];
     [[EaseMob sharedInstance].chatManager asyncLoginWithUsername:phoneNO password:phoneNO completion:^(NSDictionary *loginInfo, EMError *error) {
         if (!error && loginInfo) {

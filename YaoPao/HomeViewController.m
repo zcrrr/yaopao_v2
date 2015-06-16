@@ -323,6 +323,9 @@ NSString* dayOrNight;
             NSLog(@"同步");
             [CNAppDelegate popupWarningCloud:YES];
             
+//            [kApp.friendHandler checkNeedUploadAD];
+//            [kApp.friendHandler userInADBook];
+            
             break;
         }
         case 1:

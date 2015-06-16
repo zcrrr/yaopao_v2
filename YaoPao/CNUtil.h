@@ -29,4 +29,5 @@
 + (NSString*)getTimeFromTimestamp_ymdhm:(long long)timestamp;
 + (NSString*)dayOrNight;
 + (BOOL)isInChina:(double)lon :(double)lat;
++ (long long)getTimestampFromDate:(NSString*)dateString;
 @end

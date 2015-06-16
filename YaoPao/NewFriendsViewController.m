@@ -52,6 +52,9 @@
         NSString *nameString = (__bridge NSString *)abName;
         NSString *lastNameString = (__bridge NSString *)abLastName;
         
+        NSString *lastknow = (__bridge NSString*)ABRecordCopyValue(person, kABPersonModificationDateProperty);
+        NSLog(@"lastKnow is %@",lastknow);
+        
         if ((__bridge id)abFullName != nil) {
             nameString = (__bridge NSString *)abFullName;
         } else {
@@ -60,6 +63,7 @@
                 nameString = [NSString stringWithFormat:@"%@ %@", nameString, lastNameString];
             }
         }
+        NSLog(@"nameString is %@",nameString);
         NSData *image = (__bridge NSData*)ABPersonCopyImageData(person);
         ABMultiValueRef phones = ABRecordCopyValue(person, kABPersonPhoneProperty);
         for (k = 0; k<ABMultiValueGetCount(phones); k++)
@@ -159,7 +163,7 @@
         friend = [kApp.friendHandler.friendsNew objectAtIndex:row];
         cell.label_username.text = friend.nameInYaoPao;
         if(friend.avatarUrlInYaoPao != nil && ![friend.avatarUrlInYaoPao isEqualToString:@""]){//有头像url
-            NSString* fullurl = friend.avatarUrlInYaoPao;
+            NSString* fullurl = [NSString stringWithFormat:@"%@%@",kApp.imageurl,friend.avatarUrlInYaoPao];
             if(![fullurl hasPrefix:@"http"]){
                 fullurl = [NSString stringWithFormat:@"%@%@",kApp.imageurl,friend.avatarUrlInYaoPao];
             }

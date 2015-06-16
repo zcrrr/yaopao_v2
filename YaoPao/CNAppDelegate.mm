@@ -144,7 +144,7 @@
     //net.yaopao.yaopao开发：yaopao_push_dev
     //net.yaopao.yaopao生产：dis_push_yaopao
     //net.yaopao.enterprise生产：yaopao_inhouse_push
-    [[EaseMob sharedInstance] registerSDKWithAppKey:@"yaopao#yaopao" apnsCertName:@"dis_push_yaopao" otherConfig:@{kSDKConfigEnableConsoleLogger:[NSNumber numberWithBool:NO]}];
+    [[EaseMob sharedInstance] registerSDKWithAppKey:@"yaopao#yaopao" apnsCertName:@"yaopao_push_dev" otherConfig:@{kSDKConfigEnableConsoleLogger:[NSNumber numberWithBool:NO]}];
     [[EaseMob sharedInstance].chatManager setIsUseIp:YES];
     [self registerEaseMobNotification];
     //注册推送
@@ -745,58 +745,58 @@
                         annotation:annotation
                         wxDelegate:self];
 }
-- (void)needRegisterMobUser{
-    NSString* filePath = [CNPersistenceHandler getDocument:@"registerMob.plist"];
-    NSMutableDictionary* registerMobDic = [NSMutableDictionary dictionaryWithContentsOfFile:filePath];
-    if(registerMobDic == nil){//没注册过
-        [self registerMobUser];
-    }
-}
-- (void)registerMobUser{
-    SMS_UserInfo* user = [[SMS_UserInfo alloc]init];
-    user.phone = [self.userInfoDic objectForKey:@"phone"];
-    user.nickname = [self.userInfoDic objectForKey:@"nickname"];
-    user.uid = [NSString stringWithFormat:@"%@",[self.userInfoDic objectForKey:@"uid"]];
-    if([[self.userInfoDic allKeys] containsObject:@"imgpath"]){
-        user.avatar = [NSString stringWithFormat:@"%@%@",kApp.imageurl,[self.userInfoDic objectForKey:@"imgpath"]];
-    }else{
-        user.avatar = @"";
-    }
-    
-    NSLog(@"phone is %@",user.phone);
-    NSLog(@"nickname is %@",user.nickname);
-    NSLog(@"uid is %@",user.uid);
-    NSLog(@"avatar is %@",user.avatar);
-    [SMS_SDK submitUserInfo:user
-                     result:^(enum SMS_ResponseState state) {
-                         if (state == SMS_ResponseStateSuccess)
-                         {
-                             NSLog(@"mob提交成功--------");
-//                             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提交成功"
-//                                                                             message:nil
-//                                                                            delegate:self
-//                                                                   cancelButtonTitle:@"OK"
-//                                                                   otherButtonTitles:nil, nil];
-//                             [alert show];
-                             NSString* filePath = [CNPersistenceHandler getDocument:@"registerMob.plist"];
-                             NSMutableDictionary* registerMobDic = [NSMutableDictionary dictionaryWithContentsOfFile:filePath];
-                             if(registerMobDic == nil){
-                                 [registerMobDic setObject:@"1" forKey:@"isRegister"];
-                                 [registerMobDic writeToFile:filePath atomically:YES];
-                             }
-                         }
-                         else if (state == SMS_ResponseStateFail)
-                         {
-                             NSLog(@"mob提交失败--------");
-//                             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提交失败"
-//                                                                             message:nil
-//                                                                            delegate:self
-//                                                                   cancelButtonTitle:@"OK"
-//                                                                   otherButtonTitles:nil, nil];
-//                             [alert show];
-                         }
-                     }];
-}
+//- (void)needRegisterMobUser{
+//    NSString* filePath = [CNPersistenceHandler getDocument:@"registerMob.plist"];
+//    NSMutableDictionary* registerMobDic = [NSMutableDictionary dictionaryWithContentsOfFile:filePath];
+//    if(registerMobDic == nil){//没注册过
+//        [self registerMobUser];
+//    }
+//}
+//- (void)registerMobUser{
+//    SMS_UserInfo* user = [[SMS_UserInfo alloc]init];
+//    user.phone = [self.userInfoDic objectForKey:@"phone"];
+//    user.nickname = [self.userInfoDic objectForKey:@"nickname"];
+//    user.uid = [NSString stringWithFormat:@"%@",[self.userInfoDic objectForKey:@"uid"]];
+//    if([[self.userInfoDic allKeys] containsObject:@"imgpath"]){
+//        user.avatar = [NSString stringWithFormat:@"%@%@",kApp.imageurl,[self.userInfoDic objectForKey:@"imgpath"]];
+//    }else{
+//        user.avatar = @"";
+//    }
+//    
+//    NSLog(@"phone is %@",user.phone);
+//    NSLog(@"nickname is %@",user.nickname);
+//    NSLog(@"uid is %@",user.uid);
+//    NSLog(@"avatar is %@",user.avatar);
+//    [SMS_SDK submitUserInfo:user
+//                     result:^(enum SMS_ResponseState state) {
+//                         if (state == SMS_ResponseStateSuccess)
+//                         {
+//                             NSLog(@"mob提交成功--------");
+////                             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提交成功"
+////                                                                             message:nil
+////                                                                            delegate:self
+////                                                                   cancelButtonTitle:@"OK"
+////                                                                   otherButtonTitles:nil, nil];
+////                             [alert show];
+//                             NSString* filePath = [CNPersistenceHandler getDocument:@"registerMob.plist"];
+//                             NSMutableDictionary* registerMobDic = [NSMutableDictionary dictionaryWithContentsOfFile:filePath];
+//                             if(registerMobDic == nil){
+//                                 [registerMobDic setObject:@"1" forKey:@"isRegister"];
+//                                 [registerMobDic writeToFile:filePath atomically:YES];
+//                             }
+//                         }
+//                         else if (state == SMS_ResponseStateFail)
+//                         {
+//                             NSLog(@"mob提交失败--------");
+////                             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提交失败"
+////                                                                             message:nil
+////                                                                            delegate:self
+////                                                                   cancelButtonTitle:@"OK"
+////                                                                   otherButtonTitles:nil, nil];
+////                             [alert show];
+//                         }
+//                     }];
+//}
 
 - (void)didUnreadMessagesCountChanged{
     [CNAppDelegate howManyMessageToRead];

@@ -67,8 +67,8 @@
 
 + (CNAppDelegate*)getApplicationDelegate;
 - (void)showTab:(int)index;
-- (void)needRegisterMobUser;//登录之后调用此方法用于向mob注册用户信息
-- (void)registerMobUser;//向mob注册用户信息
+//- (void)needRegisterMobUser;//登录之后调用此方法用于向mob注册用户信息
+//- (void)registerMobUser;//向mob注册用户信息
 
 
 //-----------------------------------------比赛------------------------------------------

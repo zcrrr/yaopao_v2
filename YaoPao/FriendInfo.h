@@ -23,5 +23,4 @@
 
 
 - (id)initWithUid:(NSString*)uid1 phoneNO:(NSString*)phoneNO1 nameInPhone:(NSString*)nameInPhone1 nameInYaoPao:(NSString*)nameInYaoPao1 avatarInPhone:(UIImage*)avatarInPhone1 avatarUrlInYaoPao:(NSString*)avatarUrlInYaoPao1 status:(int)status1 verifyMessage:(NSString*)verifyMessage1 sex:(NSString*)sex1;
-
 @end

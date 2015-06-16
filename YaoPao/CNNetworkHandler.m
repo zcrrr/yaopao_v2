@@ -16,6 +16,7 @@
 #import "CNCloudRecord.h"
 #import "ASIHTTPRequest.h"
 #import "EMSDKFull.h"
+#import "ASIDataCompressor.h"
 #define kCheckServerTimeInterval 2
 #define kShortTime 3000
 
@@ -66,6 +67,7 @@
 @synthesize delegate_memberLocations;
 @synthesize delegate_enableMyLocationInGroup;
 @synthesize delegate_resetGroupSetting;
+@synthesize delegate_uploadADBook;
 
 @synthesize verifyCodeRequest;
 @synthesize registerPhoneRequest;
@@ -108,6 +110,7 @@
 @synthesize memberLocationsRequest;
 @synthesize enableMyLocationInGroupRequest;
 @synthesize resetGroupSettingRequest;
+@synthesize uploadADBookRequest;
 
 - (void)startQueue{
     //    self.handler = self;//持有自己的引用，这样就不会被释放,在delegate里面有了强引用，这里可以注释了
@@ -236,9 +239,6 @@
         case TAG_AUTO_LOGIN:
         {
             NSString* phoneNO = [kApp.userInfoDic objectForKey:@"phone"];
-            NSLog(@"phoneNO is %@",phoneNO);
-            NSLog(@"开启登录");
-            NSLog(@"[EaseMob sharedInstance].sdkVersion is %@",[EaseMob sharedInstance].sdkVersion);
             [[EaseMob sharedInstance].chatManager asyncLoginWithUsername:phoneNO password:phoneNO completion:^(NSDictionary *loginInfo, EMError *error) {
                 NSLog(@"进入回调");
                 if (!error && loginInfo) {
@@ -249,7 +249,7 @@
             } onQueue:nil];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"loginDone" object:nil];
 //            [kApp.cloudManager synTimeWithServer];
-            [kApp needRegisterMobUser];
+//            [kApp needRegisterMobUser];
             //重置所有跑团设置
             NSString* uid = [NSString stringWithFormat:@"%@",[kApp.userInfoDic objectForKey:@"uid"]];
             NSMutableDictionary* param = [[NSMutableDictionary alloc]initWithObjectsAndKeys:uid,@"uid",nil];
@@ -555,6 +555,24 @@
             }
             break;
         }
+        case TAG_UPLOAD_ADBOOK:
+        {
+            if(isSuccess){
+                [self.delegate_uploadADBook uploadADDidSuccess:result];
+            }else{
+                [self.delegate_uploadADBook uploadADDidFailed:desc];
+            }
+            break;
+        }
+        case TAG_USER_IN_ADBOOK:
+        {
+            if(isSuccess){
+                [self.delegate_userInADBook userInADBookDidSuccess:result];
+            }else{
+                [self.delegate_userInADBook userInADBookDidFailed:desc];
+            }
+            break;
+        }
         
         default:
             break;
@@ -749,6 +767,16 @@
         case TAG_RESET_GROUP_SETTING:
         {
             [self.delegate_resetGroupSetting resetGroupSettingGroupDidFailed:@""];
+            break;
+        }
+        case TAG_UPLOAD_ADBOOK:
+        {
+            [self.delegate_uploadADBook uploadADDidFailed:@""];
+            break;
+        }
+        case TAG_USER_IN_ADBOOK:
+        {
+            [self.delegate_userInADBook userInADBookDidFailed:@""];
             break;
         }
             
@@ -1458,6 +1486,39 @@
     NSLog(@"重置跑团设置url:%@",str_url);
     NSLog(@"重置跑团设置参数:%@",params);
     [[self networkQueue]addOperation:self.resetGroupSettingRequest];
+}
+- (void)doRequest_uploadADBook:(NSString*)phoneNOString{
+    NSString* str_url = [NSString stringWithFormat:@"%@chSports/login/uploadphonelist.htm",ENDPOINTS];
+    NSURL* url = [NSURL URLWithString:str_url];
+    self.uploadADBookRequest =  [ASIFormDataRequest requestWithURL:url];
+    self.uploadADBookRequest.tag = TAG_UPLOAD_ADBOOK;
+    [self.uploadADBookRequest setNumberOfTimesToRetryOnTimeout:3];
+    [self.uploadADBookRequest setTimeOutSeconds:15];
+    [self.uploadADBookRequest addRequestHeader:@"X-PID" value:kApp.pid];
+    [self.uploadADBookRequest addRequestHeader:@"ua" value:kApp.ua];
+    NSString* uid = [NSString stringWithFormat:@"%@",[kApp.userInfoDic objectForKey:@"uid"]];
+    [self.uploadADBookRequest addRequestHeader:@"uid" value:uid];
+    NSData* unzipData = [phoneNOString dataUsingEncoding:NSUTF8StringEncoding];
+    NSData* zippedData = [ASIDataCompressor compressData:unzipData error:nil];
+    [self.uploadADBookRequest appendPostData:zippedData];
+    NSLog(@"上传通讯录url:%@",str_url);
+    [[self networkQueue]addOperation:self.uploadADBookRequest];
+}
+- (void)doRequest_userInADBook:(NSMutableDictionary*)params{
+    NSString* str_url = [NSString stringWithFormat:@"%@chSports/login/getphonelist.htm",ENDPOINTS];
+    NSURL* url = [NSURL URLWithString:str_url];
+    self.userInADBookRequest =  [ASIFormDataRequest requestWithURL:url];
+    self.userInADBookRequest.tag = TAG_USER_IN_ADBOOK;
+    [self.userInADBookRequest setNumberOfTimesToRetryOnTimeout:3];
+    [self.userInADBookRequest setTimeOutSeconds:15];
+    [self.userInADBookRequest addRequestHeader:@"X-PID" value:kApp.pid];
+    [self.userInADBookRequest addRequestHeader:@"ua" value:kApp.ua];
+    for (id oneKey in [params allKeys]){
+        [self.userInADBookRequest setPostValue:[params objectForKey:oneKey] forKey:oneKey];
+    }
+    NSLog(@"获取通讯录中要跑用户url:%@",str_url);
+    NSLog(@"获取通讯录中要跑用户参数:%@",params);
+    [[self networkQueue]addOperation:self.userInADBookRequest];
 }
 - (void)showAlert:(NSString*) content{
     UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:content delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];

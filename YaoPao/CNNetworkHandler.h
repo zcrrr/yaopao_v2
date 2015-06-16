@@ -257,6 +257,16 @@
 - (void)resetGroupSettingGroupDidSuccess:(NSDictionary*)resultDic;
 - (void)resetGroupSettingGroupDidFailed:(NSString*)mes;
 @end
+@protocol uploadADBookDelegate<NSObject>
+//上传通讯录
+- (void)uploadADDidSuccess:(NSDictionary*)resultDic;
+- (void)uploadADDidFailed:(NSString*)mes;
+@end
+@protocol userInADBookDelegate<NSObject>
+//获得通讯录里要跑用户
+- (void)userInADBookDidSuccess:(NSDictionary*)resultDic;
+- (void)userInADBookDidFailed:(NSString*)mes;
+@end
 
 
 
@@ -317,6 +327,8 @@
 @property (nonatomic, strong) id<memberLocationsDelegate> delegate_memberLocations;
 @property (nonatomic, strong) id<enableMyLocationInGroupDelegate> delegate_enableMyLocationInGroup;
 @property (nonatomic, strong) id<resetGroupSettingDelegate> delegate_resetGroupSetting;
+@property (nonatomic, strong) id<uploadADBookDelegate> delegate_uploadADBook;
+@property (nonatomic, strong) id<userInADBookDelegate> delegate_userInADBook;
 
 //定义每个请求的request
 @property (nonatomic, strong) ASIFormDataRequest* verifyCodeRequest;
@@ -362,6 +374,8 @@
 @property (nonatomic, strong) ASIFormDataRequest* memberLocationsRequest;
 @property (nonatomic, strong) ASIFormDataRequest* enableMyLocationInGroupRequest;
 @property (nonatomic, strong) ASIFormDataRequest* resetGroupSettingRequest;
+@property (nonatomic, strong) ASIFormDataRequest* uploadADBookRequest;
+@property (nonatomic, strong) ASIFormDataRequest* userInADBookRequest;
 //每个请求的实现
 - (void)doRequest_verifyCode:(NSString*)phoneNO;
 - (void)doRequest_registerPhone:(NSMutableDictionary*)params;
@@ -406,5 +420,7 @@
 - (void)doRequest_memberLocations:(NSMutableDictionary*)params;
 - (void)doRequest_enableMyLocationInGroup:(NSMutableDictionary*)params;
 - (void)doRequest_resetGroupSetting:(NSMutableDictionary*)params;
+- (void)doRequest_uploadADBook:(NSString*)phoneNOString;
+- (void)doRequest_userInADBook:(NSMutableDictionary*)params;
 
 @end

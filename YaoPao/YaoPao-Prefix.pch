@@ -22,8 +22,10 @@
 #define ENDPOINTS kApp.mainurl
 #define ENDPOINTS_UDP @"udp.yaopao.net"
 
-//#define ENDPOINTS @"http://182.92.97.144:8888/"
+//#define ENDPOINTS @"http://182.92.97.144:8888/"  //本地测试ip：http://192.168.0.10:8080/
 //#define ENDPOINTS_UDP @"182.92.97.144"
+
+
 
 
 
@@ -91,4 +93,7 @@
 #define TAG_MEMBER_LOCATIONS 40
 #define TAG_ENABLE_MY_LOCATION_IN_GROUP 41
 #define TAG_RESET_GROUP_SETTING 42
+#define TAG_UPLOAD_ADBOOK 43
+#define TAG_USER_IN_ADBOOK 44
+
 
