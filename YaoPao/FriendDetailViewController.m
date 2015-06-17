@@ -54,8 +54,15 @@
     if([self.from isEqualToString:@"chat"]){
         self.button_chat.hidden = YES;
         self.button_clearHistory.frame = self.button_chat.frame;
+    }else if([self.from isEqualToString:@"search"]){
+        NSString* hidePhoneNo = [NSString stringWithFormat:@"%@******%@",[self.friend.phoneNO substringToIndex:3],[self.friend.phoneNO substringFromIndex:9]];
+        if([self.friend.nameInYaoPao isEqualToString:self.friend.phoneNO]){
+            self.label_name.text = hidePhoneNo;
+        }else{
+            self.label_name.text = friend.nameInYaoPao;
+        }
+        self.label_phone.text = hidePhoneNo;
     }
-    
 }
 
 - (void)didReceiveMemoryWarning {

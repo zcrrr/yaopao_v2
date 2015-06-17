@@ -105,6 +105,7 @@ extern NSMutableArray* imageArray;
         self.imageview_page.hidden = YES;
         self.label_whichpage.hidden = YES;
         self.button_deleteImage.enabled = NO;
+        self.button_water.enabled = NO;
         self.button_edit.enabled = NO;
         return;
     }
@@ -112,6 +113,7 @@ extern NSMutableArray* imageArray;
         self.imageview_page.hidden = NO;
         self.label_whichpage.hidden = NO;
         self.button_deleteImage.enabled = YES;
+        self.button_water.enabled = YES;
         self.button_edit.enabled = YES;
     }
     if([imageArray count] == 1){
@@ -207,27 +209,26 @@ extern NSMutableArray* imageArray;
         case 6:
         {
             NSLog(@"美化");
-//            ChooseEditImageViewController* ceiVC = [[ChooseEditImageViewController alloc]init];
-//            ceiVC.delegate_buttonClick = self;
-//            [self presentViewController:ceiVC animated:YES completion:nil];
-            
             [self displayEditorForImage:[imageArray objectAtIndex:self.currentpage]];
             break;
         }
         case 7:
         {
-            NSLog(@"拼图");
-//            ChooseEditImageViewController* ceiVC = [[ChooseEditImageViewController alloc]init];
-//            ceiVC.delegate_buttonClick = self;
-//            [self presentViewController:ceiVC animated:YES completion:nil];
-            CNChooseModelViewController* cmVC = [[CNChooseModelViewController alloc]init];
-            cmVC.delegate_combineImage = self;
-            UINavigationController* navVC = [[UINavigationController alloc]initWithRootViewController:cmVC];
-            cmVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-            navVC.modalPresentationStyle = UIModalPresentationCustom;
-            UIViewController* rootViewController =  [[UIApplication sharedApplication] keyWindow].rootViewController;
-            rootViewController.modalPresentationStyle = UIModalPresentationCurrentContext;
-            [rootViewController presentViewController:navVC animated:YES completion:^(void){NSLog(@"pop");}];
+            NSLog(@"水印");
+//            CNChooseModelViewController* cmVC = [[CNChooseModelViewController alloc]init];
+//            cmVC.delegate_combineImage = self;
+//            UINavigationController* navVC = [[UINavigationController alloc]initWithRootViewController:cmVC];
+//            cmVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+//            navVC.modalPresentationStyle = UIModalPresentationCustom;
+//            UIViewController* rootViewController =  [[UIApplication sharedApplication] keyWindow].rootViewController;
+//            rootViewController.modalPresentationStyle = UIModalPresentationCurrentContext;
+//            [rootViewController presentViewController:navVC animated:YES completion:^(void){NSLog(@"pop");}];
+            
+            WaterMarkViewController* waterVC = [[WaterMarkViewController alloc]init];
+            waterVC.delegate_addWater = self;
+            waterVC.image_datasource = [imageArray objectAtIndex:self.currentpage];
+            [self.navigationController pushViewController:waterVC animated:YES];
+            
             break;
         }
         default:
@@ -332,11 +333,9 @@ extern NSMutableArray* imageArray;
     float image_height = image.size.height;
     NSLog(@"image_width is %f",image_width);
     NSLog(@"image_height is %f",image_height);
+    [imageArray removeObjectAtIndex:self.currentpage];
+    [imageArray insertObject:image atIndex:self.currentpage];
     [self.editorController dismissViewControllerAnimated:NO completion:nil];
-    WaterMarkViewController* waterVC = [[WaterMarkViewController alloc]init];
-    waterVC.delegate_addWater = self;
-    waterVC.image_datasource = image;
-    [self.navigationController pushViewController:waterVC animated:YES];
 }
 - (void)addWaterDidSuccess:(UIImage *)image{
     [imageArray removeObjectAtIndex:self.currentpage];

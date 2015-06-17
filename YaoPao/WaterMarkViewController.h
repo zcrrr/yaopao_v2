@@ -45,6 +45,7 @@
 @property (weak, nonatomic) IBOutlet UIView *view_savaImage;
 @property (weak, nonatomic) IBOutlet UIImageView *imageview_water5;
 @property (weak, nonatomic) IBOutlet UILabel *label_water5_km;
+@property (weak, nonatomic) IBOutlet UIImageView *imageview_water0;
 
 
 

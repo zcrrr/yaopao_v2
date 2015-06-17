@@ -53,6 +53,7 @@ NSString* dayOrNight;
     [self displayEventIcon];
     if(kApp.isLogin == 2){//正在登录
         [self displayLoading];
+        self.label_username.text = @"正在登录...";
     }else{
         if(kApp.isLogin == 11){//老用户需要自动登录
             CNVCodeViewController* vcodeVC = [[CNVCodeViewController alloc]init];
@@ -187,6 +188,7 @@ NSString* dayOrNight;
     self.label_gps.text = gpsDes;
 }
 - (void)loginDone{
+    self.label_username.text = @"未登录";
     [self hideLoading];
     //加载用户信息
     [self initUI];

@@ -13,6 +13,7 @@
                 <outlet property="button_left" destination="afx-qG-rR0" id="bOT-vw-gGb"/>
                 <outlet property="button_right" destination="Ng8-Wg-zzS" id="KyH-hE-oNZ"/>
                 <outlet property="button_save" destination="kMx-DX-VMg" id="TCE-vG-NRp"/>
+                <outlet property="button_water" destination="aed-CM-Mb4" id="kcN-ul-3Gy"/>
                 <outlet property="imageview_page" destination="yIq-jG-arv" id="PCK-eI-rn7"/>
                 <outlet property="label_title" destination="QMo-gc-8I9" id="do2-pz-0Ux"/>
                 <outlet property="label_whichpage" destination="Tve-Wv-w94" id="eDo-Nk-pBu"/>

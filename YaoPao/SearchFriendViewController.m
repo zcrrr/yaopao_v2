@@ -101,8 +101,13 @@
     SearchFriendTableViewCell *cell = (SearchFriendTableViewCell*)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     FriendInfo* friend;
     friend = [self.searchResult objectAtIndex:row];
-    cell.label_name.text = friend.nameInYaoPao;
-    cell.label_phone.text = friend.phoneNO;
+    NSString* hidePhoneNo = [NSString stringWithFormat:@"%@******%@",[friend.phoneNO substringToIndex:3],[friend.phoneNO substringFromIndex:9]];
+    if([friend.nameInYaoPao isEqualToString:friend.phoneNO]){
+        cell.label_name.text = hidePhoneNo;
+    }else{
+        cell.label_name.text = friend.nameInYaoPao;
+    }
+    cell.label_phone.text = hidePhoneNo;
     if(friend.avatarUrlInYaoPao != nil && ![friend.avatarUrlInYaoPao isEqualToString:@""]){//有头像url
         NSString* fullurl = [NSString stringWithFormat:@"%@%@",kApp.imageurl,friend.avatarUrlInYaoPao];
         __block UIImage* image = [kApp.avatarDic objectForKey:fullurl];
@@ -190,6 +195,7 @@
         {
             FriendDetailViewController* fdVC = [[FriendDetailViewController alloc]init];
             fdVC.friend = friend;
+            fdVC.from = @"search";
             [self.navigationController pushViewController:fdVC animated:YES];
             break;
         }
@@ -197,6 +203,7 @@
         {
             FriendDetailNotFriendNotContactViewController* fdnfVC = [[FriendDetailNotFriendNotContactViewController alloc]init];
             fdnfVC.friend = friend;
+            fdnfVC.from = @"search";
             [self.navigationController pushViewController:fdnfVC animated:YES];
             break;
         }
@@ -204,6 +211,7 @@
         {
             FriendDetailWantMeViewController* fdwmVC = [[FriendDetailWantMeViewController alloc]init];
             fdwmVC.friend = friend;
+            fdwmVC.from = @"search";
             [self.navigationController pushViewController:fdwmVC animated:YES];
             break;
         }
@@ -211,6 +219,7 @@
         {
             FriendDetailNotFriendViewController* fdnfVC = [[FriendDetailNotFriendViewController alloc]init];
             fdnfVC.friend = friend;
+            fdnfVC.from = @"search";
             [self.navigationController pushViewController:fdnfVC animated:YES];
             break;
         }
@@ -225,6 +234,7 @@
         {
             FriendDetailNotFriendViewController* fdnfVC = [[FriendDetailNotFriendViewController alloc]init];
             fdnfVC.friend = friend;
+            fdnfVC.from = @"search";
             [self.navigationController pushViewController:fdnfVC animated:YES];
             break;
         }

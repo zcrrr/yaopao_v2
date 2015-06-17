@@ -644,6 +644,8 @@
 		81708DD61AC5002D00CE221F /* yaopaoyiqipao_black.png in Resources */ = {isa = PBXBuildFile; fileRef = 81708DD41AC5002D00CE221F /* yaopaoyiqipao_black.png */; };
 		81708DD71AC5002D00CE221F /* yaopao_cn_logo_black.png in Resources */ = {isa = PBXBuildFile; fileRef = 81708DD51AC5002D00CE221F /* yaopao_cn_logo_black.png */; };
 		81749A751AC2633A00FB18A6 /* check_gou.png in Resources */ = {isa = PBXBuildFile; fileRef = 81749A741AC2633A00FB18A6 /* check_gou.png */; };
+		8174D3CC1B31167900F5A183 /* watermark_24h_b.png in Resources */ = {isa = PBXBuildFile; fileRef = 8174D3CA1B31167900F5A183 /* watermark_24h_b.png */; };
+		8174D3CD1B31167900F5A183 /* watermark_24h_w.png in Resources */ = {isa = PBXBuildFile; fileRef = 8174D3CB1B31167900F5A183 /* watermark_24h_w.png */; };
 		81750EBE1AF9C5FD007DD4AE /* ChooseEditImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 81750EBC1AF9C5FD007DD4AE /* ChooseEditImageViewController.m */; };
 		81750EBF1AF9C5FD007DD4AE /* ChooseEditImageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 81750EBD1AF9C5FD007DD4AE /* ChooseEditImageViewController.xib */; };
 		81750EE41AF9F5D5007DD4AE /* sx_check.png in Resources */ = {isa = PBXBuildFile; fileRef = 81750ED91AF9F5D5007DD4AE /* sx_check.png */; };
@@ -2004,6 +2006,8 @@
 		81708DD41AC5002D00CE221F /* yaopaoyiqipao_black.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = yaopaoyiqipao_black.png; sourceTree = "<group>"; };
 		81708DD51AC5002D00CE221F /* yaopao_cn_logo_black.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = yaopao_cn_logo_black.png; sourceTree = "<group>"; };
 		81749A741AC2633A00FB18A6 /* check_gou.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = check_gou.png; sourceTree = "<group>"; };
+		8174D3CA1B31167900F5A183 /* watermark_24h_b.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = watermark_24h_b.png; sourceTree = "<group>"; };
+		8174D3CB1B31167900F5A183 /* watermark_24h_w.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = watermark_24h_w.png; sourceTree = "<group>"; };
 		81750EBB1AF9C5FD007DD4AE /* ChooseEditImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChooseEditImageViewController.h; sourceTree = "<group>"; };
 		81750EBC1AF9C5FD007DD4AE /* ChooseEditImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChooseEditImageViewController.m; sourceTree = "<group>"; };
 		81750EBD1AF9C5FD007DD4AE /* ChooseEditImageViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChooseEditImageViewController.xib; sourceTree = "<group>"; };
@@ -4286,6 +4290,15 @@
 			name = "adobe creative";
 			sourceTree = "<group>";
 		};
+		8174D3C91B31166300F5A183 /* water */ = {
+			isa = PBXGroup;
+			children = (
+				8174D3CA1B31167900F5A183 /* watermark_24h_b.png */,
+				8174D3CB1B31167900F5A183 /* watermark_24h_w.png */,
+			);
+			name = water;
+			sourceTree = "<group>";
+		};
 		81750ED81AF9F5D5007DD4AE /* sx_image */ = {
 			isa = PBXGroup;
 			children = (
@@ -4839,6 +4852,7 @@
 		9A4A13E91974013E00F2EF04 /* res */ = {
 			isa = PBXGroup;
 			children = (
+				8174D3C91B31166300F5A183 /* water */,
 				81750ED81AF9F5D5007DD4AE /* sx_image */,
 				8183E15D1AE5E337003E8F9A /* chat_self */,
 				8104AB341AE35ABB00A59A88 /* friend */,
@@ -5715,6 +5729,7 @@
 				814441B01ACAEF3C00A6067E /* weather_marker_b_n_12.png in Resources */,
 				81686BC31ADFBA9E006BA130 /* chatBar_textBg.png in Resources */,
 				814CD0421AB66C9200D4C526 /* gosetting_on.png in Resources */,
+				8174D3CD1B31167900F5A183 /* watermark_24h_w.png in Resources */,
 				9A11A86419E290F100937C1B /* 110023.mp3 in Resources */,
 				9A11A84919E290F100937C1B /* 100051.mp3 in Resources */,
 				9A11A84119E290F100937C1B /* 100043.mp3 in Resources */,
@@ -6001,6 +6016,7 @@
 				81686BFA1ADFBA9E006BA130 /* chatBar_more_photoSelected@2x.png in Resources */,
 				815FBC001AD6730800E42190 /* IntroduceFriendsTableViewCellCondition4.xib in Resources */,
 				81686BF61ADFBA9E006BA130 /* chatBar_more_locationSelected@2x.png in Resources */,
+				8174D3CC1B31167900F5A183 /* watermark_24h_b.png in Resources */,
 				81686B9C1ADFBA9E006BA130 /* VoiceSearchFeedback010@2x.png in Resources */,
 				81686C0B1ADFBA9E006BA130 /* chat_sender_audio_playing_001@2x.png in Resources */,
 				8196B4A01AC94A6C00130F18 /* weather_icon_d_31.png in Resources */,

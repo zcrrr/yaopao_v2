@@ -21,5 +21,6 @@
 
 @property (strong, nonatomic) IBOutlet UIActivityIndicatorView *indicator;
 @property (strong, nonatomic) IBOutlet UIImageView *loadingImage;
+@property (strong, nonatomic) NSString* from;
 
 @end

@@ -10,6 +10,7 @@
                 <outlet property="button_whiteBlackConvert" destination="ZpV-lk-2Zs" id="5pu-ku-nJS"/>
                 <outlet property="imageview" destination="xb4-4k-ZIW" id="XqL-o2-QX8"/>
                 <outlet property="imageview_logo_cn" destination="f0Y-fg-Naf" id="KRp-ro-5cL"/>
+                <outlet property="imageview_water0" destination="uh0-lc-fwZ" id="MyG-Cx-26W"/>
                 <outlet property="imageview_water3_weather" destination="O8j-Kr-RHi" id="sxI-Xr-RGK"/>
                 <outlet property="imageview_water5" destination="Guo-8E-thj" id="qLq-3h-F5a"/>
                 <outlet property="imageview_yaopaoyiqipao" destination="gPi-K3-UUy" id="SYk-3l-omz"/>
@@ -86,8 +87,19 @@
                             <rect key="frame" x="0.0" y="0.0" width="320" height="320"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
+                                <view contentMode="scaleToFill" id="cEt-ne-Mjp" userLabel="View_water0">
+                                    <rect key="frame" x="113" y="222" width="94" height="84"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <subviews>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="watermark_24h_w.png" id="uh0-lc-fwZ">
+                                            <rect key="frame" x="0.0" y="0.0" width="94" height="84"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        </imageView>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
                                 <view contentMode="scaleToFill" id="f1a-bu-Tbz" userLabel="View_water1">
-                                    <rect key="frame" x="95" y="238" width="131" height="51"/>
+                                    <rect key="frame" x="415" y="238" width="131" height="51"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="yaopaoyiqipao_white.png" id="gPi-K3-UUy">
@@ -105,7 +117,7 @@
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                                 <view contentMode="scaleToFill" id="hsk-Cs-CyR" userLabel="View_water3">
-                                    <rect key="frame" x="728" y="258" width="145" height="46"/>
+                                    <rect key="frame" x="1048" y="258" width="145" height="46"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="21.31KM" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="seT-HJ-SsZ">
@@ -142,7 +154,7 @@
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                                 <view contentMode="scaleToFill" id="2eT-ds-Trc" userLabel="View_water4">
-                                    <rect key="frame" x="990" y="210" width="107" height="98"/>
+                                    <rect key="frame" x="1310" y="210" width="107" height="98"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" id="1pk-33-OJC" customClass="OnlyTrackView">
@@ -161,7 +173,7 @@
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                                 <view contentMode="scaleToFill" id="5Hb-cs-xh5" userLabel="View_water2">
-                                    <rect key="frame" x="320" y="265" width="320" height="23"/>
+                                    <rect key="frame" x="640" y="265" width="320" height="23"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="02'42''" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="f6o-9O-GHC">
@@ -189,7 +201,7 @@
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                                 <view contentMode="scaleToFill" id="kd8-Qw-HYc" userLabel="View_water5">
-                                    <rect key="frame" x="1375" y="238" width="131" height="51"/>
+                                    <rect key="frame" x="1695" y="238" width="131" height="51"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="shaoxing_water_white.png" id="Guo-8E-thj">
@@ -222,8 +234,8 @@
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="5" id="7gw-c5-6Ac">
-                            <rect key="frame" x="125" y="-10" width="70" height="36"/>
+                        <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="6" id="7gw-c5-6Ac">
+                            <rect key="frame" x="114" y="-10" width="93" height="36"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </pageControl>
                         <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="ZpV-lk-2Zs">
@@ -260,6 +272,7 @@
         <image name="black_white.png" width="36" height="36"/>
         <image name="shaoxing_water_white.png" width="308" height="66"/>
         <image name="start_v2.png" width="684" height="100"/>
+        <image name="watermark_24h_w.png" width="236" height="211"/>
         <image name="weather.png" width="108" height="108"/>
         <image name="yaopao_cn_logo_white.png" width="110" height="50"/>
         <image name="yaopaoyiqipao_white.png" width="476" height="102"/>

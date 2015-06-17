@@ -33,12 +33,12 @@ extern NSString* dayOrNight;
     self.imageview.image = self.image_datasource;
     // Do any additional setup after loading the view from its nib.
     self.scrollview.delegate = self;
-    self.scrollview.contentSize = CGSizeMake(320*5, 320);
+    self.scrollview.contentSize = CGSizeMake(320*6, 320);
     self.scrollview.showsHorizontalScrollIndicator=NO; //不显示水平滑动线
     self.scrollview.showsVerticalScrollIndicator=NO;//不显示垂直滑动线
     self.scrollview.pagingEnabled=YES;
     
-    self.pageControl.numberOfPages=5; //设置页数为3
+    self.pageControl.numberOfPages=6; //设置页数为3
     self.pageControl.currentPage=0; //初始页码为 0
     self.pageControl.userInteractionEnabled = NO;//pagecontroller不响应点击操作
     self.pageControl.currentPageIndicatorTintColor = [UIColor greenColor];
@@ -222,6 +222,7 @@ extern NSString* dayOrNight;
         self.imageview_logo_cn.image = [UIImage imageNamed:@"yaopao_cn_logo_black"];
         self.imageview_yaopaoyiqipao.image = [UIImage imageNamed:@"yaopaoyiqipao_black"];
         [self.button_whiteBlackConvert setBackgroundImage:[UIImage imageNamed:@"white_black.png"] forState:UIControlStateNormal];
+        self.imageview_water0.image = [UIImage imageNamed:@"watermark_24h_b.png"];
         self.label_water1_km.textColor = [UIColor colorWithRed:28.0/255.0 green:28.0/255.0 blue:28.0/255.0 alpha:1];
         self.label_water2_km.textColor = [UIColor colorWithRed:28.0/255.0 green:28.0/255.0 blue:28.0/255.0 alpha:1];
         self.label_water2_time.textColor = [UIColor colorWithRed:28.0/255.0 green:28.0/255.0 blue:28.0/255.0 alpha:1];
@@ -240,6 +241,7 @@ extern NSString* dayOrNight;
         self.imageview_logo_cn.image = [UIImage imageNamed:@"yaopao_cn_logo_white"];
         self.imageview_yaopaoyiqipao.image = [UIImage imageNamed:@"yaopaoyiqipao_white"];
         [self.button_whiteBlackConvert setBackgroundImage:[UIImage imageNamed:@"black_white.png"] forState:UIControlStateNormal];
+         self.imageview_water0.image = [UIImage imageNamed:@"watermark_24h_w.png"];
         self.label_water1_km.textColor = [UIColor whiteColor];
         self.label_water2_km.textColor = [UIColor whiteColor];
         self.label_water2_time.textColor = [UIColor whiteColor];

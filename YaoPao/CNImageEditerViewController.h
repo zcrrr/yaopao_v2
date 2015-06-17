@@ -43,5 +43,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *button_deleteImage;
 @property (weak, nonatomic) IBOutlet UIButton *button_edit;
 @property (weak, nonatomic) IBOutlet UIButton *button_save;
+@property (weak, nonatomic) IBOutlet UIButton *button_water;
 
 @end

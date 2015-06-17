@@ -16,6 +16,7 @@
 
 @implementation FriendDetailNotFriendViewController
 @synthesize friend;
+@synthesize from;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -50,6 +51,15 @@
     self.label_phone.text = self.friend.phoneNO;
     NSString* imageName = [NSString stringWithFormat:@"sex_%@.png",self.friend.sex];
     self.imageview_sex.image = [UIImage imageNamed:imageName];
+    if([self.from isEqualToString:@"search"]){
+        NSString* hidePhoneNo = [NSString stringWithFormat:@"%@******%@",[self.friend.phoneNO substringToIndex:3],[self.friend.phoneNO substringFromIndex:9]];
+        if([self.friend.nameInYaoPao isEqualToString:self.friend.phoneNO]){
+            self.label_nameInYaoPao.text = hidePhoneNo;
+        }else{
+            self.label_nameInYaoPao.text = friend.nameInYaoPao;
+        }
+        self.label_phone.text = hidePhoneNo;
+    }
 }
 
 - (void)didReceiveMemoryWarning {

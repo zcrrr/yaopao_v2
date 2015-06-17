@@ -17,5 +17,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *label_nameInYaoPao;
 @property (weak, nonatomic) IBOutlet UILabel *label_phone;
 @property (weak, nonatomic) IBOutlet UIImageView *imageview_sex;
+@property (strong, nonatomic) NSString* from;
 
 @end

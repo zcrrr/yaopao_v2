@@ -18,6 +18,7 @@
 
 @implementation FriendDetailWantMeViewController
 @synthesize friend;
+@synthesize from;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -48,6 +49,15 @@
     NSString* imageName = [NSString stringWithFormat:@"sex_%@.png",self.friend.sex];
     self.imageview_sex.image = [UIImage imageNamed:imageName];
     self.label_verifymessage.text = friend.verifyMessage;
+    if([self.from isEqualToString:@"search"]){
+        NSString* hidePhoneNo = [NSString stringWithFormat:@"%@******%@",[self.friend.phoneNO substringToIndex:3],[self.friend.phoneNO substringFromIndex:9]];
+        if([self.friend.nameInYaoPao isEqualToString:self.friend.phoneNO]){
+            self.label_name.text = hidePhoneNo;
+        }else{
+            self.label_name.text = friend.nameInYaoPao;
+        }
+        self.label_phone.text = hidePhoneNo;
+    }
 }
 
 - (void)didReceiveMemoryWarning {

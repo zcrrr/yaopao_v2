@@ -128,31 +128,31 @@
         [self makeNewFriendsList];
     }else{
         NSLog(@"初次获取通讯录中使用app的人");
-        [SMS_SDK getAppContactFriends:1
-                               result:^(enum SMS_ResponseState state, NSArray *array)
-         {
-             if (1==state)
-             {
-                 for(NSDictionary* oneContact in array){
-                     NSString* phoneNO = [oneContact objectForKey:@"phone"];
-                     NSString* myphone = [kApp.userInfoDic objectForKey:@"phone"];
-                     NSRange range = [phoneNO rangeOfString:myphone];
-                     if(range.length > 0){
-                         continue;
-                     }
-                     
-                     NSString* nameInYaoPao = [oneContact objectForKey:@"nickname"];
-                     NSString* avatarUrlInYaoPao = [oneContact objectForKey:@"avatar"];
-                     NSString* uid = [oneContact objectForKey:@"uid"];
-                     FriendInfo* friend = [[FriendInfo alloc]initWithUid:uid phoneNO:phoneNO nameInPhone:@"" nameInYaoPao:nameInYaoPao avatarInPhone:nil avatarUrlInYaoPao:avatarUrlInYaoPao status:2 verifyMessage:@"" sex:@""];
-                     [kApp.myContactUseApp addObject:friend];
-                 }
-                 NSLog(@"kApp.myContactUseApp is:");
-                 [self printFriendList:kApp.myContactUseApp];
-                 [self makeNewFriendsList];
-             }
-         }];
-//        [self userInADBook];
+//        [SMS_SDK getAppContactFriends:1
+//                               result:^(enum SMS_ResponseState state, NSArray *array)
+//         {
+//             if (1==state)
+//             {
+//                 for(NSDictionary* oneContact in array){
+//                     NSString* phoneNO = [oneContact objectForKey:@"phone"];
+//                     NSString* myphone = [kApp.userInfoDic objectForKey:@"phone"];
+//                     NSRange range = [phoneNO rangeOfString:myphone];
+//                     if(range.length > 0){
+//                         continue;
+//                     }
+//
+//                     NSString* nameInYaoPao = [oneContact objectForKey:@"nickname"];
+//                     NSString* avatarUrlInYaoPao = [oneContact objectForKey:@"avatar"];
+//                     NSString* uid = [oneContact objectForKey:@"uid"];
+//                     FriendInfo* friend = [[FriendInfo alloc]initWithUid:uid phoneNO:phoneNO nameInPhone:@"" nameInYaoPao:nameInYaoPao avatarInPhone:nil avatarUrlInYaoPao:avatarUrlInYaoPao status:2 verifyMessage:@"" sex:@""];
+//                     [kApp.myContactUseApp addObject:friend];
+//                 }
+//                 NSLog(@"kApp.myContactUseApp is:");
+//                 [self printFriendList:kApp.myContactUseApp];
+//                 [self makeNewFriendsList];
+//             }
+//         }];
+        [self userInADBook];
     }
 }
 - (void)makeNewFriendsList{

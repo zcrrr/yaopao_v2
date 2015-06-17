@@ -50,5 +50,6 @@
 @property (weak, nonatomic) IBOutlet UIImageView *imageview_nophoto;
 @property (weak, nonatomic) IBOutlet UIView *view_middle;
 @property (strong, nonatomic) RunClass * runClass;
+@property (weak, nonatomic) IBOutlet UIButton *button_water;
 
 @end

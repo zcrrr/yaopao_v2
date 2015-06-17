@@ -18,6 +18,7 @@
                 <outlet property="button_mood5" destination="G2D-P5-EoO" id="Si2-BJ-ZKR"/>
                 <outlet property="button_right" destination="A2F-el-8oZ" id="Wj5-yY-3QI"/>
                 <outlet property="button_save" destination="FcW-gG-G3A" id="wAA-xv-l50"/>
+                <outlet property="button_water" destination="vhx-Uk-YpV" id="nZC-0g-ZDi"/>
                 <outlet property="button_way1" destination="SuQ-b5-WAp" id="AL5-m1-5A9"/>
                 <outlet property="button_way2" destination="iLO-c7-7Qb" id="cS2-pG-c0e"/>
                 <outlet property="button_way3" destination="v3s-Bd-mpD" id="A3X-q8-eym"/>
