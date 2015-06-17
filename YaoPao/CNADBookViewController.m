@@ -61,7 +61,12 @@
     for (FriendInfo* friend in kApp.friendHandler.friends)
     {
         NSString* name = friend.nameInYaoPao;
-        char c = [GetFirstLetter  pinyinFirstLetter:([name characterAtIndex:0])];
+        char c = [name characterAtIndex:0];
+        if((c>'a'&&c<'z')||(c>'A'&&c<'Z')){
+            
+        }else{
+            c = [GetFirstLetter  pinyinFirstLetter:([name characterAtIndex:0])];
+        }
         NSString* oneKey = [[NSString stringWithFormat:@"%c",c] uppercaseString];
         
         /*

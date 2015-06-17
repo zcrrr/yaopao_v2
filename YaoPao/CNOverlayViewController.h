@@ -7,12 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "CNImagePreviewViewController.h"
-@class CNImagePreviewViewController;
+
+@protocol saveImageDelegate <NSObject>
+//登录接口成功或者失败的协议，如果失败了会有原因mes
+- (void)saveImageDidSuccess:(UIImage*)image;
+- (void)saveImageDidFailed;
+@end
 
 @interface CNOverlayViewController : UIViewController<UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 @property (strong, nonatomic) UIImagePickerController* cameraPicker;
-@property (strong, nonatomic) CNImagePreviewViewController* imagePreviewVC;
 @property (weak, nonatomic) IBOutlet UIButton *button_takephoto;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *indicator;
 - (IBAction)button_clicked:(id)sender;

@@ -68,6 +68,7 @@
 @synthesize delegate_enableMyLocationInGroup;
 @synthesize delegate_resetGroupSetting;
 @synthesize delegate_uploadADBook;
+@synthesize delegate_testTimeOut;
 
 @synthesize verifyCodeRequest;
 @synthesize registerPhoneRequest;
@@ -111,6 +112,7 @@
 @synthesize enableMyLocationInGroupRequest;
 @synthesize resetGroupSettingRequest;
 @synthesize uploadADBookRequest;
+@synthesize testTimeOutRequest;
 
 - (void)startQueue{
     //    self.handler = self;//持有自己的引用，这样就不会被释放,在delegate里面有了强引用，这里可以注释了
@@ -777,6 +779,11 @@
         case TAG_USER_IN_ADBOOK:
         {
             [self.delegate_userInADBook userInADBookDidFailed:@""];
+            break;
+        }
+        case TAG_TEST_TIME_OUT:
+        {
+            NSLog(@"超时请求失败");
             break;
         }
             
@@ -1519,6 +1526,18 @@
     NSLog(@"获取通讯录中要跑用户url:%@",str_url);
     NSLog(@"获取通讯录中要跑用户参数:%@",params);
     [[self networkQueue]addOperation:self.userInADBookRequest];
+}
+- (void)doRequest_testTimeOut{
+    NSString* str_url = [NSString stringWithFormat:@"%@chSports/login/testtimeout.htm",ENDPOINTS];
+    NSURL* url = [NSURL URLWithString:str_url];
+    self.testTimeOutRequest =  [ASIFormDataRequest requestWithURL:url];
+    self.testTimeOutRequest.tag = TAG_TEST_TIME_OUT;
+//    [self.testTimeOutRequest setNumberOfTimesToRetryOnTimeout:3];
+//    [self.testTimeOutRequest setTimeOutSeconds:8];
+//    [self.testTimeOutRequest addRequestHeader:@"X-PID" value:kApp.pid];
+//    [self.testTimeOutRequest addRequestHeader:@"ua" value:kApp.ua];
+    NSLog(@"测试超时url:%@",str_url);
+    [[self networkQueue]addOperation:self.testTimeOutRequest];
 }
 - (void)showAlert:(NSString*) content{
     UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:content delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];

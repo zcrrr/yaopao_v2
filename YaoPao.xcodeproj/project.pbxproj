@@ -304,6 +304,8 @@
 		815FBC051AD67ED200E42190 /* NewFriendsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 815FBC031AD67ED200E42190 /* NewFriendsViewController.xib */; };
 		81650EDE1ABC549200E1ECBD /* check.png in Resources */ = {isa = PBXBuildFile; fileRef = 81650EDC1ABC549200E1ECBD /* check.png */; };
 		81650EDF1ABC549200E1ECBD /* uncheck.png in Resources */ = {isa = PBXBuildFile; fileRef = 81650EDD1ABC549200E1ECBD /* uncheck.png */; };
+		8165B2BC1B302AF500678B5F /* water_on.png in Resources */ = {isa = PBXBuildFile; fileRef = 8165B2BA1B302AF500678B5F /* water_on.png */; };
+		8165B2BD1B302AF500678B5F /* water.png in Resources */ = {isa = PBXBuildFile; fileRef = 8165B2BB1B302AF500678B5F /* water.png */; };
 		8165BDD01AC3FB9F00B6E2E1 /* WaterMarkViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8165BDCE1AC3FB9F00B6E2E1 /* WaterMarkViewController.m */; };
 		8165BDD11AC3FB9F00B6E2E1 /* WaterMarkViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8165BDCF1AC3FB9F00B6E2E1 /* WaterMarkViewController.xib */; };
 		8165BDD31AC3FF3300B6E2E1 /* yaopao_image_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 8165BDD21AC3FF3300B6E2E1 /* yaopao_image_logo.png */; };
@@ -786,8 +788,6 @@
 		81E68DAF1AFA0D270000C599 /* CombineImagePreviewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 81E68DAD1AFA0D270000C599 /* CombineImagePreviewViewController.m */; };
 		81E68DB01AFA0D270000C599 /* CombineImagePreviewViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 81E68DAE1AFA0D270000C599 /* CombineImagePreviewViewController.xib */; };
 		81E91E771ADFE1E800D96FEF /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 81E91E791ADFE1E800D96FEF /* Localizable.strings */; };
-		81F17F731AB807600059FE07 /* CNImagePreviewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 81F17F711AB807600059FE07 /* CNImagePreviewViewController.m */; };
-		81F17F741AB807600059FE07 /* CNImagePreviewViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 81F17F721AB807600059FE07 /* CNImagePreviewViewController.xib */; };
 		9A0AFAA319EE5E2600B39F7C /* LunYang.txt in Resources */ = {isa = PBXBuildFile; fileRef = 9A0AFAA219EE5E2600B39F7C /* LunYang.txt */; };
 		9A11A81619E290F100937C1B /* 100000.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 9A11A79319E290F000937C1B /* 100000.mp3 */; };
 		9A11A81719E290F100937C1B /* 100001.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 9A11A79419E290F000937C1B /* 100001.mp3 */; };
@@ -1438,6 +1438,8 @@
 		815FBC031AD67ED200E42190 /* NewFriendsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NewFriendsViewController.xib; sourceTree = "<group>"; };
 		81650EDC1ABC549200E1ECBD /* check.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = check.png; sourceTree = "<group>"; };
 		81650EDD1ABC549200E1ECBD /* uncheck.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = uncheck.png; sourceTree = "<group>"; };
+		8165B2BA1B302AF500678B5F /* water_on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = water_on.png; sourceTree = "<group>"; };
+		8165B2BB1B302AF500678B5F /* water.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = water.png; sourceTree = "<group>"; };
 		8165BDCD1AC3FB9F00B6E2E1 /* WaterMarkViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WaterMarkViewController.h; sourceTree = "<group>"; };
 		8165BDCE1AC3FB9F00B6E2E1 /* WaterMarkViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WaterMarkViewController.m; sourceTree = "<group>"; };
 		8165BDCF1AC3FB9F00B6E2E1 /* WaterMarkViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WaterMarkViewController.xib; sourceTree = "<group>"; };
@@ -2172,9 +2174,6 @@
 		81E68DAE1AFA0D270000C599 /* CombineImagePreviewViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CombineImagePreviewViewController.xib; sourceTree = "<group>"; };
 		81E91E781ADFE1E800D96FEF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		81E91E7A1ADFE1EA00D96FEF /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
-		81F17F701AB807600059FE07 /* CNImagePreviewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNImagePreviewViewController.h; sourceTree = "<group>"; };
-		81F17F711AB807600059FE07 /* CNImagePreviewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNImagePreviewViewController.m; sourceTree = "<group>"; };
-		81F17F721AB807600059FE07 /* CNImagePreviewViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CNImagePreviewViewController.xib; sourceTree = "<group>"; };
 		9A0AFAA219EE5E2600B39F7C /* LunYang.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LunYang.txt; sourceTree = "<group>"; };
 		9A11A79319E290F000937C1B /* 100000.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = 100000.mp3; sourceTree = "<group>"; };
 		9A11A79419E290F000937C1B /* 100001.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = 100001.mp3; sourceTree = "<group>"; };
@@ -2952,6 +2951,8 @@
 		814DAD091AB429B60020416F /* v2 */ = {
 			isa = PBXGroup;
 			children = (
+				8165B2BA1B302AF500678B5F /* water_on.png */,
+				8165B2BB1B302AF500678B5F /* water.png */,
 				816965CA1B15544C00321A40 /* ad_placeholder.png */,
 				8153C5D71B0F09440048DFE6 /* running_start_on.png */,
 				8153C5D81B0F09440048DFE6 /* running_start.png */,
@@ -4492,9 +4493,6 @@
 				8155672F1AB9136800D948EC /* CNOverlayViewController.h */,
 				815567301AB9136800D948EC /* CNOverlayViewController.m */,
 				815567311AB9136800D948EC /* CNOverlayViewController.xib */,
-				81F17F701AB807600059FE07 /* CNImagePreviewViewController.h */,
-				81F17F711AB807600059FE07 /* CNImagePreviewViewController.m */,
-				81F17F721AB807600059FE07 /* CNImagePreviewViewController.xib */,
 				9A6740651989F57E006E12CC /* CNRunMapViewController.h */,
 				9A6740661989F57E006E12CC /* CNRunMapViewController.m */,
 				9A6740671989F57E006E12CC /* CNRunMapViewController.xib */,
@@ -5383,6 +5381,7 @@
 				8151FDA51AE4DF6D00562548 /* SearchFriendTableViewCell.xib in Resources */,
 				81708DD61AC5002D00CE221F /* yaopaoyiqipao_black.png in Resources */,
 				9A11A81619E290F100937C1B /* 100000.mp3 in Resources */,
+				8165B2BD1B302AF500678B5F /* water.png in Resources */,
 				814CD04E1AB66C9200D4C526 /* run_type.png in Resources */,
 				81686BD41ADFBA9E006BA130 /* chatBar_faceSelected@2x.png in Resources */,
 				81686BB71ADFBA9E006BA130 /* call_silence_h.png in Resources */,
@@ -5425,7 +5424,6 @@
 				8144419A1ACAEF3C00A6067E /* weather_marker_b_d_22.png in Resources */,
 				8144420B1ACAEF3C00A6067E /* weather_marker_w_n_5.png in Resources */,
 				814441D31ACAEF3C00A6067E /* weather_marker_w_d_14.png in Resources */,
-				81F17F741AB807600059FE07 /* CNImagePreviewViewController.xib in Resources */,
 				9A11A86719E290F100937C1B /* 110026.mp3 in Resources */,
 				814441D41ACAEF3C00A6067E /* weather_marker_w_d_15.png in Resources */,
 				9A11A82419E290F100937C1B /* 100014.mp3 in Resources */,
@@ -6081,6 +6079,7 @@
 				9A11A82B19E290F100937C1B /* 100021.mp3 in Resources */,
 				8151FDA01AE4D7BD00562548 /* SearchFriendViewController.xib in Resources */,
 				9A835B961A70E4E800B30174 /* Resource.bundle in Resources */,
+				8165B2BC1B302AF500678B5F /* water_on.png in Resources */,
 				8196B4C61AC94A6C00130F18 /* weather_icon_n_6.png in Resources */,
 				81686B801ADFBA9E006BA130 /* chatListCellHead@2x.png in Resources */,
 				81686B8B1ADFBA9E006BA130 /* VoiceSearchFeedback002.png in Resources */,
@@ -6208,7 +6207,6 @@
 				81686A7D1ADF9752006BA130 /* EMChatLocationBubbleView.m in Sources */,
 				81686A711ADF9752006BA130 /* ChatViewController+Category.m in Sources */,
 				9A835BA81A71077700B30174 /* GCDAsyncUdpSocket.m in Sources */,
-				81F17F731AB807600059FE07 /* CNImagePreviewViewController.m in Sources */,
 				81686AA21ADF9752006BA130 /* EMNavigationController.m in Sources */,
 				9A4A1427197402C600F2EF04 /* SBJsonParser.m in Sources */,
 				9AD57FB019B7530200A98FB3 /* Toast+UIView.m in Sources */,

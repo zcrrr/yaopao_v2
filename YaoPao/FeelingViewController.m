@@ -267,7 +267,7 @@ extern NSMutableArray* imageArray;
             NSLog(@"相册");
             self.cameraPicker = [[UIImagePickerController alloc]init];
             self.cameraPicker.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
-            self.cameraPicker.allowsEditing = NO;
+            self.cameraPicker.allowsEditing = YES;
             self.cameraPicker.mediaTypes = @[(NSString *)kUTTypeImage];
             self.cameraPicker.delegate = self;
             [self presentViewController:self.cameraPicker animated:YES completion:^{
@@ -281,7 +281,7 @@ extern NSMutableArray* imageArray;
 }
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
     if([picker isEqual:self.cameraPicker]){
-        UIImage *image = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
+        UIImage *image = [info objectForKey:@"UIImagePickerControllerEditedImage"];
         if(image == nil){
             [kApp.window makeToast:@"无法使用该图片，请选择其他图片~"];
             return;
@@ -417,7 +417,7 @@ extern NSMutableArray* imageArray;
     self.runClass.maxHeart = [NSNumber numberWithInt:0];
     self.runClass.mileCount = [NSNumber numberWithLongLong:[kApp.runManager.dataMile count]];
     self.runClass.minCount = [NSNumber numberWithLongLong:[kApp.runManager.dataMin count]];
-    self.runClass.remark = kApp.runManager.remark;
+    self.runClass.remark = @"";
     self.runClass.rid = [NSString stringWithFormat:@"%lli",nowTime];
     self.runClass.runway = [NSNumber numberWithInt:kApp.runManager.runway];
     self.runClass.score = [NSNumber numberWithInt:kApp.runManager.score];

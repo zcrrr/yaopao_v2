@@ -55,5 +55,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *button_map;
 @property (weak, nonatomic) IBOutlet UIButton *button_group;
 @property (strong, nonatomic) CircularLock *pauseButoon;
+@property (weak, nonatomic) IBOutlet UILabel *label_longpress;
 
 @end

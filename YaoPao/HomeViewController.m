@@ -28,6 +28,7 @@
 #import "CNCloudRecord.h"
 #import "SBJson.h"
 #import "GCDAsyncUdpSocket.h"
+#import "CNUtil.h"
 
 @interface HomeViewController ()
 
@@ -36,6 +37,7 @@
 @implementation HomeViewController
 NSString* weatherCode;
 NSString* dayOrNight;
+@synthesize weatherRefreshTime;
 
 - (void)viewDidLoad {
     self.selectIndex = 0;
@@ -94,15 +96,15 @@ NSString* dayOrNight;
 }
 - (void)sendMessageByUdp{
     if(kApp.locationHandler.userLocation_lon < 1||kApp.locationHandler.userLocation_lat<1){
-        NSLog(@"没定位点不上报udp");
+//        NSLog(@"没定位点不上报udp");
         return;
     }
     if(kApp.isLogin != 1){
-        NSLog(@"没登录不上报udp");
+//        NSLog(@"没登录不上报udp");
         return;
     }
     if(!kApp.isOpenShareLocation){
-        NSLog(@"从没打开过分享不上报udp");
+//        NSLog(@"从没打开过分享不上报udp");
         return;
     }
     NSMutableDictionary* udpParamDic = [[NSMutableDictionary alloc]init];
@@ -147,6 +149,7 @@ NSString* dayOrNight;
     [self.weather_progress stopAnimating];
 }
 - (void)weatherDidSuccess:(NSDictionary *)resultDic{
+    self.weatherRefreshTime = [CNUtil getNowTime];
     self.weather_progress.hidden = YES;
     [self.weather_progress stopAnimating];
     NSDictionary* weatherData = [resultDic objectForKey:@"data"];
@@ -212,6 +215,9 @@ NSString* dayOrNight;
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     [self initUI];
     [self initData];
+    if(self.weatherRefreshTime != 0 && [CNUtil getNowTime] - self.weatherRefreshTime > 20){
+        [self tellWeather];
+    }
 }
 - (void)initUI{
     NSMutableDictionary* settingDic = [CNUtil getRunSettingWhole];
@@ -321,10 +327,11 @@ NSString* dayOrNight;
         case 0:
         {
             NSLog(@"同步");
-            [CNAppDelegate popupWarningCloud:YES];
+//            [CNAppDelegate popupWarningCloud:YES];
             
 //            [kApp.friendHandler checkNeedUploadAD];
 //            [kApp.friendHandler userInADBook];
+            [kApp.networkHandler doRequest_testTimeOut];
             
             break;
         }

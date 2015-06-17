@@ -280,7 +280,7 @@ extern NSMutableArray* imageArray;
 }
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
     if([picker isEqual:self.cameraPicker]){
-        UIImage *image = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
+        UIImage *image = [info objectForKey:@"UIImagePickerControllerEditedImage"];
         float width = image.size.width;
         float height = image.size.height;
         UIImage* imageScaled;

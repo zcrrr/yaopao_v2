@@ -146,10 +146,10 @@
                         <button opaque="NO" tag="7" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="aed-CM-Mb4">
                             <rect key="frame" x="265" y="7" width="29" height="29"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" backgroundImage="sx_pintu.png">
+                            <state key="normal" backgroundImage="water.png">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
-                            <state key="highlighted" backgroundImage="sx_pintu_on.png"/>
+                            <state key="highlighted" backgroundImage="water_on.png"/>
                             <connections>
                                 <action selector="button_clicked:" destination="-1" eventType="touchUpInside" id="NfY-Uu-4i3"/>
                             </connections>
@@ -185,10 +185,10 @@
         <image name="scroll_right.png" width="52" height="100"/>
         <image name="scroll_right_on.png" width="52" height="100"/>
         <image name="show_page.png" width="120" height="40"/>
-        <image name="sx_pintu.png" width="68" height="68"/>
-        <image name="sx_pintu_on.png" width="68" height="68"/>
         <image name="take_photo2.png" width="68" height="68"/>
         <image name="take_photo2_on.png" width="68" height="68"/>
+        <image name="water.png" width="68" height="68"/>
+        <image name="water_on.png" width="68" height="68"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

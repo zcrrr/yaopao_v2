@@ -53,6 +53,7 @@ extern NSMutableArray* imageArray;
             //todo 根据状态显示暂停or继续
             [self initPauseButton:NO];
             self.button_complete.hidden = YES;
+            self.label_longpress.hidden = NO;
             self.timer_dispalyTime = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(displayTime) userInfo:nil repeats:YES];
             break;
         }
@@ -61,6 +62,7 @@ extern NSMutableArray* imageArray;
             //todo 根据状态显示暂停or继续
             [self initPauseButton:YES];
             self.button_complete.hidden = NO;
+            self.label_longpress.hidden = YES;
             break;
         }
         default:
@@ -260,6 +262,7 @@ extern NSMutableArray* imageArray;
     [kApp.voiceHandler voiceOfapp:@"run_continue" :nil];
     [kApp.runManager changeRunStatus:1];
     self.button_complete.hidden = YES;
+    self.label_longpress.hidden = NO;
     self.timer_dispalyTime = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(displayTime) userInfo:nil repeats:YES];
     CGRect oldFrame = self.pauseButoon.frame;
     CGRect newFrame = CGRectMake(115, oldFrame.origin.y, oldFrame.size.width, oldFrame.size.height);
@@ -271,6 +274,7 @@ extern NSMutableArray* imageArray;
     // Customization example
     [kApp.runManager changeRunStatus:2];
     self.button_complete.hidden = NO;
+    self.label_longpress.hidden = YES;
     [self.timer_dispalyTime invalidate];
     CGRect oldFrame = self.pauseButoon.frame;
     CGRect newFrame = CGRectMake(64, oldFrame.origin.y, oldFrame.size.width, oldFrame.size.height);

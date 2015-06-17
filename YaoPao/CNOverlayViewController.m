@@ -8,7 +8,7 @@
 
 #import "CNOverlayViewController.h"
 #import "UIImage+Rescale.h"
-#import "CNImagePreviewViewController.h"
+#import "Toast+UIView.h"
 
 
 @interface CNOverlayViewController ()
@@ -17,8 +17,8 @@
 
 @implementation CNOverlayViewController
 @synthesize cameraPicker;
-@synthesize imagePreviewVC;
 @synthesize delegate_savaImage;
+NSMutableArray* imageArray;
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
@@ -72,15 +72,30 @@
     }else{
         imageScaled = [image rescaleImageToSize:CGSizeMake(640, 640)];
     }
-    if(self.imagePreviewVC == nil){
-        self.imagePreviewVC = [[CNImagePreviewViewController alloc]init];
-    }
-    self.imagePreviewVC.image = imageScaled;
     self.indicator.hidden = YES;
     self.button_takephoto.hidden = NO;
     [self.indicator stopAnimating];
-    self.imagePreviewVC.cameraPicker = self.cameraPicker;
-    self.imagePreviewVC.delegete_saveImage = self.delegate_savaImage;
-    [self.cameraPicker pushViewController:self.imagePreviewVC animated:YES];
+//    self.imagePreviewVC.cameraPicker = self.cameraPicker;
+//    self.imagePreviewVC.delegete_saveImage = self.delegate_savaImage;
+//    [self.cameraPicker pushViewController:self.imagePreviewVC animated:YES];
+    UIImageWriteToSavedPhotosAlbum(imageScaled, self, @selector(image:didFinishSavingWithError:contextInfo:), NULL);
+    extern NSMutableArray* imageArray;
+    if(imageArray == nil){
+        imageArray = [[NSMutableArray alloc]init];
+    }
+    [imageArray addObject:imageScaled];
+}
+- (void)image: (UIImage *) image didFinishSavingWithError: (NSError *) error contextInfo: (void *) contextInfo{
+    NSString *msg = nil ;
+    if(error != NULL){
+        msg = @"保存图片失败" ;
+        [self.delegate_savaImage saveImageDidFailed];
+    }else{
+        msg = @"保存图片成功" ;
+        [self.delegate_savaImage saveImageDidSuccess:image];
+    }
+    [kApp.window makeToast:msg duration:1 position:nil];
+    [self.cameraPicker dismissViewControllerAnimated:YES completion:nil];
+    
 }
 @end

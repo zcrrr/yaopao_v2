@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <AdobeCreativeSDKImage/AdobeCreativeSDKImage.h>
 #import "WaterMarkViewController.h"
-#import "CNImagePreviewViewController.h"
+#import "CNOverlayViewController.h"
 #import "ChooseEditImageViewController.h"
 #import "CombineImagePreviewViewController.h"
 

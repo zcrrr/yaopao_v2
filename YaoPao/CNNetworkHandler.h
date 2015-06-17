@@ -267,6 +267,11 @@
 - (void)userInADBookDidSuccess:(NSDictionary*)resultDic;
 - (void)userInADBookDidFailed:(NSString*)mes;
 @end
+@protocol testTimeOutDelegate<NSObject>
+//获得通讯录里要跑用户
+- (void)testTimeOutDidSuccess;
+- (void)testTimeOutDidFailed;
+@end
 
 
 
@@ -329,6 +334,7 @@
 @property (nonatomic, strong) id<resetGroupSettingDelegate> delegate_resetGroupSetting;
 @property (nonatomic, strong) id<uploadADBookDelegate> delegate_uploadADBook;
 @property (nonatomic, strong) id<userInADBookDelegate> delegate_userInADBook;
+@property (nonatomic, strong) id<testTimeOutDelegate> delegate_testTimeOut;
 
 //定义每个请求的request
 @property (nonatomic, strong) ASIFormDataRequest* verifyCodeRequest;
@@ -376,6 +382,7 @@
 @property (nonatomic, strong) ASIFormDataRequest* resetGroupSettingRequest;
 @property (nonatomic, strong) ASIFormDataRequest* uploadADBookRequest;
 @property (nonatomic, strong) ASIFormDataRequest* userInADBookRequest;
+@property (nonatomic, strong) ASIFormDataRequest* testTimeOutRequest;
 //每个请求的实现
 - (void)doRequest_verifyCode:(NSString*)phoneNO;
 - (void)doRequest_registerPhone:(NSMutableDictionary*)params;
@@ -422,5 +429,7 @@
 - (void)doRequest_resetGroupSetting:(NSMutableDictionary*)params;
 - (void)doRequest_uploadADBook:(NSString*)phoneNOString;
 - (void)doRequest_userInADBook:(NSMutableDictionary*)params;
+- (void)doRequest_testTimeOut;
+
 
 @end

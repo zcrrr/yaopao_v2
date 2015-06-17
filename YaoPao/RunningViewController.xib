@@ -20,6 +20,7 @@
                 <outlet property="label_dis_small" destination="VP2-bC-ML8" id="wFC-o2-jRA"/>
                 <outlet property="label_during_big" destination="g8r-dy-5PF" id="0fX-u2-VfK"/>
                 <outlet property="label_during_small" destination="05b-zC-iMw" id="iEC-wM-hm8"/>
+                <outlet property="label_longpress" destination="hyG-tR-j8Z" id="agQ-2c-SV4"/>
                 <outlet property="label_secondPerKm" destination="KuA-qq-qo2" id="w5O-B9-AmR"/>
                 <outlet property="label_time" destination="PbB-N6-nIs" id="NC0-SI-nCx"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -172,6 +173,13 @@
                         <action selector="button_clicked:" destination="-1" eventType="touchUpInside" id="xMT-Az-Kxw"/>
                     </connections>
                 </button>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="长按暂停" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="hyG-tR-j8Z">
+                    <rect key="frame" x="136" y="546" width="48" height="15"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <color key="backgroundColor" red="0.094117647060000004" green="0.094117647060000004" blue="0.094117647060000004" alpha="1" colorSpace="calibratedRGB"/>
             <point key="canvasLocation" x="200" y="353"/>
