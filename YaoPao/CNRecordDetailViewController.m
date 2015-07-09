@@ -45,6 +45,7 @@ extern NSMutableArray* imageArray;
 
 - (void)viewDidLoad
 {
+    [CNUtil appendUserOperation:@"进入运动记录二级页面"];
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     [self.button_back fillColor:kClear :kClear :kWhite :kWhiteHalfAlpha];
@@ -131,6 +132,7 @@ extern NSMutableArray* imageArray;
 }
 
 - (IBAction)button_share_clicked:(id)sender {
+    [CNUtil appendUserOperation:@"点击分享按钮，去分享界面"];
     if(![self.textfield_remark.text isEqualToString:self.oneRun.remark]){
         self.oneRun.remark = self.textfield_remark.text;
     }
@@ -538,6 +540,7 @@ extern NSMutableArray* imageArray;
 }
 
 - (IBAction)button_imageEdit_clicked:(id)sender {
+    [CNUtil appendUserOperation:@"点击要跑水印相机"];
     CNImageEditerViewController* ieVC = [[CNImageEditerViewController alloc]init];
     ieVC.oneRun = self.oneRun;
     [self.navigationController pushViewController:ieVC animated:YES];

@@ -9,7 +9,6 @@
 #import "HomeViewController.h"
 #import "ColorValue.h"
 #import "StartRunViewController.h"
-#import "CNVCodeViewController.h"
 #import "CNUtil.h"
 #import "ASIHTTPRequest.h"
 #import "MobClick.h"
@@ -22,7 +21,6 @@
 #import "CNLoginPhoneViewController.h"
 #import "CNUserinfoViewController.h"
 #import "WaterMarkViewController.h"
-#import "CNVCodeViewController.h"
 #import <SMS_SDK/SMS_SDK.h>
 #import "CNADBookViewController.h"
 #import "CNCloudRecord.h"
@@ -55,10 +53,10 @@ NSString* dayOrNight;
         [self displayLoading];
         self.label_username.text = @"正在登录...";
     }else{
-        if(kApp.isLogin == 11){//老用户需要自动登录
-            CNVCodeViewController* vcodeVC = [[CNVCodeViewController alloc]init];
-            [self.navigationController pushViewController:vcodeVC animated:YES];
-        }
+//        if(kApp.isLogin == 11){//老用户需要自动登录
+//            CNVCodeViewController* vcodeVC = [[CNVCodeViewController alloc]init];
+//            [self.navigationController pushViewController:vcodeVC animated:YES];
+//        }
     }
     self.view_line_verticle.frame = CGRectMake(160, 267, 0.5, 160);
     self.view_line_horizontal1.frame = CGRectMake(0, 347, 320, 0.5);
@@ -205,6 +203,7 @@ NSString* dayOrNight;
 }
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    [CNUtil appendUserOperation:@"进入主页面"];
     if(kApp.unreadMessageCount != 0){
         self.reddot.hidden = NO;
     }else{
@@ -217,7 +216,7 @@ NSString* dayOrNight;
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     [self initUI];
     [self initData];
-    if(self.weatherRefreshTime != 0 && [CNUtil getNowTime] - self.weatherRefreshTime > 20){
+    if(self.weatherRefreshTime != 0 && [CNUtil getNowTime] - self.weatherRefreshTime > 1*60*60){
         [self tellWeather];
     }
 }
@@ -253,6 +252,9 @@ NSString* dayOrNight;
     }else{//未登录状态
         self.image_avatar.image = [UIImage imageNamed:@"avatar_default.png"];
         self.label_username.text = @"未登录";
+        if(kApp.isLogin == 2){
+            self.label_username.text = @"正在登录...";
+        }
     }
 }
 #pragma -mark ASIHttpRequest delegate
@@ -290,25 +292,12 @@ NSString* dayOrNight;
 - (void)displayLoading{
     self.loadingImage.hidden = NO;
     [self.indicator startAnimating];
-    [self disableAllButton];
+    self.view.userInteractionEnabled = NO;
 }
 - (void)hideLoading{
     self.loadingImage.hidden = YES;
     [self.indicator stopAnimating];
-    [self enableAllButton];
-}
-- (void)disableAllButton{
-    self.button_cloud.enabled = NO;
-    self.button_go_login.enabled = NO;
-    self.button_setting.enabled = NO;
-    self.button_running.enabled = NO;
-    
-}
-- (void)enableAllButton{
-    self.button_cloud.enabled = YES;
-    self.button_go_login.enabled = YES;
-    self.button_setting.enabled = YES;
-    self.button_running.enabled = YES;
+    self.view.userInteractionEnabled = YES;
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -324,22 +313,33 @@ NSString* dayOrNight;
     // Pass the selected object to the new view controller.
 }
 */
+- (void)testTimeOutDidFailed{
+    NSLog(@"请检查网络");
+    [self hideLoading];
+}
+- (void)testTimeOutDidSuccess{
+    NSLog(@"请求成功");
+    [self hideLoading];
+}
 - (IBAction)button_clicked:(id)sender {
     switch ([sender tag]) {
         case 0:
         {
             NSLog(@"同步");
-//            [CNAppDelegate popupWarningCloud:YES];
+            [CNAppDelegate popupWarningCloud:YES];
             
 //            [kApp.friendHandler checkNeedUploadAD];
 //            [kApp.friendHandler userInADBook];
-            [kApp.networkHandler doRequest_testTimeOut];
-            
+//            [kApp.networkHandler doRequest_testTimeOut];
+//            kApp.networkHandler.delegate_testTimeOut = self;
+//            [self displayLoading];
+            [CNUtil appendUserOperation:@"点击同步"];
             break;
         }
         case 1:
         {
             NSLog(@"登录");
+            [CNUtil appendUserOperation:@"点击头像"];
             if(kApp.isLogin == 0){
                 CNLoginPhoneViewController* loginVC = [[CNLoginPhoneViewController alloc]init];
                 [self.navigationController pushViewController:loginVC animated:YES];
@@ -380,15 +380,30 @@ NSString* dayOrNight;
                 NSLog(@"targetValue is %d",kApp.runManager.targetValue);
                 int countDonwOn = [[settingDic objectForKey:@"countdown"]intValue];
                 if(countDonwOn == 1){
-                    CountDownViewController* countdownVC = [[CountDownViewController alloc]init];
-                    [self.navigationController pushViewController:countdownVC animated:YES];
+                    RunningViewController* runningVC = [[RunningViewController alloc]init];
+                    runningVC.count = 5;
+                    [self.navigationController pushViewController:runningVC animated:YES];
                 }else{
                     RunningViewController* runningVC = [[RunningViewController alloc]init];
+                    runningVC.count = 0;
                     [self.navigationController pushViewController:runningVC animated:YES];
                 }
+            [CNUtil appendUserOperation:[NSString stringWithFormat:@"开始运动：类型为:%d,目标类型是:%d,目标值:%d,是否有语音:%d,是否倒计时:%d",kApp.runManager.howToMove,kApp.runManager.targetType,kApp.runManager.targetValue,kApp.voiceOn,countDonwOn]];
 //            }
             break;
         }
+        case 4:
+        {
+            [FriendsHandler AddPeople];
+            break;
+        }
+        case 5:
+        {
+            [FriendsHandler DeletePeople];
+            [CNUtil showAlert:@"删除成功"];
+            break;
+        }
+            
         default:
             break;
     }
@@ -425,16 +440,17 @@ NSString* dayOrNight;
 }
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
     if([keyPath isEqualToString:@"stepDes"]){
-        
         if([kApp.cloudManager.stepDes isEqualToString:@"同步完毕！"]||[kApp.cloudManager.stepDes hasPrefix:@"同步失败"]){
             self.progressview_cloud.hidden = YES;
             self.button_cloud.enabled = YES;
         }
     }else if([keyPath isEqualToString:@"newprogress"]){
         if(kApp.isLogin == 1 && ![kApp.cloudManager.stepDes isEqualToString:@"同步完毕！"]){
-            self.progressview_cloud.hidden = NO;
-            [self.progressview_cloud setProgress:kApp.networkHandler.newprogress];
-            self.button_cloud.enabled = NO;
+            if(kApp.cloudManager.isSynServerTime){//已经同步了时间
+                self.progressview_cloud.hidden = NO;
+                [self.progressview_cloud setProgress:kApp.networkHandler.newprogress];
+                self.button_cloud.enabled = NO;
+            }
         }
     }else if([keyPath isEqualToString:@"unreadMessageCount"]){
         NSLog(@"--------------unreadMessageCount is %i",kApp.unreadMessageCount);

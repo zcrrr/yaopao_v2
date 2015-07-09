@@ -42,9 +42,12 @@
 @synthesize cameraPicker;
 @synthesize overlayVC;
 @synthesize pauseButoon;
+@synthesize timer_countdown;
+@synthesize count;
 extern NSMutableArray* imageArray;
 
 - (void)viewWillAppear:(BOOL)animated{
+    [CNUtil appendUserOperation:@"进入跑步页面"];
     [super viewWillAppear:animated];
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
     switch (kApp.runManager.runStatus) {
@@ -54,6 +57,8 @@ extern NSMutableArray* imageArray;
             [self initPauseButton:NO];
             self.button_complete.hidden = YES;
             self.label_longpress.hidden = NO;
+            self.label_complete.hidden = YES;
+            self.label_continue.hidden = YES;
             self.timer_dispalyTime = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(displayTime) userInfo:nil repeats:YES];
             break;
         }
@@ -63,6 +68,8 @@ extern NSMutableArray* imageArray;
             [self initPauseButton:YES];
             self.button_complete.hidden = NO;
             self.label_longpress.hidden = YES;
+            self.label_complete.hidden = NO;
+            self.label_continue.hidden = NO;
             break;
         }
         default:
@@ -70,15 +77,56 @@ extern NSMutableArray* imageArray;
     }
     [kApp.runManager addObserver:self forKeyPath:@"distance" options:NSKeyValueObservingOptionNew context:nil];
     [kApp.runManager addObserver:self forKeyPath:@"secondPerKm" options:NSKeyValueObservingOptionNew context:nil];
+    [kApp.locationHandler addObserver:self forKeyPath:@"accuracy" options:NSKeyValueObservingOptionNew context:nil];
+    
+    //进来就先显示
+    int distance = kApp.runManager.distance;
+    //        NSLog(@"distance is %i",kApp.runManager.distance);
+    if(kApp.runManager.targetType == 1 || kApp.runManager.targetType == 2){//目标是距离
+        if(kApp.runManager.targetType == 2){
+            //通过kApp.runManager.completePercent设定进度
+            if(kApp.runManager.completePercent >= 0 && kApp.runManager.completePercent<=1){
+                self.view_circle.progress = kApp.runManager.completePercent;
+                [self.view_circle setNeedsDisplay];
+            }
+        }
+        self.label_dis_big.text = [NSString stringWithFormat:@"%0.2f",distance/1000.0];
+    }else{
+        self.label_dis_small.text = [NSString stringWithFormat:@"%0.2f",distance/1000.0];
+    }
+    
 }
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    imageArray = nil;
-    // Do any additional setup after loading the view from its nib.
+- (void)countdown{
+    count--;
+    self.label_num.text = [NSString stringWithFormat:@"%i",count];
+    if(count == 0){
+        self.view_countdown.hidden = YES;
+        [self.timer_countdown invalidate];
+        [self startRun];
+    }
+}
+- (void)startRun{
     //启动runmanager跑步
     [kApp.runManager startRun];
-    
     [kApp.voiceHandler voiceOfapp:@"run_start" :nil];
+    kApp.timer_playVoice = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(checkPlayVoice) userInfo:nil repeats:YES];
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    if(self.count > 0){
+        self.timer_countdown = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(countdown) userInfo:nil repeats:YES];
+    }else{
+        self.view_countdown.hidden = YES;
+        [self startRun];
+    }
+    
+    
+    
+    imageArray = nil;
+    // Do any additional setup after loading the view from its nib.
+    
     // Do any additional setup after loading the view from its nib.
     NSString* NOTIFICATION_GPS = @"gps";
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(setGPSImage) name:NOTIFICATION_GPS object:nil];
@@ -105,13 +153,12 @@ extern NSMutableArray* imageArray;
         self.label_dis_small.hidden = NO;
         self.label_during_small.hidden = YES;
     }
-    kApp.timer_playVoice = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(checkPlayVoice) userInfo:nil repeats:YES];
     if(!iPhone5){//4、4s
-        self.view_middle.frame = CGRectMake(0, 270, 320, 44);
-        self.button_takephoto.frame = CGRectMake(28, 315, 65, 65);
-        self.button_map.frame = CGRectMake(128, 315, 65, 65);
-        self.button_group.frame = CGRectMake(229, 315, 65, 65);
-        self.button_complete.frame = CGRectMake(166, 385, 90, 90);
+        self.view_middle.frame = CGRectMake(0, 250, 320, 44);
+        self.button_takephoto.frame = CGRectMake(28, 295, 65, 65);
+        self.button_map.frame = CGRectMake(128, 295, 65, 65);
+        self.button_group.frame = CGRectMake(229, 295, 65, 65);
+        self.button_complete.frame = CGRectMake(166, 365, 90, 90);
     }
 }
 - (void)initPauseButton:(BOOL)isPause{
@@ -122,8 +169,7 @@ extern NSMutableArray* imageArray;
         certer_x = self.view.center.x;
     }
     [self.pauseButoon removeFromSuperview];
-    int bottomMargin = iPhone5?70:50;
-    self.pauseButoon = [[CircularLock alloc] initWithCenter:CGPointMake(certer_x, self.view.frame.size.height - bottomMargin)
+    self.pauseButoon = [[CircularLock alloc] initWithCenter:CGPointMake(certer_x, self.button_complete.frame.origin.y+45)
                                                      radius:45
                                                    duration:1
                                                 strokeWidth:4
@@ -141,6 +187,7 @@ extern NSMutableArray* imageArray;
                                             [self continueRun];
                                         }];
     [self.view addSubview:self.pauseButoon];
+    [self.view sendSubviewToBack:self.pauseButoon];
 }
 
 
@@ -186,6 +233,11 @@ extern NSMutableArray* imageArray;
 }
 - (void)displayTime{
     int duringMiliSecond = [kApp.runManager during];
+    NSLog(@"duringMiliSecond is %i",duringMiliSecond);
+    if(duringMiliSecond > 24*60*60*1000){//大于24小时，不可能
+        duringMiliSecond = 0;
+    }
+    
     if(kApp.runManager.targetType == 3){
         //通过kApp.runManager.completePercent设置进度;
         if(kApp.runManager.completePercent >= 0 && kApp.runManager.completePercent<=1){
@@ -213,18 +265,21 @@ extern NSMutableArray* imageArray;
     [self.timer_dispalyTime invalidate];
     [kApp.runManager removeObserver:self forKeyPath:@"distance"];
     [kApp.runManager removeObserver:self forKeyPath:@"secondPerKm"];
+    [kApp.locationHandler removeObserver:self forKeyPath:@"accuracy"];
 }
 - (IBAction)button_clicked:(id)sender {
     switch ([sender tag]) {
         case 0:
         {
             NSLog(@"拍照");
+            [CNUtil appendUserOperation:@"拍照"];
             [self takePhoto];
             break;
         }
         case 1:
         {
             NSLog(@"地图");
+            [CNUtil appendUserOperation:@"点击地图按钮"];
 //            kApp.isInChina = YES;
             if(kApp.isInChina){
                 CNRunMapViewController* mapVC = [[CNRunMapViewController alloc]init];
@@ -237,6 +292,7 @@ extern NSMutableArray* imageArray;
         }
         case 2:
         {
+            [CNUtil appendUserOperation:@"点击跑团按钮"];
             NSLog(@"跑团");
             if(kApp.isLogin == 0){
                 [kApp.window makeToast:@"请先登录~"];
@@ -249,6 +305,7 @@ extern NSMutableArray* imageArray;
         }
         case 3:
         {
+            [CNUtil appendUserOperation:@"点击完成按钮"];
             NSLog(@"完成");
             UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:@"你已经完成这次的运动了吗?" delegate:self cancelButtonTitle:@"不，还没完成" destructiveButtonTitle:nil otherButtonTitles:@"是的，完成了", nil];
             [actionSheet showInView:self.view];
@@ -259,22 +316,27 @@ extern NSMutableArray* imageArray;
     }
 }
 - (void)continueRun{
+    [CNUtil appendUserOperation:@"继续运动"];
     [kApp.voiceHandler voiceOfapp:@"run_continue" :nil];
     [kApp.runManager changeRunStatus:1];
     self.button_complete.hidden = YES;
+    self.label_complete.hidden = YES;
+    self.label_continue.hidden = YES;
     self.label_longpress.hidden = NO;
     self.timer_dispalyTime = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(displayTime) userInfo:nil repeats:YES];
     CGRect oldFrame = self.pauseButoon.frame;
     CGRect newFrame = CGRectMake(115, oldFrame.origin.y, oldFrame.size.width, oldFrame.size.height);
     self.pauseButoon.frame = newFrame;
-    
 }
 - (void)pauseRun{
+    [CNUtil appendUserOperation:@"暂停运动"];
     [kApp.voiceHandler voiceOfapp:@"run_pause" :nil];
     // Customization example
     [kApp.runManager changeRunStatus:2];
     self.button_complete.hidden = NO;
     self.label_longpress.hidden = YES;
+    self.label_complete.hidden = NO;
+    self.label_continue.hidden = NO;
     [self.timer_dispalyTime invalidate];
     CGRect oldFrame = self.pauseButoon.frame;
     CGRect newFrame = CGRectMake(64, oldFrame.origin.y, oldFrame.size.width, oldFrame.size.height);
@@ -537,6 +599,18 @@ extern NSMutableArray* imageArray;
     {
         self.label_secondPerKm.text = [CNUtil pspeedStringFromSecond:kApp.runManager.secondPerKm];
     }
+    if([keyPath isEqualToString:@"accuracy"])
+    {
+        int rank = 0;
+        if (kApp.locationHandler.accuracy > 200)
+            rank = 1;
+        else if (kApp.locationHandler.accuracy > 50)
+            rank = 2;
+        else if (kApp.locationHandler.accuracy > 20)
+            rank = 3;
+        else rank = 4;
+        self.label_acc.text = [NSString stringWithFormat:@"%f:%i",kApp.locationHandler.accuracy,rank];
+    }
 }
 - (void)takePhoto{
     self.cameraPicker = [[UIImagePickerController alloc]init];
@@ -549,5 +623,10 @@ extern NSMutableArray* imageArray;
         self.overlayVC.cameraPicker = self.cameraPicker;
         self.overlayVC.cameraPicker.delegate = self.overlayVC;
     }];
+}
+- (IBAction)button_countdonw_clicked:(id)sender {
+    self.view_countdown.hidden = YES;
+    [self.timer_countdown invalidate];
+    [self startRun];
 }
 @end

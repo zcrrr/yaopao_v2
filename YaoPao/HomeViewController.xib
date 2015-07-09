@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6751" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="HomeViewController">
@@ -170,14 +170,36 @@
                                 <action selector="button_logout:" destination="-1" eventType="touchUpInside" id="YgG-Qz-VqT"/>
                             </connections>
                         </button>
+                        <button hidden="YES" opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="ymz-OD-58b">
+                            <rect key="frame" x="237" y="72" width="75" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" red="0.73333333329999995" green="0.93333333330000001" blue="0.35294117650000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <state key="normal" title="导入联系人">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="button_clicked:" destination="-1" eventType="touchUpInside" id="SSQ-1R-PGM"/>
+                            </connections>
+                        </button>
+                        <button hidden="YES" opaque="NO" tag="5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="2xe-QP-evu">
+                            <rect key="frame" x="239" y="131" width="75" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" red="0.73333333329999995" green="0.93333333330000001" blue="0.35294117650000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <state key="normal" title="删除联系人">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="button_clicked:" destination="-1" eventType="touchUpInside" id="Y9G-qW-d2e"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </view>
                 <progressView hidden="YES" opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" id="BGE-bz-4Nf">
-                    <rect key="frame" x="0.0" y="55" width="320" height="2"/>
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="2"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="progressTintColor" red="0.54901960780000003" green="0.77647058820000003" blue="0.24313725489999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    <color key="trackTintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <color key="trackTintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                 </progressView>
                 <view contentMode="scaleToFill" id="YpA-K1-qfO">
                     <rect key="frame" x="0.0" y="267" width="160" height="80"/>

@@ -10,7 +10,7 @@
 #import "CNNetworkHandler.h"
 #import "SectionsViewController.h"
 
-@interface CNForgetPwdViewController : UIViewController<UITextFieldDelegate,findPwdDelegate,SecondViewControllerDelegate>
+@interface CNForgetPwdViewController : UIViewController<UITextFieldDelegate,findPwdDelegate,SecondViewControllerDelegate,verifyCodeDelegate>
 @property (assign, nonatomic) BOOL isVerify;
 @property (strong, nonatomic) NSString* areaCode;
 @property (strong, nonatomic) NSTimer* timer;

@@ -16,6 +16,9 @@
 #import "SectionsViewController.h"
 #import "CNCloudRecord.h"
 #import "EMSDKFull.h"
+#import "FriendsHandler.h"
+#import "CNUtil.h"
+#import "LoginDoneHandler.h"
 
 @interface CNRegisterPhoneViewController ()
 
@@ -93,43 +96,66 @@
     }
 }
 - (void)countdown{
-    kApp.vcodeSecond -- ;
+    if(kApp.vcodeSecond > 0){
+        kApp.vcodeSecond -- ;
+    }
     if(kApp.vcodeSecond == 0){
         [kApp.vcodeTimer invalidate];
     }
 }
 - (void)getVCode{
     NSLog(@"code is %@",self.areaCode);
-    [SMS_SDK getVerifyCodeByPhoneNumber:self.textfield_phone.text AndZone:self.areaCode result:^(enum SMS_GetVerifyCodeResponseState state) {
-        [self hideLoading];
-        if (1==state) {
-            NSLog(@"block 获取验证码成功");
-            UIAlertView* alert=[[UIAlertView alloc] initWithTitle:@"" message:@"获取验证码成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-            [alert show];
-            self.button_vcode.userInteractionEnabled = NO;
-            kApp.vcodeSecond = 60;
-            kApp.vcodeTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(countdown) userInfo:nil repeats:YES];
-        }
-        else if(0==state)
-        {
-            NSLog(@"block 获取验证码失败");
-            NSString* str=[NSString stringWithFormat:@"验证码发送失败 请稍后重试"];
-            UIAlertView* alert=[[UIAlertView alloc] initWithTitle:@"发送失败" message:str delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-            [alert show];
-        }
-        else if (SMS_ResponseStateMaxVerifyCode==state)
-        {
-            NSString* str=[NSString stringWithFormat:@"请求验证码超上限 请稍后重试"];
-            UIAlertView* alert=[[UIAlertView alloc] initWithTitle:@"超过上限" message:str delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-            [alert show];
-        }
-        else if(SMS_ResponseStateGetVerifyCodeTooOften==state)
-        {
-            NSString* str=[NSString stringWithFormat:@"客户端请求发送短信验证过于频繁"];
-            UIAlertView* alert=[[UIAlertView alloc] initWithTitle:@"提示" message:str delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-            [alert show];
-        }
-    }];
+    if([self.areaCode isEqualToString:@"86"]){
+        NSMutableDictionary* params = [[NSMutableDictionary alloc]init];
+        [params setObject:self.textfield_phone.text forKey:@"phone"];
+        [params setObject:self.label_country.text forKey:@"country"];
+        kApp.networkHandler.delegate_verifyCode = self;
+        [kApp.networkHandler doRequest_verifyCode:params];
+    }else{
+        [SMS_SDK getVerifyCodeByPhoneNumber:self.textfield_phone.text AndZone:self.areaCode result:^(enum SMS_GetVerifyCodeResponseState state) {
+            [self hideLoading];
+            if (1==state) {
+                NSLog(@"block 获取验证码成功");
+                [kApp.window makeToast:@"验证码发送成功!"];
+                self.button_vcode.userInteractionEnabled = NO;
+                kApp.vcodeSecond = 60;
+                kApp.vcodeTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(countdown) userInfo:nil repeats:YES];
+            }
+            else if(0==state)
+            {
+                NSLog(@"block 获取验证码失败");
+                NSString* str=[NSString stringWithFormat:@"验证码发送失败 请稍后重试"];
+                UIAlertView* alert=[[UIAlertView alloc] initWithTitle:@"发送失败" message:str delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                [alert show];
+            }
+            else if (SMS_ResponseStateMaxVerifyCode==state)
+            {
+                NSString* str=[NSString stringWithFormat:@"请求验证码超上限 请稍后重试"];
+                UIAlertView* alert=[[UIAlertView alloc] initWithTitle:@"超过上限" message:str delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                [alert show];
+            }
+            else if(SMS_ResponseStateGetVerifyCodeTooOften==state)
+            {
+                NSString* str=[NSString stringWithFormat:@"客户端请求发送短信验证过于频繁"];
+                UIAlertView* alert=[[UIAlertView alloc] initWithTitle:@"提示" message:str delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                [alert show];
+            }
+        }];
+    }
+}
+- (void)verifyCodeDidFailed:(NSString *)mes{
+    [CNUtil showAlert:mes];
+    [self hideLoading];
+}
+- (void)verifyCodeDidSuccess:(NSDictionary *)resultDic{
+    [self hideLoading];
+    [self setEditing:NO];
+    NSLog(@"自己接口获取验证码成功");
+    [kApp.window makeToast:@"验证码发送成功!"];
+    self.button_vcode.userInteractionEnabled = NO;
+    kApp.vcodeSecond = 60;
+    kApp.vcodeTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(countdown) userInfo:nil repeats:YES];
+    self.isVerify = YES;
 }
 - (void)verifyVCode{
     [SMS_SDK commitVerifyCode:self.textfield_vcode.text result:^(enum SMS_ResponseState state) {
@@ -281,20 +307,13 @@
     BOOL result = NO;
     if (self.textfield_vcode.text != nil && ![self.textfield_vcode.text isEqualToString:@""])
     {
-        if ([self.textfield_vcode.text length] != 4)
+        for (int i = 0; i < [self.textfield_vcode.text length]; i++)
         {
-            string_alert = @"验证码不符合规范，应为4位的数字";
-        }
-        else
-        {
-            for (int i = 0; i < [self.textfield_vcode.text length]; i++)
+            char c = [self.textfield_vcode.text characterAtIndex:i];
+            if (c <'0' || c >'9')
             {
-                char c = [self.textfield_vcode.text characterAtIndex:i];
-                if (c <'0' || c >'9')
-                {
-                    string_alert = @"验证码不符合规范，应为4位的数字";
-                    break;
-                }
+                string_alert = @"验证码不符合规范";
+                break;
             }
         }
     }else{
@@ -339,7 +358,7 @@
     }
     if (![string_alert isEqualToString:@""])
     {
-        [self showAlert:string_alert];
+        [CNUtil showAlert:string_alert];
         result = NO;
     }else{
         result = YES;
@@ -349,36 +368,37 @@
 #pragma mark- register delegate
 - (void)registerPhoneDidSuccess:(NSDictionary *)resultDic{
     [self hideLoading];
-    [self showAlert:@"注册成功"];
-    [CNCloudRecord ClearRecordAfterUserLogin];
-    //向mob注册用户信息
-//    [kApp needRegisterMobUser];
-    NSString* phoneNO = [kApp.userInfoDic objectForKey:@"phone"];
-    [[EaseMob sharedInstance].chatManager asyncLoginWithUsername:phoneNO password:phoneNO completion:^(NSDictionary *loginInfo, EMError *error) {
-        if (!error && loginInfo) {
-            NSLog(@"登录环信成功!!");
-            kApp.isLoginHX = 1;
-            [CNAppDelegate howManyMessageToRead];
-        }
-    } onQueue:nil];
+    [kApp.window makeToast:@"注册成功!"];
+//    [CNCloudRecord ClearRecordAfterUserLogin];
+//    //向mob注册用户信息
+////    [kApp needRegisterMobUser];
+//    NSString* phoneNO = [kApp.userInfoDic objectForKey:@"phone"];
+//    [[EaseMob sharedInstance].chatManager asyncLoginWithUsername:phoneNO password:phoneNO completion:^(NSDictionary *loginInfo, EMError *error) {
+//        if (!error && loginInfo) {
+//            NSLog(@"登录环信成功!!");
+//            kApp.isLoginHX = 1;
+//            [CNAppDelegate howManyMessageToRead];
+//        }
+//    } onQueue:nil];
+//    [kApp.friendHandler checkNeedUploadAD];
+    
+    [kApp.loginHandler doManyThingAfterLogin:1];
     CNUserinfoViewController* userInfoVC = [[CNUserinfoViewController alloc]init];
     [self.navigationController pushViewController:userInfoVC animated:YES];
 }
 - (void)registerPhoneDidFailed:(NSString *)mes{
     [self hideLoading];
-    [self showAlert:mes];
-}
-- (void)showAlert:(NSString*) content{
-    UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:content delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-    [alert show];
+    [CNUtil showAlert:mes];
 }
 - (void)displayLoading{
     self.loadingImage.hidden = NO;
     [self.indicator startAnimating];
+    self.view.userInteractionEnabled = NO;
 }
 - (void)hideLoading{
     self.loadingImage.hidden = YES;
     [self.indicator stopAnimating];
+    self.view.userInteractionEnabled = YES;
 }
 #pragma mark- textfiled delegate
 - (BOOL)textFieldShouldReturn:(UITextField *)textField

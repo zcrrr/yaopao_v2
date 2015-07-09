@@ -39,10 +39,12 @@
 - (void)displayLoading{
     self.loadingImage.hidden = NO;
     [self.indicator startAnimating];
+    self.view.userInteractionEnabled = NO;
 }
 - (void)hideLoading{
     self.loadingImage.hidden = YES;
     [self.indicator stopAnimating];
+    self.view.userInteractionEnabled = YES;
 }
 /*
 #pragma mark - Navigation

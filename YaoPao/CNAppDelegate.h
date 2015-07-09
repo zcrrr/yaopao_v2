@@ -17,6 +17,7 @@
 @class FriendsHandler;
 #import "EMSDKFull.h"
 @class GCDAsyncUdpSocket;
+@class LoginDoneHandler;
 
 @interface CNAppDelegate : UIResponder <UIApplicationDelegate,IChatManagerDelegate>
 
@@ -29,6 +30,7 @@
 @property (strong ,nonatomic) CNRunManager* runManager;
 @property (strong, nonatomic) CNCloudRecord* cloudManager;
 @property (strong, nonatomic) FriendsHandler* friendHandler;
+@property (strong, nonatomic) LoginDoneHandler* loginHandler;
 
 @property (nonatomic, strong) NSString* pid;
 @property (nonatomic, strong) NSString* ua;
@@ -157,6 +159,7 @@
 + (void)makeMatchTest;
 + (CNGPSPoint4Match*)test_getOnePoint;
 + (void)saveRun;
+@property (strong, nonatomic) NSMutableString* userOperation;
 
 
 //好友相关：

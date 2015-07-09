@@ -27,6 +27,7 @@
 #import "CNLoginPhoneViewController.h"
 #import "Toast+UIView.h"
 #import "FriendInfo.h"
+#import "CNUtil.h"
 
 @interface ChatListViewController ()<UITableViewDelegate,UITableViewDataSource, UISearchDisplayDelegate,SRRefreshDelegate, UISearchBarDelegate, IChatManagerDelegate>
 
@@ -63,6 +64,7 @@
 
 - (void)viewDidLoad
 {
+    [CNUtil appendUserOperation:@"进入跑团首页"];
     self.selectIndex = 2;
     [super viewDidLoad];
     if(kApp.isLogin == 0){
@@ -211,7 +213,6 @@
     [self unregisterNotifications];
     [super viewWillDisappear:animated];
     [kApp removeObserver:self forKeyPath:@"unreadMessageCount"];
-    
 }
 - (void)hidePopView:(id)sender
 {
@@ -224,7 +225,7 @@
     NSLog(@"请求成功");
     [self.tableView reloadData];
 }
-- (void)requestFriendsDidFailed{
+- (void)requestFriendsDidFailed:mes{
     __weak ChatListViewController *weakSelf = self;
     [weakSelf hideHud];
     self.view.userInteractionEnabled = YES;
@@ -233,6 +234,7 @@
     switch ([sender tag]) {
         case 0:
         {
+            [CNUtil appendUserOperation:@"点击通讯录"];
             NSLog(@"通讯录");
             CNADBookViewController* adbookVC = [[CNADBookViewController alloc]init];
             [self.navigationController pushViewController:adbookVC animated:YES];
@@ -240,6 +242,7 @@
         }
         case 1:
         {
+            [CNUtil appendUserOperation:@"点击发起加号"];
             NSLog(@"发起");
             self.view_pop.hidden = NO;
             break;
@@ -247,6 +250,7 @@
         case 2:
         {
             NSLog(@"发起对话");
+            [CNUtil appendUserOperation:@"点击会话按钮"];
             CNADBookViewController* adbookVC = [[CNADBookViewController alloc]init];
             [self.navigationController pushViewController:adbookVC animated:YES];
             break;
@@ -254,6 +258,7 @@
         case 3:
         {
             NSLog(@"创建组");
+            [CNUtil appendUserOperation:@"点击创建组按钮"];
             CreateGroupViewController *createChatroom = [[CreateGroupViewController alloc] init];
             [self.navigationController pushViewController:createChatroom animated:YES];
             break;

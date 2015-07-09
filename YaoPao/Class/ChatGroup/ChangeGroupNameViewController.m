@@ -9,6 +9,7 @@
 #import "ChangeGroupNameViewController.h"
 #import "Toast+UIView.h"
 #import "FriendsHandler.h"
+#import "CNUtil.h"
 
 @interface ChangeGroupNameViewController ()
 
@@ -70,6 +71,7 @@
 }
 - (void)changeGroupNameDidFailed:(NSString *)mes{
     [self hideLoading];
+    [CNUtil showAlert:mes];
 }
 - (void)changeGroupNameDidSuccess:(NSDictionary *)resultDic{
     [self hideLoading];

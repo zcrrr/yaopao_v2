@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "CNNetworkHandler.h"
 #import "SectionsViewController.h"
-@interface CNRegisterPhoneViewController : UIViewController<UITextFieldDelegate,registerPhoneDelegate,SecondViewControllerDelegate>
+@interface CNRegisterPhoneViewController : UIViewController<UITextFieldDelegate,registerPhoneDelegate,SecondViewControllerDelegate,verifyCodeDelegate>
 @property (strong, nonatomic) NSTimer* timer;
 @property (assign, nonatomic) int count;
 @property (assign, nonatomic) BOOL isVerify;

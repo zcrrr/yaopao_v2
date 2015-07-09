@@ -56,5 +56,14 @@
 @property (weak, nonatomic) IBOutlet UIButton *button_group;
 @property (strong, nonatomic) CircularLock *pauseButoon;
 @property (weak, nonatomic) IBOutlet UILabel *label_longpress;
+@property (weak, nonatomic) IBOutlet UILabel *label_acc;
+
+@property (strong, nonatomic) NSTimer* timer_countdown;
+@property (assign, nonatomic) int count;
+@property (weak, nonatomic) IBOutlet UILabel *label_num;
+@property (weak, nonatomic) IBOutlet UIView *view_countdown;
+@property (weak, nonatomic) IBOutlet UILabel *label_complete;
+@property (weak, nonatomic) IBOutlet UILabel *label_continue;
+- (IBAction)button_countdonw_clicked:(id)sender;
 
 @end

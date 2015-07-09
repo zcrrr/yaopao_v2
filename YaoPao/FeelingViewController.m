@@ -35,6 +35,7 @@
 @synthesize runClass;
 extern NSMutableArray* imageArray;
 - (void)viewDidLoad {
+    [CNUtil appendUserOperation:@"跑完步进入保存页面"];
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     kApp.isRunning = 0;
@@ -67,6 +68,7 @@ extern NSMutableArray* imageArray;
         self.view_middle.frame = CGRectMake(0, 301, 320, 43);
     }
     //先保存一下：
+    [CNUtil appendUserOperation:@"先保存一下"];
     [self saveRun];
 }
 - (void)viewWillAppear:(BOOL)animated{
@@ -152,6 +154,7 @@ extern NSMutableArray* imageArray;
     switch ([sender tag]) {
         case 0:
         {
+            [CNUtil appendUserOperation:@"点击删除记录按钮"];
             NSLog(@"删除");
             //去数据库里删除该次记录
             [CNCloudRecord deleteOneRecord:self.runClass];
@@ -162,6 +165,7 @@ extern NSMutableArray* imageArray;
         case 1:
         {
             NSLog(@"保存");
+            [CNUtil appendUserOperation:@"点击保存记录按钮"];
             //先保存，然后跳转
             [self updateRun];
             CNShareViewController* shareVC = [[CNShareViewController alloc]init];
@@ -175,9 +179,11 @@ extern NSMutableArray* imageArray;
         case 2:
         {
             NSLog(@"左");
+            
             [self.scrollview setContentOffset:CGPointMake(self.currentpage*320-320, 0) animated:YES];
             self.currentpage -- ;
             [self howControllerDisplay];
+            [CNUtil appendUserOperation:[NSString stringWithFormat:@"点击左,currentpage is %i",self.currentpage]];
             break;
         }
         case 3:
@@ -186,6 +192,7 @@ extern NSMutableArray* imageArray;
             [self.scrollview setContentOffset:CGPointMake(self.currentpage*320+320, 0) animated:YES];
             self.currentpage ++ ;
             [self howControllerDisplay];
+            [CNUtil appendUserOperation:[NSString stringWithFormat:@"点击右,currentpage is %i",self.currentpage]];
             break;
         }
         case 4:
@@ -196,6 +203,7 @@ extern NSMutableArray* imageArray;
                 self.currentpage --;
             }
             [self whichImageShouldDisplay];
+            [CNUtil appendUserOperation:[NSString stringWithFormat:@"点击删除图片,currentpage is %i",self.currentpage]];
             break;
         }
         case 5:
@@ -210,7 +218,9 @@ extern NSMutableArray* imageArray;
         {
             NSLog(@"美化");
             [self displayEditorForImage:[imageArray objectAtIndex:self.currentpage]];
+            [CNUtil appendUserOperation:@"点击美化按钮"];
             break;
+            
         }
         case 7:
         {
@@ -228,7 +238,7 @@ extern NSMutableArray* imageArray;
             waterVC.delegate_addWater = self;
             waterVC.image_datasource = [imageArray objectAtIndex:self.currentpage];
             [self.navigationController pushViewController:waterVC animated:YES];
-            
+            [CNUtil appendUserOperation:@"点击水印按钮"];
             break;
         }
         default:
@@ -261,11 +271,13 @@ extern NSMutableArray* imageArray;
         {
             NSLog(@"拍照");
             [self takePhoto];
+            [CNUtil appendUserOperation:@"点击拍照"];
             break;
         }
         case 1:
         {
             NSLog(@"相册");
+            [CNUtil appendUserOperation:@"点击相册"];
             self.cameraPicker = [[UIImagePickerController alloc]init];
             self.cameraPicker.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
             self.cameraPicker.allowsEditing = YES;
@@ -299,7 +311,9 @@ extern NSMutableArray* imageArray;
             imageArray = [[NSMutableArray alloc]init];
         }
         [imageArray addObject:imageScaled];
+        self.currentpage = (int)[imageArray count]-1;
         [picker dismissViewControllerAnimated:YES completion:nil];
+        [CNUtil appendUserOperation:@"从相册选择一张图片"];
     }
 }
 - (void)takePhoto{
@@ -311,9 +325,17 @@ extern NSMutableArray* imageArray;
     self.cameraPicker.cameraOverlayView = self.overlayVC.view;
     [self presentViewController:self.cameraPicker animated:YES completion:^{
         self.overlayVC.cameraPicker = self.cameraPicker;
+        self.overlayVC.delegate_savaImage = self;
         self.overlayVC.cameraPicker.delegate = self.overlayVC;
     }];
 }
+- (void)saveImageDidFailed{
+    self.currentpage = (int)[imageArray count]-1;
+}
+- (void)saveImageDidSuccess:(UIImage *)image{
+    self.currentpage = (int)[imageArray count]-1;
+}
+
 - (void)displayEditorForImage:(UIImage *)imageToEdit
 {
     float image_width = imageToEdit.size.width;

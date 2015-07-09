@@ -11,6 +11,7 @@
 #import "CNNetworkHandler.h"
 #import "Toast+UIView.h"
 #import "FriendsHandler.h"
+#import "CNUtil.h"
 
 @interface CNAddFriendViewController ()
 
@@ -65,7 +66,7 @@
     
 }
 - (void)sendMakeFriendsRequestDidFailed:(NSString *)mes{
-    [kApp.window makeToast:@"发送好友请求失败"];
+    [CNUtil showAlert:mes];
     [self hideLoading];
 }
 - (void)sendMakeFriendsRequestDidSuccess:(NSDictionary *)resultDic{

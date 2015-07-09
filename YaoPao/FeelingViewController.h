@@ -11,11 +11,12 @@
 #import "WaterMarkViewController.h"
 #import "ChooseEditImageViewController.h"
 #import "CombineImagePreviewViewController.h"
+#import "CNOverlayViewController.h"
 @class CNCustomButton;
 @class CNOverlayViewController;
 @class AdobeUXImageEditorViewController;
 @class RunClass;
-@interface FeelingViewController : UIViewController<UITextFieldDelegate,UIScrollViewDelegate,AdobeUXImageEditorViewControllerDelegate,addWaternDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,buttonClickDelegate,combineImageDelegate>
+@interface FeelingViewController : UIViewController<UITextFieldDelegate,UIScrollViewDelegate,AdobeUXImageEditorViewControllerDelegate,addWaternDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,buttonClickDelegate,combineImageDelegate,saveImageDelegate>
 @property (assign, nonatomic) int currentpage;
 @property (strong, nonatomic) UIImagePickerController* cameraPicker;
 @property (strong, nonatomic) CNOverlayViewController* overlayVC;

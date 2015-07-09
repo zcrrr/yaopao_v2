@@ -36,6 +36,7 @@
 }
 - (void)viewDidLoad
 {
+    [CNUtil appendUserOperation:@"进入目标设置页面"];
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     [self changeLineOne:self.view_line1];
@@ -130,6 +131,7 @@ numberOfRowsInComponent:(NSInteger)component {
     self.textfield_choose2.text = [NSString stringWithFormat:@"%@km",[self.dis_array objectAtIndex:row]];
     self.distance = [[self.dis_array objectAtIndex:row]intValue];
     [self hideAllTextfiled];
+    [CNUtil appendUserOperation:[NSString stringWithFormat:@"目标设定为：%@",self.textfield_choose2.text]];
 }
 
 - (IBAction)time_selected:(id)sender {
@@ -139,6 +141,7 @@ numberOfRowsInComponent:(NSInteger)component {
     self.textfield_choose3.text = timestr;
     self.time = [[self.time_array objectAtIndex:row]intValue];
     [self hideAllTextfiled];
+    [CNUtil appendUserOperation:[NSString stringWithFormat:@"目标设定为：%@",self.textfield_choose3.text]];
 }
 - (IBAction)button_back_clicked:(id)sender {
     self.button_back.backgroundColor = [UIColor clearColor];

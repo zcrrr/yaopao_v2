@@ -30,6 +30,7 @@
 @property (assign, nonatomic) BOOL userCancel;
 @property (strong, nonatomic) NSString* stepDes;
 @property (strong, nonatomic) NSString* udpRes;
+@property (assign, nonatomic) BOOL isClouding;
 
 + (void)ClearRecordAfterUserLogin;
 + (void)deletePlistRecord:(RunClass*)runclass;

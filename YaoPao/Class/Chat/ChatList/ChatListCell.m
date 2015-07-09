@@ -49,7 +49,7 @@
         
         _detailLabel = [[UILabel alloc] initWithFrame:CGRectMake(65, 30, 175, 20)];
         _detailLabel.backgroundColor = [UIColor clearColor];
-        _detailLabel.font = [UIFont systemFontOfSize:15];
+        _detailLabel.font = [UIFont systemFontOfSize:13];
         _detailLabel.textColor = [UIColor lightGrayColor];
         [self.contentView addSubview:_detailLabel];
         
@@ -93,7 +93,9 @@
     self.imageView.layer.masksToBounds = YES;
     
     self.textLabel.text = _name;
+    self.textLabel.font = [UIFont systemFontOfSize:15];
     self.textLabel.frame = CGRectMake(65, 7, 175, 20);
+    
     
     _detailLabel.text = _detailMsg;
     _timeLabel.text = _time;

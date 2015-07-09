@@ -51,7 +51,6 @@
         [self.navigationController pushViewController:runningVC animated:YES];
         [self.timer_countdown invalidate];
     }
-    
 }
 
 @end

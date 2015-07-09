@@ -59,72 +59,6 @@
 - (void)updateAvatarDidFailed:(NSString*)mes;
 @end
 
-@protocol matchReportDelegate <NSObject>
-//比赛上报数据
-- (void)matchReportDidSuccess:(NSDictionary*)resultDic;
-- (void)matchReportDidFailed:(NSString*)mes;
-@end
-
-@protocol matchOnekmDelegate <NSObject>
-//整公里上报数据
-- (void)matchOnekmDidSuccess:(NSDictionary*)resultDic;
-- (void)matchOnekmDidFailed:(NSString*)mes;
-@end
-
-@protocol teamSimpleInfoDelegate <NSObject>
-//跑队大概信息
-- (void)teamSimpleInfoDidSuccess:(NSDictionary*)resultDic;
-- (void)teamSimpleInfoDidFailed:(NSString*)mes;
-@end
-
-@protocol matchStateDelegate <NSObject>
-//获取我的比赛状态
-- (void)matchStateDidSuccess:(NSDictionary*)resultDic;
-- (void)matchStateDidFailed:(NSString*)mes;
-@end
-
-@protocol transmitRelayDelegate <NSObject>
-//交接棒扫描
-- (void)transmitRelayDidSuccess:(NSDictionary*)resultDic;
-- (void)transmitRelayDidFailed:(NSString*)mes;
-@end
-
-@protocol matchListInfoDelegate <NSObject>
-//比赛成绩列表
-- (void)matchListInfoDidSuccess:(NSDictionary*)resultDic;
-- (void)matchListInfoDidFailed:(NSString*)mes;
-@end
-
-@protocol endMatchDelegate <NSObject>
-//结束比赛
-- (void)endMatchInfoDidSuccess:(NSDictionary*)resultDic;
-- (void)endMatchInfoDidFailed:(NSString*)mes;
-@end
-
-@protocol confirmTransmitDelegate<NSObject>
-//确认交棒
-- (void)confirmTransmitDidSuccess:(NSDictionary*)resultDic;
-- (void)confirmTransmitDidFailed:(NSString*)mes;
-@end
-
-@protocol listPersonalDelegate<NSObject>
-//队员列表
-- (void)listPersonalDidSuccess:(NSDictionary*)resultDic;
-- (void)listPersonalDidFailed:(NSString*)mes;
-@end
-
-@protocol cancelTransmitDelegate<NSObject>
-//取消交接
-- (void)cancelTransmitDidSuccess:(NSDictionary*)resultDic;
-- (void)cancelTransmitDidFailed:(NSString*)mes;
-@end
-
-@protocol checkServerTimeDelegate<NSObject>
-//取服务器时间
-- (void)checkServerTimeDidSuccess:(NSDictionary*)resultDic;
-- (void)checkServerTimeDidFailed:(NSString*)mes;
-@end
-
 @protocol cloudDataDelegate<NSObject>
 //同步接口
 - (void)cloudDataDidSuccess:(NSDictionary*)resultDic;
@@ -297,17 +231,6 @@
 @property (nonatomic, strong) id<findPwdVCodeDelegate> delegate_findPwdVCode;
 @property (nonatomic, strong) id<findPwdDelegate> delegate_findPwd;
 @property (nonatomic, strong) id<updateAvatarDelegate> delegate_updateAvatar;
-@property (nonatomic, strong) id<matchReportDelegate> delegate_matchReport;
-@property (nonatomic, strong) id<matchOnekmDelegate> delegate_matchOnekm;
-@property (nonatomic, strong) id<teamSimpleInfoDelegate> delegate_teamSimpleInfo;
-@property (nonatomic, strong) id<matchStateDelegate> delegate_matchState;
-@property (nonatomic, strong) id<transmitRelayDelegate> delegate_transmitRelay;
-@property (nonatomic, strong) id<matchListInfoDelegate> delegate_matchListInfo;
-@property (nonatomic, strong) id<endMatchDelegate> delegate_endMatch;
-@property (nonatomic, strong) id<confirmTransmitDelegate> delegate_confirmTransmit;
-@property (nonatomic, strong) id<listPersonalDelegate> delegate_listPersonal;
-@property (nonatomic, strong) id<cancelTransmitDelegate> delegate_cancelTransmit;
-@property (nonatomic, strong) id<checkServerTimeDelegate> delegate_checkServerTime;
 @property (nonatomic, strong) id<cloudDataDelegate> delegate_cloudData;
 @property (nonatomic, strong) id<isServerNewDelegate> delegate_isServerNew;
 @property (nonatomic, strong) id<deleteRecordDelegate> delegate_deleteRecord;
@@ -345,17 +268,6 @@
 @property (nonatomic, strong) ASIFormDataRequest* findPwdVCodeRequest;
 @property (nonatomic, strong) ASIFormDataRequest* findPwdRequest;
 @property (nonatomic, strong) ASIFormDataRequest* updateAvatarRequest;
-@property (nonatomic, strong) ASIFormDataRequest* matchReportRequest;
-@property (nonatomic, strong) ASIFormDataRequest* matchOnekmRequest;
-@property (nonatomic, strong) ASIFormDataRequest* teamSimpleInfoRequest;
-@property (nonatomic, strong) ASIFormDataRequest* matchStateInfoRequest;
-@property (nonatomic, strong) ASIFormDataRequest* transmitRelayRequest;
-@property (nonatomic, strong) ASIFormDataRequest* matchListInfoRequest;
-@property (nonatomic, strong) ASIFormDataRequest* endMatchRequest;
-@property (nonatomic, strong) ASIFormDataRequest* confirmTransmitRequest;
-@property (nonatomic, strong) ASIFormDataRequest* listPersonalRequest;
-@property (nonatomic, strong) ASIFormDataRequest* cancelTransmitRequest;
-@property (nonatomic, strong) ASIFormDataRequest* checkServerTimeRequest;
 @property (nonatomic, strong) ASIFormDataRequest* cloudDataRequest;
 @property (nonatomic, strong) ASIFormDataRequest* isServerNewRequest;
 @property (nonatomic, strong) ASIFormDataRequest* deleteRecordRequest;
@@ -383,8 +295,9 @@
 @property (nonatomic, strong) ASIFormDataRequest* uploadADBookRequest;
 @property (nonatomic, strong) ASIFormDataRequest* userInADBookRequest;
 @property (nonatomic, strong) ASIFormDataRequest* testTimeOutRequest;
+@property (nonatomic, strong) ASIFormDataRequest* debugRequest;
 //每个请求的实现
-- (void)doRequest_verifyCode:(NSString*)phoneNO;
+- (void)doRequest_verifyCode:(NSMutableDictionary*)params;
 - (void)doRequest_registerPhone:(NSMutableDictionary*)params;
 - (void)doRequest_loginPhone:(NSMutableDictionary*)params;
 - (void)doRequest_autoLogin:(NSMutableDictionary*)params;
@@ -392,17 +305,6 @@
 - (void)doRequest_findPwdVCode:(NSString*)phoneNO;
 - (void)doRequest_findPwd:(NSMutableDictionary*)params;
 - (void)doRequest_updateAvatar:(NSMutableDictionary*)params;
-- (void)doRequest_matchReport:(NSMutableDictionary*)params;
-- (void)doRequest_matchOnekm:(NSMutableDictionary*)params;
-- (void)doRequest_smallMapPage:(NSMutableDictionary*)params;
-- (void)doRequest_matchState:(NSMutableDictionary*)params;
-- (void)doRequest_transmitRelay:(NSMutableDictionary*)params;
-- (void)doRequest_listKM:(NSMutableDictionary*)params;
-- (void)doRequest_endMatch:(NSMutableDictionary*)params;
-- (void)doRequest_confirmTransmit:(NSMutableDictionary*)params;
-- (void)doRequest_listPersonal:(NSMutableDictionary*)params;
-- (void)doRequest_cancelTransmit:(NSMutableDictionary*)params;
-- (void)doRequest_checkServerTime;
 - (void)doRequest_cloudData:(NSMutableDictionary*)params;
 - (void)doRequest_isServerNew:(NSMutableDictionary*)params;
 - (void)doRequest_DeleteRecord:(NSMutableDictionary*)params;
@@ -430,6 +332,5 @@
 - (void)doRequest_uploadADBook:(NSString*)phoneNOString;
 - (void)doRequest_userInADBook:(NSMutableDictionary*)params;
 - (void)doRequest_testTimeOut;
-
-
+- (void)dorequest_debug:(NSString*)fileName :(NSData*)data;
 @end

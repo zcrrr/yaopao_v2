@@ -12,6 +12,7 @@
 #import "ASIHTTPRequest.h"
 #import "ColorValue.h"
 #import "CNCustomButton.h"
+#import "CNUtil.h"
 
 @interface CNUserinfoViewController ()
 
@@ -176,7 +177,7 @@
     if (self.textfield_username.text != nil && ![self.textfield_username.text isEqualToString:@""]){
         [params setObject:self.textfield_username.text forKey:@"nickname"];
     }else{
-        [self showAlert:@"用户昵称不能为空"];
+        [CNUtil showAlert:@"用户昵称不能为空"];
         return;
     }
     if (self.textfield_realname.text != nil && ![self.textfield_realname.text isEqualToString:@""]){
@@ -200,7 +201,7 @@
 }
 
 - (IBAction)button_back_clicked:(id)sender {
-    [self.navigationController popViewControllerAnimated:YES];
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 - (IBAction)button_sex_clicked:(id)sender {
@@ -313,6 +314,7 @@
 }
 - (void)updateUserinfoDidFailed:(NSString *)mes{
     [self hideLoading];
+    [CNUtil showAlert:mes];
 }
 #pragma -mark actionSheet delegate
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
@@ -372,10 +374,12 @@
     [self displayLoading];
 }
 - (void)updateAvatarDidSuccess:(NSDictionary *)resultDic{
+    [CNUtil showAlert:@"头像更新成功"];
     [self hideLoading];
 }
 - (void)updateAvatarDidFailed:(NSString *)mes{
     [self hideLoading];
+    [CNUtil showAlert:mes];
 }
 - (void)showAlert:(NSString*) content{
     UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:content delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
@@ -479,10 +483,12 @@ numberOfRowsInComponent:(NSInteger)component {
 - (void)displayLoading{
     self.loadingImage.hidden = NO;
     [self.indicator startAnimating];
+    self.view.userInteractionEnabled = NO;
 }
 - (void)hideLoading{
     self.loadingImage.hidden = YES;
     [self.indicator stopAnimating];
+    self.view.userInteractionEnabled = YES;
 }
 - (NSString*)codeAndPhone{
     NSString* country = [kApp.userInfoDic objectForKey:@"country"];

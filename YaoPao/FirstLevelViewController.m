@@ -8,6 +8,7 @@
 
 #import "FirstLevelViewController.h"
 #import "Toast+UIView.h"
+#import "CNUtil.h"
 #define kScreenHeight [[UIScreen mainScreen] bounds].size.height
 #define kScreenWidth [[UIScreen mainScreen] bounds].size.width
 
@@ -79,6 +80,7 @@
 }
 - (void)tabButtonClicked:(id)sender{
     int tag = (int)[sender tag];
+    [CNUtil appendUserOperation:[NSString stringWithFormat:@"点击tab%i",tag]];
     if(tag == 2){
         if(kApp.isLogin == 0){
             [kApp.window makeToast:@"请先登录~"];

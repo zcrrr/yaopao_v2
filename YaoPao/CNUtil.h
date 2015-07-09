@@ -30,4 +30,7 @@
 + (NSString*)dayOrNight;
 + (BOOL)isInChina:(double)lon :(double)lat;
 + (long long)getTimestampFromDate:(NSString*)dateString;
++ (void)showAlert:(NSString*) content;
++ (void)saveImageToIphone4Test:(NSString*)name :(UIImage*)imageToSave;
++ (void)appendUserOperation:(NSString*)str;
 @end

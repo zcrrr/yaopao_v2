@@ -22,6 +22,7 @@
 #import "FriendsHandler.h"
 #import "SBJson.h"
 #import "ChangeGroupNameViewController.h"
+#import "CNUtil.h"
 
 @interface ZCGroupSettingViewController ()
 
@@ -38,6 +39,7 @@
 @synthesize isShareLocation;
 
 - (void)viewDidLoad {
+    [CNUtil appendUserOperation:@"进入跑团设置页面"];
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     [self displayLoading];
@@ -75,6 +77,7 @@
             }
             else{
                 NSLog(@"获取群详细信息出错");
+                [CNUtil showAlert:@"您当前网络似乎不太好，请检查网络后重试。"];
                 [self hideLoading];
             }
         });
@@ -98,6 +101,7 @@
     }
 }
 - (void)groupMemberDidFailed:(NSString *)mes{
+    [CNUtil showAlert:mes];
     [self hideLoading];
 }
 - (void)groupMemberDidSuccess:(NSDictionary *)resultDic{
@@ -226,6 +230,7 @@
     }
 }
 - (void)delOneMember:(id)sender{
+    [CNUtil appendUserOperation:@"删除一个成员"];
     NSString* nickname = [[self.dataSource objectAtIndex:[sender tag]] objectForKey:@"nickname"];
     NSString* phone = [[self.dataSource objectAtIndex:[sender tag]] objectForKey:@"phone"];
     NSString* myphone = [kApp.userInfoDic objectForKey:@"phone"];
@@ -282,12 +287,14 @@
         case 0:
         {
             NSLog(@"返回");
+            [CNUtil appendUserOperation:@"点击返回按钮"];
             [self.navigationController popViewControllerAnimated:YES];
             break;
         }
         case 1:
         {
             NSLog(@"增加成员");
+            [CNUtil appendUserOperation:@"点击增加成员按钮"];
             ContactSelectionViewController *selectionController = [[ContactSelectionViewController alloc] initWithBlockSelectedUsernames:self.chatGroup.occupants];
             NSLog(@"self.chatGroup.occupants is %@",self.chatGroup.occupants);
             selectionController.delegate = self;
@@ -296,18 +303,21 @@
         }
         case 2:
         {
+            [CNUtil appendUserOperation:@"点击删除成员按钮"];
             NSLog(@"减少成员");
             [self displayDelButton];
             break;
         }
         case 3:
         {
+            [CNUtil appendUserOperation:@"清空聊天记录"];
             NSLog(@"清空聊天记录");
             [self clearAction];
             break;
         }
         case 4:
         {
+            [CNUtil appendUserOperation:@"退出or解散跑团"];
             NSLog(@"退出or解散跑团");
             if(self.isOwner){
                 [self dissolveAction];
@@ -556,6 +566,7 @@
 - (void)delMemberDidFailed:(NSString *)mes{
     [self hideLoading];
     NSLog(@"删除成员失败");
+    [CNUtil showAlert:mes];
 }
 - (void)delMemberDidSuccess:(NSDictionary *)resultDic{
     NSString* nickname = [[self.dataSource objectAtIndex:self.handleIndex] objectForKey:@"nickname"];
@@ -588,6 +599,7 @@
             }
             else{
                 NSLog(@"获取群详细信息出错");
+                [CNUtil showAlert:@"您当前网络似乎不太好，请检查网络后重试。"];
                 [self hideLoading];
             }
         });
@@ -597,6 +609,7 @@
 - (void)exitGroupDidFailed:(NSString *)mes{
     [self hideLoading];
     NSLog(@"退出跑团失败");
+    [CNUtil showAlert:mes];
 }
 - (void)exitGroupDidSuccess:(NSDictionary *)resultDic{
 //    [[EaseMob sharedInstance].chatManager asyncLeaveGroup:self.chatGroupId completion:^(EMGroup *group, EMGroupLeaveReason reason, EMError *error) {
@@ -620,6 +633,7 @@
 - (void)deleteGroupDidFailed:(NSString *)mes{
     [self hideLoading];
     NSLog(@"解散跑团失败");
+    [CNUtil showAlert:mes];
 }
 - (void)deleteGroupDidSuccess:(NSDictionary *)resultDic{
 //    [[EaseMob sharedInstance].chatManager asyncDestroyGroup:self.chatGroupId completion:^(EMGroup *group, EMGroupLeaveReason reason, EMError *error) {
@@ -672,13 +686,14 @@
             else{
                 [self displayLoading];
                 NSLog(@"获取群详细信息出错");
+                [CNUtil showAlert:@"您当前网络似乎不太好，请检查网络后重试。"];
             }
         });
     } onQueue:nil];
 }
 - (void)addMemberDidFailed:(NSString *)mes{
-    [kApp.window makeToast:@"添加失败"];
     [self hideLoading];
+    [CNUtil showAlert:mes];
 }
 - (void)changeNameDidSuccess:(NSString *)name{
     self.label_title.text = [NSString stringWithFormat:@"%@/%i",name,(int)(self.chatGroup.groupOccupantsCount)];

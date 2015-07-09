@@ -1,27 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6751" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CNLoginPhoneViewController">
             <connections>
                 <outlet property="button_back" destination="ad6-3N-P6U" id="GXJ-t8-61O"/>
                 <outlet property="button_checkbox" destination="gz3-pt-1hV" id="uwD-Ay-0Er"/>
-                <outlet property="button_country" destination="pIU-JI-wwP" id="VkD-VO-nae"/>
                 <outlet property="button_goFindPwdPage" destination="39o-Ed-HQk" id="guW-Jr-rJi"/>
                 <outlet property="button_goRegister" destination="aPC-hY-JhS" id="A0D-Xl-UYU"/>
                 <outlet property="button_login" destination="pDi-8f-yHO" id="gAC-iU-8Dv"/>
-                <outlet property="button_vcode" destination="gHt-ez-6Er" id="Dzk-DI-APT"/>
                 <outlet property="indicator" destination="qfk-Qm-Ls6" id="P9d-Os-Km2"/>
-                <outlet property="label_country" destination="kig-wA-uQS" id="HCH-mE-GdX"/>
                 <outlet property="loadingImage" destination="5aA-0B-jy8" id="8C6-2I-KRn"/>
                 <outlet property="textfield_phone" destination="z5H-x6-mVb" id="cIh-WJ-dkQ"/>
                 <outlet property="textfield_pwd" destination="RQJ-ba-sG7" id="2Ut-4a-5pI"/>
-                <outlet property="textfield_vcode" destination="ukz-DQ-8dG" id="Lxu-vA-7Yh"/>
                 <outlet property="view" destination="sef-fm-nSy" id="ReT-s7-Urv"/>
-                <outlet property="view_country" destination="7Og-WR-88F" id="TBd-fl-IMG"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -64,129 +59,54 @@
                     </subviews>
                     <color key="backgroundColor" red="0.2274509804" green="0.65098039220000004" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="请确认你的国家或地区并输入手机号" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="HlG-eE-new">
-                    <rect key="frame" x="0.0" y="63" width="320" height="32"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" red="0.96470588239999999" green="0.96470588239999999" blue="0.97254901959999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                    <color key="textColor" red="0.53333333329999999" green="0.53333333329999999" blue="0.53333333329999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    <nil key="highlightedColor"/>
-                </label>
-                <view contentMode="scaleToFill" id="7Og-WR-88F">
-                    <rect key="frame" x="0.0" y="95" width="320" height="43"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <subviews>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="国家和地区" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="UNZ-Kl-U9H">
-                            <rect key="frame" x="13" y="0.0" width="72" height="43"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                            <color key="textColor" red="0.53333333329999999" green="0.53333333329999999" blue="0.53333333329999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            <nil key="highlightedColor"/>
-                        </label>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="中国" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="kig-wA-uQS">
-                            <rect key="frame" x="93" y="0.0" width="200" height="43"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
-                            <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                            <color key="textColor" red="0.1764705882" green="0.1764705882" blue="0.1764705882" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            <nil key="highlightedColor"/>
-                        </label>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="pIU-JI-wwP">
-                            <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
-                            <state key="normal">
-                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <connections>
-                                <action selector="button_country_clicked:" destination="-1" eventType="touchUpInside" id="Fhl-fL-9s1"/>
-                            </connections>
-                        </button>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrow_right2.png" id="Lh8-cn-Vn3">
-                            <rect key="frame" x="301" y="16" width="6" height="11"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
-                        </imageView>
-                    </subviews>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                </view>
                 <view contentMode="scaleToFill" id="0I2-ck-bO2">
-                    <rect key="frame" x="0.0" y="138" width="320" height="1"/>
+                    <rect key="frame" x="0.0" y="85" width="320" height="1"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="0.95294117649999999" green="0.95294117649999999" blue="0.95294117649999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
                 </view>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="账号" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="MPd-oJ-HTt">
-                    <rect key="frame" x="13" y="139" width="28" height="43"/>
+                    <rect key="frame" x="13" y="86" width="28" height="43"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <color key="textColor" red="0.1764705882" green="0.1764705882" blue="0.1764705882" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="请填写手机号码" minimumFontSize="17" id="z5H-x6-mVb">
-                    <rect key="frame" x="52" y="139" width="268" height="43"/>
+                    <rect key="frame" x="52" y="86" width="268" height="43"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                     <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done"/>
                 </textField>
                 <view contentMode="scaleToFill" id="ZYu-Vb-tOF">
-                    <rect key="frame" x="0.0" y="182" width="320" height="1"/>
+                    <rect key="frame" x="0.0" y="129" width="320" height="1"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="0.95294117649999999" green="0.95294117649999999" blue="0.95294117649999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
                 </view>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="密码" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="s7j-bF-x90">
-                    <rect key="frame" x="13" y="183" width="28" height="43"/>
+                    <rect key="frame" x="13" y="130" width="28" height="43"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <color key="textColor" red="0.1764705882" green="0.1764705882" blue="0.1764705882" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="输入新密码，6-16位字母或数字" minimumFontSize="17" id="RQJ-ba-sG7">
-                    <rect key="frame" x="52" y="183" width="268" height="43"/>
+                    <rect key="frame" x="52" y="130" width="268" height="43"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                     <textInputTraits key="textInputTraits" returnKeyType="done" secureTextEntry="YES"/>
                 </textField>
                 <view contentMode="scaleToFill" id="C1o-Td-8uM">
-                    <rect key="frame" x="0.0" y="226" width="320" height="1"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" red="0.95294117649999999" green="0.95294117649999999" blue="0.95294117649999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
-                </view>
-                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="验证码" minimumFontSize="17" id="ukz-DQ-8dG">
-                    <rect key="frame" x="95" y="227" width="225" height="43"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                    <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done"/>
-                </textField>
-                <button opaque="NO" tag="5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="gHt-ez-6Er">
-                    <rect key="frame" x="13" y="233" width="71" height="31"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                    <state key="normal" title="获取验证码" backgroundImage="get_vcode.png">
-                        <color key="titleColor" red="0.54901960780000003" green="0.77647058820000003" blue="0.24313725489999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <state key="highlighted" backgroundImage="get_vcode_on.png"/>
-                    <connections>
-                        <action selector="button_clicked:" destination="-1" eventType="touchUpInside" id="9oR-os-rXf"/>
-                    </connections>
-                </button>
-                <view contentMode="scaleToFill" id="xfO-EB-pWY">
-                    <rect key="frame" x="0.0" y="270" width="320" height="1"/>
+                    <rect key="frame" x="0.0" y="173" width="320" height="1"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="0.95294117649999999" green="0.95294117649999999" blue="0.95294117649999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
                 </view>
                 <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="pDi-8f-yHO">
-                    <rect key="frame" x="14" y="283" width="293" height="43"/>
+                    <rect key="frame" x="14" y="185" width="293" height="43"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
                     <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
@@ -198,7 +118,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="gz3-pt-1hV">
-                    <rect key="frame" x="170" y="338" width="14" height="14"/>
+                    <rect key="frame" x="170" y="240" width="14" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <state key="normal" backgroundImage="check.png">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -208,7 +128,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="BJw-rM-AXz">
-                    <rect key="frame" x="186" y="332" width="125" height="26"/>
+                    <rect key="frame" x="186" y="234" width="125" height="26"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                     <state key="normal" title="我已同意要跑服务协议">
@@ -220,15 +140,15 @@
                     </connections>
                 </button>
                 <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" image="netProcess.png" id="5aA-0B-jy8">
-                    <rect key="frame" x="113" y="238" width="94" height="89"/>
+                    <rect key="frame" x="113" y="239" width="94" height="89"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
                 <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" hidesWhenStopped="YES" style="whiteLarge" id="qfk-Qm-Ls6">
-                    <rect key="frame" x="141" y="264" width="37" height="37"/>
+                    <rect key="frame" x="141" y="265" width="37" height="37"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </activityIndicatorView>
                 <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="39o-Ed-HQk">
-                    <rect key="frame" x="14" y="331" width="48" height="27"/>
+                    <rect key="frame" x="14" y="233" width="48" height="27"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                     <state key="normal" title="重设密码">
@@ -247,12 +167,9 @@
         </view>
     </objects>
     <resources>
-        <image name="arrow_right2.png" width="14" height="26"/>
         <image name="back_v2.png" width="48" height="68"/>
         <image name="button_green.png" width="690" height="100"/>
         <image name="check.png" width="34" height="34"/>
-        <image name="get_vcode.png" width="168" height="74"/>
-        <image name="get_vcode_on.png" width="168" height="74"/>
         <image name="netProcess.png" width="85" height="85"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

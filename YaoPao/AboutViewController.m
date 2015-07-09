@@ -7,12 +7,15 @@
 //
 
 #import "AboutViewController.h"
+#import "CNNetworkHandler.h"
+#import "CNUtil.h"
 
 @interface AboutViewController ()
 
 @end
 
 @implementation AboutViewController
+@synthesize count;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -35,6 +38,45 @@
 */
 
 - (IBAction)button_clicked:(id)sender {
-    [self.navigationController popViewControllerAnimated:YES];
+    switch ([sender tag]) {
+        case 0:
+        {
+            [self.navigationController popViewControllerAnimated:YES];
+            break;
+        }
+        case 1:
+        {
+            count++;
+            if(count == 5){
+                self.button_debug.hidden = NO;
+            }
+            break;
+        }
+        case 2:
+        {
+            NSString* filePath = [CNPersistenceHandler getDocument:@"debug.plist"];
+            NSMutableDictionary* dic = [NSMutableDictionary dictionaryWithContentsOfFile:filePath];
+            NSString* string2upload;
+            if(dic != nil){
+                NSString* strHistory = [dic objectForKey:@"userOperation"];
+                string2upload = [NSString stringWithFormat:@"%@\n%@",strHistory,kApp.userOperation];
+            }else{
+                string2upload = [NSString stringWithFormat:@"%@",kApp.userOperation];
+            }
+            NSLog(@"上报debug信息：%@",string2upload);
+            NSData* data = [string2upload dataUsingEncoding:NSUTF8StringEncoding];
+            NSString* username = @"";
+            if(kApp.isLogin == 1){
+                username = [kApp.userInfoDic objectForKey:@"nickname"];
+            }else{
+                username = @"unknown";
+            }
+            NSString* filename = [NSString stringWithFormat:@"%@%lli.txt",username,[CNUtil getNowTime1000]];
+            [kApp.networkHandler dorequest_debug:filename :data];
+        }
+        default:
+            break;
+    }
+    
 }
 @end

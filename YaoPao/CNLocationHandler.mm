@@ -22,6 +22,7 @@
 @synthesize gpsTime;
 @synthesize isStart;
 @synthesize num;
+@synthesize accuracy;
 
 
 - (void)startGetLocation{
@@ -41,6 +42,7 @@
 #pragma mark CLLocationManagerDelegate Methods
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations{
     CLLocation* newLocation = [locations lastObject];
+    self.accuracy = newLocation.horizontalAccuracy;
     if (newLocation.horizontalAccuracy > 200)
         self.rank = 1;
     else if (newLocation.horizontalAccuracy > 50)
@@ -81,37 +83,6 @@
 //    self.userLocation_lon = 116.390053;
 //    self.gpsTime = [CNUtil getNowTime];
 //    self.num++;
-    //进入出发区自动启动代码
-    if(kApp.canStartButNotInStartZone){
-        NSLog(@"lat is %f,lon is %f",self.userLocation_lat,self.userLocation_lon);
-        if([CNAppDelegate isInStartZone]){//进入了出发区
-            NSLog(@"进入出发去区");
-            NSString* NOTIFICATION_NOT_IN_START_ZONE = @"not_in_start_zone";
-            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_NOT_IN_START_ZONE object:nil];
-            kApp.canStartButNotInStartZone = NO;
-            [self performSelector:@selector(startMatch) withObject:nil afterDelay:0.5];
-        }
-    }
-    
-    //以下必须等待与服务器同步完时间再做
-    if(kApp.hasCheckTimeFromServer && self.gpsTime > 1 && self.gpsTime > kApp.match_start_timestamp && self.gpsTime < kApp.match_end_timestamp){
-        if(kApp.isMatch == 1){//参赛
-            kApp.match_inMatch = YES;
-        }
-    }
-    if(kApp.hasCheckTimeFromServer && self.gpsTime > 1 && kApp.match_inMatch == YES && self.gpsTime > kApp.match_end_timestamp){//比赛结束时间
-        if(kApp.hasFinishTeamMatch == NO){
-            kApp.hasFinishTeamMatch = YES;
-            if(kApp.isbaton == 1){
-                [self finishMatch];
-            }else{
-                [CNAppDelegate ForceGoMatchPage:@"finishTeam"];
-            }
-        }
-    }
-}
-- (void)startMatch{
-    [CNAppDelegate ForceGoMatchPage:@"matchRun_normal"];
 }
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error{
     switch([error code]) {
@@ -129,43 +100,5 @@
         default:
             break;
     }
-}
-- (void)finishMatch{
-    [CNAppDelegate saveMatchToRecord];
-    [kApp.timer_one_point invalidate];
-    [kApp.timer_secondplusplus invalidate];
-    [kApp.match_timer_report invalidate];
-    NSString* filePath = [CNPersistenceHandler getDocument:@"match_historydis.plist"];
-    [CNPersistenceHandler DeleteSingleFile:filePath];
-    //调用服务器接口
-    NSMutableDictionary* params = [[NSMutableDictionary alloc]init];
-    [params setObject:kApp.uid forKey:@"uid"];
-    [params setObject:kApp.mid forKey:@"mid"];
-    [params setObject:kApp.gid forKey:@"gid"];
-    CNGPSPoint4Match* gpsPoint = [kApp.match_pointList lastObject];
-    NSMutableArray* pointList = [[NSMutableArray alloc]init];
-    NSMutableDictionary* onepoint = [[NSMutableDictionary alloc]init];
-    [onepoint setObject:[NSString stringWithFormat:@"%llu",gpsPoint.time*1000] forKey:@"uptime"];
-    [onepoint setObject:[NSString stringWithFormat:@"%f",kApp.match_totaldis] forKey:@"distanceur"];
-    [onepoint setObject:[NSString stringWithFormat:@"%i",gpsPoint.isInTrack] forKey:@"inrunway"];
-    [onepoint setObject:[NSString stringWithFormat:@"%f",gpsPoint.lat] forKey:@"slat"];
-    [onepoint setObject:[NSString stringWithFormat:@"%f",gpsPoint.lon] forKey:@"slon"];
-    [onepoint setObject:@"2" forKey:@"mstate"];
-    [pointList addObject:onepoint];
-    SBJsonWriter *jsonWriter = [[SBJsonWriter alloc] init];
-    NSString* pointJson = [jsonWriter stringWithObject:pointList];
-    [params setObject:pointJson forKey:@"longitude"];
-    kApp.networkHandler.delegate_endMatch = self;
-    [kApp.networkHandler doRequest_endMatch:params];
-}
-- (void)endMatchInfoDidSuccess:(NSDictionary *)resultDic{
-    [CNAppDelegate ForceGoMatchPage:@"finishTeam"];
-}
-- (void)endMatchInfoDidFailed:(NSString *)mes{
-    
-}
-- (void)showAlert:(NSString*) content{
-    UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:content delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-    [alert show];
 }
 @end

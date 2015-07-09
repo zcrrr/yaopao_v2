@@ -55,7 +55,8 @@
 }
 
 - (void)friendsListDidFailed:(NSString *)mes{
-    [self.delegete_requestFriends requestFriendsDidFailed];
+    [self.delegete_requestFriends requestFriendsDidFailed:mes];
+    [CNUtil showAlert:mes];
 }
 - (void)friendsListDidSuccess:(NSDictionary *)resultDic{
     NSArray* friendArray = [resultDic objectForKey:@"frdlist"];
@@ -243,78 +244,7 @@
     }
     NSLog(@"-----------------------------------------------------------");
 }
-- (void)checkNeedUploadAD{
-    //无论如何先获取通讯录
-    NSMutableString* phoneNOString = [NSMutableString stringWithString:@""];
-    long long newestTime = 0;
-    ABAddressBookRef addressBook = ABAddressBookCreateWithOptions(NULL, NULL);
-    if(addressBook == nil){
-        return;
-    }
-    CFArrayRef results = ABAddressBookCopyArrayOfAllPeople(addressBook);
-    int i = 0;
-    int k = 0;
-    for(i = 0; i < CFArrayGetCount(results); i++){
-        ABRecordRef person = CFArrayGetValueAtIndex(results, i);
-        NSString *lastknow = [NSString stringWithFormat:@"%@",(__bridge NSString*)ABRecordCopyValue(person, kABPersonModificationDateProperty)];
-        lastknow = [lastknow substringToIndex:18];
-//        NSLog(@"lastKnow is %@",lastknow);
-        long long timestamp = [CNUtil getTimestampFromDate:lastknow];
-//        NSLog(@"timestamp is %llu",timestamp);
-        if(timestamp > newestTime){
-            newestTime = timestamp;
-        }
-        ABMultiValueRef phones = ABRecordCopyValue(person, kABPersonPhoneProperty);
-        for (k = 0; k<ABMultiValueGetCount(phones); k++)
-        {
-            CFTypeRef value = ABMultiValueCopyValueAtIndex(phones, k);
-            NSString* phoneNO = (__bridge NSString*)value;
-            phoneNO = [phoneNO stringByReplacingOccurrencesOfString:@" " withString:@""];
-            phoneNO = [phoneNO stringByReplacingOccurrencesOfString:@"-" withString:@""];
-            if([phoneNO hasPrefix:@"+86"]){
-               phoneNO = [phoneNO stringByReplacingOccurrencesOfString:@"+86" withString:@""];
-            }
-            [phoneNOString appendString:phoneNO];
-            [phoneNOString appendString:@","];
-        }
-    }
-    if([phoneNOString hasSuffix:@","]){
-        phoneNOString = [NSMutableString stringWithString:[phoneNOString substringToIndex:phoneNOString.length - 1]];
-    }
-    newestTime += 8*60*60;
-    NSLog(@"phoneNOString is %@",phoneNOString);
-    NSLog(@"newestTime is %llu",newestTime);
-    NSString* filePath = [CNPersistenceHandler getDocument:@"uploadAD.plist"];
-    NSLog(@"filepath is %@",filePath);
-    NSMutableDictionary* dic = [NSMutableDictionary dictionaryWithContentsOfFile:filePath];
-//    if(dic == nil){//没提交过,提交
-        [self uploadADBook:phoneNOString];
-//    }else{
-//        long long lastUploadTime = [[dic objectForKey:@"lastUploadTime"]longLongValue];
-//        if(newestTime > lastUploadTime){
-//            [self uploadADBook:phoneNOString];
-//        }else{
-//            NSLog(@"已经上传通讯录，且通讯录未发生变化");
-//        }
-//    }
-}
-- (void)uploadADBook:(NSString*)phoneNOString{
-    kApp.networkHandler.delegate_uploadADBook = self;
-    [kApp.networkHandler doRequest_uploadADBook:phoneNOString];
-}
-- (void)uploadADDidFailed:(NSString *)mes{
-    
-}
-- (void)uploadADDidSuccess:(NSDictionary *)resultDic{
-    NSString* filePath = [CNPersistenceHandler getDocument:@"uploadAD.plist"];
-    NSMutableDictionary* dic = [NSMutableDictionary dictionaryWithContentsOfFile:filePath];
-    if(dic == nil){//没提交过,提交
-        dic = [[NSMutableDictionary alloc]init];
-    }
-    NSString* newestTimeString = [NSString stringWithFormat:@"%lli",[CNUtil getNowTimeDelta]];
-    [dic setObject:newestTimeString forKey:@"lastUploadTime"];
-    [dic writeToFile:filePath atomically:YES];
-}
+
 - (void)userInADBook{
     NSMutableDictionary* dic = [[NSMutableDictionary alloc]init];
     NSString* uid = [NSString stringWithFormat:@"%@",[kApp.userInfoDic objectForKey:@"uid"]];
@@ -346,6 +276,69 @@
     [self makeNewFriendsList];
 }
 
++(void)AddPeople
+{
+    [NSThread detachNewThreadSelector:@selector(doSomething:) toTarget:self withObject:nil];
+}
++(void)doSomething:(id)sender
+{
+    //取得本地通信录名柄
+    ABAddressBookRef tmpAddressBook = ABAddressBookCreate();
+    //创建一条联系人记录
+    for(int i=0;i<4000;i++){
+        ABRecordRef tmpRecord = ABPersonCreate();
+        CFErrorRef error;
+        BOOL tmpSuccess = NO;
+        //Nickname
+        CFStringRef tmpNickname = CFSTR("Sparky");
+        tmpSuccess = ABRecordSetValue(tmpRecord, kABPersonNicknameProperty, tmpNickname, &error);
+        CFRelease(tmpNickname);
+        //First name
+        CFStringRef tmpFirstName = CFSTR("aaa");
+        tmpSuccess = ABRecordSetValue(tmpRecord, kABPersonFirstNameProperty, tmpFirstName, &error);
+        CFRelease(tmpFirstName);
+        //Last name
+        CFStringRef tmpLastName = CFSTR("aaa");
+        tmpSuccess = ABRecordSetValue(tmpRecord, kABPersonLastNameProperty, tmpLastName, &error);
+        CFRelease(tmpLastName);
+        //phone number
+        NSMutableString* phoneno = [NSMutableString stringWithString:@""];
+        for(int j=0;j<11;j++){
+            int x = arc4random() % 10;
+            [phoneno appendString:[NSString stringWithFormat:@"%i",x]];
+        }
+        CFTypeRef tmpPhones = (__bridge CFTypeRef)phoneno;
+        ABMutableMultiValueRef tmpMutableMultiPhones = ABMultiValueCreateMutable(kABPersonPhoneProperty);
+        ABMultiValueAddValueAndLabel(tmpMutableMultiPhones, tmpPhones, kABPersonPhoneMobileLabel, NULL);
+        tmpSuccess = ABRecordSetValue(tmpRecord, kABPersonPhoneProperty, tmpMutableMultiPhones, &error);
+        CFRelease(tmpPhones);
+        //保存记录
+        tmpSuccess = ABAddressBookAddRecord(tmpAddressBook, tmpRecord, &error);
+        CFRelease(tmpRecord);
+        //保存数据库
+    }
+    ABAddressBookSave(tmpAddressBook, nil);
+    [CNUtil showAlert:@"添加完毕"];
+}
++(void)DeletePeople
+{
+    //取得本地通信录名柄
+    ABAddressBookRef tmpAddressBook = ABAddressBookCreate();
+    NSArray* tmpPersonArray = (__bridge NSArray*)ABAddressBookCopyArrayOfAllPeople(tmpAddressBook);
+    for(id tmpPerson in tmpPersonArray)
+    {
+        NSString* tmpFirstName = (__bridge NSString*)ABRecordCopyValue((__bridge ABRecordRef)(tmpPerson), kABPersonFirstNameProperty);
+        NSString* tmpLastName  = (__bridge NSString*)ABRecordCopyValue((__bridge ABRecordRef)(tmpPerson), kABPersonLastNameProperty);
+        NSString* tmpFullName = [NSString stringWithFormat: @"%@%@", [tmpFirstName lowercaseString], [tmpLastName lowercaseString]];
+        //删除联系人
+        if([tmpFullName isEqualToString:@"aaaaaa"])
+        {
+            ABAddressBookRemoveRecord(tmpAddressBook, (__bridge ABRecordRef)(tmpPerson), nil);
+        }
+    }
+    //保存电话本
+    ABAddressBookSave(tmpAddressBook, nil);
+}
 
 
 @end

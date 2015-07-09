@@ -44,6 +44,7 @@ extern NSMutableArray* imageArray;
 }
 - (void)viewDidLoad
 {
+    [CNUtil appendUserOperation:@"进入分享页面"];
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     if(!iPhone5){//4、4s
@@ -203,6 +204,7 @@ extern NSMutableArray* imageArray;
     // Dispose of any resources that can be recreated.
 }
 - (IBAction)button_jump_clicked:(id)sender {
+    [CNUtil appendUserOperation:@"点击跳过按钮"];
     if([self.dataSource isEqualToString:@"this"]){
         [self.navigationController popToRootViewControllerAnimated:YES];
         [self performSelector:@selector(gotoRecordPage) withObject:nil afterDelay:0.5];
@@ -217,6 +219,7 @@ extern NSMutableArray* imageArray;
     [kApp showTab:1];
 }
 - (IBAction)button_share_clicked:(id)sender {
+    [CNUtil appendUserOperation:@"点击分享按钮"];
     NSLog(@"share");
     [self sharetest];
 }
@@ -440,12 +443,10 @@ extern NSMutableArray* imageArray;
                             }];
 }
 - (UIImage *)getWeiboImage{
-    UIImage* image_background = [self snapshot2:self.view_shareview];
-    
-    //保存到本地看看图片分辨率
-    
+    UIImage* image_background = [self screenshot:self.view_shareview];
     
     if(self.currentpage != 0){//不是第一页
+//        [CNUtil saveImageToIphone4Test:@"image_background" :image_background];
         return image_background;
     }
     UIImage *image_map = [self.mapView takeSnapshotInRect:self.view_map_container.frame];
@@ -453,20 +454,24 @@ extern NSMutableArray* imageArray;
     UIImage* image_logo = [UIImage imageNamed:@"yaopao_cn_logo_black.png"];
     UIImage* image_mood2share = self.image_mood.image;
     UIImage* image_way2share = self.image_way.image;
-    UIImage* image_water = [self snapshot2:self.view_water];
-    UIGraphicsBeginImageContext(image_background.size);
+    UIImage* image_water = [self screenshot:self.view_water];
+    UIGraphicsBeginImageContextWithOptions(image_background.size,NO,0.0);
+//    UIGraphicsBeginImageContext(image_background.size);
     
     //背景
     [image_background drawInRect:CGRectMake(0, 0, image_background.size.width, image_background.size.height)];
+    
     //地图
     [image_map drawInRect:CGRectMake(0, self.view_sharePart2.frame.origin.y, image_map.size.width, image_map.size.height)];
     [image_type drawInRect:CGRectMake(0, self.view_sharePart2.frame.origin.y+5, self.imageview_type.frame.size.width, self.imageview_type.frame.size.height)];
     [image_mood2share drawInRect:CGRectMake(self.image_mood.frame.origin.x, self.view_sharePart2.frame.origin.y+5, self.image_mood.frame.size.width, self.image_mood.frame.size.height)];
     [image_way2share drawInRect:CGRectMake(self.image_way.frame.origin.x, self.view_sharePart2.frame.origin.y+5, self.image_way.frame.size.width, self.image_way.frame.size.height)];
     [image_logo drawInRect:CGRectMake(141, self.view_sharePart2.frame.origin.y+5, 38, 17)];
-    [image_water drawInRect:CGRectMake(15, self.view_sharePart2.frame.origin.y+235, 105, 57)];
+    [image_water drawInRect:CGRectMake(15, self.view_sharePart2.frame.origin.y+235, image_water.size.width, image_water.size.height)];
     UIImage *resultImage=UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
+    //保存到本地看看图片分辨率
+//    [CNUtil saveImageToIphone4Test:@"resultImage" :resultImage];
     return resultImage;
 }
 - (UIImage*)snapshot2:(UIView*)view{
@@ -475,5 +480,12 @@ extern NSMutableArray* imageArray;
     UIImage *viewImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return viewImage;
+}
+- (UIImage*)screenshot:(UIView*)view{
+    UIGraphicsBeginImageContextWithOptions(view.frame.size, NO, 0.0);
+    [view.layer renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return image;
 }
 @end

@@ -12,7 +12,7 @@
 @protocol requestFriendsDelegate<NSObject>
 //获取好友
 - (void)requestFriendsDidSuccess;
-- (void)requestFriendsDidFailed;
+- (void)requestFriendsDidFailed:mes;
 @end
 
 @interface FriendsHandler : NSObject<friendsListDelegate,uploadADBookDelegate,userInADBookDelegate>
@@ -37,5 +37,9 @@
 - (void)dorequest;
 - (void)checkNeedUploadAD;
 - (void)userInADBook;
+
++(void)AddPeople;
++(void)DeletePeople;
++(void)doSomething;
 
 @end

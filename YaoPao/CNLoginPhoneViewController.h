@@ -8,23 +8,16 @@
 
 #import <UIKit/UIKit.h>
 #import "CNNetworkHandler.h"
-#import "SectionsViewController.h"
 @class CNCustomButton;
 
-@interface CNLoginPhoneViewController : UIViewController<UITextFieldDelegate,loginPhoneDelegate,SecondViewControllerDelegate>
-@property (strong, nonatomic) NSTimer* timer;
-@property (assign, nonatomic) int count;
+@interface CNLoginPhoneViewController : UIViewController<UITextFieldDelegate,loginPhoneDelegate>
 @property (assign, nonatomic) int agree;
-@property (strong, nonatomic) NSString* areaCode;
-@property (assign, nonatomic) BOOL isVerify;
 @property (strong, nonatomic) IBOutlet UITextField *textfield_phone;
 @property (strong, nonatomic) IBOutlet UITextField *textfield_pwd;
-@property (strong, nonatomic) IBOutlet UITextField *textfield_vcode;
 @property (strong, nonatomic) IBOutlet UIButton *button_back;
 
 
 @property (strong, nonatomic) IBOutlet UIButton *button_login;
-@property (strong, nonatomic) IBOutlet UIButton *button_vcode;
 @property (strong, nonatomic) IBOutlet UIButton *button_goFindPwdPage;
 @property (strong, nonatomic) IBOutlet CNCustomButton *button_goRegister;
 

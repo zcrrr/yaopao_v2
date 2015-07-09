@@ -10,7 +10,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import "CNNetworkHandler.h"
 
-@interface CNLocationHandler : NSObject<CLLocationManagerDelegate,endMatchDelegate>
+@interface CNLocationHandler : NSObject<CLLocationManagerDelegate>
 
 @property (strong, nonatomic) CLLocationManager* locationManager;
 @property (assign, nonatomic) int isStart;
@@ -21,6 +21,7 @@
 @property (assign, nonatomic) double course;//方向
 @property (assign, nonatomic) double speed;//速度
 @property (assign, nonatomic) long long gpsTime;//gps时间
+@property (assign, nonatomic) double accuracy;//精度
 
 @property (assign, nonatomic) int num;
 

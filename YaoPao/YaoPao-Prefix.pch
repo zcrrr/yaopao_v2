@@ -18,14 +18,14 @@
     #import "CNPersistenceHandler.h"
 #endif
 
-#define ClIENT_VERSION @"2.2.0"
-//#define ENDPOINTS kApp.mainurl
-//#define ENDPOINTS_UDP @"udp.yaopao.net"
+#define ClIENT_VERSION @"2.3.1"
+#define ENDPOINTS kApp.mainurl
+#define ENDPOINTS_UDP @"udp.yaopao.net"
 
-#define ENDPOINTS @"http://182.92.97.144:8888/"  //本地测试ip：http://192.168.0.10:8080/
-#define ENDPOINTS_UDP @"182.92.97.144"
+//#define ENDPOINTS @"http://182.92.97.144:8888/"
+//#define ENDPOINTS_UDP @"182.92.97.144"
 
-
+//#define ENDPOINTS @"http://192.168.31.214:8080/"
 
 
 
@@ -42,7 +42,9 @@
 #define kDuringMinute 24*60
 #define kBoundary1 10
 #define kBoundary2 60
-#define SIMULATORTEST
+//#define SIMULATORTEST
+//#define kInhouse
+#define kTestFlight
 
 
 #define TAG_VERIFY_CODE 1
@@ -96,5 +98,6 @@
 #define TAG_UPLOAD_ADBOOK 43
 #define TAG_USER_IN_ADBOOK 44
 #define TAG_TEST_TIME_OUT 45
+#define TAG_DEBUG 46
 
 

@@ -28,6 +28,7 @@
 @synthesize page;
 
 - (void)viewDidLoad {
+    [CNUtil appendUserOperation:@"进入运动记录主页"];
     self.selectIndex = 1;
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
@@ -242,6 +243,7 @@
         recordDetailVC.oneRun = oneRun;
         [self.navigationController pushViewController:recordDetailVC animated:YES];
     }
+    [CNUtil appendUserOperation:@"点击一条记录"];
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
@@ -289,6 +291,7 @@
 }
 */
 - (void)viewWillAppear:(BOOL)animated{
+    [CNUtil appendUserOperation:@"进入运动记录页面"];
     [super viewWillAppear:animated];
     if(kApp.unreadMessageCount != 0){
         self.reddot.hidden = NO;

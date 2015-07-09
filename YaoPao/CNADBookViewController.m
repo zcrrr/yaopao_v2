@@ -21,6 +21,7 @@
 #import "ColorValue.h"
 #import "CNCustomButton.h"
 #import "ChatViewController.h"
+#import "CNUtil.h"
 
 @interface CNADBookViewController ()
 
@@ -42,6 +43,7 @@
     }
 }
 - (void)viewWillAppear:(BOOL)animated{
+    [CNUtil appendUserOperation:@"进入通讯录页面"];
     [super viewWillAppear:animated];
     if(kApp.friendHandler.friendList1NeedRefresh){
         NSLog(@"需要刷新好友列表1");
@@ -54,6 +56,19 @@
         [self initKeys];
     }
 }
+- (NSString *)firstCharactor:(NSString *)aString
+{
+    //转成了可变字符串
+    NSMutableString *str = [NSMutableString stringWithString:aString];
+    //先转换为带声调的拼音
+    CFStringTransform((CFMutableStringRef)str,NULL, kCFStringTransformMandarinLatin,NO);
+    //再转换为不带声调的拼音
+    CFStringTransform((CFMutableStringRef)str,NULL, kCFStringTransformStripDiacritics,NO);
+    //转化为大写拼音
+    NSString *pinYin = [str capitalizedString];
+    //获取并返回首字母
+    return [pinYin substringToIndex:1];
+}
 - (void)initKeys{
     self.keys = [[NSMutableArray alloc]init];
     self.groupedMap = [[NSMutableDictionary alloc]init];
@@ -61,13 +76,16 @@
     for (FriendInfo* friend in kApp.friendHandler.friends)
     {
         NSString* name = friend.nameInYaoPao;
-        char c = [name characterAtIndex:0];
-        if((c>'a'&&c<'z')||(c>'A'&&c<'Z')){
-            
-        }else{
-            c = [GetFirstLetter  pinyinFirstLetter:([name characterAtIndex:0])];
-        }
-        NSString* oneKey = [[NSString stringWithFormat:@"%c",c] uppercaseString];
+//        char c = [name characterAtIndex:0];
+//        if((c>'a'&&c<'z')||(c>'A'&&c<'Z')){
+//            
+//        }else{
+//            c = [GetFirstLetter  pinyinFirstLetter:([name characterAtIndex:0])];
+//        }
+//        NSString* oneKey = [[NSString stringWithFormat:@"%c",c] uppercaseString];
+        NSString* oneKey = [self firstCharactor:name];
+        
+        
         
         /*
          对 ”长“ 进行特殊处理
@@ -377,10 +395,7 @@
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
-- (void)friendsListDidFailed:(NSString *)mes{
-    NSLog(@"请求好友列表失败，原因是%@",mes);
-}
-- (void)requestFriendsDidFailed{
+- (void)requestFriendsDidFailed:mes{
     [self hideLoading];
 }
 - (void)requestFriendsDidSuccess{

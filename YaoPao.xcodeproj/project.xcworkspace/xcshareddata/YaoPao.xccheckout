@@ -12,8 +12,6 @@
 	<dict>
 		<key>3C37183D57B628AA9EB1A27305217A0FE32B2D18</key>
 		<string>github.com:zcrrr/yaopao_v2.git</string>
-		<key>EFB1AE54EB687ED18B5159A1B4F0C0C1240AF162</key>
-		<string>github.com:zcrrr/YaoPao.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>YaoPao.xcodeproj</string>
@@ -21,8 +19,6 @@
 	<dict>
 		<key>3C37183D57B628AA9EB1A27305217A0FE32B2D18</key>
 		<string>../..</string>
-		<key>EFB1AE54EB687ED18B5159A1B4F0C0C1240AF162</key>
-		<string>../../../YaoPao</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>github.com:zcrrr/yaopao_v2.git</string>
@@ -32,14 +28,6 @@
 	<string>3C37183D57B628AA9EB1A27305217A0FE32B2D18</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
-		<dict>
-			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
-			<string>public.vcs.git</string>
-			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>EFB1AE54EB687ED18B5159A1B4F0C0C1240AF162</string>
-			<key>IDESourceControlWCCName</key>
-			<string>YaoPao</string>
-		</dict>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>

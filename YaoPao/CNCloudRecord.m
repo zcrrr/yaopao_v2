@@ -33,6 +33,7 @@
 @synthesize userCancel;
 @synthesize editImageAddArray;
 @synthesize udpRes;
+@synthesize isClouding;
 
 + (void)ClearRecordAfterUserLogin{
     NSString* uid = [NSString stringWithFormat:@"%i",[[kApp.userInfoDic objectForKey:@"uid"] intValue]];
@@ -733,6 +734,7 @@
             }
         }
     }
+    self.fileCount = [self.fileArray count];
     [self downloadfile];
 }
 - (void)downloadfile{
@@ -834,6 +836,7 @@
 }
 - (void)cloudSuccess{
     NSLog(@"同步全部完成");
+    [CNUtil appendUserOperation:@"同步全部完成"];
     self.stepDes = @"同步完毕！";
     //重置cloudDiray
     [CNCloudRecord createCloudDiary:self.synTimeNew];
@@ -844,6 +847,7 @@
 }
 - (void)cloudFailed:(NSString*)error{
     NSLog(@"同步失败：%@",error);
+    [CNUtil appendUserOperation:@"同步失败"];
     self.stepDes = [NSString stringWithFormat:@"同步失败，原因是:%@",error];
 }
 - (void)synTimeWithServer{

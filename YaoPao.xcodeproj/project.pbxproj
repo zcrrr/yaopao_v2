@@ -646,6 +646,7 @@
 		81749A751AC2633A00FB18A6 /* check_gou.png in Resources */ = {isa = PBXBuildFile; fileRef = 81749A741AC2633A00FB18A6 /* check_gou.png */; };
 		8174D3CC1B31167900F5A183 /* watermark_24h_b.png in Resources */ = {isa = PBXBuildFile; fileRef = 8174D3CA1B31167900F5A183 /* watermark_24h_b.png */; };
 		8174D3CD1B31167900F5A183 /* watermark_24h_w.png in Resources */ = {isa = PBXBuildFile; fileRef = 8174D3CB1B31167900F5A183 /* watermark_24h_w.png */; };
+		8174D3D01B31780E00F5A183 /* LoginDoneHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 8174D3CF1B31780E00F5A183 /* LoginDoneHandler.m */; };
 		81750EBE1AF9C5FD007DD4AE /* ChooseEditImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 81750EBC1AF9C5FD007DD4AE /* ChooseEditImageViewController.m */; };
 		81750EBF1AF9C5FD007DD4AE /* ChooseEditImageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 81750EBD1AF9C5FD007DD4AE /* ChooseEditImageViewController.xib */; };
 		81750EE41AF9F5D5007DD4AE /* sx_check.png in Resources */ = {isa = PBXBuildFile; fileRef = 81750ED91AF9F5D5007DD4AE /* sx_check.png */; };
@@ -932,8 +933,6 @@
 		9A28DE6919B56F99001AC1A2 /* CNNumImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A28DE6819B56F99001AC1A2 /* CNNumImageView.m */; };
 		9A2CE59D19E0E94700FDF49D /* CNWarningNotInStartZoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2CE59B19E0E94700FDF49D /* CNWarningNotInStartZoneViewController.m */; };
 		9A2CE59E19E0E94700FDF49D /* CNWarningNotInStartZoneViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9A2CE59C19E0E94700FDF49D /* CNWarningNotInStartZoneViewController.xib */; };
-		9A2CE5A219E1407400FDF49D /* CNWarningCheckTimeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2CE5A019E1407400FDF49D /* CNWarningCheckTimeViewController.m */; };
-		9A2CE5A319E1407400FDF49D /* CNWarningCheckTimeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9A2CE5A119E1407400FDF49D /* CNWarningCheckTimeViewController.xib */; };
 		9A2E1AF019C6CBD20078CD7D /* CNServiceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2E1AEE19C6CBD20078CD7D /* CNServiceViewController.m */; };
 		9A2E1AF119C6CBD20078CD7D /* CNServiceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9A2E1AEF19C6CBD20078CD7D /* CNServiceViewController.xib */; };
 		9A30FB2E19B6255100D0869F /* help_background.html in Resources */ = {isa = PBXBuildFile; fileRef = 9A30FB2C19B6255100D0869F /* help_background.html */; };
@@ -2008,6 +2007,8 @@
 		81749A741AC2633A00FB18A6 /* check_gou.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = check_gou.png; sourceTree = "<group>"; };
 		8174D3CA1B31167900F5A183 /* watermark_24h_b.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = watermark_24h_b.png; sourceTree = "<group>"; };
 		8174D3CB1B31167900F5A183 /* watermark_24h_w.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = watermark_24h_w.png; sourceTree = "<group>"; };
+		8174D3CE1B31780E00F5A183 /* LoginDoneHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginDoneHandler.h; sourceTree = "<group>"; };
+		8174D3CF1B31780E00F5A183 /* LoginDoneHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginDoneHandler.m; sourceTree = "<group>"; };
 		81750EBB1AF9C5FD007DD4AE /* ChooseEditImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChooseEditImageViewController.h; sourceTree = "<group>"; };
 		81750EBC1AF9C5FD007DD4AE /* ChooseEditImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChooseEditImageViewController.m; sourceTree = "<group>"; };
 		81750EBD1AF9C5FD007DD4AE /* ChooseEditImageViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChooseEditImageViewController.xib; sourceTree = "<group>"; };
@@ -2327,9 +2328,6 @@
 		9A2CE59A19E0E94700FDF49D /* CNWarningNotInStartZoneViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNWarningNotInStartZoneViewController.h; sourceTree = "<group>"; };
 		9A2CE59B19E0E94700FDF49D /* CNWarningNotInStartZoneViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNWarningNotInStartZoneViewController.m; sourceTree = "<group>"; };
 		9A2CE59C19E0E94700FDF49D /* CNWarningNotInStartZoneViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CNWarningNotInStartZoneViewController.xib; sourceTree = "<group>"; };
-		9A2CE59F19E1407400FDF49D /* CNWarningCheckTimeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNWarningCheckTimeViewController.h; sourceTree = "<group>"; };
-		9A2CE5A019E1407400FDF49D /* CNWarningCheckTimeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNWarningCheckTimeViewController.m; sourceTree = "<group>"; };
-		9A2CE5A119E1407400FDF49D /* CNWarningCheckTimeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CNWarningCheckTimeViewController.xib; sourceTree = "<group>"; };
 		9A2E1AED19C6CBD20078CD7D /* CNServiceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNServiceViewController.h; sourceTree = "<group>"; };
 		9A2E1AEE19C6CBD20078CD7D /* CNServiceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNServiceViewController.m; sourceTree = "<group>"; };
 		9A2E1AEF19C6CBD20078CD7D /* CNServiceViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CNServiceViewController.xib; sourceTree = "<group>"; };
@@ -5089,9 +5087,6 @@
 				9A2CE59A19E0E94700FDF49D /* CNWarningNotInStartZoneViewController.h */,
 				9A2CE59B19E0E94700FDF49D /* CNWarningNotInStartZoneViewController.m */,
 				9A2CE59C19E0E94700FDF49D /* CNWarningNotInStartZoneViewController.xib */,
-				9A2CE59F19E1407400FDF49D /* CNWarningCheckTimeViewController.h */,
-				9A2CE5A019E1407400FDF49D /* CNWarningCheckTimeViewController.m */,
-				9A2CE5A119E1407400FDF49D /* CNWarningCheckTimeViewController.xib */,
 				9A5CD99F1A75E41400E61DEF /* CNWarningCloudingViewController.h */,
 				9A5CD9A01A75E41400E61DEF /* CNWarningCloudingViewController.m */,
 				9A5CD9A11A75E41400E61DEF /* CNWarningCloudingViewController.xib */,
@@ -5118,6 +5113,8 @@
 				9A4712221A527AD000A4419D /* BinaryIO.h */,
 				9A77D8E51A67BC70003CCE5A /* CNCloudRecord.h */,
 				9A77D8E61A67BC70003CCE5A /* CNCloudRecord.m */,
+				8174D3CE1B31780E00F5A183 /* LoginDoneHandler.h */,
+				8174D3CF1B31780E00F5A183 /* LoginDoneHandler.m */,
 			);
 			name = manager;
 			sourceTree = "<group>";
@@ -6084,7 +6081,6 @@
 				9A11A88019E290F100937C1B /* 120113.mp3 in Resources */,
 				8196B4A31AC94A6C00130F18 /* weather_icon_d_4.png in Resources */,
 				811EAC571AFF18DA004D1CD0 /* remove_member_small_on.png in Resources */,
-				9A2CE5A319E1407400FDF49D /* CNWarningCheckTimeViewController.xib in Resources */,
 				81686C1E1ADFBA9E006BA130 /* group_invitee_delete@2x.png in Resources */,
 				81686BB61ADFBA9E006BA130 /* call_silence@2x.png in Resources */,
 				81686BC71ADFBA9E006BA130 /* chat_location_detail_disclosure.png in Resources */,
@@ -6246,6 +6242,7 @@
 				81686A411ADF9752006BA130 /* EMSDImageCache.m in Sources */,
 				81686A731ADF9752006BA130 /* ConvertToCommonEmoticonsHelper.m in Sources */,
 				81686A571ADF9752006BA130 /* PSTCollectionViewItemKey.m in Sources */,
+				8174D3D01B31780E00F5A183 /* LoginDoneHandler.m in Sources */,
 				81686A8E1ADF9752006BA130 /* PublicGroupDetailViewController.m in Sources */,
 				81686A371ADF9752006BA130 /* MBProgressHUD.m in Sources */,
 				81686A921ADF9752006BA130 /* AddFriendCell.m in Sources */,
@@ -6304,7 +6301,6 @@
 				81686A551ADF9752006BA130 /* PSTCollectionViewData.m in Sources */,
 				81686A841ADF9752006BA130 /* MessageModelManager.m in Sources */,
 				9A4A143A1974048400F2EF04 /* CNNetworkHandler.m in Sources */,
-				9A2CE5A219E1407400FDF49D /* CNWarningCheckTimeViewController.m in Sources */,
 				81B164A01ACAA41900355746 /* CNRunMapGoogleViewController.m in Sources */,
 				8153C5D61B0ECCBD0048DFE6 /* CircularLock.m in Sources */,
 				81686A611ADF9752006BA130 /* SRRefreshView.m in Sources */,

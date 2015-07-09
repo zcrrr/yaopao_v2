@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 
 @interface AboutViewController : UIViewController
+@property (assign, nonatomic) int count;
 - (IBAction)button_clicked:(id)sender;
+@property (weak, nonatomic) IBOutlet UIButton *button_debug;
 
 @end

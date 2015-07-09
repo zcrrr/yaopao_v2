@@ -69,11 +69,7 @@
     {
         self.timeInterval = second;
     }
-    return self;
-}
-- (void)startRun{
-    self.startTimeStamp = [CNUtil getNowTime1000];// 起始时间
-    self.endTimeStamp = 0;
+    
     // 初始化变量
     self.runType = 1;
     self.runStatus = 1;
@@ -93,6 +89,13 @@
     self.targetMile = 1;
     self.targetMinute = 1;
     self.everyXMinute = 1;
+    
+    return self;
+}
+- (void)startRun{
+    self.startTimeStamp = [CNUtil getNowTime1000];// 起始时间
+    self.endTimeStamp = 0;
+    
     [self startTimer];
 }
 - (void)finishOneRun{
@@ -127,6 +130,9 @@
     }else{
         nowTimeStamp = self.endTimeStamp;
     }
+    NSLog(@"nowTimeStamp is %lli",nowTimeStamp);
+    NSLog(@"startTimeStamp is %lli",self.startTimeStamp);
+    NSLog(@"pauseSecond is %d",pauseSecond);
     int second = (int) (nowTimeStamp - self.startTimeStamp) - pauseSecond;
     return second >= 0 ? second : 0;
 }

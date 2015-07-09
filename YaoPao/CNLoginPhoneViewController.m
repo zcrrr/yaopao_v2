@@ -19,6 +19,9 @@
 #import "ColorValue.h"
 #import "CNCustomButton.h"
 #import "EMSDKFull.h"
+#import "FriendsHandler.h"
+#import "CNUtil.h"
+#import "LoginDoneHandler.h"
 
 @interface CNLoginPhoneViewController ()
 
@@ -26,10 +29,6 @@
 
 @implementation CNLoginPhoneViewController
 @synthesize agree;
-@synthesize timer;
-@synthesize count;
-@synthesize isVerify;
-@synthesize areaCode;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -47,28 +46,17 @@
     self.agree = 1;
     self.textfield_pwd.delegate = self;
     self.textfield_phone.delegate = self;
-    self.textfield_vcode.delegate = self;
     [self.button_goRegister fillColor:kClear :kClear :kWhite :kWhiteHalfAlpha];
     [self.button_country addTarget:self action:@selector(changeViewColor:) forControlEvents:UIControlEventTouchDown];
-    self.areaCode = @"86";
 }
 - (void)changeViewColor:(id)sender{
     self.view_country.backgroundColor = [UIColor lightGrayColor];
 }
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    if(kApp.vcodeSecond == 0){
-        [self.button_vcode setTitle:@"获取验证码" forState:UIControlStateNormal];
-        self.button_vcode.userInteractionEnabled = YES;
-    }else{
-        [self.button_vcode setTitle:[NSString stringWithFormat:@"%i",kApp.vcodeSecond] forState:UIControlStateNormal];
-        self.button_vcode.userInteractionEnabled = NO;
-    }
-    [kApp addObserver:self forKeyPath:@"vcodeSecond" options:NSKeyValueObservingOptionNew context:nil];
 }
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
-    [kApp removeObserver:self forKeyPath:@"vcodeSecond"];
 }
 
 - (void)didReceiveMemoryWarning
@@ -90,24 +78,13 @@
             if ([self checkPhoneNO]) {
                 if ([self checkPwd]) {
                     if(self.agree == 1){
-                        //先验证验证码
-                        //测试代码
-                        self.isVerify = YES;
-                        if([self.textfield_phone.text isEqualToString:@"18611101410"]){
-                            self.isVerify = YES;
-                        }
-
-                        if(self.isVerify){//已经验证
-                            //登录
-                            NSMutableDictionary* params = [[NSMutableDictionary alloc]init];
-                            [params setObject:self.textfield_phone.text forKey:@"phone"];
-                            [params setObject:self.textfield_pwd.text forKey:@"passwd"];
-                            kApp.networkHandler.delegate_loginPhone = self;
-                            [kApp.networkHandler doRequest_loginPhone:params];
-                            [self displayLoading];
-                        }else{//未验证
-                            [self verifyVCode];
-                        }
+                        //登录
+                        NSMutableDictionary* params = [[NSMutableDictionary alloc]init];
+                        [params setObject:self.textfield_phone.text forKey:@"phone"];
+                        [params setObject:self.textfield_pwd.text forKey:@"passwd"];
+                        kApp.networkHandler.delegate_loginPhone = self;
+                        [kApp.networkHandler doRequest_loginPhone:params];
+                        [self displayLoading];
                     }else{
                         [kApp.window makeToast:@"您需要同意要跑服务协议才能进行后续操作"];
                     }
@@ -133,79 +110,9 @@
             [self.navigationController pushViewController:registerVC animated:YES];
             break;
         }
-        case 5:
-        {
-            if ([self checkPhoneNO]) {
-                NSLog(@"获取验证码");
-                [self getVCode];
-                [self displayLoading];
-            }
-            break;
-        }
         default:
             break;
     }
-}
-- (void)getVCode{
-    NSLog(@"code is %@",self.areaCode);
-    [SMS_SDK getVerifyCodeByPhoneNumber:self.textfield_phone.text AndZone:self.areaCode result:^(enum SMS_GetVerifyCodeResponseState state) {
-        [self hideLoading];
-        if (1==state) {
-            NSLog(@"block 获取验证码成功");
-            UIAlertView* alert=[[UIAlertView alloc] initWithTitle:@"" message:@"获取验证码成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-            [alert show];
-            self.button_vcode.userInteractionEnabled = NO;
-            kApp.vcodeSecond = 60;
-            kApp.vcodeTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(countdown) userInfo:nil repeats:YES];
-        }
-        else if(0==state)
-        {
-            NSLog(@"block 获取验证码失败");
-            NSString* str=[NSString stringWithFormat:@"验证码发送失败 请稍后重试"];
-            UIAlertView* alert=[[UIAlertView alloc] initWithTitle:@"发送失败" message:str delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-            [alert show];
-        }
-        else if (SMS_ResponseStateMaxVerifyCode==state)
-        {
-            NSString* str=[NSString stringWithFormat:@"请求验证码超上限 请稍后重试"];
-            UIAlertView* alert=[[UIAlertView alloc] initWithTitle:@"超过上限" message:str delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-            [alert show];
-        }
-        else if(SMS_ResponseStateGetVerifyCodeTooOften==state)
-        {
-            NSString* str=[NSString stringWithFormat:@"客户端请求发送短信验证过于频繁"];
-            UIAlertView* alert=[[UIAlertView alloc] initWithTitle:@"提示" message:str delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-            [alert show];
-        }
-    }];
-}
-- (void)countdown{
-    kApp.vcodeSecond -- ;
-    if(kApp.vcodeSecond == 0){
-        [kApp.vcodeTimer invalidate];
-    }
-}
-- (void)verifyVCode{
-    [SMS_SDK commitVerifyCode:self.textfield_vcode.text result:^(enum SMS_ResponseState state) {
-        if (1==state) {
-            NSLog(@"block 验证成功");
-            self.isVerify = YES;
-            //登录
-            NSMutableDictionary* params = [[NSMutableDictionary alloc]init];
-            [params setObject:self.textfield_phone.text forKey:@"phone"];
-            [params setObject:self.textfield_pwd.text forKey:@"passwd"];
-            kApp.networkHandler.delegate_loginPhone = self;
-            [kApp.networkHandler doRequest_loginPhone:params];
-            [self displayLoading];
-            
-        }
-        else if(0==state)
-        {
-            NSLog(@"block 验证失败");
-            UIAlertView* alert=[[UIAlertView alloc] initWithTitle:@"" message:@"验证码验证失败" delegate:self cancelButtonTitle:@"确定"  otherButtonTitles:nil, nil];
-            [alert show];
-        }
-    }];
 }
 - (IBAction)button_checkbox_clicked:(id)sender {
     if(self.agree == 0){
@@ -223,7 +130,6 @@
 - (void)resignAllText{
     [self.textfield_phone resignFirstResponder];
     [self.textfield_pwd resignFirstResponder];
-    [self.textfield_vcode resignFirstResponder];
     [self resetViewFrame];
 }
 - (BOOL)checkPhoneNO{
@@ -327,45 +233,45 @@
     [self hideLoading];
     //登录、注册之后的一系列操作
     [self.navigationController popToRootViewControllerAnimated:YES];
-    //向mob提交用户信息
-//    [kApp needRegisterMobUser];
-    NSString* phoneNO = [kApp.userInfoDic objectForKey:@"phone"];
-    [[EaseMob sharedInstance].chatManager asyncLoginWithUsername:phoneNO password:phoneNO completion:^(NSDictionary *loginInfo, EMError *error) {
-        if (!error && loginInfo) {
-            NSLog(@"登录环信成功!!");
-            kApp.isLoginHX = 1;
-            [CNAppDelegate howManyMessageToRead];
-        }
-    } onQueue:nil];
-    
-    [CNCloudRecord ClearRecordAfterUserLogin];
-    //重置一下跑团位置上报
-    NSString* uid = [NSString stringWithFormat:@"%@",[kApp.userInfoDic objectForKey:@"uid"]];
-    NSMutableDictionary* param = [[NSMutableDictionary alloc]initWithObjectsAndKeys:uid,@"uid",nil];
-    [kApp.networkHandler doRequest_resetGroupSetting:param];
-    //用户登录之后先同步
-    [CNAppDelegate popupWarningCloud:NO];
+//    //向mob提交用户信息
+////    [kApp needRegisterMobUser];
+//    NSString* phoneNO = [kApp.userInfoDic objectForKey:@"phone"];
+//    [[EaseMob sharedInstance].chatManager asyncLoginWithUsername:phoneNO password:phoneNO completion:^(NSDictionary *loginInfo, EMError *error) {
+//        if (!error && loginInfo) {
+//            NSLog(@"登录环信成功!!");
+//            kApp.isLoginHX = 1;
+//            [CNAppDelegate howManyMessageToRead];
+//        }
+//    } onQueue:nil];
+//    [kApp.friendHandler checkNeedUploadAD];
+//    [CNCloudRecord ClearRecordAfterUserLogin];
+//    //重置一下跑团位置上报
+//    NSString* uid = [NSString stringWithFormat:@"%@",[kApp.userInfoDic objectForKey:@"uid"]];
+//    NSMutableDictionary* param = [[NSMutableDictionary alloc]initWithObjectsAndKeys:uid,@"uid",nil];
+//    [kApp.networkHandler doRequest_resetGroupSetting:param];
+//    //用户登录之后先同步
+//    [CNAppDelegate popupWarningCloud:NO];
     
 //    CNUserinfoViewController* userInfoVC = [[CNUserinfoViewController alloc]init];
 //    [self.navigationController pushViewController:userInfoVC animated:YES];
+    [kApp.loginHandler doManyThingAfterLogin:2];
+    
 }
 - (void)loginPhoneDidFailed:(NSString *)mes{
+    [CNUtil showAlert:mes];
     [self hideLoading];
 }
 - (void)displayLoading{
     self.loadingImage.hidden = NO;
     [self.indicator startAnimating];
+    self.view.userInteractionEnabled = NO;
 }
 - (void)hideLoading{
     self.loadingImage.hidden = YES;
     [self.indicator stopAnimating];
+    self.view.userInteractionEnabled = YES;
 }
-#pragma mark - SecondViewControllerDelegate的方法
-- (void)setSecondData:(CountryAndAreaCode *)data {
-    NSLog(@"从Second传过来的数据：%@,%@", data.areaCode,data.countryName);
-    self.areaCode = data.areaCode;
-    self.label_country.text = [NSString stringWithFormat:@"%@",data.countryName];
-}
+
 #pragma mark- textfiled delegate
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
@@ -415,14 +321,5 @@
     CGRect rect = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
     self.view.frame = rect;
     [UIView commitAnimations];
-}
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
-    if(kApp.vcodeSecond == 0){
-        [self.button_vcode setTitle:@"获取验证码" forState:UIControlStateNormal];
-        self.button_vcode.userInteractionEnabled = YES;
-    }else{
-        [self.button_vcode setTitle:[NSString stringWithFormat:@"%i",kApp.vcodeSecond] forState:UIControlStateNormal];
-        self.button_vcode.userInteractionEnabled = NO;
-    }
 }
 @end

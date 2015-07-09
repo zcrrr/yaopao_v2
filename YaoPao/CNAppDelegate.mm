@@ -29,7 +29,6 @@
 #import "CNEncryption.h"
 #import "Toast+UIView.h"
 #import "CNWarningNotInStartZoneViewController.h"
-#import "CNWarningCheckTimeViewController.h"
 #import <SMS_SDK/SMS_SDK.h>
 #import <GoogleMaps/GoogleMaps.h>
 #import "CNCloudRecord.h"
@@ -43,6 +42,7 @@
 #import "EMSDKFull.h"
 #import "ChatListViewController.h"
 #import "FriendsHandler.h"
+#import "LoginDoneHandler.h"
 #import "GCDAsyncUdpSocket.h"
 
 @implementation CNAppDelegate
@@ -61,6 +61,7 @@
 @synthesize vcodeSecond;
 @synthesize vcodeTimer;
 @synthesize locationHandler;
+@synthesize loginHandler;
 @synthesize oneRunPointList;
 @synthesize isRunning;
 @synthesize gpsLevel;
@@ -128,6 +129,7 @@
 @synthesize eventTimeString;
 @synthesize isInEvent;
 @synthesize isOpenShareLocation;
+@synthesize userOperation;
 
 @synthesize managedObjectModel=_managedObjectModel;
 @synthesize managedObjectContext=_managedObjectContext;
@@ -144,7 +146,7 @@
     //net.yaopao.yaopao开发：yaopao_push_dev
     //net.yaopao.yaopao生产：dis_push_yaopao
     //net.yaopao.enterprise生产：yaopao_inhouse_push
-    [[EaseMob sharedInstance] registerSDKWithAppKey:@"yaopao#yaopao" apnsCertName:@"yaopao_push_dev" otherConfig:@{kSDKConfigEnableConsoleLogger:[NSNumber numberWithBool:NO]}];
+    [[EaseMob sharedInstance] registerSDKWithAppKey:@"yaopao#yaopao" apnsCertName:@"dis_push_yaopao" otherConfig:@{kSDKConfigEnableConsoleLogger:[NSNumber numberWithBool:NO]}];
     [[EaseMob sharedInstance].chatManager setIsUseIp:YES];
     [self registerEaseMobNotification];
     //注册推送
@@ -178,9 +180,11 @@
     //google map
     [GMSServices provideAPIKey:@"AIzaSyCyYR5Ih3xP0rpYMaF1qAsInxFyqvaCJIY"];
     //高德地图
+#ifdef kInhouse
+    [MAMapServices sharedServices].apiKey =@"e46925db02f9c24a1323a8b900e56346";
+#else
     [MAMapServices sharedServices].apiKey =@"0f3dad31deac3acd29ce27c3c2a265f2";
-    //inhouse
-//    [MAMapServices sharedServices].apiKey =@"e46925db02f9c24a1323a8b900e56346";
+# endif
     //adobe creative
     NSString* const CreativeSDKClientId = @"b8ae54f2e0084b789790003fda5127e1";
     NSString* const CreativeSDKClientSecret = @"581b3dc8-5946-491e-88e4-ce258e94c5f4";
@@ -188,10 +192,17 @@
     //设置时区
     [NSTimeZone setDefaultTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"GMT+0800"]];
     
-    //友盟
+    
+#ifdef kTestFlight
+    //如果是inhouse则使用自己的crash处理
+    self.userOperation = [NSMutableString stringWithString:@"开启要跑"];
+    NSSetUncaughtExceptionHandler(&UncaughtExceptionHandler);
+#else
+    //否则使用友盟
     [MobClick startWithAppkey:@"53fd6e13fd98c561b903e002" reportPolicy:BATCH   channelId:@""];
     [MobClick updateOnlineConfig];
     [MobClick setLogEnabled:YES];
+# endif
     self.mainurl = [MobClick getConfigParams:@"mainurl"];
     NSLog(@"self.mainurl is %@",self.mainurl);
     if (self.mainurl == nil || ([NSNull null] == (NSNull *)self.mainurl)) {
@@ -206,7 +217,7 @@
     self.showad = [MobClick getConfigParams:@"showad"];
     NSLog(@"self.showad is %@",self.showad);
     if (self.showad == nil || ([NSNull null] == (NSNull *)self.showad)) {
-        self.showad = @"2.2.0,1";
+        self.showad = @"2.3.1,1";
     }
     self.eventTimeString = [MobClick getConfigParams:@"event"];
     NSLog(@"self.eventTimeString is %@",self.eventTimeString);
@@ -285,7 +296,7 @@
     self.window.rootViewController = [self.navVCList objectAtIndex:0];
     [self.window makeKeyAndVisible];
     //屏幕长亮
-    [[ UIApplication sharedApplication] setIdleTimerDisabled:YES ];
+//    [[ UIApplication sharedApplication] setIdleTimerDisabled:YES ];
     return YES;
 }
 // 将得到的deviceToken传给SDK
@@ -318,6 +329,28 @@
             [self.locationHandler stopLocation];
         }
     }
+
+    [CNUtil appendUserOperation:@"进入后台"];
+#ifdef kTestFlight
+    //把字符串记录到plist中
+    NSString* filePath = [CNPersistenceHandler getDocument:@"debug.plist"];
+    NSMutableDictionary* dic = [NSMutableDictionary dictionaryWithContentsOfFile:filePath];
+    NSString* strHistory;
+    if(dic == nil){
+        dic = [[NSMutableDictionary alloc]init];
+        strHistory = @"";
+    }else{
+        strHistory = [dic objectForKey:@"userOperation"];
+    }
+    strHistory = [NSString stringWithFormat:@"%@\n%@",strHistory,self.userOperation];
+    [dic setObject:strHistory forKey:@"userOperation"];
+    [dic writeToFile:filePath atomically:YES];
+    self.userOperation = [NSMutableString stringWithString:@""];
+#else
+    
+# endif
+    
+    
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
@@ -333,6 +366,7 @@
     if(kApp.locationHandler.isStart == 0){
         [self.locationHandler startGetLocation];
     }
+    [CNUtil appendUserOperation:[NSString stringWithFormat:@"回到前台，时间：%@",[CNUtil getTimeFromTimestamp_ymdhm:[CNUtil getNowTime]]]];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
@@ -419,6 +453,7 @@
     [self.voiceHandler initPlayer];
     self.cloudManager = [[CNCloudRecord alloc]init];
     self.friendHandler = [[FriendsHandler alloc]init];
+    self.loginHandler = [[LoginDoneHandler alloc]init];
     self.friendHandler.friendList1NeedRefresh = YES;
     self.friendHandler.friendList2NeedRefresh = YES;
     self.pid = [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
@@ -530,16 +565,17 @@
     rootViewController.modalPresentationStyle = UIModalPresentationCurrentContext;
     [rootViewController presentViewController:navVC animated:YES completion:^(void){NSLog(@"pop");}];
 }
-+ (void)popupWarningCheckTime{
-    CNWarningCheckTimeViewController* warningVC = [[CNWarningCheckTimeViewController alloc]init];
-    UINavigationController* navVC = [[UINavigationController alloc]initWithRootViewController:warningVC];
-    navVC.modalPresentationStyle = UIModalPresentationCustom;
-    warningVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-    UIViewController* rootViewController =  [[UIApplication sharedApplication] keyWindow].rootViewController;
-    rootViewController.modalPresentationStyle = UIModalPresentationCurrentContext;
-    [rootViewController presentViewController:navVC animated:NO completion:^(void){NSLog(@"pop");}];
-}
+//+ (void)popupWarningCheckTime{
+//    CNWarningCheckTimeViewController* warningVC = [[CNWarningCheckTimeViewController alloc]init];
+//    UINavigationController* navVC = [[UINavigationController alloc]initWithRootViewController:warningVC];
+//    navVC.modalPresentationStyle = UIModalPresentationCustom;
+//    warningVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+//    UIViewController* rootViewController =  [[UIApplication sharedApplication] keyWindow].rootViewController;
+//    rootViewController.modalPresentationStyle = UIModalPresentationCurrentContext;
+//    [rootViewController presentViewController:navVC animated:NO completion:^(void){NSLog(@"pop");}];
+//}
 + (void)popupWarningCloud:(BOOL)visible{
+    [CNUtil appendUserOperation:@"开始同步"];
     if(visible){
         CNWarningCloudingViewController* warningVC = [[CNWarningCloudingViewController alloc]init];
         UINavigationController* navVC = [[UINavigationController alloc]initWithRootViewController:warningVC];
@@ -807,13 +843,6 @@
     for (EMConversation *conversation in conversations) {
         unreadCount += conversation.unreadMessagesCount;
     }
-    //    if (_chatListVC) {
-    //        if (unreadCount > 0) {
-    //            _chatListVC.tabBarItem.badgeValue = [NSString stringWithFormat:@"%i",(int)unreadCount];
-    //        }else{
-    //            _chatListVC.tabBarItem.badgeValue = nil;
-    //        }
-    //    }
     UIApplication *application = [UIApplication sharedApplication];
     [application setApplicationIconBadgeNumber:unreadCount];
     NSLog(@"unreadCount is %i",(int)unreadCount);
@@ -922,5 +951,38 @@ withFilterContext:(id)filterContext
 //    friendHandler.friendList1NeedRefresh = YES;
 //}
 
-
+void UncaughtExceptionHandler(NSException *exception) {
+    /**
+     *  获取异常崩溃信息
+     */
+    NSArray *callStack = [exception callStackSymbols];
+    NSString *reason = [exception reason];
+    NSString *name = [exception name];
+    NSString *content = [NSString stringWithFormat:@"========异常错误报告========\nname:%@\nreason:\n%@\ncallStackSymbols:\n%@",name,reason,[callStack componentsJoinedByString:@"\n"]];
+    [CNUtil appendUserOperation:content];
+//    /**
+//     *  把异常崩溃信息发送至开发者邮件
+//     */
+//    NSMutableString *mailUrl = [NSMutableString string];
+//    [mailUrl appendString:@"mailto:test@qq.com"];
+//    [mailUrl appendString:@"?subject=程序异常崩溃，请配合发送异常报告，谢谢合作！"];
+//    [mailUrl appendFormat:@"&body=%@", content];
+//    // 打开地址
+//    NSString *mailPath = [mailUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+//    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:mailPath]];
+    //把字符串记录到plist中
+    NSString* filePath = [CNPersistenceHandler getDocument:@"debug.plist"];
+    NSMutableDictionary* dic = [NSMutableDictionary dictionaryWithContentsOfFile:filePath];
+    NSString* strHistory;
+    if(dic == nil){
+        dic = [[NSMutableDictionary alloc]init];
+        strHistory = @"";
+    }else{
+        strHistory = [dic objectForKey:@"userOperation"];
+    }
+    strHistory = [NSString stringWithFormat:@"%@\n%@",strHistory,kApp.userOperation];
+    [dic setObject:strHistory forKey:@"userOperation"];
+    [dic writeToFile:filePath atomically:YES];
+    kApp.userOperation = [NSMutableString stringWithString:@""];
+}
 @end

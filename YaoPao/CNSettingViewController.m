@@ -13,6 +13,7 @@
 #import "CNServiceViewController.h"
 #import "CNLoginPhoneViewController.h"
 #import "AboutViewController.h"
+#import "CNUtil.h"
 
 @interface CNSettingViewController ()
 
@@ -106,7 +107,7 @@
             NSLog(@"个人");
             self.view_personal.backgroundColor = [UIColor colorWithRed:55.0/255.0 green:53.0/255.0 blue:69.0/255.0 alpha:1];
             if(kApp.isLogin == 0){
-                [self showAlert:@"请先登录"];
+                [CNUtil showAlert:@"请先登录"];
                 CNLoginPhoneViewController* loginVC = [[CNLoginPhoneViewController alloc]init];
                 [self.navigationController pushViewController:loginVC animated:YES];
             }else{
@@ -169,6 +170,7 @@
     [bannerView_ loadRequest:[GADRequest request]];
 }
 - (void)viewWillAppear:(BOOL)animated{
+    [CNUtil appendUserOperation:@"进入设置页面"];
     [super viewWillAppear:animated];
     if(kApp.unreadMessageCount != 0){
         self.reddot.hidden = NO;

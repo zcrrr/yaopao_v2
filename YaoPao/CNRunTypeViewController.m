@@ -7,6 +7,7 @@
 //
 
 #import "CNRunTypeViewController.h"
+#import "CNUtil.h"
 
 @interface CNRunTypeViewController ()
 
@@ -31,6 +32,7 @@
 }
 - (void)viewDidLoad
 {
+    [CNUtil appendUserOperation:@"进入类型设置页面"];
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     [self changeLineOne:self.view_line1];
@@ -49,6 +51,7 @@
     }
     int type = [[runSettingDic objectForKey:@"howToMove"]intValue];
     [self selectType:type];
+    
 }
 - (void)didReceiveMemoryWarning
 {
@@ -66,6 +69,7 @@
     NSString* filePath = [CNPersistenceHandler getDocument:@"runSetting.plist"];
     [self.runSettingDic writeToFile:filePath atomically:YES];
     [self.navigationController popViewControllerAnimated:YES];
+    [CNUtil appendUserOperation:[NSString stringWithFormat:@"类型设定为：%i",self.selectedIndex]];
 }
 - (void)selectType:(int)type{
     self.selectedIndex = type;

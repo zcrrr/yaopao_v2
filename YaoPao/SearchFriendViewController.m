@@ -18,6 +18,7 @@
 #import "FriendDetailWantMeViewController.h"
 #import "FriendDetailViewController.h"
 #import "FriendDetailNotFriendNotContactViewController.h"
+#import "CNUtil.h"
 
 
 @interface SearchFriendViewController ()
@@ -287,6 +288,7 @@
     kApp.friendHandler.friendList1NeedRefresh = YES;
 }
 - (void)searchFriendDidFailed:(NSString *)mes{
+    [CNUtil showAlert:mes];
     [self hideLoading];
 }
 - (void)searchFriendDidSuccess:(NSDictionary *)resultDic{

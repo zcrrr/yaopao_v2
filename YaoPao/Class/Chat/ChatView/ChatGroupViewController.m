@@ -284,7 +284,7 @@
     }else{
         self.switchButton.on = YES;
     }
-    [kApp.window makeToast:@"设置失败，请稍后重试！"];
+    [CNUtil showAlert:mes];
 }
 - (void)enableMyLocationInGroupDidSuccess:(NSDictionary *)resultDic{
     __weak ChatGroupViewController *weakSelf = self;
@@ -443,6 +443,7 @@
     self.view.userInteractionEnabled = YES;
     __weak ChatGroupViewController *weakSelf = self;
     [weakSelf hideHud];
+    [CNUtil showAlert:mes];
 }
 - (void)memberLocationsDidSuccess:(NSDictionary *)resultDic{
     self.isRequestingLocation = NO;

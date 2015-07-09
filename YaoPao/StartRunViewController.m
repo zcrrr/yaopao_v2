@@ -55,6 +55,7 @@
     }
 }
 - (void)viewWillAppear:(BOOL)animated{
+    [CNUtil appendUserOperation:@"进入设置跑步页面"];
     [super viewWillAppear:animated];
     NSMutableDictionary* settingDic = [CNUtil getRunSettingWhole];
     self.howToMove = [[settingDic objectForKey:@"howToMove"]intValue];
@@ -137,7 +138,6 @@
             }
             NSString* filePath = [CNPersistenceHandler getDocument:@"runSetting.plist"];
             [runSettingDic writeToFile:filePath atomically:YES];
-//            if ([self prepareRun]) {
                 kApp.isRunning = 1;
                 kApp.gpsLevel = 4;
                 NSMutableDictionary* settingDic = [CNUtil getRunSettingWhole];
@@ -150,14 +150,16 @@
                 NSLog(@"targetType is %d",kApp.runManager.targetType);
                 NSLog(@"targetValue is %d",kApp.runManager.targetValue);
                 int countDonwOn = [[settingDic objectForKey:@"countdown"]intValue];
-                if(countDonwOn == 1){
-                    CountDownViewController* countdownVC = [[CountDownViewController alloc]init];
-                    [self.navigationController pushViewController:countdownVC animated:YES];
-                }else{
-                    RunningViewController* runningVC = [[RunningViewController alloc]init];
-                    [self.navigationController pushViewController:runningVC animated:YES];
-                }
-//            }
+            if(countDonwOn == 1){
+                RunningViewController* runningVC = [[RunningViewController alloc]init];
+                runningVC.count = 5;
+                [self.navigationController pushViewController:runningVC animated:YES];
+            }else{
+                RunningViewController* runningVC = [[RunningViewController alloc]init];
+                runningVC.count = 0;
+                [self.navigationController pushViewController:runningVC animated:YES];
+            }
+            [CNUtil appendUserOperation:[NSString stringWithFormat:@"开始运动：类型为:%d,目标类型是:%d,目标值:%d,是否有语音:%d,是否倒计时:%d",kApp.runManager.howToMove,kApp.runManager.targetType,kApp.runManager.targetValue,kApp.voiceOn,countDonwOn]];
             break;
         }
         default:

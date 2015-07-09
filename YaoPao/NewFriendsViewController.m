@@ -23,6 +23,7 @@
 #import "FriendDetailViewController.h"
 #import "ColorValue.h"
 #import "CNCustomButton.h"
+#import "CNUtil.h"
 
 @interface NewFriendsViewController ()
 
@@ -53,7 +54,7 @@
         NSString *lastNameString = (__bridge NSString *)abLastName;
         
         NSString *lastknow = (__bridge NSString*)ABRecordCopyValue(person, kABPersonModificationDateProperty);
-        NSLog(@"lastKnow is %@",lastknow);
+//        NSLog(@"lastKnow is %@",lastknow);
         
         if ((__bridge id)abFullName != nil) {
             nameString = (__bridge NSString *)abFullName;
@@ -63,7 +64,7 @@
                 nameString = [NSString stringWithFormat:@"%@ %@", nameString, lastNameString];
             }
         }
-        NSLog(@"nameString is %@",nameString);
+//        NSLog(@"nameString is %@",nameString);
         NSData *image = (__bridge NSData*)ABPersonCopyImageData(person);
         ABMultiValueRef phones = ABRecordCopyValue(person, kABPersonPhoneProperty);
         for (k = 0; k<ABMultiValueGetCount(phones); k++)
@@ -81,6 +82,7 @@
     }
 }
 - (void)viewWillAppear:(BOOL)animated{
+    [CNUtil appendUserOperation:@"进入新的朋友页面"];
     [super viewWillAppear:animated];
     if(kApp.friendHandler.friendList2NeedRefresh){
         NSLog(@"需要刷新好友列表2");

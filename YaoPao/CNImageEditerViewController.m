@@ -38,6 +38,7 @@ extern NSMutableArray* imageArray;
 @synthesize isThisRecordClouded;
 
 - (void)viewDidLoad {
+    [CNUtil appendUserOperation:@"进入要跑水印相机"];
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(backToList) name:@"updatePathsArray" object:nil];
@@ -86,6 +87,7 @@ extern NSMutableArray* imageArray;
     }
 }
 -(void)backToList{
+    NSLog(@"..........");
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 - (void)didReceiveMemoryWarning {
@@ -161,6 +163,7 @@ extern NSMutableArray* imageArray;
         case 0:
         {
             NSLog(@"返回");
+            [CNUtil appendUserOperation:@"点击返回"];
             if(self.button_save.enabled){//可以点，证明有改变
                 if(kApp.cloudManager.isSynServerTime){
                     self.oneRun.updateTime = [NSNumber numberWithLongLong:([CNUtil getNowTime1000]+kApp.cloudManager.deltaMiliSecond)];
@@ -178,6 +181,7 @@ extern NSMutableArray* imageArray;
         }
         case 1:
         {
+            [CNUtil appendUserOperation:@"点击保存"];
             NSLog(@"保存");
             //第一步：将本地图片，删除和保存
             //第二步：更新本地的clientImagePath值，更新时间：
@@ -196,6 +200,7 @@ extern NSMutableArray* imageArray;
         }
         case 2:
         {
+            [CNUtil appendUserOperation:@"点击左"];
             NSLog(@"左");
             [self.scrollview setContentOffset:CGPointMake(self.currentpage*320-320, 0) animated:YES];
             self.currentpage -- ;
@@ -204,6 +209,7 @@ extern NSMutableArray* imageArray;
         }
         case 3:
         {
+            [CNUtil appendUserOperation:@"点击右"];
             NSLog(@"右");
             [self.scrollview setContentOffset:CGPointMake(self.currentpage*320+320, 0) animated:YES];
             self.currentpage ++ ;
@@ -212,6 +218,7 @@ extern NSMutableArray* imageArray;
         }
         case 4:
         {
+            [CNUtil appendUserOperation:@"删除一张"];
             NSLog(@"删除图片");
             [self deleteOneImage:self.currentpage];
             [imageArray removeObjectAtIndex:self.currentpage];
@@ -223,6 +230,7 @@ extern NSMutableArray* imageArray;
         }
         case 5:
         {
+            [CNUtil appendUserOperation:@"再拍一张"];
             NSLog(@"再拍一张");
             UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:@"选取来自" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"拍照",@"用户相册", nil];
             [actionSheet showInView:self.view];
@@ -230,12 +238,14 @@ extern NSMutableArray* imageArray;
         }
         case 6:
         {
+            [CNUtil appendUserOperation:@"美化"];
             NSLog(@"美化");
             [self displayEditorForImage:[imageArray objectAtIndex:self.currentpage]];
             break;
         }
         case 7:
         {
+            [CNUtil appendUserOperation:@"水印"];
             NSLog(@"水印");
 //            CNChooseModelViewController* cmVC = [[CNChooseModelViewController alloc]init];
 //            cmVC.delegate_combineImage = self;
@@ -261,16 +271,18 @@ extern NSMutableArray* imageArray;
         case 0:
         {
             NSLog(@"拍照");
+            [CNUtil appendUserOperation:@"拍照"];
             [self takePhoto];
             break;
         }
         case 1:
         {
             NSLog(@"相册");
+            [CNUtil appendUserOperation:@"从相册里选"];
             self.cameraPicker = [[UIImagePickerController alloc]init];
             self.cameraPicker.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
             self.cameraPicker.mediaTypes = @[(NSString *)kUTTypeImage];
-            self.cameraPicker.allowsEditing = NO;
+            self.cameraPicker.allowsEditing = YES;
             self.cameraPicker.delegate = self;
             [self presentViewController:self.cameraPicker animated:YES completion:^{
                 
@@ -297,6 +309,7 @@ extern NSMutableArray* imageArray;
         }
         [imageArray addObject:imageScaled];
         [self addOneNewImage:imageScaled];
+        self.currentpage = (int)[imageArray count]-1;
         [picker dismissViewControllerAnimated:YES completion:nil];
     }
 }
@@ -314,9 +327,10 @@ extern NSMutableArray* imageArray;
     }];
 }
 - (void)saveImageDidFailed{
-    
+    self.currentpage = (int)[imageArray count]-1;
 }
 - (void)saveImageDidSuccess:(UIImage *)image{
+    self.currentpage = (int)[imageArray count]-1;
     [self addOneNewImage:image];
 }
 - (void)displayEditorForImage:(UIImage *)imageToEdit
@@ -332,6 +346,7 @@ extern NSMutableArray* imageArray;
 }
 - (void)photoEditor:(AdobeUXImageEditorViewController *)editor finishedWithImage:(UIImage *)image
 {
+    [CNUtil appendUserOperation:@"美化成功"];
     // Handle the result image here
     NSLog(@"done");
     float image_width = image.size.width;
@@ -340,13 +355,16 @@ extern NSMutableArray* imageArray;
     NSLog(@"image_height is %f",image_height);
     [self editOneImage:image :self.currentpage];
     [imageArray removeObjectAtIndex:self.currentpage];
-    [imageArray insertObject:image atIndex:self.currentpage];
+    [imageArray addObject:image];
+    self.currentpage = (int)[imageArray count]-1;
     [self.editorController dismissViewControllerAnimated:NO completion:nil];
 }
 - (void)addWaterDidSuccess:(UIImage *)image{
+    [CNUtil appendUserOperation:@"添加水印成功"];
     [self editOneImage:image :self.currentpage];
     [imageArray removeObjectAtIndex:self.currentpage];
     [imageArray addObject:image];
+    self.currentpage = (int)[imageArray count]-1;
 }
 - (void)photoEditorCanceled:(AdobeUXImageEditorViewController *)editor
 {

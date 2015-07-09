@@ -234,20 +234,13 @@
     BOOL result = NO;
     if (self.textfield_vcode.text != nil && ![self.textfield_vcode.text isEqualToString:@""])
     {
-        if ([self.textfield_vcode.text length] != 4)
+        for (int i = 0; i < [self.textfield_vcode.text length]; i++)
         {
-            string_alert = @"验证码不符合规范，应为4位的数字";
-        }
-        else
-        {
-            for (int i = 0; i < [self.textfield_vcode.text length]; i++)
+            char c = [self.textfield_vcode.text characterAtIndex:i];
+            if (c <'0' || c >'9')
             {
-                char c = [self.textfield_vcode.text characterAtIndex:i];
-                if (c <'0' || c >'9')
-                {
-                    string_alert = @"验证码不符合规范，应为4位的数字";
-                    break;
-                }
+                string_alert = @"验证码不符合规范";
+                break;
             }
         }
     }else{

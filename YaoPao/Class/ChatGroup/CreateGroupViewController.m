@@ -18,6 +18,7 @@
 #import "UIViewController+HUD.h"
 #import "CNNetworkHandler.h"
 #import "ChatGroupViewController.h"
+#import "CNUtil.h"
 
 @interface CreateGroupViewController ()<UITextFieldDelegate, UITextViewDelegate, EMChooseViewDelegate>
 
@@ -294,6 +295,7 @@
 
 }
 - (void)createGroupDidFailed:(NSString *)mes{
+    [CNUtil showAlert:mes];
     __weak CreateGroupViewController *weakSelf = self;
     [weakSelf hideHud];
 }

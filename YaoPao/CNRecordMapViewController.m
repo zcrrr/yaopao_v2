@@ -41,6 +41,7 @@
 
 - (void)viewDidLoad
 {
+    [CNUtil appendUserOperation:@"进入大地图页面"];
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     [self.button_back fillColor:kClear :kClear :kWhite :kWhiteHalfAlpha];

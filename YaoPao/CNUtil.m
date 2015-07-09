@@ -240,5 +240,28 @@
         return NO;
     }
 }
++ (void)showAlert:(NSString*) content{
+    UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:content delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+    [alert show];
+}
++ (void)saveImageToIphone4Test:(NSString*)name :(UIImage*)imageToSave{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *path = [documentsDirectory stringByAppendingPathComponent:@"test"];
+    [[NSFileManager defaultManager] createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:nil];
+    NSString *filePath = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"/%@.png",name]];
+    NSLog(@"存储到本地的路径：%@",filePath);
+    [UIImagePNGRepresentation(imageToSave) writeToFile: filePath atomically:YES];
+}
++ (void)appendUserOperation:(NSString*)str{
+#ifdef kTestFlight
+//    NSLog(@"userOperation is %@",kApp.userOperation);
+    [kApp.userOperation appendString:str];
+    [kApp.userOperation appendString:@"\n"];
+    
+#else
+    
+# endif
+}
 
 @end
