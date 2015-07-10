@@ -7,14 +7,14 @@
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>A3BB0D11-9464-4B35-B7AD-87C8CB5614C8</string>
 	<key>IDESourceControlProjectName</key>
-	<string>YaoPao</string>
+	<string>project</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>3C37183D57B628AA9EB1A27305217A0FE32B2D18</key>
 		<string>github.com:zcrrr/yaopao_v2.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>YaoPao.xcodeproj</string>
+	<string>YaoPao.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>3C37183D57B628AA9EB1A27305217A0FE32B2D18</key>

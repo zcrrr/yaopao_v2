@@ -35,6 +35,7 @@
 #import "FriendDetailViewController.h"
 #import "FriendsHandler.h"
 #import "FriendInfo.h"
+#import "CNUtil.h"
 #define KPageCount 20
 
 @interface ChatViewController ()<UITableViewDataSource, UITableViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, SRRefreshDelegate, IChatManagerDelegate, DXChatBarMoreViewDelegate, DXMessageToolBarDelegate, LocationViewDelegate, IDeviceManagerDelegate>
@@ -881,6 +882,7 @@
     self.imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
     self.imagePicker.mediaTypes = @[(NSString *)kUTTypeImage];
     [self presentViewController:self.imagePicker animated:YES completion:NULL];
+    [CNUtil checkUserPermission];
 #endif
 }
 
@@ -903,6 +905,7 @@
     self.imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
     self.imagePicker.mediaTypes = @[(NSString *)kUTTypeMovie];
     [self presentViewController:self.imagePicker animated:YES completion:NULL];
+    [CNUtil checkUserPermission];
 #endif
 }
 

@@ -56,6 +56,7 @@ extern NSMutableArray* imageArray;
         self.view_shareview.frame = CGRectMake(0, 63, 320, 340);
 //        self.imageview_page.frame = CGRectMake(134, 306, 51, 17);
 //        self.label_whichpage.frame  = CGRectMake(134, 306, 51, 17);
+        self.button_share.frame  = CGRectMake(14, 428, 293, 42);
     }
     [self.button_jump fillColor:kClear :kClear :kWhite :kWhiteHalfAlpha];
     self.mapView=[[MAMapView alloc] initWithFrame:CGRectMake(0, 0, self.view_map_container.bounds.size.width, self.view_map_container.bounds.size.height)];
@@ -220,6 +221,7 @@ extern NSMutableArray* imageArray;
 }
 - (IBAction)button_share_clicked:(id)sender {
     [CNUtil appendUserOperation:@"点击分享按钮"];
+    [kApp.window makeToast:@"请稍后"];
     NSLog(@"share");
     [self sharetest];
 }
@@ -463,9 +465,9 @@ extern NSMutableArray* imageArray;
     
     //地图
     [image_map drawInRect:CGRectMake(0, self.view_sharePart2.frame.origin.y, image_map.size.width, image_map.size.height)];
-    [image_type drawInRect:CGRectMake(0, self.view_sharePart2.frame.origin.y+5, self.imageview_type.frame.size.width, self.imageview_type.frame.size.height)];
-    [image_mood2share drawInRect:CGRectMake(self.image_mood.frame.origin.x, self.view_sharePart2.frame.origin.y+5, self.image_mood.frame.size.width, self.image_mood.frame.size.height)];
-    [image_way2share drawInRect:CGRectMake(self.image_way.frame.origin.x, self.view_sharePart2.frame.origin.y+5, self.image_way.frame.size.width, self.image_way.frame.size.height)];
+//    [image_type drawInRect:CGRectMake(0, self.view_sharePart2.frame.origin.y+5, self.imageview_type.frame.size.width, self.imageview_type.frame.size.height)];
+//    [image_mood2share drawInRect:CGRectMake(self.image_mood.frame.origin.x, self.view_sharePart2.frame.origin.y+5, self.image_mood.frame.size.width, self.image_mood.frame.size.height)];
+//    [image_way2share drawInRect:CGRectMake(self.image_way.frame.origin.x, self.view_sharePart2.frame.origin.y+5, self.image_way.frame.size.width, self.image_way.frame.size.height)];
     [image_logo drawInRect:CGRectMake(141, self.view_sharePart2.frame.origin.y+5, 38, 17)];
     [image_water drawInRect:CGRectMake(15, self.view_sharePart2.frame.origin.y+235, image_water.size.width, image_water.size.height)];
     UIImage *resultImage=UIGraphicsGetImageFromCurrentImageContext();

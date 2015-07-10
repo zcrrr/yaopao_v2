@@ -42,47 +42,75 @@
     [CNUtil appendUserOperation:@"进入跑团设置页面"];
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    [self displayLoading];
-    [[EaseMob sharedInstance].chatManager asyncFetchGroupInfo:self.chatGroupId completion:^(EMGroup *group, EMError *error) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (!error) {
-                self.chatGroup = group;
-                NSLog(@"self.chatGroup.occupants is %@",self.chatGroup.occupants);
-                //判断是否为群主
-                self.isOwner = NO;
-                NSDictionary *loginInfo = [[[EaseMob sharedInstance] chatManager] loginInfo];
-                NSString *loginUsername = [loginInfo objectForKey:kSDKUsername];
-                if ([self.chatGroup.owner isEqualToString:loginUsername]) {
-                    self.isOwner = YES;
-                    NSLog(@"我是群主");
-                    CGRect frame_tableview = self.tableview.frame;
-                    [self.button_exit setTitle:@"解散跑团" forState:UIControlStateNormal];
-                    self.tableview.frame = CGRectMake(frame_tableview.origin.x, frame_tableview.origin.y, 320, 44*5);
-                }
-                
-                if (!self.isOwner) {
-                    for (NSString *str in self.chatGroup.members) {
-                        if ([str isEqualToString:loginUsername]) {
-                            self.isOwner = NO;
-                            NSLog(@"我是成员");
-                            CGRect frame_tableview = self.tableview.frame;
-                            [self.button_exit setTitle:@"退出跑团" forState:UIControlStateNormal];
-                            self.tableview.frame = CGRectMake(frame_tableview.origin.x, frame_tableview.origin.y, 320, 44*4);
-                            break;
-                        }
-                    }
-                }
-                [self.tableview reloadData];
-                [self refreshGroupinfo];
-            }
-            else{
-                NSLog(@"获取群详细信息出错");
-                [CNUtil showAlert:@"您当前网络似乎不太好，请检查网络后重试。"];
-                [self hideLoading];
-            }
-        });
-    } onQueue:nil];
+//    [self displayLoading];
+//    [[EaseMob sharedInstance].chatManager asyncFetchGroupInfo:self.chatGroupId completion:^(EMGroup *group, EMError *error) {
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            if (!error) {
+//                self.chatGroup = group;
+//                NSLog(@"self.chatGroup.occupants is %@",self.chatGroup.occupants);
+//                //判断是否为群主
+//                self.isOwner = NO;
+//                NSDictionary *loginInfo = [[[EaseMob sharedInstance] chatManager] loginInfo];
+//                NSString *loginUsername = [loginInfo objectForKey:kSDKUsername];
+//                if ([self.chatGroup.owner isEqualToString:loginUsername]) {
+//                    self.isOwner = YES;
+//                    NSLog(@"我是群主");
+//                    CGRect frame_tableview = self.tableview.frame;
+//                    [self.button_exit setTitle:@"解散跑团" forState:UIControlStateNormal];
+//                    self.tableview.frame = CGRectMake(frame_tableview.origin.x, frame_tableview.origin.y, 320, 44*5);
+//                }
+//                
+//                if (!self.isOwner) {
+//                    for (NSString *str in self.chatGroup.members) {
+//                        if ([str isEqualToString:loginUsername]) {
+//                            self.isOwner = NO;
+//                            NSLog(@"我是成员");
+//                            CGRect frame_tableview = self.tableview.frame;
+//                            [self.button_exit setTitle:@"退出跑团" forState:UIControlStateNormal];
+//                            self.tableview.frame = CGRectMake(frame_tableview.origin.x, frame_tableview.origin.y, 320, 44*4);
+//                            break;
+//                        }
+//                    }
+//                }
+//                [self.tableview reloadData];
+//                [self refreshGroupinfo];
+//            }
+//            else{
+//                NSLog(@"获取群详细信息出错");
+//                [CNUtil showAlert:@"您当前网络似乎不太好，请检查网络后重试。"];
+//                [self hideLoading];
+//            }
+//        });
+//    } onQueue:nil];
+    
+    [self amIOwner];
+    if(self.isOwner){
+        CGRect frame_tableview = self.tableview.frame;
+        [self.button_exit setTitle:@"解散跑团" forState:UIControlStateNormal];
+        self.tableview.frame = CGRectMake(frame_tableview.origin.x, frame_tableview.origin.y, 320, 44*5);
+    }else{
+        CGRect frame_tableview = self.tableview.frame;
+        [self.button_exit setTitle:@"退出跑团" forState:UIControlStateNormal];
+        self.tableview.frame = CGRectMake(frame_tableview.origin.x, frame_tableview.origin.y, 320, 44*4);
+    }
+    [self.tableview reloadData];
+    [self refreshGroupinfo];
+    
     [self registerNotifications];
+    
+    
+}
+- (void)amIOwner{
+    NSDictionary* groupMemberDic = [kApp.friendHandler.groupNeedRefresh objectForKey:self.chatGroupId];
+    NSString* myPhone = [kApp.userInfoDic objectForKey:@"phone"];
+    NSDictionary* myInfoInThisGroup = [groupMemberDic objectForKey:myPhone];
+    if([[myInfoInThisGroup objectForKey:@"isowner"] isEqualToString:@"1"]){
+        NSLog(@"我是群主");
+        self.isOwner = YES;
+    }else{
+        NSLog(@"我是成员");
+        self.isOwner = NO;
+    }
 }
 - (void)refreshGroupinfo{
     self.label_title.text = [NSString stringWithFormat:@"%@/%i",self.chatGroup.groupSubject,(int)(self.chatGroup.groupOccupantsCount)];

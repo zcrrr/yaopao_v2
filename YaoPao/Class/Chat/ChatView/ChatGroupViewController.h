@@ -33,5 +33,6 @@
 @property (nonatomic, strong) UISwitch* switchButton;
 @property (nonatomic, assign) BOOL isRequestingLocation;
 @property (nonatomic, strong) MAPointAnnotation* annotation_me;
+@property (assign, nonatomic) BOOL isOwner;
 
 @end

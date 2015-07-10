@@ -283,8 +283,8 @@
                     <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="OYz-1W-pFA">
-                    <rect key="frame" x="14" y="522" width="293" height="42"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <rect key="frame" x="14" y="469" width="293" height="42"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
                     <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
                     <state key="normal" title="分享" backgroundImage="button_green.png">

@@ -171,9 +171,10 @@
     }
     NSLog(@"self.myContactUseAppButNotFriend is:");
     [self printFriendList:self.myContactUseAppButNotFriend];
-    self.friendsNew = [self.myContactUseAppButNotFriend mutableCopy];
-    [self.friendsNew addObjectsFromArray:self.frinedsWantMe];
+    self.friendsNew = [self.frinedsWantMe mutableCopy];
     [self.friendsNew addObjectsFromArray:self.friendsIWant];
+    [self.friendsNew addObjectsFromArray:self.myContactUseAppButNotFriend];
+    
     NSLog(@"self.friendsNew is:");
     [self printFriendList:self.friendsNew];
     //判断是否新的朋友列表有更新：

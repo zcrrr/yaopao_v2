@@ -140,13 +140,13 @@ extern NSMutableArray* imageArray;
     
     if(kApp.runManager.targetType == 1 || kApp.runManager.targetType == 2){//目标是距离
         self.label_dis.text = @"距离(公里)";
-        self.label_time.text = @"时间";
+        self.label_time.text = @"用时";
         self.label_dis_big.hidden = NO;
         self.label_during_big.hidden = YES;
         self.label_dis_small.hidden = YES;
         self.label_during_small.hidden = NO;
     }else if(kApp.runManager.targetType == 3){
-        self.label_dis.text = @"时间";
+        self.label_dis.text = @"用时";
         self.label_time.text = @"距离(公里)";
         self.label_dis_big.hidden = YES;
         self.label_during_big.hidden = NO;
@@ -280,7 +280,7 @@ extern NSMutableArray* imageArray;
         {
             NSLog(@"地图");
             [CNUtil appendUserOperation:@"点击地图按钮"];
-//            kApp.isInChina = YES;
+            kApp.isInChina = YES;
             if(kApp.isInChina){
                 CNRunMapViewController* mapVC = [[CNRunMapViewController alloc]init];
                 [self.navigationController pushViewController:mapVC animated:YES];

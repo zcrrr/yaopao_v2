@@ -99,6 +99,7 @@
 @synthesize switchButton;
 @synthesize isRequestingLocation;
 @synthesize annotation_me;
+@synthesize isOwner;
 - (instancetype)initWithChatter:(NSString *)chatter isGroup:(BOOL)isGroup
 {
     self = [super initWithNibName:nil bundle:nil];
@@ -331,6 +332,7 @@
     for(NSDictionary* dic in array){
         NSString* phone = [dic objectForKey:@"phone"];
         [self.groupMemberDic setObject:dic forKey:phone];
+        //这里算一下是否是群主
     }
     NSString* isShareLocation = [NSString stringWithFormat:@"%@",[resultDic objectForKey:@"enable"]];
     NSLog(@"isShareLocation is %@",isShareLocation);
@@ -567,7 +569,7 @@ updatingLocation:(BOOL)updatingLocation
     if(updatingLocation)
     {
         //取出当前位置的坐标
-        NSLog(@"当前位置latitude : %f,longitude: %f",userLocation.coordinate.latitude,userLocation.coordinate.longitude);
+//        NSLog(@"当前位置latitude : %f,longitude: %f",userLocation.coordinate.latitude,userLocation.coordinate.longitude);
         if(self.switchButton.on){
             if(self.annotation_me == nil){
                 self.annotation_me = [[MAPointAnnotation alloc] init];
@@ -1292,6 +1294,7 @@ updatingLocation:(BOOL)updatingLocation
     self.imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
     self.imagePicker.mediaTypes = @[(NSString *)kUTTypeImage];
     [self presentViewController:self.imagePicker animated:YES completion:NULL];
+    [CNUtil checkUserPermission];
 #endif
 }
 
@@ -1314,6 +1317,7 @@ updatingLocation:(BOOL)updatingLocation
     self.imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
     self.imagePicker.mediaTypes = @[(NSString *)kUTTypeMovie];
     [self presentViewController:self.imagePicker animated:YES completion:NULL];
+    [CNUtil checkUserPermission];
 #endif
 }
 

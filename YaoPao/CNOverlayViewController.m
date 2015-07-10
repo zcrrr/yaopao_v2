@@ -9,6 +9,7 @@
 #import "CNOverlayViewController.h"
 #import "UIImage+Rescale.h"
 #import "Toast+UIView.h"
+#import "CNUtil.h"
 
 
 @interface CNOverlayViewController ()
@@ -29,6 +30,7 @@ NSMutableArray* imageArray;
         self.button_takephoto.frame = CGRectMake(128, 1, 55, 55);
         self.indicator.frame = CGRectMake(145, 18, 20, 20);
     }
+    [CNUtil checkUserPermission];
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

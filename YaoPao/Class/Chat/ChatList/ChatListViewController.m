@@ -28,6 +28,7 @@
 #import "Toast+UIView.h"
 #import "FriendInfo.h"
 #import "CNUtil.h"
+#import "CNGroupInfo.h"
 
 @interface ChatListViewController ()<UITableViewDelegate,UITableViewDataSource, UISearchDisplayDelegate,SRRefreshDelegate, UISearchBarDelegate, IChatManagerDelegate>
 
@@ -581,13 +582,23 @@
     FriendInfo* friend = [kApp.friendHandler.friendsDicByPhone objectForKey:conversation.chatter];
     cell.name = friend.nameInYaoPao;
 //    cell.name = @"dkkd";
-    NSArray *groupArray = [[EaseMob sharedInstance].chatManager groupList];
-    for (EMGroup *group in groupArray) {
+//    NSArray *groupArray = [[EaseMob sharedInstance].chatManager groupList];
+//    for (EMGroup *group in groupArray) {
+//        if ([group.groupId isEqualToString:conversation.chatter]) {
+//            cell.name = group.groupSubject;
+//            break;
+//        }
+//    }
+    
+    for (CNGroupInfo *group in kApp.friendHandler.myGroups) {
         if ([group.groupId isEqualToString:conversation.chatter]) {
-            cell.name = group.groupSubject;
+            cell.name = group.groupName;
             break;
         }
     }
+
+    
+    
     
     if (!conversation.isGroup) {
         FriendInfo* friend = [kApp.friendHandler.friendsDicByPhone objectForKey:conversation.chatter];

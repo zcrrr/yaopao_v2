@@ -263,5 +263,13 @@
     
 # endif
 }
++ (void)checkUserPermission{
+    NSString * mediaType = AVMediaTypeVideo;
+    AVAuthorizationStatus  authorizationStatus = [AVCaptureDevice authorizationStatusForMediaType:mediaType];
+    if (authorizationStatus == AVAuthorizationStatusRestricted|| authorizationStatus == AVAuthorizationStatusDenied) {
+        NSLog(@"用户禁止了摄像头");
+        [CNUtil showAlert:@"请前往“设置-隐私-相机”，允许要跑访问您的摄像头"];
+    }
+}
 
 @end
