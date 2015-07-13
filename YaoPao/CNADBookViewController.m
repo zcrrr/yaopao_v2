@@ -22,6 +22,7 @@
 #import "CNCustomButton.h"
 #import "ChatViewController.h"
 #import "CNUtil.h"
+#import "AvatarManager.h"
 
 @interface CNADBookViewController ()
 
@@ -209,22 +210,23 @@
                 }
                 
                 if(friend.avatarUrlInYaoPao != nil && ![friend.avatarUrlInYaoPao isEqualToString:@""]){//有头像url
-                    NSString* fullurl = [NSString stringWithFormat:@"%@%@",kApp.imageurl,friend.avatarUrlInYaoPao];
-                    __block UIImage* image = [kApp.avatarDic objectForKey:fullurl];
-                    if(image != nil){//缓存中有
-                        cell.imageview_avatar.image = image;
-                    }else{//下载
-                        NSURL *url = [NSURL URLWithString:fullurl];
-                        __block ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
-                        [request setCompletionBlock :^{
-                            image = [[UIImage alloc] initWithData:[request responseData]];
-                            if(image != nil){
-                                cell.imageview_avatar.image = image;
-                                [kApp.avatarDic setObject:image forKey:fullurl];
-                            }
-                        }];
-                        [request startAsynchronous ];
-                    }
+//                    NSString* fullurl = [NSString stringWithFormat:@"%@%@",kApp.imageurl,friend.avatarUrlInYaoPao];
+//                    __block UIImage* image = [kApp.avatarDic objectForKey:fullurl];
+//                    if(image != nil){//缓存中有
+//                        cell.imageview_avatar.image = image;
+//                    }else{//下载
+//                        NSURL *url = [NSURL URLWithString:fullurl];
+//                        __block ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
+//                        [request setCompletionBlock :^{
+//                            image = [[UIImage alloc] initWithData:[request responseData]];
+//                            if(image != nil){
+//                                cell.imageview_avatar.image = image;
+//                                [kApp.avatarDic setObject:image forKey:fullurl];
+//                            }
+//                        }];
+//                        [request startAsynchronous ];
+//                    }
+                    [kApp.avatarManager setImageToImageView:cell.imageview_avatar fromUrl:friend.avatarUrlInYaoPao];
                 }
                 return cell;
                 break;
@@ -250,22 +252,23 @@
                     cell.button_num.hidden = YES;
                 }
                 if(friend.avatarUrlInYaoPao != nil && ![friend.avatarUrlInYaoPao isEqualToString:@""]){//有头像url
-                    NSString* fullurl = [NSString stringWithFormat:@"%@%@",kApp.imageurl,friend.avatarUrlInYaoPao];
-                    __block UIImage* image = [kApp.avatarDic objectForKey:fullurl];
-                    if(image != nil){//缓存中有
-                        cell.imageview_avatar.image = image;
-                    }else{//下载
-                        NSURL *url = [NSURL URLWithString:fullurl];
-                        __block ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
-                        [request setCompletionBlock :^{
-                            image = [[UIImage alloc] initWithData:[request responseData]];
-                            if(image != nil){
-                                cell.imageview_avatar.image = image;
-                                [kApp.avatarDic setObject:image forKey:fullurl];
-                            }
-                        }];
-                        [request startAsynchronous ];
-                    }
+//                    NSString* fullurl = [NSString stringWithFormat:@"%@%@",kApp.imageurl,friend.avatarUrlInYaoPao];
+//                    __block UIImage* image = [kApp.avatarDic objectForKey:fullurl];
+//                    if(image != nil){//缓存中有
+//                        cell.imageview_avatar.image = image;
+//                    }else{//下载
+//                        NSURL *url = [NSURL URLWithString:fullurl];
+//                        __block ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
+//                        [request setCompletionBlock :^{
+//                            image = [[UIImage alloc] initWithData:[request responseData]];
+//                            if(image != nil){
+//                                cell.imageview_avatar.image = image;
+//                                [kApp.avatarDic setObject:image forKey:fullurl];
+//                            }
+//                        }];
+//                        [request startAsynchronous ];
+//                    }
+                    [kApp.avatarManager setImageToImageView:cell.imageview_avatar fromUrl:friend.avatarUrlInYaoPao];
                 }
                 return cell;
                 break;
@@ -282,22 +285,23 @@
                     ((UIImageView*)[arraytemp objectAtIndex:i]).hidden = NO;
                     FriendInfo* friend = [kApp.friendHandler.myContactUseAppButNotFriend objectAtIndex:i];
                     if(friend.avatarUrlInYaoPao != nil && ![friend.avatarUrlInYaoPao isEqualToString:@""]){//有头像url
-                        NSString* fullurl = [NSString stringWithFormat:@"%@%@",kApp.imageurl,friend.avatarUrlInYaoPao];
-                        __block UIImage* image = [kApp.avatarDic objectForKey:fullurl];
-                        if(image != nil){//缓存中有
-                            ((UIImageView*)[arraytemp objectAtIndex:i]).image = image;
-                        }else{//下载
-                            NSURL *url = [NSURL URLWithString:fullurl];
-                            __block ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
-                            [request setCompletionBlock :^{
-                                image = [[UIImage alloc] initWithData:[request responseData]];
-                                if(image != nil){
-                                    ((UIImageView*)[arraytemp objectAtIndex:i]).image = image;
-                                    [kApp.avatarDic setObject:image forKey:fullurl];
-                                }
-                            }];
-                            [request startAsynchronous ];
-                        }
+//                        NSString* fullurl = [NSString stringWithFormat:@"%@%@",kApp.imageurl,friend.avatarUrlInYaoPao];
+//                        __block UIImage* image = [kApp.avatarDic objectForKey:fullurl];
+//                        if(image != nil){//缓存中有
+//                            ((UIImageView*)[arraytemp objectAtIndex:i]).image = image;
+//                        }else{//下载
+//                            NSURL *url = [NSURL URLWithString:fullurl];
+//                            __block ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
+//                            [request setCompletionBlock :^{
+//                                image = [[UIImage alloc] initWithData:[request responseData]];
+//                                if(image != nil){
+//                                    ((UIImageView*)[arraytemp objectAtIndex:i]).image = image;
+//                                    [kApp.avatarDic setObject:image forKey:fullurl];
+//                                }
+//                            }];
+//                            [request startAsynchronous ];
+//                        }
+                        [kApp.avatarManager setImageToImageView:((UIImageView*)[arraytemp objectAtIndex:i]) fromUrl:friend.avatarUrlInYaoPao];
                     }
                 }
                 if(kApp.friendHandler.haveNewFriends){
@@ -342,22 +346,23 @@
         
         cell.label_username.text = friend.nameInYaoPao;
         if(friend.avatarUrlInYaoPao != nil && ![friend.avatarUrlInYaoPao isEqualToString:@""]){//有头像url
-            NSString* fullurl = [NSString stringWithFormat:@"%@%@",kApp.imageurl,friend.avatarUrlInYaoPao];
-            __block UIImage* image = [kApp.avatarDic objectForKey:fullurl];
-            if(image != nil){//缓存中有
-                cell.imageview_avatar.image = image;
-            }else{//下载
-                NSURL *url = [NSURL URLWithString:fullurl];
-                __block ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
-                [request setCompletionBlock :^{
-                    image = [[UIImage alloc] initWithData:[request responseData]];
-                    if(image != nil){
-                        cell.imageview_avatar.image = image;
-                        [kApp.avatarDic setObject:image forKey:fullurl];
-                    }
-                }];
-                [request startAsynchronous ];
-            }
+//            NSString* fullurl = [NSString stringWithFormat:@"%@%@",kApp.imageurl,friend.avatarUrlInYaoPao];
+//            __block UIImage* image = [kApp.avatarDic objectForKey:fullurl];
+//            if(image != nil){//缓存中有
+//                cell.imageview_avatar.image = image;
+//            }else{//下载
+//                NSURL *url = [NSURL URLWithString:fullurl];
+//                __block ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
+//                [request setCompletionBlock :^{
+//                    image = [[UIImage alloc] initWithData:[request responseData]];
+//                    if(image != nil){
+//                        cell.imageview_avatar.image = image;
+//                        [kApp.avatarDic setObject:image forKey:fullurl];
+//                    }
+//                }];
+//                [request startAsynchronous ];
+//            }
+            [kApp.avatarManager setImageToImageView:cell.imageview_avatar fromUrl:friend.avatarUrlInYaoPao];
         }else{
             cell.imageview_avatar.image = [UIImage imageNamed:@"avatar_default.png"];
         }

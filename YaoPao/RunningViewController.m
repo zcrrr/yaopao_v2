@@ -233,7 +233,6 @@ extern NSMutableArray* imageArray;
 }
 - (void)displayTime{
     int duringMiliSecond = [kApp.runManager during];
-    NSLog(@"duringMiliSecond is %i",duringMiliSecond);
     if(duringMiliSecond > 24*60*60*1000){//大于24小时，不可能
         duringMiliSecond = 0;
     }
@@ -272,7 +271,7 @@ extern NSMutableArray* imageArray;
         case 0:
         {
             NSLog(@"拍照");
-            [CNUtil appendUserOperation:@"拍照"];
+            [CNUtil appendUserOperation:@"点击拍照按钮"];
             [self takePhoto];
             break;
         }

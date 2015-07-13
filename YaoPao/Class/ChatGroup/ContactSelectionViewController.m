@@ -21,6 +21,7 @@
 #import "FriendInfo.h"
 #import "FriendsHandler.h"
 #import "ASIHTTPRequest.h"
+#import "AvatarManager.h"
 
 @interface ContactSelectionViewController ()<UISearchBarDelegate, UISearchDisplayDelegate>
 
@@ -273,26 +274,26 @@
     FriendInfo* friend = [kApp.friendHandler.friendsDicByPhone objectForKey:buddy.username];
     if(friend != nil){
         if(friend.avatarUrlInYaoPao != nil && ![friend.avatarUrlInYaoPao isEqualToString:@""]){//有头像url
-            NSString* fullurl = [NSString stringWithFormat:@"%@%@",kApp.imageurl,friend.avatarUrlInYaoPao];
-            NSLog(@"kApp.avatarDic is %@",kApp.avatarDic);
-            __block UIImage* image = [kApp.avatarDic objectForKey:fullurl];
-            if(image != nil){//缓存中有
-                NSLog(@"缓存中有");
-                cell.imageView.image = image;
-            }else{//下载
-                NSURL *url = [NSURL URLWithString:fullurl];
-                __block ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
-                [request setCompletionBlock :^{
-                    image = [[UIImage alloc] initWithData:[request responseData]];
-                    if(image != nil){
-                        NSLog(@"网络请求图片成功！！");
-                        cell.imageView.image = image;
-                        [kApp.avatarDic setObject:image forKey:fullurl];
-                    }
-                }];
-                [request startAsynchronous ];
-                NSLog(@"网络请求图片");
-            }
+//            NSString* fullurl = [NSString stringWithFormat:@"%@%@",kApp.imageurl,friend.avatarUrlInYaoPao];
+//            __block UIImage* image = [kApp.avatarDic objectForKey:fullurl];
+//            if(image != nil){//缓存中有
+//                NSLog(@"缓存中有");
+//                cell.imageView.image = image;
+//            }else{//下载
+//                NSURL *url = [NSURL URLWithString:fullurl];
+//                __block ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
+//                [request setCompletionBlock :^{
+//                    image = [[UIImage alloc] initWithData:[request responseData]];
+//                    if(image != nil){
+//                        NSLog(@"网络请求图片成功！！");
+//                        cell.imageView.image = image;
+//                        [kApp.avatarDic setObject:image forKey:fullurl];
+//                    }
+//                }];
+//                [request startAsynchronous ];
+//                NSLog(@"网络请求图片");
+//            }
+            [kApp.avatarManager setImageToImageView:cell.imageView fromUrl:friend.avatarUrlInYaoPao];
         }else{
             cell.imageView.image = [UIImage imageNamed:@"avatar_default.png"];
         }
@@ -429,7 +430,6 @@
         if(friend != nil){
             if(friend.avatarUrlInYaoPao != nil && ![friend.avatarUrlInYaoPao isEqualToString:@""]){//有头像url
                 NSString* fullurl = [NSString stringWithFormat:@"%@%@",kApp.imageurl,friend.avatarUrlInYaoPao];
-                NSLog(@"kApp.avatarDic is %@",kApp.avatarDic);
                 __block UIImage* image = [kApp.avatarDic objectForKey:fullurl];
                 if(image != nil){//缓存中有
                     NSLog(@"缓存中有");
@@ -465,11 +465,19 @@
     [_dataSource removeAllObjects];
     [_contactsSource removeAllObjects];
     
-    NSArray *buddyList = [[EaseMob sharedInstance].chatManager buddyList];
-    for (EMBuddy *buddy in buddyList) {
-        if (buddy.followState != eEMBuddyFollowState_NotFollowed) {
-            [self.contactsSource addObject:buddy];
-        }
+//    NSArray *buddyList = [[EaseMob sharedInstance].chatManager buddyList];
+//    for (EMBuddy *buddy in buddyList) {
+//        if (buddy.followState != eEMBuddyFollowState_NotFollowed) {
+//            [self.contactsSource addObject:buddy];
+//            NSLog(@"phone is %@",buddy.username);
+//        }
+//    }
+//    [_contactsSource removeAllObjects];
+//    NSLog(@"--------");
+    for(FriendInfo* friend in kApp.friendHandler.friends){
+        EMBuddy *buddy = [EMBuddy buddyWithUsername:friend.phoneNO];
+        [self.contactsSource addObject:buddy];
+        NSLog(@"phone is %@",buddy.username);
     }
     
     [_dataSource addObjectsFromArray:[self sortRecords:self.contactsSource]];

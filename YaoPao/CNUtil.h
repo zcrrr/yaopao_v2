@@ -33,5 +33,5 @@
 + (void)showAlert:(NSString*) content;
 + (void)saveImageToIphone4Test:(NSString*)name :(UIImage*)imageToSave;
 + (void)appendUserOperation:(NSString*)str;
-+ (void)checkUserPermission;
++ (BOOL)checkUserPermission;
 @end

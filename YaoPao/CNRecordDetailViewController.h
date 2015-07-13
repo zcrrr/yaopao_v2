@@ -10,8 +10,9 @@
 #import "RunClass.h"
 #import <MAMapKit/MAMapKit.h>
 @class CNCustomButton;
+#import "CNImageEditerViewController.h"
 
-@interface CNRecordDetailViewController : UIViewController<MAMapViewDelegate,UITextFieldDelegate,UIScrollViewDelegate>
+@interface CNRecordDetailViewController : UIViewController<MAMapViewDelegate,UITextFieldDelegate,UIScrollViewDelegate,EditImageDelegate>
 
 @property (nonatomic, strong) MAMapView *mapView;
 @property (assign, nonatomic) int currentpage;
@@ -48,5 +49,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *label_date_map1;
 @property (weak, nonatomic) IBOutlet UILabel *label_time_map1;
 @property (weak, nonatomic) IBOutlet UIButton *button_details;
+@property (weak, nonatomic) IBOutlet UIButton *button_water;
 
 @end

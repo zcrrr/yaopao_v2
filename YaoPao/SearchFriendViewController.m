@@ -19,6 +19,7 @@
 #import "FriendDetailViewController.h"
 #import "FriendDetailNotFriendNotContactViewController.h"
 #import "CNUtil.h"
+#import "AvatarManager.h"
 
 
 @interface SearchFriendViewController ()
@@ -110,22 +111,23 @@
     }
     cell.label_phone.text = hidePhoneNo;
     if(friend.avatarUrlInYaoPao != nil && ![friend.avatarUrlInYaoPao isEqualToString:@""]){//有头像url
-        NSString* fullurl = [NSString stringWithFormat:@"%@%@",kApp.imageurl,friend.avatarUrlInYaoPao];
-        __block UIImage* image = [kApp.avatarDic objectForKey:fullurl];
-        if(image != nil){//缓存中有
-            cell.imageview_avatar.image = image;
-        }else{//下载
-            NSURL *url = [NSURL URLWithString:fullurl];
-            __block ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
-            [request setCompletionBlock :^{
-                image = [[UIImage alloc] initWithData:[request responseData]];
-                if(image != nil){
-                    cell.imageview_avatar.image = image;
-                    [kApp.avatarDic setObject:image forKey:fullurl];
-                }
-            }];
-            [request startAsynchronous ];
-        }
+//        NSString* fullurl = [NSString stringWithFormat:@"%@%@",kApp.imageurl,friend.avatarUrlInYaoPao];
+//        __block UIImage* image = [kApp.avatarDic objectForKey:fullurl];
+//        if(image != nil){//缓存中有
+//            cell.imageview_avatar.image = image;
+//        }else{//下载
+//            NSURL *url = [NSURL URLWithString:fullurl];
+//            __block ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
+//            [request setCompletionBlock :^{
+//                image = [[UIImage alloc] initWithData:[request responseData]];
+//                if(image != nil){
+//                    cell.imageview_avatar.image = image;
+//                    [kApp.avatarDic setObject:image forKey:fullurl];
+//                }
+//            }];
+//            [request startAsynchronous ];
+//        }
+        [kApp.avatarManager setImageToImageView:cell.imageview_avatar fromUrl:friend.avatarUrlInYaoPao];
     }else{
         cell.imageview_avatar.image = [UIImage imageNamed:@"avatar_default.png"];
     }

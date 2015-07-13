@@ -60,6 +60,9 @@ extern NSMutableArray* imageArray;
     [self.view_map_container sendSubviewToBack:self.mapView];
     self.textfield_remark.delegate = self;
     [self initUI];
+    if(!iPhone5){//4、4s
+        self.button_water.frame  = CGRectMake(14, 431, 293, 42);
+    }
 }
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
     if(scrollView==self.scrollview){
@@ -398,6 +401,48 @@ extern NSMutableArray* imageArray;
         ieVC.oneRun = self.oneRun;
         [self.navigationController pushViewController:ieVC animated:YES];
     }
+}
+- (void)editImageDidSuccess{
+    //删除所有图片
+    for (UIView *subview in [self.scrollview subviews]) {
+        if([subview isKindOfClass:[UIImageView class]]){
+            [subview removeFromSuperview];
+        }
+    }
+    NSLog(@"client imagepath = %@",self.oneRun.clientImagePaths);
+    //判断是否有图片
+    imageArray = [[NSMutableArray alloc]init];
+    if(![oneRun.clientImagePaths isEqualToString:@""]){
+        NSArray* imagePaths = [oneRun.clientImagePaths componentsSeparatedByString:@"|"];
+        //去沙盒读取图片
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES);
+        for (int i=0;i<[imagePaths count];i++){
+            NSString* onePath = [imagePaths objectAtIndex:i];
+            NSString *filePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:onePath];
+            BOOL blHave=[[NSFileManager defaultManager] fileExistsAtPath:filePath];
+            if (blHave) {//图片存在
+                [self.scrollview setContentSize:CGSizeMake(320+(i+1)*320, 320)];
+                self.button_details.frame = CGRectMake(0, 0, 320+(i+1)*320, 320);
+                self.scrollview.showsHorizontalScrollIndicator=NO; //不显示水平滑动线
+                self.scrollview.showsVerticalScrollIndicator=NO;//不显示垂直滑动线
+                self.scrollview.pagingEnabled=YES;
+                self.scrollview.delegate = self;
+                UIImageView* photo = [[UIImageView alloc]initWithFrame:CGRectMake(320+i*320, 0, 320, 320)];
+                photo.contentMode = UIViewContentModeScaleAspectFill;
+                [self.scrollview addSubview:photo];
+                NSData *data = [NSData dataWithContentsOfFile:filePath];
+                photo.image = [[UIImage alloc] initWithData:data];
+                if(photo.image != nil){
+                    [imageArray addObject:photo.image];
+                }
+            }
+        }
+    }else{
+        [self.scrollview setContentSize:CGSizeMake(320, 320)];
+    }
+    self.currentpage = 0;
+    [self.scrollview setContentOffset:CGPointMake(0,0) animated:YES];
+    [self howControllerDisplay];
     
 }
 //比赛：
@@ -543,6 +588,7 @@ extern NSMutableArray* imageArray;
     [CNUtil appendUserOperation:@"点击要跑水印相机"];
     CNImageEditerViewController* ieVC = [[CNImageEditerViewController alloc]init];
     ieVC.oneRun = self.oneRun;
+    ieVC.delegate_editImage = self;
     [self.navigationController pushViewController:ieVC animated:YES];
 }
 @end

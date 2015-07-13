@@ -36,6 +36,7 @@ extern NSMutableArray* imageArray;
 @synthesize serverImagePathsArray;
 @synthesize serverImagePathsSmallArray;
 @synthesize isThisRecordClouded;
+@synthesize delegate_editImage;
 
 - (void)viewDidLoad {
     [CNUtil appendUserOperation:@"进入要跑水印相机"];
@@ -88,7 +89,9 @@ extern NSMutableArray* imageArray;
 }
 -(void)backToList{
     NSLog(@"..........");
-    [self.navigationController popToRootViewControllerAnimated:YES];
+//    [self.navigationController popToRootViewControllerAnimated:YES];
+    [self.delegate_editImage editImageDidSuccess];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -176,7 +179,9 @@ extern NSMutableArray* imageArray;
                 NSString* NOTIFICATION_REFRESH = @"REFRESH";
                 [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_REFRESH object:nil];
             }
-            [self.navigationController popToRootViewControllerAnimated:YES];
+//            [self.navigationController popToRootViewControllerAnimated:YES];
+            [self.delegate_editImage editImageDidSuccess];
+            [self.navigationController popViewControllerAnimated:YES];
             break;
         }
         case 1:
@@ -257,6 +262,7 @@ extern NSMutableArray* imageArray;
 //            [rootViewController presentViewController:navVC animated:YES completion:^(void){NSLog(@"pop");}];
             WaterMarkViewController* waterVC = [[WaterMarkViewController alloc]init];
             waterVC.delegate_addWater = self;
+            waterVC.oneRun = self.oneRun;
             waterVC.image_datasource = [imageArray objectAtIndex:self.currentpage];
             [self.navigationController pushViewController:waterVC animated:YES];
             break;

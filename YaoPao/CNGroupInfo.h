@@ -13,6 +13,7 @@
 @property (strong, nonatomic) NSString* groupId;
 @property (strong, nonatomic) NSString* groupName;
 @property (strong, nonatomic) NSString* groupDesc;
+@property (assign, nonatomic) int memberCount;
 
 
 @end

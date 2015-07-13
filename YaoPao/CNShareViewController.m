@@ -56,7 +56,7 @@ extern NSMutableArray* imageArray;
         self.view_shareview.frame = CGRectMake(0, 63, 320, 340);
 //        self.imageview_page.frame = CGRectMake(134, 306, 51, 17);
 //        self.label_whichpage.frame  = CGRectMake(134, 306, 51, 17);
-        self.button_share.frame  = CGRectMake(14, 428, 293, 42);
+        self.button_share.frame  = CGRectMake(14, 418, 293, 42);
     }
     [self.button_jump fillColor:kClear :kClear :kWhite :kWhiteHalfAlpha];
     self.mapView=[[MAMapView alloc] initWithFrame:CGRectMake(0, 0, self.view_map_container.bounds.size.width, self.view_map_container.bounds.size.height)];

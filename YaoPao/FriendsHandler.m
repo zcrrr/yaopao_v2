@@ -118,9 +118,10 @@
         groupInfo.groupId = groupId;
         groupInfo.groupName = groupName;
         groupInfo.groupDesc = groupDesc;
+        groupInfo.memberCount = [[dic objectForKey:@"affiliations_count"]intValue];
         [self.myGroups addObject:groupInfo];
     }
-    [[EaseMob sharedInstance].chatManager fetchBuddyListWithError:nil];
+//    [[EaseMob sharedInstance].chatManager fetchBuddyListWithError:nil];
     //测试代码：加上环信好友获取
 //    NSArray *buddyList = [[EaseMob sharedInstance].chatManager buddyList];
 //    NSLog(@"环信---好友获取成功： %@",buddyList);

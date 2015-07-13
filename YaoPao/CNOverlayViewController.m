@@ -30,13 +30,20 @@ NSMutableArray* imageArray;
         self.button_takephoto.frame = CGRectMake(128, 1, 55, 55);
         self.indicator.frame = CGRectMake(145, 18, 20, 20);
     }
-    [CNUtil checkUserPermission];
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
+- (void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    if(![CNUtil checkUserPermission]){
+        [self performSelector:@selector(dismissThisPage) withObject:nil afterDelay:2];
+    }
+}
+- (void)dismissThisPage{
+    [self.cameraPicker dismissViewControllerAnimated:YES completion:nil];
+}
 /*
 #pragma mark - Navigation
 
@@ -53,6 +60,10 @@ NSMutableArray* imageArray;
             [self.cameraPicker dismissViewControllerAnimated:YES completion:nil];
             break;
         case 1:
+            if(![CNUtil checkUserPermission]){
+                [self performSelector:@selector(dismissThisPage) withObject:nil afterDelay:2];
+                return;
+            }
             self.indicator.hidden = NO;
             self.button_takephoto.hidden = YES;
             [self.indicator startAnimating];

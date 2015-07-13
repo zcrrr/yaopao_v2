@@ -155,6 +155,7 @@
 		8144420D1ACAEF3C00A6067E /* weather_marker_w_n_7.png in Resources */ = {isa = PBXBuildFile; fileRef = 814441891ACAEF3C00A6067E /* weather_marker_w_n_7.png */; };
 		8144420E1ACAEF3C00A6067E /* weather_marker_w_n_8.png in Resources */ = {isa = PBXBuildFile; fileRef = 8144418A1ACAEF3C00A6067E /* weather_marker_w_n_8.png */; };
 		8144420F1ACAEF3C00A6067E /* weather_marker_w_n_9.png in Resources */ = {isa = PBXBuildFile; fileRef = 8144418B1ACAEF3C00A6067E /* weather_marker_w_n_9.png */; };
+		8148605C1B50AF5D00630BE3 /* AvatarManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8148605B1B50AF5D00630BE3 /* AvatarManager.m */; };
 		8149CE661ADD1449000BA4FD /* NewFriendsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8149CE641ADD1449000BA4FD /* NewFriendsTableViewCell.m */; };
 		8149CE671ADD1449000BA4FD /* NewFriendsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8149CE651ADD1449000BA4FD /* NewFriendsTableViewCell.xib */; };
 		8149CE6B1ADD3686000BA4FD /* FriendDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8149CE691ADD3686000BA4FD /* FriendDetailViewController.m */; };
@@ -271,6 +272,7 @@
 		8158E0301AE89ABA00B30228 /* way5_hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 8158E0261AE89ABA00B30228 /* way5_hd.png */; };
 		8158E0341AE925CE00B30228 /* CNImageEditerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8158E0321AE925CE00B30228 /* CNImageEditerViewController.m */; };
 		8158E0351AE925CE00B30228 /* CNImageEditerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8158E0331AE925CE00B30228 /* CNImageEditerViewController.xib */; };
+		8158F7391B523D9B006927A6 /* back_v2_big2.png in Resources */ = {isa = PBXBuildFile; fileRef = 8158F7381B523D9B006927A6 /* back_v2_big2.png */; };
 		815EE95B1ACA2FCF00CF1BDA /* mood1.png in Resources */ = {isa = PBXBuildFile; fileRef = 815EE9471ACA2FCF00CF1BDA /* mood1.png */; };
 		815EE95C1ACA2FCF00CF1BDA /* mood1_h.png in Resources */ = {isa = PBXBuildFile; fileRef = 815EE9481ACA2FCF00CF1BDA /* mood1_h.png */; };
 		815EE95D1ACA2FCF00CF1BDA /* mood2.png in Resources */ = {isa = PBXBuildFile; fileRef = 815EE9491ACA2FCF00CF1BDA /* mood2.png */; };
@@ -1260,6 +1262,8 @@
 		814441891ACAEF3C00A6067E /* weather_marker_w_n_7.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = weather_marker_w_n_7.png; sourceTree = "<group>"; };
 		8144418A1ACAEF3C00A6067E /* weather_marker_w_n_8.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = weather_marker_w_n_8.png; sourceTree = "<group>"; };
 		8144418B1ACAEF3C00A6067E /* weather_marker_w_n_9.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = weather_marker_w_n_9.png; sourceTree = "<group>"; };
+		8148605A1B50AF5D00630BE3 /* AvatarManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AvatarManager.h; sourceTree = "<group>"; };
+		8148605B1B50AF5D00630BE3 /* AvatarManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AvatarManager.m; sourceTree = "<group>"; };
 		8149CE631ADD1449000BA4FD /* NewFriendsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewFriendsTableViewCell.h; sourceTree = "<group>"; };
 		8149CE641ADD1449000BA4FD /* NewFriendsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewFriendsTableViewCell.m; sourceTree = "<group>"; };
 		8149CE651ADD1449000BA4FD /* NewFriendsTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NewFriendsTableViewCell.xib; sourceTree = "<group>"; };
@@ -1400,6 +1404,7 @@
 		8158E0311AE925CE00B30228 /* CNImageEditerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNImageEditerViewController.h; sourceTree = "<group>"; };
 		8158E0321AE925CE00B30228 /* CNImageEditerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNImageEditerViewController.m; sourceTree = "<group>"; };
 		8158E0331AE925CE00B30228 /* CNImageEditerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CNImageEditerViewController.xib; sourceTree = "<group>"; };
+		8158F7381B523D9B006927A6 /* back_v2_big2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = back_v2_big2.png; sourceTree = "<group>"; };
 		815EE9471ACA2FCF00CF1BDA /* mood1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mood1.png; sourceTree = "<group>"; };
 		815EE9481ACA2FCF00CF1BDA /* mood1_h.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mood1_h.png; sourceTree = "<group>"; };
 		815EE9491ACA2FCF00CF1BDA /* mood2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mood2.png; sourceTree = "<group>"; };
@@ -2953,6 +2958,7 @@
 		814DAD091AB429B60020416F /* v2 */ = {
 			isa = PBXGroup;
 			children = (
+				8158F7381B523D9B006927A6 /* back_v2_big2.png */,
 				8165B2BA1B302AF500678B5F /* water_on.png */,
 				8165B2BB1B302AF500678B5F /* water.png */,
 				816965CA1B15544C00321A40 /* ad_placeholder.png */,
@@ -5115,6 +5121,8 @@
 				9A77D8E61A67BC70003CCE5A /* CNCloudRecord.m */,
 				8174D3CE1B31780E00F5A183 /* LoginDoneHandler.h */,
 				8174D3CF1B31780E00F5A183 /* LoginDoneHandler.m */,
+				8148605A1B50AF5D00630BE3 /* AvatarManager.h */,
+				8148605B1B50AF5D00630BE3 /* AvatarManager.m */,
 			);
 			name = manager;
 			sourceTree = "<group>";
@@ -5486,6 +5494,7 @@
 				8196B4A81AC94A6C00130F18 /* weather_icon_d_9.png in Resources */,
 				8196B4C81AC94A6C00130F18 /* weather_icon_n_8.png in Resources */,
 				814441AB1ACAEF3C00A6067E /* weather_marker_b_d_8.png in Resources */,
+				8158F7391B523D9B006927A6 /* back_v2_big2.png in Resources */,
 				81B23AE21AF89E9700A51778 /* menu0_on.png in Resources */,
 				819E3A891AEE32E200189940 /* button_red_on.png in Resources */,
 				814441BE1ACAEF3C00A6067E /* weather_marker_b_n_25.png in Resources */,
@@ -6265,6 +6274,7 @@
 				81750EBE1AF9C5FD007DD4AE /* ChooseEditImageViewController.m in Sources */,
 				81686AA11ADF9752006BA130 /* EMChooseViewController.m in Sources */,
 				9A6A1C0019B455F100C3D2F9 /* CNWarningHelpViewController.m in Sources */,
+				8148605C1B50AF5D00630BE3 /* AvatarManager.m in Sources */,
 				81686A4D1ADF9752006BA130 /* UIImage+EMWebP.m in Sources */,
 				815216A31AEF2B7C008A3B91 /* CellWithSwitchTableViewCell.m in Sources */,
 				81686A531ADF9752006BA130 /* PSTCollectionViewCell.m in Sources */,

@@ -55,10 +55,30 @@
             [CNUtil appendUserOperation:@"登录环信成功"];
             kApp.isLoginHX = 1;
             [CNAppDelegate howManyMessageToRead];
-            [self loginDoneStep3];
+            
         }else{
-            [self loginDoneStep3];
+            NSLog(@"登录环信失败!!");
             [CNUtil appendUserOperation:@"登录环信失败了"];
+            [self tryLoginHuanxinAgain];
+        }
+    } onQueue:nil];
+    //同时进行第三步：
+    [self loginDoneStep3];
+}
+- (void)tryLoginHuanxinAgain{
+    NSLog(@"重试登录环信!!");
+    [CNUtil appendUserOperation:@"重试登录环信"];
+    NSString* phoneNO = [kApp.userInfoDic objectForKey:@"phone"];
+    [[EaseMob sharedInstance].chatManager asyncLoginWithUsername:phoneNO password:phoneNO completion:^(NSDictionary *loginInfo, EMError *error) {
+        if (!error && loginInfo) {
+            NSLog(@"登录环信成功!!");
+            [CNUtil appendUserOperation:@"登录环信成功"];
+            kApp.isLoginHX = 1;
+            [CNAppDelegate howManyMessageToRead];
+        }else{
+            NSLog(@"登录环信失败!!");
+            [CNUtil appendUserOperation:@"登录环信失败了"];
+            [self tryLoginHuanxinAgain];
         }
     } onQueue:nil];
 }

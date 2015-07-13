@@ -62,7 +62,6 @@
             //logout
             kApp.isLogin = 0;
             kApp.userInfoDic = nil;
-            kApp.imageData = nil;
             NSString* filePath = [CNPersistenceHandler getDocument:@"userinfo.plist"];
             [CNPersistenceHandler DeleteSingleFile:filePath];
             break;

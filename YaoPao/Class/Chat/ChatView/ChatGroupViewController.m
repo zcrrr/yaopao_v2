@@ -41,6 +41,7 @@
 #import "CNUtil.h"
 #import "FriendsHandler.h"
 #import "Toast+UIView.h"
+#import "AvatarManager.h"
 #define KPageCount 20
 
 @interface ChatGroupViewController ()<UITableViewDataSource, UITableViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, SRRefreshDelegate, IChatManagerDelegate, DXChatBarMoreViewDelegate, DXMessageToolBarDelegate, LocationViewDelegate, IDeviceManagerDelegate>
@@ -119,6 +120,7 @@
 
 - (void)viewDidLoad
 {
+    [CNUtil appendUserOperation:@"进入跑团聊天"];
     [super viewDidLoad];
     [self registerBecomeActive];
     // Do any additional setup after loading the view.
@@ -527,26 +529,27 @@
             
             NSString* imgpath = [dic objectForKey:@"imgpath"];
             if(imgpath != nil && ![imgpath isEqualToString:@""]){//有头像url
-                NSString* fullurl = [NSString stringWithFormat:@"%@%@",kApp.imageurl,imgpath];
-                __block UIImage* image = [kApp.avatarDic objectForKey:fullurl];
-                if(image != nil){//缓存中有
-                    annotationView.imageview.image = image;
-                }else{//下载
-                    NSURL *url = [NSURL URLWithString:fullurl];
-                    __block ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
-                    [request setCompletionBlock :^{
-                        image = [[UIImage alloc] initWithData:[request responseData]];
-                        if(image != nil){
-                            if(annotationView != nil){
-                                annotationView.imageview.image = image;
-                            }
-                            [kApp.avatarDic setObject:image forKey:fullurl];
-                        }else{
-                            annotationView.imageview.image = [UIImage imageNamed:@"avatar_default.png"];
-                        }
-                    }];
-                    [request startAsynchronous ];
-                }
+//                NSString* fullurl = [NSString stringWithFormat:@"%@%@",kApp.imageurl,imgpath];
+//                __block UIImage* image = [kApp.avatarDic objectForKey:fullurl];
+//                if(image != nil){//缓存中有
+//                    annotationView.imageview.image = image;
+//                }else{//下载
+//                    NSURL *url = [NSURL URLWithString:fullurl];
+//                    __block ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
+//                    [request setCompletionBlock :^{
+//                        image = [[UIImage alloc] initWithData:[request responseData]];
+//                        if(image != nil){
+//                            if(annotationView != nil){
+//                                annotationView.imageview.image = image;
+//                            }
+//                            [kApp.avatarDic setObject:image forKey:fullurl];
+//                        }else{
+//                            annotationView.imageview.image = [UIImage imageNamed:@"avatar_default.png"];
+//                        }
+//                    }];
+//                    [request startAsynchronous ];
+//                }
+                [kApp.avatarManager setImageToImageView:annotationView.imageview fromUrl:imgpath];
             }else{
                 annotationView.imageview.image = [UIImage imageNamed:@"avatar_default.png"];
             }
@@ -555,7 +558,7 @@
             NSString* nickname = [kApp.userInfoDic objectForKey:@"nickname"];
             NSString* time = @"刚刚";
             ((MAPointAnnotation*)annotation).subtitle = [NSString stringWithFormat:@"%@+%@",nickname,time];
-            annotationView.imageview.image = kApp.imageData == nil?[UIImage imageNamed:@"avatar_default.png"]:[UIImage imageWithData:kApp.imageData];
+            annotationView.imageview.image = [kApp.avatarManager getMyAvatar] == nil?[UIImage imageNamed:@"avatar_default.png"]:[kApp.avatarManager getMyAvatar];
             return annotationView;
                                                                 
         }

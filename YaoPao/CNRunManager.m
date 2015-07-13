@@ -130,9 +130,6 @@
     }else{
         nowTimeStamp = self.endTimeStamp;
     }
-    NSLog(@"nowTimeStamp is %lli",nowTimeStamp);
-    NSLog(@"startTimeStamp is %lli",self.startTimeStamp);
-    NSLog(@"pauseSecond is %d",pauseSecond);
     int second = (int) (nowTimeStamp - self.startTimeStamp) - pauseSecond;
     return second >= 0 ? second : 0;
 }

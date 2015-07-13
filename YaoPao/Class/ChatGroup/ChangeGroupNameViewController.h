@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "EMSDKFull.h"
 #import "CNNetworkHandler.h"
+@class CNGroupInfo;
 
 @protocol changeNameDelegate <NSObject>
 //修改跑团名
@@ -16,7 +17,7 @@
 @end
 
 @interface ChangeGroupNameViewController : UIViewController<changeGroupNameDelegate>
-@property (strong, nonatomic) EMGroup *chatGroup;
+@property (strong, nonatomic) CNGroupInfo *chatGroup;
 @property (weak, nonatomic) IBOutlet UITextField *textfield;
 - (IBAction)button_clicked:(id)sender;
 @property (strong, nonatomic) IBOutlet UIActivityIndicatorView *indicator;

@@ -10,6 +10,7 @@
 #import "Toast+UIView.h"
 #import "FriendsHandler.h"
 #import "CNUtil.h"
+#import "CNGroupInfo.h"
 
 @interface ChangeGroupNameViewController ()
 
@@ -22,7 +23,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    self.textfield.placeholder = self.chatGroup.groupSubject;
+    self.textfield.placeholder = self.chatGroup.groupName;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -58,7 +59,7 @@
             NSString* uid = [NSString stringWithFormat:@"%@",[kApp.userInfoDic objectForKey:@"uid"]];
             [params setObject:uid forKey:@"uid"];
             [params setObject:self.chatGroup.groupId forKey:@"groupid"];
-            [params setObject:self.chatGroup.groupDescription forKey:@"desc"];
+            [params setObject:self.chatGroup.groupDesc forKey:@"desc"];
             [params setObject:self.textfield.text forKey:@"groupname"];
             kApp.networkHandler.delegate_changeGroupName = self;
             [kApp.networkHandler doRequest_changeGroupName:params];

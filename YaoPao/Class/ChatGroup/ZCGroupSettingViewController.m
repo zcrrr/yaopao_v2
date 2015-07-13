@@ -23,6 +23,7 @@
 #import "SBJson.h"
 #import "ChangeGroupNameViewController.h"
 #import "CNUtil.h"
+#import "AvatarManager.h"
 
 @interface ZCGroupSettingViewController ()
 
@@ -37,10 +38,28 @@
 @synthesize isDelBtnDisplay;
 @synthesize handleIndex;
 @synthesize isShareLocation;
+@synthesize hxgroup;
 
 - (void)viewDidLoad {
     [CNUtil appendUserOperation:@"进入跑团设置页面"];
     [super viewDidLoad];
+    //初始化组对象
+    for (CNGroupInfo *group in kApp.friendHandler.myGroups) {
+        if ([group.groupId isEqualToString:self.chatGroupId]) {
+            self.chatGroup = group;
+        }
+    }
+    self.label_title.text = [NSString stringWithFormat:@"%@/%i",self.chatGroup.groupName,(int)(self.chatGroup.memberCount)];
+    
+    //初始化datasource
+    self.dataSource = [[NSMutableArray alloc]init];
+    NSDictionary* groupMemberDic = [kApp.friendHandler.groupNeedRefresh objectForKey:self.chatGroupId];
+    NSArray *keys = [groupMemberDic allKeys];
+    for(NSString* key in keys){
+        NSDictionary* dic = [groupMemberDic objectForKey:key];
+        [self.dataSource addObject:dic];
+    }
+    
     // Do any additional setup after loading the view from its nib.
 //    [self displayLoading];
 //    [[EaseMob sharedInstance].chatManager asyncFetchGroupInfo:self.chatGroupId completion:^(EMGroup *group, EMError *error) {
@@ -94,10 +113,21 @@
         self.tableview.frame = CGRectMake(frame_tableview.origin.x, frame_tableview.origin.y, 320, 44*4);
     }
     [self.tableview reloadData];
-    [self refreshGroupinfo];
-    
+//    [self refreshGroupinfo];
+    [self refreshMemberView];
     [self registerNotifications];
     
+    
+    //同时也得到一下环信的组，不用显示状态，失败就算了。
+    [[EaseMob sharedInstance].chatManager asyncFetchGroupInfo:self.chatGroupId completion:^(EMGroup *group, EMError *error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (!error) {
+                self.hxgroup = group;
+                NSLog(@"环信群组获取成功");
+                [self.tableview reloadData];
+            }
+        });
+    } onQueue:nil];
     
 }
 - (void)amIOwner{
@@ -113,7 +143,7 @@
     }
 }
 - (void)refreshGroupinfo{
-    self.label_title.text = [NSString stringWithFormat:@"%@/%i",self.chatGroup.groupSubject,(int)(self.chatGroup.groupOccupantsCount)];
+    self.label_title.text = [NSString stringWithFormat:@"%@/%i",self.chatGroup.groupName,(int)(self.chatGroup.memberCount)];
     //获取所有成员
     NSMutableDictionary* params = [[NSMutableDictionary alloc]init];
     NSString* uid = [NSString stringWithFormat:@"%@",[kApp.userInfoDic objectForKey:@"uid"]];
@@ -151,7 +181,6 @@
             [kApp.friendHandler.groupIsShareLocation addObject:self.chatGroupId];
         }
     }
-    
 }
 - (void)refreshMemberView{
     //先删除所有按钮
@@ -194,22 +223,23 @@
         
         NSDictionary* memberInfo = [self.dataSource objectAtIndex:i];
         if([memberInfo objectForKey:@"imgpath"] != nil && ![[memberInfo objectForKey:@"imgpath"] isEqualToString:@""]){//有头像url
-            NSString* fullurl = [NSString stringWithFormat:@"%@%@",kApp.imageurl,[memberInfo objectForKey:@"imgpath"]];
-            __block UIImage* image = [kApp.avatarDic objectForKey:fullurl];
-            if(image != nil){//缓存中有
-                [memButton setBackgroundImage:image forState:UIControlStateNormal];
-            }else{//下载
-                NSURL *url = [NSURL URLWithString:fullurl];
-                __block ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
-                [request setCompletionBlock :^{
-                    image = [[UIImage alloc] initWithData:[request responseData]];
-                    if(image != nil){
-                        [memButton setBackgroundImage:image forState:UIControlStateNormal];
-                        [kApp.avatarDic setObject:image forKey:fullurl];
-                    }
-                }];
-                [request startAsynchronous ];
-            }
+//            NSString* fullurl = [NSString stringWithFormat:@"%@%@",kApp.imageurl,[memberInfo objectForKey:@"imgpath"]];
+//            __block UIImage* image = [kApp.avatarDic objectForKey:fullurl];
+//            if(image != nil){//缓存中有
+//                [memButton setBackgroundImage:image forState:UIControlStateNormal];
+//            }else{//下载
+//                NSURL *url = [NSURL URLWithString:fullurl];
+//                __block ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
+//                [request setCompletionBlock :^{
+//                    image = [[UIImage alloc] initWithData:[request responseData]];
+//                    if(image != nil){
+//                        [memButton setBackgroundImage:image forState:UIControlStateNormal];
+//                        [kApp.avatarDic setObject:image forKey:fullurl];
+//                    }
+//                }];
+//                [request startAsynchronous ];
+//            }
+            [kApp.avatarManager setImageToButton:memButton fromUrl:[memberInfo objectForKey:@"imgpath"]];
         }
     }
     //增加addmember按钮
@@ -323,8 +353,10 @@
         {
             NSLog(@"增加成员");
             [CNUtil appendUserOperation:@"点击增加成员按钮"];
-            ContactSelectionViewController *selectionController = [[ContactSelectionViewController alloc] initWithBlockSelectedUsernames:self.chatGroup.occupants];
-            NSLog(@"self.chatGroup.occupants is %@",self.chatGroup.occupants);
+            NSDictionary* groupMemberDic = [kApp.friendHandler.groupNeedRefresh objectForKey:self.chatGroupId];
+            NSArray *keys = [groupMemberDic allKeys];
+            ContactSelectionViewController *selectionController = [[ContactSelectionViewController alloc] initWithBlockSelectedUsernames:keys];
+            NSLog(@"keys is %@",keys);
             selectionController.delegate = self;
             [self.navigationController pushViewController:selectionController animated:YES];
             break;
@@ -400,7 +432,7 @@
         {
             cell.label_title.text = @"接收并提示跑团消息";
             cell.myswitch.hidden = NO;
-            cell.myswitch.on = self.chatGroup.isPushNotificationEnabled;
+            cell.myswitch.on = self.hxgroup.isPushNotificationEnabled;
             cell.accessoryType = UITableViewCellAccessoryNone;
             [cell.myswitch addTarget:self action:@selector(switchValueChanged:) forControlEvents:UIControlEventValueChanged];
             break;
@@ -530,7 +562,12 @@
             ((UISwitch*)sender).on = YES;
         }
     }else{
-        [self isIgnoreGroup:!((UISwitch*)sender).isOn];
+        if(self.hxgroup != nil){
+            [self isIgnoreGroup:!((UISwitch*)sender).isOn];
+        }else{
+            [kApp.window makeToast:@"设置失败，请稍后重试~"];
+        }
+        
     }
 }
 - (void)isIgnoreGroup:(BOOL)isIgnore
@@ -597,6 +634,7 @@
     [CNUtil showAlert:mes];
 }
 - (void)delMemberDidSuccess:(NSDictionary *)resultDic{
+    [self hideLoading];
     NSString* nickname = [[self.dataSource objectAtIndex:self.handleIndex] objectForKey:@"nickname"];
 //    NSString* phone = [[self.dataSource objectAtIndex:self.handleIndex] objectForKey:@"phone"];
 //    NSArray* occupants = [[NSArray alloc]initWithObjects:phone, nil];
@@ -615,23 +653,24 @@
 //    } onQueue:nil];
     
     
-    [[EaseMob sharedInstance].chatManager asyncFetchGroupInfo:self.chatGroupId completion:^(EMGroup *group, EMError *error) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self hideLoading];
-            if (!error) {
-                self.chatGroup = group;
+//    [[EaseMob sharedInstance].chatManager asyncFetchGroupInfo:self.chatGroupId completion:^(EMGroup *group, EMError *error) {
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [self hideLoading];
+//            if (!error) {
+//                self.chatGroup = group;
+    
                 [kApp.window makeToast:[NSString stringWithFormat:@"已删除%@",nickname]];
                 [self.dataSource removeObjectAtIndex:self.handleIndex];
-                self.label_title.text = [NSString stringWithFormat:@"%@/%i",self.chatGroup.groupSubject,(int)(self.chatGroup.groupOccupantsCount)];
+                self.label_title.text = [NSString stringWithFormat:@"%@/%i",self.chatGroup.groupName,(int)(self.chatGroup.memberCount)];
                 [self refreshMemberView];
-            }
-            else{
-                NSLog(@"获取群详细信息出错");
-                [CNUtil showAlert:@"您当前网络似乎不太好，请检查网络后重试。"];
-                [self hideLoading];
-            }
-        });
-    } onQueue:nil];
+//            }
+//            else{
+//                NSLog(@"获取群详细信息出错");
+//                [CNUtil showAlert:@"您当前网络似乎不太好，请检查网络后重试。"];
+//                [self hideLoading];
+//            }
+//        });
+//    } onQueue:nil];
     
 }
 - (void)exitGroupDidFailed:(NSString *)mes{
@@ -703,28 +742,29 @@
 }
 - (void)addMemberDidSuccess:(NSDictionary *)resultDic{
     [kApp.window makeToast:@"添加成功"];
-    //添加成员之后更新self.chatGroup
-    [[EaseMob sharedInstance].chatManager asyncFetchGroupInfo:self.chatGroupId completion:^(EMGroup *group, EMError *error) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (!error) {
-                self.chatGroup = group;
-                //获取所有成员，刷新列表
-                [self refreshGroupinfo];
-            }
-            else{
-                [self displayLoading];
-                NSLog(@"获取群详细信息出错");
-                [CNUtil showAlert:@"您当前网络似乎不太好，请检查网络后重试。"];
-            }
-        });
-    } onQueue:nil];
+//    //添加成员之后更新self.chatGroup
+//    [[EaseMob sharedInstance].chatManager asyncFetchGroupInfo:self.chatGroupId completion:^(EMGroup *group, EMError *error) {
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            if (!error) {
+//                self.chatGroup = group;
+//                //获取所有成员，刷新列表
+//                [self refreshGroupinfo];
+//            }
+//            else{
+//                [self displayLoading];
+//                NSLog(@"获取群详细信息出错");
+//                [CNUtil showAlert:@"您当前网络似乎不太好，请检查网络后重试。"];
+//            }
+//        });
+//    } onQueue:nil];
+    [self refreshGroupinfo];
 }
 - (void)addMemberDidFailed:(NSString *)mes{
     [self hideLoading];
     [CNUtil showAlert:mes];
 }
 - (void)changeNameDidSuccess:(NSString *)name{
-    self.label_title.text = [NSString stringWithFormat:@"%@/%i",name,(int)(self.chatGroup.groupOccupantsCount)];
+    self.label_title.text = [NSString stringWithFormat:@"%@/%i",name,(int)(self.chatGroup.memberCount)];
 }
 - (void)displayLoading{
     self.loadingImage.hidden = NO;

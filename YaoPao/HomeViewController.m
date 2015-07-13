@@ -27,6 +27,7 @@
 #import "SBJson.h"
 #import "GCDAsyncUdpSocket.h"
 #import "CNUtil.h"
+#import "AvatarManager.h"
 
 @interface HomeViewController ()
 
@@ -234,20 +235,21 @@ NSString* dayOrNight;
         NSString* imgpath = [kApp.userInfoDic objectForKey:@"imgpath"];
         if(imgpath != nil){
             //显示头像
-            NSData* imageData = kApp.imageData;
-            if(imageData){
-                self.image_avatar.image = [[UIImage alloc] initWithData:imageData];
-            }else{
-                NSString *avatar = imgpath;
-                NSString* imageURL = [NSString stringWithFormat:@"%@%@",kApp.imageurl,avatar];
-                NSLog(@"avatar is %@",imageURL);
-                NSURL *url = [NSURL URLWithString:imageURL];
-                ASIHTTPRequest *Imagerequest = [ASIHTTPRequest requestWithURL:url];
-                Imagerequest.tag = 1;
-                Imagerequest.timeOutSeconds = 15;
-                [Imagerequest setDelegate:self];
-                [Imagerequest startAsynchronous];
-            }
+//            NSData* imageData = kApp.imageData;
+//            if(imageData){
+//                self.image_avatar.image = [[UIImage alloc] initWithData:imageData];
+//            }else{
+//                NSString *avatar = imgpath;
+//                NSString* imageURL = [NSString stringWithFormat:@"%@%@",kApp.imageurl,avatar];
+//                NSLog(@"avatar is %@",imageURL);
+//                NSURL *url = [NSURL URLWithString:imageURL];
+//                ASIHTTPRequest *Imagerequest = [ASIHTTPRequest requestWithURL:url];
+//                Imagerequest.tag = 1;
+//                Imagerequest.timeOutSeconds = 15;
+//                [Imagerequest setDelegate:self];
+//                [Imagerequest startAsynchronous];
+//            }
+            [kApp.avatarManager setImageToImageView:self.image_avatar fromUrl:imgpath];
         }
     }else{//未登录状态
         self.image_avatar.image = [UIImage imageNamed:@"avatar_default.png"];
@@ -255,14 +257,6 @@ NSString* dayOrNight;
         if(kApp.isLogin == 2){
             self.label_username.text = @"正在登录...";
         }
-    }
-}
-#pragma -mark ASIHttpRequest delegate
-- (void)requestFinished:(ASIHTTPRequest *)request{
-    UIImage *image = [[UIImage alloc] initWithData:[request responseData]];
-    if(image){
-        self.image_avatar.image = image;
-        kApp.imageData = [request responseData];
     }
 }
 - (void)viewWillDisappear:(BOOL)animated
@@ -412,7 +406,6 @@ NSString* dayOrNight;
 - (IBAction)button_logout:(id)sender {
     kApp.isLogin = 0;
     kApp.userInfoDic = nil;
-    kApp.imageData = nil;
     NSString* filePath = [CNPersistenceHandler getDocument:@"userinfo.plist"];
     [CNPersistenceHandler DeleteSingleFile:filePath];
     [self initUI];

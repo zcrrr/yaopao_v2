@@ -44,6 +44,7 @@
 #import "FriendsHandler.h"
 #import "LoginDoneHandler.h"
 #import "GCDAsyncUdpSocket.h"
+#import "AvatarManager.h"
 
 @implementation CNAppDelegate
 @synthesize navVCList;
@@ -53,11 +54,11 @@
 @synthesize runManager;
 @synthesize cloudManager;
 @synthesize friendHandler;
+@synthesize avatarManager;
 @synthesize isLogin;
 @synthesize isLoginHX;
 @synthesize pid;
 @synthesize userInfoDic;
-@synthesize imageData;
 @synthesize vcodeSecond;
 @synthesize vcodeTimer;
 @synthesize locationHandler;
@@ -454,10 +455,26 @@
     self.cloudManager = [[CNCloudRecord alloc]init];
     self.friendHandler = [[FriendsHandler alloc]init];
     self.loginHandler = [[LoginDoneHandler alloc]init];
+    self.avatarManager = [[AvatarManager alloc]init];
+    [self.avatarManager initAvatarManager];
     self.friendHandler.friendList1NeedRefresh = YES;
     self.friendHandler.friendList2NeedRefresh = YES;
+#ifdef kTestFlight
     self.pid = [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
-    NSLog(@"pid is %@",pid);
+    NSString* filePath = [CNPersistenceHandler getDocument:@"pid.plist"];
+    NSMutableDictionary* dic = [NSMutableDictionary dictionaryWithContentsOfFile:filePath];
+    if(dic == nil){
+        dic = [[NSMutableDictionary alloc]init];
+    }else{
+        self.pid = [dic objectForKey:@"pid"];
+    }
+    [dic setObject:self.pid forKey:@"pid"];
+    [dic writeToFile:filePath atomically:YES];
+#else
+    self.pid = [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
+# endif
+    NSLog(@"self.pid is %@",self.pid);
+//    [CNUtil showAlert:self.pid];
     self.ua = [NSString stringWithFormat:@"I_%@,i_%@",[[UIDevice currentDevice] systemVersion],ClIENT_VERSION];
     NSLog(@"ua is %@",self.ua);
 //    kApp.geosHandler = [[CNTestGEOS alloc]init];

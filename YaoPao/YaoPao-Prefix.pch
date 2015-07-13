@@ -44,7 +44,7 @@
 #define kBoundary2 60
 //#define SIMULATORTEST
 //#define kInhouse
-#define kTestFlight
+//#define kTestFlight
 
 
 #define TAG_VERIFY_CODE 1

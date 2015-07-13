@@ -13,5 +13,6 @@
 @synthesize groupId;
 @synthesize groupName;
 @synthesize groupDesc;
+@synthesize memberCount;
 
 @end

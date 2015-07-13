@@ -85,6 +85,11 @@
         if(kApp.isLogin == 0){
             [kApp.window makeToast:@"请先登录~"];
             return;
+        }else{
+            if(kApp.isLoginHX != 1){
+                [kApp.window makeToast:@"当前网络不给力，请稍后重试~"];
+                return;
+            }
         }
     }
     [kApp showTab:tag];

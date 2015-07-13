@@ -95,6 +95,7 @@
 
 - (void)viewDidLoad
 {
+    [CNUtil appendUserOperation:@"进入双人聊天"];
     [super viewDidLoad];
     [self registerBecomeActive];
     // Do any additional setup after loading the view.

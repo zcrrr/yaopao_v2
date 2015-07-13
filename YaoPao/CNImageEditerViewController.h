@@ -18,6 +18,11 @@
 @class AdobeUXImageEditorViewController;
 @class RunClass;
 
+@protocol EditImageDelegate <NSObject>
+//登录接口成功或者失败的协议，如果失败了会有原因mes
+- (void)editImageDidSuccess;
+@end
+
 @interface CNImageEditerViewController : UIViewController<UIScrollViewDelegate,AdobeUXImageEditorViewControllerDelegate,addWaternDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,saveImageDelegate,buttonClickDelegate,combineImageDelegate>
 
 @property (strong ,nonatomic) RunClass* oneRun;
@@ -44,5 +49,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *button_edit;
 @property (weak, nonatomic) IBOutlet UIButton *button_save;
 @property (weak, nonatomic) IBOutlet UIButton *button_water;
+@property (strong, nonatomic) id<EditImageDelegate> delegate_editImage;
 
 @end

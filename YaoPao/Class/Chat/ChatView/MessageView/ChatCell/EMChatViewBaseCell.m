@@ -13,6 +13,7 @@
 #import "EMChatViewBaseCell.h"
 #import "UIImageView+EMWebCache.h"
 #import "ASIHTTPRequest.h"
+#import "AvatarManager.h"
 
 NSString *const kRouterEventChatHeadImageTapEventName = @"kRouterEventChatHeadImageTapEventName";
 
@@ -38,7 +39,7 @@ NSString *const kRouterEventChatHeadImageTapEventName = @"kRouterEventChatHeadIm
         _nameLabel = [[UILabel alloc] init];
         _nameLabel.backgroundColor = [UIColor clearColor];
         _nameLabel.textColor = [UIColor grayColor];
-        _nameLabel.textAlignment = NSTextAlignmentCenter;
+        _nameLabel.textAlignment = NSTextAlignmentLeft;
         _nameLabel.font = [UIFont systemFontOfSize:12];
         [self.contentView addSubview:_nameLabel];
         
@@ -55,7 +56,7 @@ NSString *const kRouterEventChatHeadImageTapEventName = @"kRouterEventChatHeadIm
     frame.origin.x = _messageModel.isSender ? (self.bounds.size.width - _headImageView.frame.size.width - HEAD_PADDING) : HEAD_PADDING;
     _headImageView.frame = frame;
     
-    _nameLabel.frame = CGRectMake(CGRectGetMinX(_headImageView.frame), CGRectGetMaxY(_headImageView.frame), CGRectGetWidth(_headImageView.frame), NAME_LABEL_HEIGHT);
+    _nameLabel.frame = CGRectMake(CGRectGetMinX(_headImageView.frame), CGRectGetMinY(_headImageView.frame)-NAME_LABEL_HEIGHT, CGRectGetWidth(_headImageView.frame)+100, NAME_LABEL_HEIGHT);
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
@@ -78,22 +79,23 @@ NSString *const kRouterEventChatHeadImageTapEventName = @"kRouterEventChatHeadIm
         _headImageView.image = [UIImage imageNamed:@"avatar_default.png"];
         return;
     }
-    NSString* fullurl = [NSString stringWithFormat:@"%@%@",kApp.imageurl,[messageModel.headImageURL absoluteString]];
-    __block UIImage* image = [kApp.avatarDic objectForKey:fullurl];
-    if(image != nil){//缓存中有
-        _headImageView.image = image;
-    }else{//下载
-        NSURL *url = [NSURL URLWithString:fullurl];
-        __block ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
-        [request setCompletionBlock :^{
-            image = [[UIImage alloc] initWithData:[request responseData]];
-            if(image != nil){
-                _headImageView.image = image;
-                [kApp.avatarDic setObject:image forKey:fullurl];
-            }
-        }];
-        [request startAsynchronous ];
-    }
+//    NSString* fullurl = [NSString stringWithFormat:@"%@%@",kApp.imageurl,[messageModel.headImageURL absoluteString]];
+//    __block UIImage* image = [kApp.avatarDic objectForKey:fullurl];
+//    if(image != nil){//缓存中有
+//        _headImageView.image = image;
+//    }else{//下载
+//        NSURL *url = [NSURL URLWithString:fullurl];
+//        __block ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
+//        [request setCompletionBlock :^{
+//            image = [[UIImage alloc] initWithData:[request responseData]];
+//            if(image != nil){
+//                _headImageView.image = image;
+//                [kApp.avatarDic setObject:image forKey:fullurl];
+//            }
+//        }];
+//        [request startAsynchronous ];
+//    }
+    [kApp.avatarManager setImageToImageView:_headImageView fromUrl:[messageModel.headImageURL absoluteString]];
     
     
 //    [self.headImageView sd_setImageWithURL:_messageModel.headImageURL placeholderImage:placeholderImage];

@@ -14,6 +14,7 @@
 #import "Toast+UIView.h"
 #import "FriendsHandler.h"
 #import "CNCustomButton.h"
+#import "AvatarManager.h"
 
 @interface FriendDetailViewController ()
 
@@ -29,23 +30,24 @@
     self.imageview_avatar.layer.cornerRadius = self.imageview_avatar.bounds.size.width/2;
     self.imageview_avatar.layer.masksToBounds = YES;
     if(self.friend.avatarUrlInYaoPao != nil && ![self.friend.avatarUrlInYaoPao isEqualToString:@""]){//有头像url
-        NSString* fullurl = [NSString stringWithFormat:@"%@%@",kApp.imageurl,self.friend.avatarUrlInYaoPao];
-        __block UIImage* image = [kApp.avatarDic objectForKey:fullurl];
-        if(image != nil){//缓存中有
-            NSLog(@"缓存中有");
-            self.imageview_avatar.image = image;
-        }else{//下载
-            NSURL *url = [NSURL URLWithString:fullurl];
-            __block ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
-            [request setCompletionBlock :^{
-                image = [[UIImage alloc] initWithData:[request responseData]];
-                if(image != nil){
-                    self.imageview_avatar.image = image;
-                    [kApp.avatarDic setObject:image forKey:fullurl];
-                }
-            }];
-            [request startAsynchronous ];
-        }
+//        NSString* fullurl = [NSString stringWithFormat:@"%@%@",kApp.imageurl,self.friend.avatarUrlInYaoPao];
+//        __block UIImage* image = [kApp.avatarDic objectForKey:fullurl];
+//        if(image != nil){//缓存中有
+//            NSLog(@"缓存中有");
+//            self.imageview_avatar.image = image;
+//        }else{//下载
+//            NSURL *url = [NSURL URLWithString:fullurl];
+//            __block ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
+//            [request setCompletionBlock :^{
+//                image = [[UIImage alloc] initWithData:[request responseData]];
+//                if(image != nil){
+//                    self.imageview_avatar.image = image;
+//                    [kApp.avatarDic setObject:image forKey:fullurl];
+//                }
+//            }];
+//            [request startAsynchronous ];
+//        }
+        [kApp.avatarManager setImageToImageView:self.imageview_avatar fromUrl:self.friend.avatarUrlInYaoPao];
     }
     self.label_name.text =  [NSString stringWithFormat:@"昵称:%@",self.friend.nameInYaoPao];
     self.label_phone.text = self.friend.phoneNO;

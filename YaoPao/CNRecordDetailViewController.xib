@@ -12,6 +12,7 @@
                 <outlet property="button_left" destination="lQ4-Fs-7rf" id="jvO-cA-0ch"/>
                 <outlet property="button_right" destination="el2-z5-g4N" id="gmV-c4-enV"/>
                 <outlet property="button_share" destination="YCq-Rb-Xub" id="PSJ-i8-AqP"/>
+                <outlet property="button_water" destination="siu-ND-d3G" id="PvJ-84-l2f"/>
                 <outlet property="image_mood" destination="xl0-yy-ZT9" id="BvC-h3-dch"/>
                 <outlet property="image_way" destination="5Ko-3j-iTc" id="KkL-Vm-eay"/>
                 <outlet property="imageview_type" destination="U92-wc-hG5" id="ABw-gd-Ht0"/>
@@ -288,8 +289,8 @@
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="siu-ND-d3G">
-                    <rect key="frame" x="14" y="521" width="293" height="42"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <rect key="frame" x="14" y="500" width="293" height="42"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
                     <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
                     <state key="normal" title="要跑水印相机" backgroundImage="button_green.png">

@@ -12,11 +12,13 @@
 #import "GroupSettingViewController.h"
 #import "CNNetworkHandler.h"
 #import "ChangeGroupNameViewController.h"
+#import "CNGroupInfo.h"
 
 
 @interface ZCGroupSettingViewController : UIViewController<IChatManagerDelegate, EMChooseViewDelegate,groupMemberDelegate,enableMyLocationInGroupDelegate,UITableViewDataSource,UITableViewDelegate,exitGroupDelegate,deleteGroupDelegate,addMemberDelegate,delMemberDelegate,changeNameDelegate>
 @property (strong, nonatomic) NSString* chatGroupId;
-@property (strong, nonatomic) EMGroup *chatGroup;
+@property (strong, nonatomic) CNGroupInfo *chatGroup;
+@property (strong, nonatomic) EMGroup* hxgroup;
 @property (assign, nonatomic) BOOL isOwner;
 @property (assign, nonatomic) BOOL isDelBtnDisplay;
 @property (assign, nonatomic) int handleIndex;

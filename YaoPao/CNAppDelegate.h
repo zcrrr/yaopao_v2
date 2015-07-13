@@ -18,6 +18,7 @@
 #import "EMSDKFull.h"
 @class GCDAsyncUdpSocket;
 @class LoginDoneHandler;
+@class AvatarManager;
 
 @interface CNAppDelegate : UIResponder <UIApplicationDelegate,IChatManagerDelegate>
 
@@ -31,6 +32,7 @@
 @property (strong, nonatomic) CNCloudRecord* cloudManager;
 @property (strong, nonatomic) FriendsHandler* friendHandler;
 @property (strong, nonatomic) LoginDoneHandler* loginHandler;
+@property (strong, nonatomic) AvatarManager* avatarManager;
 
 @property (nonatomic, strong) NSString* pid;
 @property (nonatomic, strong) NSString* ua;
@@ -43,7 +45,6 @@
 @property (assign, nonatomic) int isLogin;//0-未登录，1-已经登录，2-正在登录
 @property (assign, nonatomic) int isLoginHX;//环信是否登录 0-未登录 1-已登录
 @property (strong, nonatomic) NSMutableDictionary* userInfoDic;
-@property (nonatomic, strong) NSData* imageData;//保存用户头像
 @property (nonatomic, assign) BOOL hasMessage;
 @property (assign, nonatomic) int vcodeSecond;
 @property (strong, nonatomic) NSTimer* vcodeTimer;

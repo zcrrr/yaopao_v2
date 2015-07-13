@@ -13,6 +13,7 @@
 #import "ColorValue.h"
 #import "CNCustomButton.h"
 #import "CNUtil.h"
+#import "AvatarManager.h"
 
 @interface CNUserinfoViewController ()
 
@@ -135,31 +136,10 @@
     }
     NSString* imgpath = [kApp.userInfoDic objectForKey:@"imgpath"];
     if(imgpath != nil){
-        //显示头像
-        NSData* imageData = kApp.imageData;
-        if(imageData){
-            [self.button_avatar setBackgroundImage:[[UIImage alloc] initWithData:imageData] forState:UIControlStateNormal];
-        }else{
-            NSString *avatar = imgpath;
-            NSString* imageURL = [NSString stringWithFormat:@"%@%@",kApp.imageurl,avatar];
-            NSLog(@"avatar is %@",imageURL);
-            NSURL *url = [NSURL URLWithString:imageURL];
-            ASIHTTPRequest *Imagerequest = [ASIHTTPRequest requestWithURL:url];
-            Imagerequest.tag = 1;
-            Imagerequest.timeOutSeconds = 15;
-            [Imagerequest setDelegate:self];
-            [Imagerequest startAsynchronous];
-        }
+        [kApp.avatarManager setImageToButton:self.button_avatar fromUrl:imgpath];
     }
 }
-#pragma -mark ASIHttpRequest delegate
-- (void)requestFinished:(ASIHTTPRequest *)request{
-    UIImage *image = [[UIImage alloc] initWithData:[request responseData]];
-    if(image){
-        [self.button_avatar setBackgroundImage:image forState:UIControlStateNormal];
-        kApp.imageData = [request responseData];
-    }
-}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -357,9 +337,6 @@
     //新头像同步到服务器
     NSMutableDictionary* params = [[NSMutableDictionary alloc]init];
     NSData* data_image = UIImageJPEGRepresentation(image_compressed, 1);
-    //本地保存一下
-    kApp.imageData = data_image;
-    
 //    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES);
 //    NSString *filePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:[NSString stringWithFormat:@"test.png"]];   // 保存文件的名称
 //    BOOL result = [UIImagePNGRepresentation(image_compressed)writeToFile: filePath atomically:YES];
@@ -374,6 +351,7 @@
     [self displayLoading];
 }
 - (void)updateAvatarDidSuccess:(NSDictionary *)resultDic{
+    [kApp.userInfoDic setObject:[resultDic objectForKey:@"serverImagePathsSmall"] forKey:@"imgpath"];
     [CNUtil showAlert:@"头像更新成功"];
     [self hideLoading];
 }
