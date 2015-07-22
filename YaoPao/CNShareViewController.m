@@ -484,10 +484,15 @@ extern NSMutableArray* imageArray;
     return viewImage;
 }
 - (UIImage*)screenshot:(UIView*)view{
+    self.label_whichpage.hidden = YES;
+    self.imageview_page.hidden = YES;
     UIGraphicsBeginImageContextWithOptions(view.frame.size, NO, 0.0);
     [view.layer renderInContext:UIGraphicsGetCurrentContext()];
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
+    
+    self.label_whichpage.hidden = NO;
+    self.imageview_page.hidden = NO;
     return image;
 }
 @end

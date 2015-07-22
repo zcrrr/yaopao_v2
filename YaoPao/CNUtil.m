@@ -268,7 +268,8 @@
     AVAuthorizationStatus  authorizationStatus = [AVCaptureDevice authorizationStatusForMediaType:mediaType];
     if (authorizationStatus == AVAuthorizationStatusRestricted|| authorizationStatus == AVAuthorizationStatusDenied) {
         NSLog(@"用户禁止了摄像头");
-        [CNUtil showAlert:@"请前往“设置-隐私-相机”，允许要跑访问您的摄像头"];
+        NSString* message = kApp.isRunning == 1?@"请前往“设置-隐私-相机”，允许要跑访问您的相机\n\n建议您完成运动之后再修改“要跑”的隐私设置，这是由于在程序运行时修改该程序的隐私设置，iPhone会强行停止该程序，那么该次运动记录将不会被保存。":@"请前往“设置-隐私-相机”，允许要跑访问您的相机";
+        [CNUtil showAlert:message];
         return NO;
     }else{
         return YES;

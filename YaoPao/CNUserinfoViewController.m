@@ -303,12 +303,14 @@
         case 0:
         {
             NSLog(@"拍照");
-            pickC.sourceType = UIImagePickerControllerSourceTypeCamera;
-            pickC.allowsEditing = YES;
-            pickC.delegate = self;
-            [self presentViewController:pickC animated:YES completion:^{
-                
-            }];
+            if([CNUtil checkUserPermission]){
+                pickC.sourceType = UIImagePickerControllerSourceTypeCamera;
+                pickC.allowsEditing = YES;
+                pickC.delegate = self;
+                [self presentViewController:pickC animated:YES completion:^{
+                    
+                }];
+            }
             break;
         }
         case 1:

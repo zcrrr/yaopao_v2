@@ -41,6 +41,9 @@
             __block ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
             [request setCompletionBlock :^{
                 UIImage* image = [[UIImage alloc] initWithData:[request responseData]];
+                if(image == nil){
+                    iv.image = [UIImage imageNamed:@"avatar_default.png"];
+                }
                 iv.image = image;
                 [self.avatarDic setObject:image forKey:imagename];
                 NSString *imageFullPath = [NSString stringWithFormat:@"%@/%@",self.dirPath,imagename];
@@ -49,6 +52,7 @@
             [request startAsynchronous ];
         }
     }
+    NSLog(@"%@安全结束",imagename);
 }
 
 - (void)setImageToButton:(UIButton*)button fromUrl:(NSString*)imageURL{

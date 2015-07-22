@@ -253,7 +253,6 @@ extern NSMutableArray* imageArray;
     annotation_end.coordinate = CLLocationCoordinate2DMake(encryptionPoint_end.latitude, encryptionPoint_end.longitude);
     annotation_end.title = @"end";
     [self.mapView addAnnotation:annotation_end];
-    
     //先画底色：
     CLLocationCoordinate2D polylineCoords_backgound[pointCount];
     CLLocationCoordinate2D polylineCoords_encryption[pointCount];
@@ -344,7 +343,7 @@ extern NSMutableArray* imageArray;
     CLLocationCoordinate2D center = CLLocationCoordinate2DMake((min_lat+max_lat)/2, (min_lon+max_lon)/2);
     MACoordinateSpan span = MACoordinateSpanMake(max_lat-min_lat+0.005, max_lon-min_lon+0.005);
     MACoordinateRegion region = MACoordinateRegionMake(center, span);
-    [self.mapView setRegion:region animated:YES];
+    [self.mapView setRegion:region animated:NO];
 }
 - (MAOverlayView *)mapView:(MAMapView *)mapView viewForOverlay:(id)overlay
 {
@@ -458,7 +457,6 @@ extern NSMutableArray* imageArray;
     annotation_end.coordinate = CLLocationCoordinate2DMake(endPoint.lat, endPoint.lon);
     annotation_end.title = @"end";
     [self.mapView addAnnotation:annotation_end];
-    
     
     int j = 0;
     int i = 0;

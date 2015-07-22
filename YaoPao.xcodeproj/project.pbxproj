@@ -163,7 +163,6 @@
 		814AF1EE1AB8639B00CD920B /* arrow_slider.png in Resources */ = {isa = PBXBuildFile; fileRef = 814AF1ED1AB8639B00CD920B /* arrow_slider.png */; };
 		814CD0371AB66C9200D4C526 /* air.png in Resources */ = {isa = PBXBuildFile; fileRef = 814CD01A1AB66C9200D4C526 /* air.png */; };
 		814CD0381AB66C9200D4C526 /* arrow_right.png in Resources */ = {isa = PBXBuildFile; fileRef = 814CD01B1AB66C9200D4C526 /* arrow_right.png */; };
-		814CD0391AB66C9200D4C526 /* back_v2.png in Resources */ = {isa = PBXBuildFile; fileRef = 814CD01C1AB66C9200D4C526 /* back_v2.png */; };
 		814CD03A1AB66C9200D4C526 /* bg_home.png in Resources */ = {isa = PBXBuildFile; fileRef = 814CD01D1AB66C9200D4C526 /* bg_home.png */; };
 		814CD03B1AB66C9200D4C526 /* countdown.png in Resources */ = {isa = PBXBuildFile; fileRef = 814CD01E1AB66C9200D4C526 /* countdown.png */; };
 		814CD03C1AB66C9200D4C526 /* go_map_on.png in Resources */ = {isa = PBXBuildFile; fileRef = 814CD01F1AB66C9200D4C526 /* go_map_on.png */; };
@@ -272,7 +271,7 @@
 		8158E0301AE89ABA00B30228 /* way5_hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 8158E0261AE89ABA00B30228 /* way5_hd.png */; };
 		8158E0341AE925CE00B30228 /* CNImageEditerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8158E0321AE925CE00B30228 /* CNImageEditerViewController.m */; };
 		8158E0351AE925CE00B30228 /* CNImageEditerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8158E0331AE925CE00B30228 /* CNImageEditerViewController.xib */; };
-		8158F7391B523D9B006927A6 /* back_v2_big2.png in Resources */ = {isa = PBXBuildFile; fileRef = 8158F7381B523D9B006927A6 /* back_v2_big2.png */; };
+		8158F7391B523D9B006927A6 /* back_v2.png in Resources */ = {isa = PBXBuildFile; fileRef = 8158F7381B523D9B006927A6 /* back_v2.png */; };
 		815EE95B1ACA2FCF00CF1BDA /* mood1.png in Resources */ = {isa = PBXBuildFile; fileRef = 815EE9471ACA2FCF00CF1BDA /* mood1.png */; };
 		815EE95C1ACA2FCF00CF1BDA /* mood1_h.png in Resources */ = {isa = PBXBuildFile; fileRef = 815EE9481ACA2FCF00CF1BDA /* mood1_h.png */; };
 		815EE95D1ACA2FCF00CF1BDA /* mood2.png in Resources */ = {isa = PBXBuildFile; fileRef = 815EE9491ACA2FCF00CF1BDA /* mood2.png */; };
@@ -1273,7 +1272,6 @@
 		814AF1ED1AB8639B00CD920B /* arrow_slider.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow_slider.png; sourceTree = "<group>"; };
 		814CD01A1AB66C9200D4C526 /* air.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = air.png; sourceTree = "<group>"; };
 		814CD01B1AB66C9200D4C526 /* arrow_right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow_right.png; sourceTree = "<group>"; };
-		814CD01C1AB66C9200D4C526 /* back_v2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = back_v2.png; sourceTree = "<group>"; };
 		814CD01D1AB66C9200D4C526 /* bg_home.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg_home.png; sourceTree = "<group>"; };
 		814CD01E1AB66C9200D4C526 /* countdown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = countdown.png; sourceTree = "<group>"; };
 		814CD01F1AB66C9200D4C526 /* go_map_on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = go_map_on.png; sourceTree = "<group>"; };
@@ -1404,7 +1402,7 @@
 		8158E0311AE925CE00B30228 /* CNImageEditerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNImageEditerViewController.h; sourceTree = "<group>"; };
 		8158E0321AE925CE00B30228 /* CNImageEditerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNImageEditerViewController.m; sourceTree = "<group>"; };
 		8158E0331AE925CE00B30228 /* CNImageEditerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CNImageEditerViewController.xib; sourceTree = "<group>"; };
-		8158F7381B523D9B006927A6 /* back_v2_big2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = back_v2_big2.png; sourceTree = "<group>"; };
+		8158F7381B523D9B006927A6 /* back_v2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = back_v2.png; sourceTree = "<group>"; };
 		815EE9471ACA2FCF00CF1BDA /* mood1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mood1.png; sourceTree = "<group>"; };
 		815EE9481ACA2FCF00CF1BDA /* mood1_h.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mood1_h.png; sourceTree = "<group>"; };
 		815EE9491ACA2FCF00CF1BDA /* mood2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mood2.png; sourceTree = "<group>"; };
@@ -2958,7 +2956,7 @@
 		814DAD091AB429B60020416F /* v2 */ = {
 			isa = PBXGroup;
 			children = (
-				8158F7381B523D9B006927A6 /* back_v2_big2.png */,
+				8158F7381B523D9B006927A6 /* back_v2.png */,
 				8165B2BA1B302AF500678B5F /* water_on.png */,
 				8165B2BB1B302AF500678B5F /* water.png */,
 				816965CA1B15544C00321A40 /* ad_placeholder.png */,
@@ -3028,7 +3026,6 @@
 				814CD0631AB6A8BF00D4C526 /* avatar_default.png */,
 				814CD01A1AB66C9200D4C526 /* air.png */,
 				814CD01B1AB66C9200D4C526 /* arrow_right.png */,
-				814CD01C1AB66C9200D4C526 /* back_v2.png */,
 				814CD01D1AB66C9200D4C526 /* bg_home.png */,
 				814CD01E1AB66C9200D4C526 /* countdown.png */,
 				814CD01F1AB66C9200D4C526 /* go_map_on.png */,
@@ -5470,7 +5467,6 @@
 				9A11A88B19E290F100937C1B /* 120223.mp3 in Resources */,
 				8196B4C91AC94A6C00130F18 /* weather_icon_n_9.png in Resources */,
 				81686BCB1ADFBA9E006BA130 /* chat_location_preview.png in Resources */,
-				814CD0391AB66C9200D4C526 /* back_v2.png in Resources */,
 				8158E02E1AE89ABA00B30228 /* way3_hd.png in Resources */,
 				814441D61ACAEF3C00A6067E /* weather_marker_w_d_17.png in Resources */,
 				9A11A89619E290F100937C1B /* 131105.mp3 in Resources */,
@@ -5494,7 +5490,7 @@
 				8196B4A81AC94A6C00130F18 /* weather_icon_d_9.png in Resources */,
 				8196B4C81AC94A6C00130F18 /* weather_icon_n_8.png in Resources */,
 				814441AB1ACAEF3C00A6067E /* weather_marker_b_d_8.png in Resources */,
-				8158F7391B523D9B006927A6 /* back_v2_big2.png in Resources */,
+				8158F7391B523D9B006927A6 /* back_v2.png in Resources */,
 				81B23AE21AF89E9700A51778 /* menu0_on.png in Resources */,
 				819E3A891AEE32E200189940 /* button_red_on.png in Resources */,
 				814441BE1ACAEF3C00A6067E /* weather_marker_b_n_25.png in Resources */,

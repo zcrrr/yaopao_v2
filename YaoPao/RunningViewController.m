@@ -173,8 +173,8 @@ extern NSMutableArray* imageArray;
                                                      radius:45
                                                    duration:1
                                                 strokeWidth:4
-                                                  ringColor:[UIColor greenColor]
-                                                strokeColor:[UIColor whiteColor]
+                                                  ringColor:[UIColor lightGrayColor]
+                                                strokeColor:[UIColor greenColor]
                                                 lockedImage:[UIImage imageNamed:@"running_start.png"]
                                               unlockedImage:[UIImage imageNamed:@"running_pause.png"]
                                                    isLocked:isPause

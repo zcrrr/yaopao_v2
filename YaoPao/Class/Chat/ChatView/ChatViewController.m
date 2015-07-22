@@ -113,7 +113,7 @@
     label_title.textColor = [UIColor whiteColor];
     [topbar addSubview:label_title];
     UIButton * button_back = [UIButton buttonWithType:UIButtonTypeCustom];
-    button_back.frame = CGRectMake(6, 26, 21, 29);
+    button_back.frame = CGRectMake(0, 20, 43, 43);
     [button_back setBackgroundImage:[UIImage imageNamed:@"back_v2.png"] forState:UIControlStateNormal];
     button_back.tag = 0;
     [button_back addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
@@ -882,8 +882,9 @@
 #elif TARGET_OS_IPHONE
     self.imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
     self.imagePicker.mediaTypes = @[(NSString *)kUTTypeImage];
-    [self presentViewController:self.imagePicker animated:YES completion:NULL];
-    [CNUtil checkUserPermission];
+    if([CNUtil checkUserPermission]){
+        [self presentViewController:self.imagePicker animated:YES completion:NULL];
+    }
 #endif
 }
 
@@ -905,8 +906,9 @@
 #elif TARGET_OS_IPHONE
     self.imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
     self.imagePicker.mediaTypes = @[(NSString *)kUTTypeMovie];
-    [self presentViewController:self.imagePicker animated:YES completion:NULL];
-    [CNUtil checkUserPermission];
+    if([CNUtil checkUserPermission]){
+        [self presentViewController:self.imagePicker animated:YES completion:NULL];
+    }
 #endif
 }
 
@@ -1000,9 +1002,9 @@
              [self sendAudioMessage:aChatVoice];
          }else{
              if (error.code == EMErrorAudioRecordNotStarted) {
-                 [self showHint:error.domain yOffset:-40];
+                 [self showHint:@"录音还没开始" yOffset:-40];
              } else {
-                 [self showHint:error.domain];
+                 [self showHint:@"录音时间太短"];
              }
          }
          
