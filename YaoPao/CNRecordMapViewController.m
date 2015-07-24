@@ -249,7 +249,7 @@
     CLLocationCoordinate2D center = CLLocationCoordinate2DMake((min_lat+max_lat)/2, (min_lon+max_lon)/2);
     MACoordinateSpan span = MACoordinateSpanMake(max_lat-min_lat+0.005, max_lon-min_lon+0.005);
     MACoordinateRegion region = MACoordinateRegionMake(center, span);
-    [self.mapView setRegion:region animated:YES];
+    [self.mapView setRegion:region animated:NO];
     
     
     

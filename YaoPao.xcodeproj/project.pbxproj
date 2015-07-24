@@ -780,6 +780,8 @@
 		81CF74381AC839A000670DE9 /* map_pop.png in Resources */ = {isa = PBXBuildFile; fileRef = 81CF74371AC839A000670DE9 /* map_pop.png */; };
 		81D762991ADD68A300B79558 /* InviteFriendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 81D762971ADD68A300B79558 /* InviteFriendViewController.m */; };
 		81D7629A1ADD68A300B79558 /* InviteFriendViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 81D762981ADD68A300B79558 /* InviteFriendViewController.xib */; };
+		81D7A8E41B61E4A4002CD588 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81D7A8E31B61E4A4002CD588 /* SenTestingKit.framework */; };
+		81D7A8E61B61E4FA002CD588 /* tingyunApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81D7A8E51B61E4FA002CD588 /* tingyunApp.framework */; };
 		81E68D9A1AF9F7FF0000C599 /* AssetHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 81E68D901AF9F7FF0000C599 /* AssetHelper.m */; };
 		81E68D9B1AF9F7FF0000C599 /* DoAlbumCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 81E68D921AF9F7FF0000C599 /* DoAlbumCell.m */; };
 		81E68D9C1AF9F7FF0000C599 /* DoAlbumCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 81E68D931AF9F7FF0000C599 /* DoAlbumCell.xib */; };
@@ -2163,6 +2165,8 @@
 		81D762961ADD68A300B79558 /* InviteFriendViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InviteFriendViewController.h; sourceTree = "<group>"; };
 		81D762971ADD68A300B79558 /* InviteFriendViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InviteFriendViewController.m; sourceTree = "<group>"; };
 		81D762981ADD68A300B79558 /* InviteFriendViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InviteFriendViewController.xib; sourceTree = "<group>"; };
+		81D7A8E31B61E4A4002CD588 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		81D7A8E51B61E4FA002CD588 /* tingyunApp.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = tingyunApp.framework; sourceTree = "<group>"; };
 		81E68D8F1AF9F7FF0000C599 /* AssetHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssetHelper.h; sourceTree = "<group>"; };
 		81E68D901AF9F7FF0000C599 /* AssetHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AssetHelper.m; sourceTree = "<group>"; };
 		81E68D911AF9F7FF0000C599 /* DoAlbumCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DoAlbumCell.h; sourceTree = "<group>"; };
@@ -2588,6 +2592,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				81D7A8E41B61E4A4002CD588 /* SenTestingKit.framework in Frameworks */,
 				8143F3D31ADE834C00BAF95E /* libresolv.dylib in Frameworks */,
 				8143F3D11ADE832F00BAF95E /* libiconv.dylib in Frameworks */,
 				8143F3CF1ADE831800BAF95E /* libxml2.dylib in Frameworks */,
@@ -2612,6 +2617,7 @@
 				816869271ADF96F8006BA130 /* libEaseMobClientSDK.a in Frameworks */,
 				9A835B9D1A70E4E800B30174 /* ShareSDK.framework in Frameworks */,
 				9A54A7C31A3EE50400D09D80 /* ImageIO.framework in Frameworks */,
+				81D7A8E61B61E4FA002CD588 /* tingyunApp.framework in Frameworks */,
 				9A54A7C11A3EE4FD00D09D80 /* GLKit.framework in Frameworks */,
 				9A54A7BF1A3EE4ED00D09D80 /* CoreData.framework in Frameworks */,
 				9A835B931A70E4E800B30174 /* WeChatConnection.framework in Frameworks */,
@@ -2866,6 +2872,14 @@
 				8144418B1ACAEF3C00A6067E /* weather_marker_w_n_9.png */,
 			);
 			path = night;
+			sourceTree = "<group>";
+		};
+		8145E6711B61E35F008ACD5F /* tingyun */ = {
+			isa = PBXGroup;
+			children = (
+				81D7A8E51B61E4FA002CD588 /* tingyunApp.framework */,
+			);
+			name = tingyun;
 			sourceTree = "<group>";
 		};
 		814CD0651AB6B45E00D4C526 /* level2Page */ = {
@@ -4760,6 +4774,7 @@
 		9A4A13B31973FFD500F2EF04 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				81D7A8E31B61E4A4002CD588 /* SenTestingKit.framework */,
 				8143F3D21ADE834C00BAF95E /* libresolv.dylib */,
 				8143F3D01ADE832F00BAF95E /* libiconv.dylib */,
 				8143F3CE1ADE831800BAF95E /* libxml2.dylib */,
@@ -4903,6 +4918,7 @@
 		9A4A13EC1974019B00F2EF04 /* third */ = {
 			isa = PBXGroup;
 			children = (
+				8145E6711B61E35F008ACD5F /* tingyun */,
 				81E68D8E1AF9F7FF0000C599 /* DoImagePicker */,
 				818DA9171ACADB9F0012F45A /* ad */,
 				816D51961ABAC94C005A395E /* adobe creative */,
@@ -6581,6 +6597,7 @@
 					"$(PROJECT_DIR)/YaoPao/Core",
 					/Users/zhangchi1/Desktop/xcode_projects/AdobeCreativeSDKFrameworks,
 					"$(PROJECT_DIR)/YaoPao/SMS_SDK",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "YaoPao/YaoPao-Prefix.pch";
@@ -6633,6 +6650,7 @@
 					"$(PROJECT_DIR)/YaoPao/Core",
 					/Users/zhangchi1/Desktop/xcode_projects/AdobeCreativeSDKFrameworks,
 					"$(PROJECT_DIR)/YaoPao/SMS_SDK",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "YaoPao/YaoPao-Prefix.pch";
