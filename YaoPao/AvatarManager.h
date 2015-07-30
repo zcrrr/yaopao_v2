@@ -18,6 +18,7 @@
 - (void)setImageToButton:(UIButton*)button fromUrl:(NSString*)imageURL;
 - (UIImage*)getMyAvatar;
 - (void)initAvatarManager;
+- (UIImage*)getImageFromMemory:(NSString*)imageURL;
 
 
 @end

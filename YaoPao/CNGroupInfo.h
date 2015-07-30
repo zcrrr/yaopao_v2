@@ -14,6 +14,7 @@
 @property (strong, nonatomic) NSString* groupName;
 @property (strong, nonatomic) NSString* groupDesc;
 @property (assign, nonatomic) int memberCount;
+@property (strong, nonatomic) NSString* groupImgPath;
 
 
 @end

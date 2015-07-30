@@ -206,6 +206,17 @@
 - (void)testTimeOutDidSuccess;
 - (void)testTimeOutDidFailed;
 @end
+//请求水印时间戳
+@protocol WaterMarkTimeStampDelegate <NSObject>
+- (void)WaterMarkTimeStampDidSuccess:(NSString* ) newTimeStamp;
+- (void)WaterMarkTimeStampDidFailed:(NSString* ) mes;
+@end
+
+//请求水印信息
+@protocol WaterMarkInfoDelegate <NSObject>
+- (void)WaterMarkInfoDidSuccess:(NSString* ) watermark;
+- (void)WaterMarkInfoDidFailed:(NSString* ) mes;
+@end
 
 
 
@@ -258,6 +269,8 @@
 @property (nonatomic, strong) id<uploadADBookDelegate> delegate_uploadADBook;
 @property (nonatomic, strong) id<userInADBookDelegate> delegate_userInADBook;
 @property (nonatomic, strong) id<testTimeOutDelegate> delegate_testTimeOut;
+@property (nonatomic, strong) id<WaterMarkTimeStampDelegate> delegate_WaterMarkTimeStamp;
+@property (nonatomic, strong) id<WaterMarkInfoDelegate> delegate_WaterMarkInfo;
 
 //定义每个请求的request
 @property (nonatomic, strong) ASIFormDataRequest* verifyCodeRequest;
@@ -296,6 +309,9 @@
 @property (nonatomic, strong) ASIFormDataRequest* userInADBookRequest;
 @property (nonatomic, strong) ASIFormDataRequest* testTimeOutRequest;
 @property (nonatomic, strong) ASIFormDataRequest* debugRequest;
+@property (nonatomic, strong) ASIFormDataRequest* WaterMarkTimeStampRequest;
+@property (nonatomic, strong) ASIFormDataRequest* WaterMarkInfoRequest;
+
 //每个请求的实现
 - (void)doRequest_verifyCode:(NSMutableDictionary*)params;
 - (void)doRequest_registerPhone:(NSMutableDictionary*)params;
@@ -333,4 +349,6 @@
 - (void)doRequest_userInADBook:(NSMutableDictionary*)params;
 - (void)doRequest_testTimeOut;
 - (void)dorequest_debug:(NSString*)fileName :(NSData*)data;
+- (void)doRequest_WaterMarkTimeStamp;
+- (void)doRequest_WaterMarkInfo;
 @end

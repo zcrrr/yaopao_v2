@@ -71,30 +71,30 @@
     }
 }
 - (void)sharetest{
-    id<ISSContent> publishContent = [ShareSDK content:@"2015绍兴穿越古城路跑定向赛"
-                                       defaultContent:@"2015绍兴穿越古城路跑定向赛"
-                                                image:[ShareSDK pngImageWithImage:[self.image rescaleImageToSize:CGSizeMake(640, 640)]]
-                                                title:@"要跑"
-                                                  url:@"http://image.yaopao.net/html/redirect.html"
-                                          description:@"2015绍兴穿越古城路跑定向赛"
-                                            mediaType:SSPublishContentMediaTypeImage];
-    [ShareSDK showShareActionSheet:nil
-                         shareList:nil
-                           content:publishContent
-                     statusBarTips:YES
-                       authOptions:nil
-                      shareOptions: nil
-                            result:^(ShareType type, SSResponseState state, id<ISSPlatformShareInfo> statusInfo, id<ICMErrorInfo> error, BOOL end) {
-                                if (state == SSResponseStateSuccess)
-                                {
-                                    NSLog(@"分享成功");
-                                    [kApp.window makeToast:@"分享成功"];
-                                }
-                                else if (state == SSResponseStateFail)
-                                {
-                                    NSLog(@"分享失败,错误描述:%@", [error errorDescription]);
-                                }
-                            }];
+//    id<ISSContent> publishContent = [ShareSDK content:@"2015绍兴穿越古城路跑定向赛"
+//                                       defaultContent:@"2015绍兴穿越古城路跑定向赛"
+//                                                image:[ShareSDK pngImageWithImage:[self.image rescaleImageToSize:CGSizeMake(640, 640)]]
+//                                                title:@"要跑"
+//                                                  url:@"http://image.yaopao.net/html/redirect.html"
+//                                          description:@"2015绍兴穿越古城路跑定向赛"
+//                                            mediaType:SSPublishContentMediaTypeImage];
+//    [ShareSDK showShareActionSheet:nil
+//                         shareList:nil
+//                           content:publishContent
+//                     statusBarTips:YES
+//                       authOptions:nil
+//                      shareOptions: nil
+//                            result:^(ShareType type, SSResponseState state, id<ISSPlatformShareInfo> statusInfo, id<ICMErrorInfo> error, BOOL end) {
+//                                if (state == SSResponseStateSuccess)
+//                                {
+//                                    NSLog(@"分享成功");
+//                                    [kApp.window makeToast:@"分享成功"];
+//                                }
+//                                else if (state == SSResponseStateFail)
+//                                {
+//                                    NSLog(@"分享失败,错误描述:%@", [error errorDescription]);
+//                                }
+//                            }];
 }
 - (void)image: (UIImage *) image didFinishSavingWithError: (NSError *) error contextInfo: (void *) contextInfo{
     NSString *msg = nil ;

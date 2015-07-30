@@ -13,6 +13,6 @@
 #import <UIKit/UIKit.h>
 #import "CNNetworkHandler.h"
 
-@interface CreateGroupViewController : UIViewController<createGroupDelegate>
+@interface CreateGroupViewController : UIViewController<createGroupDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,updateAvatarDelegate>
 
 @end

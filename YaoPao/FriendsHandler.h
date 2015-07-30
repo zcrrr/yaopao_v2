@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "CNNetworkHandler.h"
+@class CNGroupInfo;
 
 @protocol requestFriendsDelegate<NSObject>
 //获取好友
@@ -37,6 +38,8 @@
 - (void)dorequest;
 - (void)checkNeedUploadAD;
 - (void)userInADBook;
+- (CNGroupInfo*)findGroupByid:(NSString*)groupid;
+- (CNGroupInfo*)findGroupByName:(NSString*)groupName;
 
 +(void)AddPeople;
 +(void)DeletePeople;

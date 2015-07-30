@@ -131,6 +131,8 @@
 @synthesize isInEvent;
 @synthesize isOpenShareLocation;
 @synthesize userOperation;
+@synthesize hasNewWaterMaker;
+@synthesize waterTimeStampNew;
 
 @synthesize managedObjectModel=_managedObjectModel;
 @synthesize managedObjectContext=_managedObjectContext;
@@ -218,7 +220,7 @@
     self.showad = [MobClick getConfigParams:@"showad"];
     NSLog(@"self.showad is %@",self.showad);
     if (self.showad == nil || ([NSNull null] == (NSNull *)self.showad)) {
-        self.showad = @"2.3.1,1";
+        self.showad = @"2.4.0,1";
     }
     self.eventTimeString = [MobClick getConfigParams:@"event"];
     NSLog(@"self.eventTimeString is %@",self.eventTimeString);

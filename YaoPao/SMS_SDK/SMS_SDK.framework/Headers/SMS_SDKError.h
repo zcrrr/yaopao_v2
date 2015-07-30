@@ -2,7 +2,7 @@
 //  SMS_SDKError.h
 //  SMS_SDKDemo
 //
-//  Created by 刘 靖煌 on 1/29/15.
+//  Created by ljh on 1/29/15.
 //  Copyright (c) 2015 严军. All rights reserved.
 //
 

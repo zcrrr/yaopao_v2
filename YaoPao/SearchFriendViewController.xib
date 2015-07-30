@@ -41,7 +41,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                     </subviews>
-                    <color key="backgroundColor" red="0.2274509804" green="0.65098039220000004" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="backgroundColor" red="0.2156862745" green="0.20784313730000001" blue="0.27058823529999998" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
                 <view contentMode="scaleToFill" id="Cl5-DJ-Z6m">
                     <rect key="frame" x="0.0" y="76" width="320" height="40"/>
@@ -94,7 +94,7 @@
     <resources>
         <image name="action_buttonbg.png" width="130" height="60"/>
         <image name="action_buttonbg_on.png" width="130" height="60"/>
-        <image name="back_v2.png" width="48" height="68"/>
+        <image name="back_v2.png" width="90" height="90"/>
         <image name="netProcess.png" width="85" height="85"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

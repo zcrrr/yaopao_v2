@@ -223,7 +223,7 @@
     cell.label_during.text = [NSString stringWithFormat:@"%02d:%02d",minute1,second1];
     
     //距离
-    cell.label_dis.text = [NSString stringWithFormat:@"%0.2fkm",[runClass.distance floatValue]/1000];
+    cell.label_dis.text = [NSString stringWithFormat:@"%0.2fKM",[runClass.distance floatValue]/1000];
     return cell;
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -297,6 +297,11 @@
         self.reddot.hidden = NO;
     }else{
         self.reddot.hidden = YES;
+    }
+    if(kApp.hasNewWaterMaker){
+        self.reddot_water.hidden = NO;
+    }else{
+        self.reddot_water.hidden = YES;
     }
     [kApp addObserver:self forKeyPath:@"unreadMessageCount" options:NSKeyValueObservingOptionNew context:nil];
 }

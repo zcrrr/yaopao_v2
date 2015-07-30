@@ -128,7 +128,7 @@
     self.annoArray = [[NSMutableArray alloc]init];
     //zc
     UIView* topbar = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 63)];
-    topbar.backgroundColor = [UIColor colorWithRed:58.0/255.0 green:166.0/255.0 blue:1 alpha:1];
+    topbar.backgroundColor = [UIColor colorWithRed:55.0/255.0 green:53.0/255.0 blue:69.0/255.0 alpha:1];
     [self.view addSubview:topbar];
     UILabel* label_title = [[UILabel alloc]initWithFrame:CGRectMake(87, 23, 146, 35)];
     [label_title setTextAlignment:NSTextAlignmentCenter];

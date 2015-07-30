@@ -56,7 +56,7 @@
     }
     int target = [[runSettingDic objectForKey:@"targetType"]intValue];
     [self selectTarget:target];
-    self.textfield_choose2.text = [NSString stringWithFormat:@"%@km",[self.runSettingDic objectForKey:@"distance"]];
+    self.textfield_choose2.text = [NSString stringWithFormat:@"%@KM",[self.runSettingDic objectForKey:@"distance"]];
     int second = [[self.runSettingDic objectForKey:@"time"]intValue]*60;
     NSString* timestr = [CNUtil duringTimeStringFromSecond:second];
     self.textfield_choose3.text = timestr;
@@ -103,7 +103,7 @@
              titleForRow:(NSInteger)row forComponent:(NSInteger)component {
     int tag = (int)[pickerView tag];
     if(tag == 0){
-        return [NSString stringWithFormat:@"%@km",[dis_array objectAtIndex:row]];
+        return [NSString stringWithFormat:@"%@KM",[dis_array objectAtIndex:row]];
     }else{
         int second = [[time_array objectAtIndex:row]intValue]*60;
         NSString* timestr = [CNUtil duringTimeStringFromSecond:second];
@@ -128,7 +128,7 @@ numberOfRowsInComponent:(NSInteger)component {
 }
 - (IBAction)dis_selected:(id)sender {
     NSInteger row = [self.pickview_dis selectedRowInComponent:0];
-    self.textfield_choose2.text = [NSString stringWithFormat:@"%@km",[self.dis_array objectAtIndex:row]];
+    self.textfield_choose2.text = [NSString stringWithFormat:@"%@KM",[self.dis_array objectAtIndex:row]];
     self.distance = [[self.dis_array objectAtIndex:row]intValue];
     [self hideAllTextfiled];
     [CNUtil appendUserOperation:[NSString stringWithFormat:@"目标设定为：%@",self.textfield_choose2.text]];

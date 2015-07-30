@@ -117,7 +117,7 @@
             break;
     }
     self.label_title.text = [NSString stringWithFormat:@"%@的%@",strDate2,typeDes];
-    self.label_dis.text = [NSString stringWithFormat:@"%0.2fkm",[oneRun.distance floatValue]/1000];
+    self.label_dis.text = [NSString stringWithFormat:@"%0.2fKM",[oneRun.distance floatValue]/1000];
     self.label_during.text = [CNUtil duringTimeStringFromSecond:[oneRun.duration intValue]/1000];
     self.label_pspeed.text = [CNUtil pspeedStringFromSecond:[oneRun.secondPerKm intValue]];
     self.label_aver_speed.text = [NSString stringWithFormat:@"+%i",[oneRun.score intValue]];

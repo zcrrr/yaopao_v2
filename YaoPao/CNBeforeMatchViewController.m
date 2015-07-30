@@ -55,7 +55,7 @@
 //        if(self.excuteCallback){
 //            return;
 //        }
-        NSString* uid = [kApp.userInfoDic objectForKey:@"uid"];
+        NSString* uid = [NSString stringWithFormat:@"%@",[kApp.userInfoDic objectForKey:@"uid"]];
         if (uid == nil || ([NSNull null] == (NSNull *)uid)) {
             uid = @"";
         }

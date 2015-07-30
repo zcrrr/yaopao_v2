@@ -19,6 +19,7 @@
 @implementation FirstLevelViewController
 @synthesize selectIndex;
 @synthesize reddot;
+@synthesize reddot_water;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -45,6 +46,11 @@
     self.reddot.image = [UIImage imageNamed:@"bg_rednum.png"];
     self.reddot.hidden = YES;
     [bottomBar addSubview:self.reddot];
+    
+    self.reddot_water = [[UIImageView alloc]initWithFrame:CGRectMake(287, 2, 10, 10)];
+    self.reddot_water.image = [UIImage imageNamed:@"bg_rednum.png"];
+    self.reddot_water.hidden = YES;
+    [bottomBar addSubview:self.reddot_water];
     
     offsize = 27;
     NSArray* titles = [[NSArray alloc]initWithObjects:@"首页",@"运动记录",@"跑团",@"设置",nil];
@@ -87,7 +93,7 @@
             return;
         }else{
             if(kApp.isLoginHX != 1){
-                [kApp.window makeToast:@"当前网络不给力，请稍后重试~"];
+                [kApp.window makeToast:@"当前网络不给力，正在努力获取跑团信息，过几秒试试~~"];
                 return;
             }
         }

@@ -13,7 +13,7 @@
 #import "MessageModelManager.h"
 #import "ConvertToCommonEmoticonsHelper.h"
 #import "MessageModel.h"
-#import "EaseMob.h"
+#import "EMSDKFull.h"
 
 @implementation MessageModelManager
 

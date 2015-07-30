@@ -14,5 +14,6 @@
 @synthesize groupName;
 @synthesize groupDesc;
 @synthesize memberCount;
+@synthesize groupImgPath;
 
 @end

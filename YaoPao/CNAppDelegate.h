@@ -126,6 +126,8 @@
 
 //-----------------好友、聊天----------------
 @property (assign, nonatomic) int unreadMessageCount;
+@property (assign, nonatomic) BOOL hasNewWaterMaker;
+@property (strong, nonatomic) NSString* waterTimeStampNew;
 
 + (void)howManyMessageToRead;
 @property (nonatomic, strong) GCDAsyncUdpSocket *udpSocket;

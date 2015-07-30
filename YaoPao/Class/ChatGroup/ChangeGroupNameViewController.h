@@ -16,11 +16,14 @@
 - (void)changeNameDidSuccess:(NSString*)name;
 @end
 
-@interface ChangeGroupNameViewController : UIViewController<changeGroupNameDelegate>
+@interface ChangeGroupNameViewController : UIViewController<changeGroupNameDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,updateAvatarDelegate>
 @property (strong, nonatomic) CNGroupInfo *chatGroup;
 @property (weak, nonatomic) IBOutlet UITextField *textfield;
 - (IBAction)button_clicked:(id)sender;
 @property (strong, nonatomic) IBOutlet UIActivityIndicatorView *indicator;
 @property (strong, nonatomic) IBOutlet UIImageView *loadingImage;
+@property (weak, nonatomic) IBOutlet UITextView *textview;
+@property (weak, nonatomic) IBOutlet UIButton *button_avatar;
 @property (strong, nonatomic) id<changeNameDelegate> delegate_changename;
+@property (strong, nonatomic) UIImage* image_avatar;
 @end

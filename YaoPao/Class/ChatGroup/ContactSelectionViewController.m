@@ -80,7 +80,7 @@
     // Do any additional setup after loading the view.
     self.view.backgroundColor = [UIColor colorWithRed:246.0/255.0 green:246.0/255.0 blue:247.0/255.0 alpha:1];
     UIView* topbar = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 63)];
-    topbar.backgroundColor = [UIColor colorWithRed:58.0/255.0 green:166.0/255.0 blue:1 alpha:1];
+    topbar.backgroundColor = [UIColor colorWithRed:55.0/255.0 green:53.0/255.0 blue:69.0/255.0 alpha:1];
     [self.view addSubview:topbar];
     UILabel* label_title = [[UILabel alloc]initWithFrame:CGRectMake(87, 23, 146, 35)];
     [label_title setTextAlignment:NSTextAlignmentCenter];
@@ -430,13 +430,15 @@
         if(friend != nil){
             if(friend.avatarUrlInYaoPao != nil && ![friend.avatarUrlInYaoPao isEqualToString:@""]){//有头像url
                 NSString* fullurl = [NSString stringWithFormat:@"%@%@",kApp.imageurl,friend.avatarUrlInYaoPao];
-                __block UIImage* image = [kApp.avatarDic objectForKey:fullurl];
+                UIImage* image = [kApp.avatarManager getImageFromMemory:fullurl];
                 if(image != nil){//缓存中有
                     NSLog(@"缓存中有");
                     remarkView.image = image;
                 }else{
                     remarkView.image = [UIImage imageNamed:@"avatar_default.png"];
                 }
+
+                
             }else{
                 remarkView.image = [UIImage imageNamed:@"avatar_default.png"];
             }

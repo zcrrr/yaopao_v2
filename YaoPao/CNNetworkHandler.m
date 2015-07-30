@@ -476,6 +476,25 @@
             }
             break;
         }
+        case TAG_WATER_DOWNLOAD:
+        {
+            if(isSuccess){
+                NSString *description = [result objectForKey:@"description"];
+                [self.delegate_WaterMarkInfo WaterMarkInfoDidSuccess:description];
+            }else{
+                [self.delegate_WaterMarkTimeStamp WaterMarkTimeStampDidFailed:@""];
+            }
+            break;
+        }
+        case TAG_WATER_TIME:
+        {
+            if(isSuccess){
+                NSString *timeStamp = [result objectForKey:@"timestamp"];
+                [self.delegate_WaterMarkTimeStamp WaterMarkTimeStampDidSuccess:timeStamp];
+            }else{
+                [self.delegate_WaterMarkInfo WaterMarkInfoDidFailed:@""];
+            }
+        }
         default:
             break;
     }
@@ -639,6 +658,16 @@
             NSLog(@"超时请求失败");
             [CNUtil showAlert:@"您当前网络似乎不是很好，请检查网络后重试~"];
             [self.delegate_testTimeOut testTimeOutDidFailed];
+            break;
+        }
+        case TAG_WATER_TIME:
+        {
+            [self.delegate_WaterMarkTimeStamp WaterMarkTimeStampDidFailed:kCheckNetworkTip];
+            break;
+        }
+        case TAG_WATER_DOWNLOAD:
+        {
+            [self.delegate_WaterMarkInfo WaterMarkInfoDidFailed:kCheckNetworkTip];
             break;
         }
         default:
@@ -1234,6 +1263,38 @@
     [self.debugRequest setPostValue:@"0" forKey:@"type"];
     [self.debugRequest addData:data forKey:@"stepfile"];
     [[self networkQueue]addOperation:self.debugRequest];
+}
+- (void)doRequest_WaterMarkTimeStamp{
+    NSString* str_url = [NSString stringWithFormat:@"%@chSports/sys/getsytime.htm",ENDPOINTS];
+    NSURL* url = [NSURL URLWithString:str_url];
+    self.WaterMarkTimeStampRequest =  [ASIFormDataRequest requestWithURL:url];
+    self.WaterMarkTimeStampRequest.tag = TAG_WATER_TIME;
+    [self.WaterMarkTimeStampRequest setNumberOfTimesToRetryOnTimeout:3];
+    [self.WaterMarkTimeStampRequest setTimeOutSeconds:15];
+    [self.WaterMarkTimeStampRequest addRequestHeader:@"X-PID" value:kApp.pid];
+    [self.WaterMarkTimeStampRequest addRequestHeader:@"ua" value:kApp.ua];
+    NSString* uid = [NSString stringWithFormat:@"%@",[kApp.userInfoDic objectForKey:@"uid"]];
+    [self.WaterMarkTimeStampRequest setPostValue:uid forKey:@"uid"];
+    NSLog(@"获取水印时间戳url:%@",str_url);
+    NSLog(@"获取水印时间戳参数:%@",uid);
+    [[self networkQueue]addOperation:self.WaterMarkTimeStampRequest];
+
+}
+
+- (void)doRequest_WaterMarkInfo{
+    NSString* str_url = [NSString stringWithFormat:@"%@chSports/sys/getsydesc.htm",ENDPOINTS];
+    NSURL* url = [NSURL URLWithString:str_url];
+    self.WaterMarkInfoRequest =  [ASIFormDataRequest requestWithURL:url];
+    self.WaterMarkInfoRequest.tag = TAG_WATER_DOWNLOAD;
+    [self.WaterMarkInfoRequest setNumberOfTimesToRetryOnTimeout:3];
+    [self.WaterMarkInfoRequest setTimeOutSeconds:15];
+    [self.WaterMarkInfoRequest addRequestHeader:@"X-PID" value:kApp.pid];
+    [self.WaterMarkInfoRequest addRequestHeader:@"ua" value:kApp.ua];
+    NSString* uid = [NSString stringWithFormat:@"%@",[kApp.userInfoDic objectForKey:@"uid"]];
+    [self.WaterMarkInfoRequest setPostValue:uid forKey:@"uid"];
+    NSLog(@"下载水印url:%@",str_url);
+    NSLog(@"下载水印参数:%@",uid);
+    [[self networkQueue]addOperation:self.WaterMarkInfoRequest];
 }
 - (void)showAlert:(NSString*) content{
     UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:content delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];

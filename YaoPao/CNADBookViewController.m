@@ -329,7 +329,14 @@
         NewFriendsTableViewCell *cell = (NewFriendsTableViewCell*)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         
         cell.label_username.text = group.groupName;
-        cell.imageview_avatar.image = [UIImage imageNamed:@"group_avatar_default.png"];
+        
+        CNGroupInfo* groupinfo = [kApp.friendHandler findGroupByid:group.groupId];
+        if(groupinfo == nil || [groupinfo.groupImgPath isEqualToString:@""]){
+            cell.imageview_avatar.image = [UIImage imageNamed:@"group_avatar_default.png"];
+        }else{
+            NSString* groupImgPath = groupinfo.groupImgPath;
+            [kApp.avatarManager setImageToImageView:cell.imageview_avatar fromUrl:groupImgPath];
+        }
         cell.button_action.hidden = YES;
         return cell;
     }else{

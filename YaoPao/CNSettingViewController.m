@@ -14,7 +14,9 @@
 #import "CNLoginPhoneViewController.h"
 #import "AboutViewController.h"
 #import "CNUtil.h"
-
+#import "UMFeedback.h"
+#import "UMFeedbackViewController.h"
+#import "WaterMarkDownloadViewController.h"
 @interface CNSettingViewController ()
 
 @end
@@ -45,6 +47,8 @@
     [self changeLineOne:self.view_line2];
     [self changeLineOne:self.view_line3];
     [self changeLineOne:self.view_line4];
+    [self changeLineOne:self.view_line5];
+    [self changeLineOne:self.view_line6];
     [self.button_about addTarget:self action:@selector(changeViewColor:) forControlEvents:UIControlEventTouchDown];
     [self.button_feedback addTarget:self action:@selector(changeViewColor:) forControlEvents:UIControlEventTouchDown];
     [self.button_personal addTarget:self action:@selector(changeViewColor:) forControlEvents:UIControlEventTouchDown];
@@ -119,8 +123,10 @@
         }
         case 2:
         {
-            NSLog(@"消息");
+            NSLog(@"水印");
             self.view_system.backgroundColor = [UIColor colorWithRed:55.0/255.0 green:53.0/255.0 blue:69.0/255.0 alpha:1];
+            WaterMarkDownloadViewController *WaterMarkDownloadVC = [[WaterMarkDownloadViewController alloc]init];
+            [self.navigationController pushViewController:WaterMarkDownloadVC animated:YES];
             break;
         }
         case 3:
@@ -133,6 +139,9 @@
         {
             NSLog(@"反馈");
             self.view_feedback.backgroundColor = [UIColor colorWithRed:55.0/255.0 green:53.0/255.0 blue:69.0/255.0 alpha:1];
+            UMFeedbackViewController* feedbackVC = [[UMFeedbackViewController alloc]init];
+            feedbackVC.modalStyle = YES;
+            [self presentViewController:feedbackVC animated:YES completion:nil];
             break;
         }
         case 5:
@@ -176,6 +185,13 @@
         self.reddot.hidden = NO;
     }else{
         self.reddot.hidden = YES;
+    }
+    if(kApp.hasNewWaterMaker){
+        self.reddot_water.hidden = NO;
+        self.imageview_reddot.hidden = NO;
+    }else{
+        self.reddot_water.hidden = YES;
+        self.imageview_reddot.hidden = YES;
     }
     [kApp addObserver:self forKeyPath:@"unreadMessageCount" options:NSKeyValueObservingOptionNew context:nil];
 }

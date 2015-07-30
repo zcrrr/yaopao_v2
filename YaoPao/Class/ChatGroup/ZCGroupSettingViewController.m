@@ -143,8 +143,6 @@
     }
 }
 - (void)refreshGroupinfo{
-    self.label_title.text = [NSString stringWithFormat:@"%@/%i",self.chatGroup.groupName,(int)(self.chatGroup.memberCount)];
-    //获取所有成员
     NSMutableDictionary* params = [[NSMutableDictionary alloc]init];
     NSString* uid = [NSString stringWithFormat:@"%@",[kApp.userInfoDic objectForKey:@"uid"]];
     [params setObject:uid forKey:@"uid"];
@@ -164,6 +162,9 @@
 }
 - (void)groupMemberDidSuccess:(NSDictionary *)resultDic{
     self.dataSource = [resultDic objectForKey:@"users"];
+    self.chatGroup.memberCount = (int)[self.dataSource count];
+    self.label_title.text = [NSString stringWithFormat:@"%@/%i",self.chatGroup.groupName,(int)(self.chatGroup.memberCount)];
+    //获取所有成员
     [self refreshMemberView];
     [self hideLoading];
     
@@ -636,6 +637,7 @@
 - (void)delMemberDidSuccess:(NSDictionary *)resultDic{
     [self hideLoading];
     NSString* nickname = [[self.dataSource objectAtIndex:self.handleIndex] objectForKey:@"nickname"];
+    self.chatGroup.memberCount--;
 //    NSString* phone = [[self.dataSource objectAtIndex:self.handleIndex] objectForKey:@"phone"];
 //    NSArray* occupants = [[NSArray alloc]initWithObjects:phone, nil];
 //    [[EaseMob sharedInstance].chatManager asyncRemoveOccupants:occupants fromGroup:self.chatGroupId completion:^(EMGroup *group, EMError *error) {

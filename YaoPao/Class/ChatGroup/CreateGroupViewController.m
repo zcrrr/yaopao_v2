@@ -19,6 +19,9 @@
 #import "CNNetworkHandler.h"
 #import "ChatGroupViewController.h"
 #import "CNUtil.h"
+#import "UIImage+Rescale.h"
+#import "FriendsHandler.h"
+#import "CNGroupInfo.h"
 
 @interface CreateGroupViewController ()<UITextFieldDelegate, UITextViewDelegate, EMChooseViewDelegate>
 
@@ -35,11 +38,15 @@
 @property (strong, nonatomic) UISwitch *groupMemberSwitch;
 @property (strong, nonatomic) UILabel *groupMemberLabel;
 @property (strong, nonatomic) NSString* groupId;
+@property (strong, nonatomic) UIButton* button_avatar;
+@property (strong, nonatomic) UIImage* image_avatar;
 
 @end
 
 @implementation CreateGroupViewController
 @synthesize groupId;
+@synthesize button_avatar;
+@synthesize image_avatar;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -62,7 +69,7 @@
     }
     [self.view setBackgroundColor:[UIColor colorWithRed:246.0/255.0 green:246.0/255.0 blue:247.0/255.0 alpha:1]];
     UIView* topbar = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 55)];
-    topbar.backgroundColor = [UIColor colorWithRed:58.0/255.0 green:166.0/255.0 blue:1 alpha:1];
+    topbar.backgroundColor = [UIColor colorWithRed:55.0/255.0 green:53.0/255.0 blue:69.0/255.0 alpha:1];
     [self.view addSubview:topbar];
     UILabel* label_title = [[UILabel alloc]initWithFrame:CGRectMake(87, 20, 146, 35)];
     [label_title setTextAlignment:NSTextAlignmentCenter];
@@ -77,7 +84,7 @@
     [button_back addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
     [topbar addSubview:button_back];
     
-    UIButton *addButton = [[UIButton alloc] initWithFrame:CGRectMake(14, 266, 293, 43)];
+    UIButton *addButton = [[UIButton alloc] initWithFrame:CGRectMake(14, 298, 293, 43)];
     addButton.titleLabel.font = [UIFont systemFontOfSize:14.0];
     [addButton setTitle:@"添加好友" forState:UIControlStateNormal];
     [addButton setBackgroundImage:[UIImage imageNamed:@"button_green.png"] forState:UIControlStateNormal];
@@ -85,9 +92,22 @@
     [addButton addTarget:self action:@selector(addContacts:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:addButton];
     
-    UIView* view_groupname = [[UIView alloc]initWithFrame:CGRectMake(0, 55+9, 320, 43)];
+    
+    
+    
+    UIView* view_groupname = [[UIView alloc]initWithFrame:CGRectMake(0, 55+10, 320, 80)];
     view_groupname.backgroundColor = [UIColor whiteColor];
-    UILabel* label_groupname = [[UILabel alloc]initWithFrame:CGRectMake(13, 0, 28, 43)];
+    
+    self.button_avatar = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.button_avatar.frame = CGRectMake(10, 10, 60, 60);
+    [self.button_avatar setBackgroundImage:[UIImage imageNamed:@"group_avatar_default.png"] forState:UIControlStateNormal];
+    self.button_avatar.tag = 1;
+    [self.button_avatar addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    [view_groupname addSubview:self.button_avatar];
+    self.button_avatar.layer.cornerRadius = self.button_avatar.bounds.size.width/2;
+    self.button_avatar.layer.masksToBounds = YES;
+    
+    UILabel* label_groupname = [[UILabel alloc]initWithFrame:CGRectMake(80, 20, 28, 40)];
     label_groupname.text = @"名称";
     label_groupname.textColor = [UIColor blackColor];
     label_groupname.font = [UIFont systemFontOfSize:14];
@@ -97,7 +117,7 @@
     [self.view addSubview:view_groupname];
     
     
-    UIView* view_groupdesc = [[UIView alloc]initWithFrame:CGRectMake(0, 110, 320, 143)];
+    UIView* view_groupdesc = [[UIView alloc]initWithFrame:CGRectMake(0, 55+80+10+10, 320, 143)];
     view_groupdesc.backgroundColor = [UIColor whiteColor];
     UILabel* label_groupdesc = [[UILabel alloc]initWithFrame:CGRectMake(13, 0, 28, 43)];
     label_groupdesc.text = @"简介";
@@ -120,11 +140,55 @@
             [self.navigationController popViewControllerAnimated:YES];
             break;
         }
+        case 1:
+        {
+            NSLog(@"头像");
+            UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:@"选取来自" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"拍照",@"用户相册", nil];
+            [actionSheet showInView:self.view];
+            break;
+        }
         default:
             break;
     }
 }
-
+#pragma -mark actionSheet delegate
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
+    UIImagePickerController* pickC = [[UIImagePickerController alloc]init];
+    switch (buttonIndex) {
+        case 0:
+        {
+            NSLog(@"拍照");
+            if([CNUtil checkUserPermission]){
+                pickC.sourceType = UIImagePickerControllerSourceTypeCamera;
+                pickC.allowsEditing = YES;
+                pickC.delegate = self;
+                [self presentViewController:pickC animated:YES completion:^{
+                    
+                }];
+            }
+            break;
+        }
+        case 1:
+        {
+            NSLog(@"相册");
+            pickC.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+            pickC.allowsEditing = YES;
+            pickC.delegate = self;
+            [self presentViewController:pickC animated:YES completion:^{
+                
+            }];
+            break;
+        }
+        default:
+            break;
+    }
+}
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
+    UIImage *image = [info objectForKey:@"UIImagePickerControllerEditedImage"];
+    self.image_avatar = [image rescaleImageToSize:CGSizeMake(640, 640)];
+    [self.button_avatar setBackgroundImage:self.image_avatar forState:UIControlStateNormal];
+    [picker dismissViewControllerAnimated:YES completion:nil];
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -135,7 +199,7 @@
 - (UITextField *)textField
 {
     if (_textField == nil) {
-        _textField = [[UITextField alloc] initWithFrame:CGRectMake(51, 0, 320-51-21, 43)];
+        _textField = [[UITextField alloc] initWithFrame:CGRectMake(115, 20, 205, 40)];
 //        _textField.layer.borderColor = [[UIColor lightGrayColor] CGColor];
 //        _textField.layer.borderWidth = 0.5;
 //        _textField.layer.cornerRadius = 3;
@@ -145,7 +209,7 @@
         _textField.clearButtonMode = UITextFieldViewModeWhileEditing;
         _textField.font = [UIFont systemFontOfSize:14.0];
         _textField.textColor = [UIColor blackColor];
-        _textField.placeholder = NSLocalizedString(@"group.create.inputName", @"please enter the group name");
+        _textField.placeholder = @"请输入跑团名称";
         _textField.returnKeyType = UIReturnKeyDone;
         _textField.delegate = self;
     }
@@ -156,13 +220,13 @@
 - (EMTextView *)textView
 {
     if (_textView == nil) {
-        _textView = [[EMTextView alloc] initWithFrame:CGRectMake(47, 5, 320-51-21, 130)];
+        _textView = [[EMTextView alloc] initWithFrame:CGRectMake(45, 5, 275, 130)];
 //        _textView.layer.borderColor = [[UIColor lightGrayColor] CGColor];
 //        _textView.layer.borderWidth = 0.5;
 //        _textView.layer.cornerRadius = 3;
         _textView.font = [UIFont systemFontOfSize:14.0];
         _textView.textColor = [UIColor blackColor];
-        _textView.placeholder = NSLocalizedString(@"group.create.inputDescribe", @"please enter a group description");
+        _textView.placeholder = @"请输入跑团简介";
         _textView.returnKeyType = UIReturnKeyDone;
         _textView.delegate = self;
     }
@@ -300,23 +364,66 @@
     [weakSelf hideHud];
 }
 - (void)createGroupDidSuccess:(NSDictionary *)resultDic{
+    self.groupId = [[[resultDic objectForKey:@"grouplist"]objectAtIndex:0]objectForKey:@"id"];
+    //把全局的mygroup数组，增加一个成员
+    NSDictionary* dic = [[resultDic objectForKey:@"grouplist"]objectAtIndex:0];
+    NSString* groupName = [dic objectForKey:@"name"];
+    NSString* groupDesc = [dic objectForKey:@"description"];
+    CNGroupInfo* groupInfo = [[CNGroupInfo alloc]init];
+    groupInfo.groupId = self.groupId;
+    groupInfo.groupName = groupName;
+    groupInfo.groupDesc = groupDesc;
+    groupInfo.memberCount = [[dic objectForKey:@"affiliations_count"]intValue];
+    groupInfo.groupImgPath = @"";
+    [kApp.friendHandler.myGroups addObject:groupInfo];
     //先刷新全局群组信息：
-    [[EaseMob sharedInstance].chatManager asyncFetchMyGroupsListWithCompletion:^(NSArray *groups, EMError *error) {
-        if (!error) {
-            NSLog(@"获取成功 -- %@",groups);
-            __weak CreateGroupViewController *weakSelf = self;
-            [weakSelf hideHud];
-            [weakSelf showHint:NSLocalizedString(@"group.create.success", @"create group success")];
-            self.groupId = [[[resultDic objectForKey:@"grouplist"]objectAtIndex:0]objectForKey:@"id"];
-            ChatGroupViewController *chatController = [[ChatGroupViewController alloc] initWithChatter:self.groupId isGroup:YES];
-            chatController.groupname = self.textField.text;
-            chatController.from = @"creatGroup";
-            [self.navigationController pushViewController:chatController animated:YES];
-        }
-    } onQueue:nil];
+//    [[EaseMob sharedInstance].chatManager asyncFetchMyGroupsListWithCompletion:^(NSArray *groups, EMError *error) {
+//        if (!error) {
+//            NSLog(@"获取成功 -- %@",groups);
+//            __weak CreateGroupViewController *weakSelf = self;
+//            [weakSelf hideHud];
+//            [weakSelf showHint:NSLocalizedString(@"group.create.success", @"create group success")];
+//            self.groupId = [[[resultDic objectForKey:@"grouplist"]objectAtIndex:0]objectForKey:@"id"];
+//            ChatGroupViewController *chatController = [[ChatGroupViewController alloc] initWithChatter:self.groupId isGroup:YES];
+//            chatController.groupname = self.textField.text;
+//            chatController.from = @"creatGroup";
+//            [self.navigationController pushViewController:chatController animated:YES];
+//        }
+//    } onQueue:nil];
+    if(self.image_avatar != nil){
+        //上传跑团头像
+        NSMutableDictionary* params = [[NSMutableDictionary alloc]init];
+        NSData* data_image = UIImageJPEGRepresentation(self.image_avatar, 1);
+        [params setObject:@"6" forKey:@"type"];
+        [params setObject:self.groupId forKey:@"groupid"];
+        
+        NSString* uid = [kApp.userInfoDic objectForKey:@"uid"];
+        [params setObject:uid forKey:@"uid"];
+        [params setObject:data_image forKey:@"avatar"];
+        [kApp.networkHandler doRequest_updateAvatar:params];
+        kApp.networkHandler.delegate_updateAvatar = self;
+    }else{
+        [self gotoChatPage];
+    }
+}
+- (void)updateAvatarDidSuccess:(NSDictionary *)resultDic{
+    NSLog(@"上传跑团头像成功");
+    [self gotoChatPage];
     
-    
-    
+}
+- (void)updateAvatarDidFailed:(NSString *)mes{
+    NSLog(@"上传跑团头像失败");
+    [self gotoChatPage];
+}
+- (void)gotoChatPage{
+    __weak CreateGroupViewController *weakSelf = self;
+    [weakSelf hideHud];
+    [weakSelf showHint:NSLocalizedString(@"group.create.success", @"create group success")];
+    ChatGroupViewController *chatController = [[ChatGroupViewController alloc] initWithChatter:self.groupId isGroup:YES];
+    chatController.groupname = self.textField.text;
+    chatController.from = @"creatGroup";
+    [self.navigationController pushViewController:chatController animated:YES];
+
 }
 #pragma mark - action
 
@@ -353,7 +460,8 @@
         {
             _groupMemberLabel.text = NSLocalizedString(@"group.create.allowedOccupantInvite", @"allows group members to invite others");
         }
-        else{
+        else
+        {
             _groupMemberLabel.text = NSLocalizedString(@"group.create.unallowedOccupantInvite", @"don't allow group members to invite others");
         }
     }

@@ -108,18 +108,22 @@
     NSLog(@"self.frinedsWantMe is:");
     [self printFriendList:self.frinedsWantMe];
     
+    NSLog(@"my group is:--------------");
     //获取组
     NSArray* grouplist = [resultDic objectForKey:@"grouplist"];
     for(NSDictionary* dic in grouplist){
         NSString* groupId = [dic objectForKey:@"id"];
         NSString* groupName = [dic objectForKey:@"name"];
         NSString* groupDesc = [dic objectForKey:@"description"];
+        NSString* groupImgPath = [[dic allKeys] containsObject:@"groupimgpath"]?[dic objectForKey:@"groupimgpath"]:@"";
         CNGroupInfo* groupInfo = [[CNGroupInfo alloc]init];
         groupInfo.groupId = groupId;
         groupInfo.groupName = groupName;
         groupInfo.groupDesc = groupDesc;
         groupInfo.memberCount = [[dic objectForKey:@"affiliations_count"]intValue];
+        groupInfo.groupImgPath = groupImgPath;
         [self.myGroups addObject:groupInfo];
+        NSLog(@"%@,%@,%@",groupId,groupName,groupImgPath);
     }
 //    [[EaseMob sharedInstance].chatManager fetchBuddyListWithError:nil];
     //测试代码：加上环信好友获取
@@ -340,6 +344,22 @@
     }
     //保存电话本
     ABAddressBookSave(tmpAddressBook, nil);
+}
+- (CNGroupInfo*)findGroupByid:(NSString*)groupid{
+    for(CNGroupInfo* group in self.myGroups){
+        if([group.groupId isEqualToString:groupid]){
+            return group;
+        }
+    }
+    return nil;
+}
+- (CNGroupInfo*)findGroupByName:(NSString*)groupName{
+    for(CNGroupInfo* group in self.myGroups){
+        if([group.groupName isEqualToString:groupName]){
+            return group;
+        }
+    }
+    return nil;
 }
 
 

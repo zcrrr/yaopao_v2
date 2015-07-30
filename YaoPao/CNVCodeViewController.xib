@@ -46,7 +46,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                     </subviews>
-                    <color key="backgroundColor" red="0.2274509804" green="0.65098039220000004" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="backgroundColor" red="0.2156862745" green="0.20784313730000001" blue="0.27058823529999998" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="请确认你的国家或地区并输入手机号" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="fks-Td-SR3">
                     <rect key="frame" x="0.0" y="63" width="320" height="32"/>
@@ -178,7 +178,7 @@
     </objects>
     <resources>
         <image name="arrow_right2.png" width="14" height="26"/>
-        <image name="back_v2.png" width="48" height="68"/>
+        <image name="back_v2.png" width="90" height="90"/>
         <image name="button_green.png" width="690" height="100"/>
         <image name="get_vcode.png" width="168" height="74"/>
         <image name="get_vcode_on.png" width="168" height="74"/>

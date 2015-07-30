@@ -25,7 +25,8 @@
 #import "CNCustomButton.h"
 #import "CNUtil.h"
 #import "AvatarManager.h"
-
+#import "ScanQRCodeViewController.h"
+#import "CreateQRCodeViewController.h"
 @interface NewFriendsViewController ()
 
 @end
@@ -309,6 +310,20 @@
             NSLog(@"搜索");
             SearchFriendViewController* sfVC = [[SearchFriendViewController alloc]init];
             [self.navigationController pushViewController:sfVC animated:YES];
+            break;
+        }
+        case 3:
+        {
+            NSLog(@"扫码加好友");
+            ScanQRCodeViewController *ScanVC = [[ScanQRCodeViewController alloc]init];
+            [self presentViewController:ScanVC animated:YES completion:nil];
+            break;
+        }
+        case 4:
+        {
+            NSLog(@"我的二维码");
+            CreateQRCodeViewController *CreateVC = [[CreateQRCodeViewController alloc]init];
+            [self presentViewController:CreateVC animated:YES completion:nil];
             break;
         }
         

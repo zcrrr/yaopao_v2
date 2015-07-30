@@ -18,7 +18,7 @@
     #import "CNPersistenceHandler.h"
 #endif
 
-#define ClIENT_VERSION @"2.3.1"
+#define ClIENT_VERSION @"2.4.0"
 #define ENDPOINTS kApp.mainurl
 #define ENDPOINTS_UDP @"udp.yaopao.net"
 
@@ -44,7 +44,7 @@
 #define kBoundary2 60
 //#define SIMULATORTEST
 //#define kInhouse
-//#define kTestFlight
+#define kTestFlight
 
 
 #define TAG_VERIFY_CODE 1
@@ -99,5 +99,7 @@
 #define TAG_USER_IN_ADBOOK 44
 #define TAG_TEST_TIME_OUT 45
 #define TAG_DEBUG 46
+#define TAG_WATER_TIME 47
+#define TAG_WATER_DOWNLOAD 48
 
 

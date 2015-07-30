@@ -11,7 +11,7 @@
 #import "CNCustomButton.h"
 #import "CNNetworkHandler.h"
 
-@interface HomeViewController : FirstLevelViewController<weatherDelegate,testTimeOutDelegate>
+@interface HomeViewController : FirstLevelViewController<weatherDelegate,testTimeOutDelegate,WaterMarkTimeStampDelegate>
 @property (assign, nonatomic) long long weatherRefreshTime;
 @property (weak, nonatomic) IBOutlet CNCustomButton *button_cloud;
 @property (weak, nonatomic) IBOutlet UIButton *button_go_login;

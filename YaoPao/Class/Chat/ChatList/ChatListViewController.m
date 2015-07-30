@@ -78,7 +78,7 @@
     self.view_pop = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 568)];
     self.view_pop.backgroundColor = [UIColor clearColor];
     UIView* view_content = [[UIView alloc]initWithFrame:CGRectMake(220, 63, 100, 110)];
-    view_content.backgroundColor = [UIColor colorWithRed:58.0/255.0 green:166.0/255.0 blue:1 alpha:1];
+    view_content.backgroundColor = [UIColor colorWithRed:55.0/255.0 green:53.0/255.0 blue:69.0/255.0 alpha:1];
     UIImageView* imageview_chat = [[UIImageView alloc]initWithFrame:CGRectMake(8, 20, 16, 14)];
     imageview_chat.image = [UIImage imageNamed:@"create_chat.png"];
     UILabel* label_chat = [[UILabel alloc]initWithFrame:CGRectMake(32, 20, 68, 14)];
@@ -118,7 +118,7 @@
     [self.view_pop addSubview:view_content];
     
     UIView* topbar = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 63)];
-    topbar.backgroundColor = [UIColor colorWithRed:58.0/255.0 green:166.0/255.0 blue:1 alpha:1];
+    topbar.backgroundColor = [UIColor colorWithRed:55.0/255.0 green:53.0/255.0 blue:69.0/255.0 alpha:1];
     [self.view addSubview:topbar];
     UILabel* label_title = [[UILabel alloc]initWithFrame:CGRectMake(87, 23, 146, 35)];
     [label_title setTextAlignment:NSTextAlignmentCenter];
@@ -335,6 +335,11 @@
         self.reddot.hidden = NO;
     }else{
         self.reddot.hidden = YES;
+    }
+    if(kApp.hasNewWaterMaker){
+        self.reddot_water.hidden = NO;
+    }else{
+        self.reddot_water.hidden = YES;
     }
     [kApp addObserver:self forKeyPath:@"unreadMessageCount" options:NSKeyValueObservingOptionNew context:nil];
 }
@@ -632,7 +637,15 @@
         }
     }
     else{
-        cell.placeholderImage = [UIImage imageNamed:@"group_avatar_default.png"];
+        
+        CNGroupInfo* groupinfo = [kApp.friendHandler findGroupByid:conversation.chatter];
+        if(groupinfo == nil || [groupinfo.groupImgPath isEqualToString:@""]){
+            cell.placeholderImage = [UIImage imageNamed:@"group_avatar_default.png"];
+        }else{
+            NSString* groupImgPath = groupinfo.groupImgPath;
+            [kApp.avatarManager setImageToImageView:cell.imageView fromUrl:groupImgPath];
+            cell.placeholderImage = cell.imageView.image;
+        }
     }
     cell.detailMsg = [self subTitleMessageByConversation:conversation];
     cell.time = [self lastMessageTimeByConversation:conversation];
@@ -665,19 +678,16 @@
     
     
     NSString *title = conversation.chatter;
+    NSLog(@"title is %@",title);
     if (conversation.isGroup) {
-        NSArray *groupArray = [[EaseMob sharedInstance].chatManager groupList];
-        for (EMGroup *group in groupArray) {
-            if ([group.groupId isEqualToString:conversation.chatter]) {
-                title = group.groupSubject;
-                break;
-            }
-        }
+        CNGroupInfo* groupInfo = [kApp.friendHandler findGroupByid:title];
+        title = groupInfo.groupName;
         ChatGroupViewController *chatController;
         NSString *chatter = conversation.chatter;
         chatController = [[ChatGroupViewController alloc] initWithChatter:chatter isGroup:conversation.isGroup];
         chatController.title = title;
         chatController.groupname = title;
+        
         [self.navigationController pushViewController:chatController animated:YES];
     }else{
         ChatViewController *chatController;
@@ -686,8 +696,6 @@
         chatController.title = title;
         [self.navigationController pushViewController:chatController animated:YES];
     }
-    
-    
 }
 
 -(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath{

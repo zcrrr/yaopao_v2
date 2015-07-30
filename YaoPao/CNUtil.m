@@ -173,7 +173,7 @@
             [runSettingDic setObject:@"targetType1.png" forKey:@"typeImageName"];
             break;
         case 2:
-            [runSettingDic setObject:[NSString stringWithFormat:@"%@km",[runSettingDic objectForKey:@"distance"]] forKey:@"targetDes"];
+            [runSettingDic setObject:[NSString stringWithFormat:@"%@KM",[runSettingDic objectForKey:@"distance"]] forKey:@"targetDes"];
             [runSettingDic setObject:[NSString stringWithFormat:@"%i",[[runSettingDic objectForKey:@"distance"] intValue]*1000] forKey:@"targetValue"];
             [runSettingDic setObject:@"targetType2.png" forKey:@"typeImageName"];
             break;

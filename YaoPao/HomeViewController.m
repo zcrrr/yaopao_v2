@@ -27,6 +27,7 @@
 #import "SBJson.h"
 #import "GCDAsyncUdpSocket.h"
 #import "CNUtil.h"
+#import "ToolClass.h"
 #import "AvatarManager.h"
 
 @interface HomeViewController ()
@@ -92,7 +93,38 @@ NSString* dayOrNight;
     }
     //开始上报udp
     kApp.timer_udp_running = [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(sendMessageByUdp) userInfo:nil repeats:YES];
-    
+    //是否有新水印
+    //请求时间戳
+    [self requestTimeStamp];
+}
+- (void)requestTimeStamp{
+    [kApp.networkHandler doRequest_WaterMarkTimeStamp];
+    kApp.networkHandler.delegate_WaterMarkTimeStamp = self;
+}
+- (void)WaterMarkTimeStampDidSuccess:(NSString* ) newTimeStamp{
+    NSString *filePath = [ToolClass getDocument:@"WMTimeStamp.plist"];
+    NSDictionary *dic = [NSDictionary dictionaryWithContentsOfFile:filePath];
+    if (dic) {
+        NSString *oldTimeStamp = [dic objectForKey:@"timestamp"];
+        if ([newTimeStamp isEqualToString:oldTimeStamp]) {
+            kApp.hasNewWaterMaker = NO;
+        }
+        else{
+            kApp.hasNewWaterMaker = YES;
+            self.reddot_water.hidden = NO;
+        }
+    }
+    else{
+        kApp.hasNewWaterMaker = YES;
+        self.reddot_water.hidden = NO;
+    }
+    kApp.waterTimeStampNew = newTimeStamp;
+}
+
+- (void)WaterMarkTimeStampDidFailed:(NSString* ) mes{
+    //水印时间戳请求失败，为了妥善，认为有新的水印
+    kApp.hasNewWaterMaker = YES;
+    self.reddot_water.hidden = NO;
 }
 - (void)sendMessageByUdp{
     if(kApp.locationHandler.userLocation_lon < 1||kApp.locationHandler.userLocation_lat<1){
@@ -195,7 +227,7 @@ NSString* dayOrNight;
 - (void)initData{
     NSMutableDictionary* record_dic = [CNUtil getPersonalSummary];
     float totaldistance = [[record_dic objectForKey:@"total_distance"]floatValue]/1000;
-    self.label_km.text = [NSString stringWithFormat:@"%0.2fkm",totaldistance];
+    self.label_km.text = [NSString stringWithFormat:@"%0.2fKM",totaldistance];
     self.label_count.text = [record_dic objectForKey:@"total_count"];
     int total_time = [[record_dic objectForKey:@"total_time"]intValue];
     int average_pspeed = 1.0/totaldistance*total_time;

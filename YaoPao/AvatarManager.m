@@ -43,6 +43,7 @@
                 UIImage* image = [[UIImage alloc] initWithData:[request responseData]];
                 if(image == nil){
                     iv.image = [UIImage imageNamed:@"avatar_default.png"];
+                    return;
                 }
                 iv.image = image;
                 [self.avatarDic setObject:image forKey:imagename];
@@ -83,6 +84,10 @@
             __block ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
             [request setCompletionBlock :^{
                 UIImage* image = [[UIImage alloc] initWithData:[request responseData]];
+                if(image == nil){
+                    [button setBackgroundImage:[UIImage imageNamed:@"avatar_default.png"] forState:UIControlStateNormal];
+                    return;
+                }
                 [button setBackgroundImage:image forState:UIControlStateNormal];
                 [self.avatarDic setObject:image forKey:imagename];
                 NSString *imageFullPath = [NSString stringWithFormat:@"%@/%@",self.dirPath,imagename];
@@ -115,6 +120,19 @@
         }
     }
     return nil;
+}
+- (UIImage*)getImageFromMemory:(NSString*)imageURL{
+    NSArray* tempArray = [imageURL componentsSeparatedByString:@"/"];
+    NSString* imagename = [tempArray objectAtIndex:[tempArray count]-1];
+    NSLog(@"imagename is %@",imagename);
+    //看内存中有没有
+    NSArray* allImageInMemory = [self.avatarDic allKeys];
+    if([allImageInMemory containsObject:imagename]){//内存有
+        UIImage* image = [self.avatarDic objectForKey:imagename];
+        return image;
+    }else{
+        return nil;
+    }
 }
 
 @end

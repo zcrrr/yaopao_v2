@@ -138,6 +138,8 @@
     if(imgpath != nil){
         [kApp.avatarManager setImageToButton:self.button_avatar fromUrl:imgpath];
     }
+    self.button_avatar.layer.cornerRadius = self.button_avatar.bounds.size.width/2;
+    self.button_avatar.layer.masksToBounds = YES;
 }
 
 - (void)didReceiveMemoryWarning
