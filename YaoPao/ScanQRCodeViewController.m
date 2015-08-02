@@ -9,6 +9,13 @@
 #import "ScanQRCodeViewController.h"
 #import <AVFoundation/AVFoundation.h>
 #import "Toast+UIView.h"
+#import "CNNetworkHandler.h"
+#import "FriendInfo.h"
+#import "FriendDetailViewController.h"
+#import "FriendDetailNotFriendNotContactViewController.h"
+#import "FriendDetailWantMeViewController.h"
+#import "FriendDetailNotFriendViewController.h"
+#import "FriendFromQRCodeViewController.h"
 
 #define URL @"http://182.92.97.144:8888/chSports"
 
@@ -168,9 +175,14 @@
 }
 
 - (void)requestQRCode:(NSString *)code{
-    
-//    [self.HUD show:YES];
-//    
+    NSMutableDictionary* params = [[NSMutableDictionary alloc]init];
+    NSString* uid = [NSString stringWithFormat:@"%@",[kApp.userInfoDic objectForKey:@"uid"]];
+    [params setObject:uid forKey:@"uid"];
+    [params setObject:code forKey:@"someonesID"];
+    kApp.networkHandler.delegate_searchFriend = self;
+    [kApp.networkHandler doRequest_searchFriend:params];
+    [self.HUD show:YES];
+//
 //    NSString *urlStr = [NSString stringWithFormat:@"%@/friend/searchfriend.htm",URL];
 //   [urlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 //    
@@ -199,6 +211,25 @@
 //    }];
     
 }
+- (void)searchFriendDidFailed:(NSString *)mes{
+    [self.HUD hide:YES];
+}
+- (void)searchFriendDidSuccess:(NSDictionary *)resultDic{
+    [self.HUD hide:YES];
+    NSDictionary* dic = [[resultDic objectForKey:@"frdlist"] objectAtIndex:0];
+    NSString* uid = [NSString stringWithFormat:@"%@",[dic objectForKey:@"id"]];
+    NSString* phone = [dic objectForKey:@"phone"];
+    NSString* name = [dic objectForKey:@"nickname"];
+    NSString* avatar = [dic objectForKey:@"imgpath"];
+    int status = [[dic objectForKey:@"friend"]intValue];
+    NSString* sex = [dic objectForKey:@"gender"];
+    NSString* remark = [[dic allKeys] containsObject:@"beizhu"]?[dic objectForKey:@"beizhu"]:@"";
+    FriendInfo* friend = [[FriendInfo alloc]initWithUid:uid phoneNO:phone nameInPhone:@"" nameInYaoPao:name avatarInPhone:nil avatarUrlInYaoPao:avatar status:status verifyMessage:@"" sex:sex remark:remark];
+        NSLog(@"succ");
+    FriendFromQRCodeViewController* ffqVC = [[FriendFromQRCodeViewController alloc]init];
+    ffqVC.friend = friend;
+    [self.navigationController pushViewController:ffqVC animated:YES];
+}
 - (void)handleCode:(NSString *)code{
     
     NSInteger codeType = [self getCodeType:code];
@@ -221,14 +252,16 @@
     else if (codeType == 1){
         NSLog(@"自己的二维码信息：%@",code);
         [kApp.window makeToast:@"不能添加自己为好友！"];
-        [self dismissViewControllerAnimated:YES completion:nil];
+//        [self dismissViewControllerAnimated:YES completion:nil];
+        [self.navigationController popViewControllerAnimated:YES];
         
     }
     //其他二维码信息
     else{
         NSLog(@"其他二维码信息：%@",code);
         [kApp.window makeToast:@"未能识别的二维码！"];
-        [self dismissViewControllerAnimated:YES completion:nil];
+//        [self dismissViewControllerAnimated:YES completion:nil];
+        [self.navigationController popViewControllerAnimated:YES];
     }
 }
 
@@ -267,9 +300,11 @@
 
 - (IBAction)back:(id)sender {
     
-    [self dismissViewControllerAnimated:YES completion:nil];
+//    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 - (IBAction)button_clicked:(id)sender {
-    [self dismissViewControllerAnimated:YES completion:nil];
+//    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 @end

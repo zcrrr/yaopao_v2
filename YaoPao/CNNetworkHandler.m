@@ -494,6 +494,16 @@
             }else{
                 [self.delegate_WaterMarkInfo WaterMarkInfoDidFailed:@""];
             }
+            break;
+        }
+        case TAG_CHANGE_REMARK:
+        {
+            if(isSuccess){
+                [self.delegate_changeRemark changeRemarkDidSuccess:result];
+            }else{
+                [self.delegate_changeRemark changeRemarkDidFailed:desc];
+            }
+            break;
         }
         default:
             break;
@@ -668,6 +678,11 @@
         case TAG_WATER_DOWNLOAD:
         {
             [self.delegate_WaterMarkInfo WaterMarkInfoDidFailed:kCheckNetworkTip];
+            break;
+        }
+        case TAG_CHANGE_REMARK:
+        {
+            [self.delegate_changeRemark changeRemarkDidFailed:kCheckNetworkTip];
             break;
         }
         default:
@@ -1295,6 +1310,22 @@
     NSLog(@"下载水印url:%@",str_url);
     NSLog(@"下载水印参数:%@",uid);
     [[self networkQueue]addOperation:self.WaterMarkInfoRequest];
+}
+- (void)doRequest_changeRemark:(NSMutableDictionary*)params{
+    NSString* str_url = [NSString stringWithFormat:@"%@chSports/friend/modifyrename.htm",ENDPOINTS];
+    NSURL* url = [NSURL URLWithString:str_url];
+    self.changeRemarkRequest =  [ASIFormDataRequest requestWithURL:url];
+    self.changeRemarkRequest.tag = TAG_CHANGE_REMARK;
+    [self.changeRemarkRequest setNumberOfTimesToRetryOnTimeout:3];
+    [self.changeRemarkRequest setTimeOutSeconds:15];
+    [self.changeRemarkRequest addRequestHeader:@"X-PID" value:kApp.pid];
+    [self.changeRemarkRequest addRequestHeader:@"ua" value:kApp.ua];
+    for (id oneKey in [params allKeys]){
+        [self.changeRemarkRequest setPostValue:[params objectForKey:oneKey] forKey:oneKey];
+    }
+    NSLog(@"修改好友备注url:%@",str_url);
+    NSLog(@"修改好友备注参数:%@",params);
+    [[self networkQueue]addOperation:self.changeRemarkRequest];
 }
 - (void)showAlert:(NSString*) content{
     UIAlertView* alert = [[UIAlertView alloc]initWithTitle:nil message:content delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];

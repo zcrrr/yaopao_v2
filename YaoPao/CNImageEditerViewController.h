@@ -12,6 +12,7 @@
 #import "CNOverlayViewController.h"
 #import "ChooseEditImageViewController.h"
 #import "CombineImagePreviewViewController.h"
+#import "AddWaterMarkToImageViewController.h"
 
 @class CNCustomButton;
 @class CNOverlayViewController;
@@ -23,7 +24,7 @@
 - (void)editImageDidSuccess;
 @end
 
-@interface CNImageEditerViewController : UIViewController<UIScrollViewDelegate,AdobeUXImageEditorViewControllerDelegate,addWaternDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,saveImageDelegate,buttonClickDelegate,combineImageDelegate>
+@interface CNImageEditerViewController : UIViewController<UIScrollViewDelegate,AdobeUXImageEditorViewControllerDelegate,addWaternDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,saveImageDelegate,buttonClickDelegate,combineImageDelegate,addWaterDelegate>
 
 @property (strong ,nonatomic) RunClass* oneRun;
 @property (strong, nonatomic) NSMutableArray* editImageArray;

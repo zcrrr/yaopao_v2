@@ -15,6 +15,7 @@
 #import "FriendsHandler.h"
 #import "CNCustomButton.h"
 #import "AvatarManager.h"
+#import "CNViewControllerChangeRemark.h"
 
 @interface FriendDetailViewController ()
 
@@ -49,7 +50,7 @@
 //        }
         [kApp.avatarManager setImageToImageView:self.imageview_avatar fromUrl:self.friend.avatarUrlInYaoPao];
     }
-    self.label_name.text =  [NSString stringWithFormat:@"昵称:%@",self.friend.nameInYaoPao];
+    self.label_name.text =  [self.friend.remark isEqualToString:@""]?self.friend.nameInYaoPao:[NSString stringWithFormat:@"%@（昵称:%@）",self.friend.remark, self.friend.nameInYaoPao];
     self.label_phone.text = self.friend.phoneNO;
     NSString* imageName = [NSString stringWithFormat:@"sex_%@.png",self.friend.sex];
     self.imageview_sex.image = [UIImage imageNamed:imageName];
@@ -57,16 +58,25 @@
         self.button_chat.hidden = YES;
         self.button_clearHistory.frame = self.button_chat.frame;
     }else if([self.from isEqualToString:@"search"]){
+        self.button_threedot.hidden = YES;
+        self.button_threedotbutton.hidden = YES;
         NSString* hidePhoneNo = [NSString stringWithFormat:@"%@******%@",[self.friend.phoneNO substringToIndex:3],[self.friend.phoneNO substringFromIndex:9]];
         if([self.friend.nameInYaoPao isEqualToString:self.friend.phoneNO]){
             self.label_name.text = hidePhoneNo;
         }else{
-            self.label_name.text = friend.nameInYaoPao;
+            self.label_name.text = [self.friend.remark isEqualToString:@""]?self.friend.nameInYaoPao:[NSString stringWithFormat:@"%@（昵称:%@）",self.friend.remark, self.friend.nameInYaoPao];
         }
         self.label_phone.text = hidePhoneNo;
     }
+    [self.view addSubview:self.view_pop];
+    self.view_pop.hidden = YES;
+    UITapGestureRecognizer* tapRecognizer_switch = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(hidePopView:)];
+    [self.view_pop addGestureRecognizer:tapRecognizer_switch];
 }
-
+- (void)hidePopView:(id)sender
+{
+    self.view_pop.hidden = YES;
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -115,9 +125,38 @@
             [alert show];
             break;
         }
+        case 4:
+        {
+            self.view_pop.hidden = NO;
+            break;
+        }
+        case 5:
+        {
+            NSLog(@"修改备注");
+            self.view_pop.hidden = YES;
+            CNViewControllerChangeRemark* crVC = [[CNViewControllerChangeRemark alloc]init];
+            crVC.friend = self.friend;
+            crVC.delegate_remark = self;
+            [self.navigationController pushViewController:crVC animated:YES];
+            break;
+        }
+        case  6:
+        {
+            NSLog(@"删除好友");
+            self.view_pop.hidden = YES;
+            NSString* message = [NSString stringWithFormat:@"确定删除好友？"];
+            UIAlertView* alert =[[UIAlertView alloc] initWithTitle:nil message:message delegate:self cancelButtonTitle:@"确认" otherButtonTitles:@"取消", nil];
+            alert.tag = 1;
+            [alert show];
+            break;
+            
+        }
         default:
             break;
     }
+}
+- (void)remarkDidSuccess{
+    self.label_name.text =  [self.friend.remark isEqualToString:@""]?self.friend.nameInYaoPao:[NSString stringWithFormat:@"%@（昵称:%@）",self.friend.remark, self.friend.nameInYaoPao];
 }
 #pragma -mark alert delegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{

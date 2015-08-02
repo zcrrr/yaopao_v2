@@ -308,7 +308,8 @@
         NSString* avatar = [dic objectForKey:@"imgpath"];
         int status = [[dic objectForKey:@"friend"]intValue];
         NSString* sex = [dic objectForKey:@"gender"];
-        FriendInfo* oneFriend = [[FriendInfo alloc]initWithUid:uid phoneNO:phone nameInPhone:@"" nameInYaoPao:name avatarInPhone:nil avatarUrlInYaoPao:avatar status:status verifyMessage:@"" sex:sex];
+        NSString* remark = [[dic allKeys] containsObject:@"beizhu"]?[dic objectForKey:@"beizhu"]:@"";
+        FriendInfo* oneFriend = [[FriendInfo alloc]initWithUid:uid phoneNO:phone nameInPhone:@"" nameInYaoPao:name avatarInPhone:nil avatarUrlInYaoPao:avatar status:status verifyMessage:@"" sex:sex remark:remark];
         [self.searchResult addObject:oneFriend];
     }
     [self.tableview reloadData];

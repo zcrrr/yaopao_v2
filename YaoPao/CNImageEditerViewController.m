@@ -23,6 +23,7 @@
 #import "RunClass.h"
 #import "CNChooseModelViewController.h"
 #import <MobileCoreServices/MobileCoreServices.h>
+#import "AddWaterMarkToImageViewController.h"
 
 @interface CNImageEditerViewController ()
 
@@ -178,9 +179,8 @@ extern NSMutableArray* imageArray;
                 [kApp.managedObjectContext save:&error];
                 NSString* NOTIFICATION_REFRESH = @"REFRESH";
                 [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_REFRESH object:nil];
+                [self.delegate_editImage editImageDidSuccess];
             }
-//            [self.navigationController popToRootViewControllerAnimated:YES];
-            [self.delegate_editImage editImageDidSuccess];
             [self.navigationController popViewControllerAnimated:YES];
             break;
         }
@@ -260,11 +260,18 @@ extern NSMutableArray* imageArray;
 //            UIViewController* rootViewController =  [[UIApplication sharedApplication] keyWindow].rootViewController;
 //            rootViewController.modalPresentationStyle = UIModalPresentationCurrentContext;
 //            [rootViewController presentViewController:navVC animated:YES completion:^(void){NSLog(@"pop");}];
-            WaterMarkViewController* waterVC = [[WaterMarkViewController alloc]init];
-            waterVC.delegate_addWater = self;
+//            WaterMarkViewController* waterVC = [[WaterMarkViewController alloc]init];
+//            waterVC.delegate_addWater = self;
+//            waterVC.oneRun = self.oneRun;
+//            waterVC.image_datasource = [imageArray objectAtIndex:self.currentpage];
+//            [self.navigationController pushViewController:waterVC animated:YES];
+            
+            AddWaterMarkToImageViewController* waterVC = [[AddWaterMarkToImageViewController alloc]init];
+            waterVC.AddWMDelegate = self;
+            waterVC.workImage = [imageArray objectAtIndex:self.currentpage];
             waterVC.oneRun = self.oneRun;
-            waterVC.image_datasource = [imageArray objectAtIndex:self.currentpage];
             [self.navigationController pushViewController:waterVC animated:YES];
+            
             break;
         }
         default:

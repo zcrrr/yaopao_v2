@@ -867,7 +867,11 @@ updatingLocation:(BOOL)updatingLocation
             }else{
                 model.headImageURL = nil;
             }
-            model.nickName = [dic objectForKey:@"nickname"];
+            if([dic objectForKey:@"beizhu"]!=nil&&![[dic objectForKey:@"beizhu"]isEqualToString:@""]){
+                model.nickName = [dic objectForKey:@"beizhu"];
+            }else{
+                model.nickName = [dic objectForKey:@"nickname"];
+            }
             cell.messageModel = model;
             return cell;
         }

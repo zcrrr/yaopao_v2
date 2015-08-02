@@ -347,12 +347,28 @@ const CGFloat kMessagesInputToolbarHeightDefault = 44.0f;
     }
     [bar setDelegate:self];
     self.navBar = bar;
-    [self.view addSubview:bar];
+    UIView* topbar = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 64)];
+    topbar.backgroundColor = [UIColor colorWithRed:55.0/255.0 green:53.0/255.0 blue:69.0/255.0 alpha:1];
+    [self.view addSubview:topbar];
+    UILabel* label_title = [[UILabel alloc]initWithFrame:CGRectMake(87, 23, 146, 35)];
+    [label_title setTextAlignment:NSTextAlignmentCenter];
+    label_title.text = @"用户反馈";
+    label_title.font = [UIFont systemFontOfSize:16];
+    label_title.textColor = [UIColor whiteColor];
+    [topbar addSubview:label_title];
+    UIButton * button_back = [UIButton buttonWithType:UIButtonTypeCustom];
+    button_back.frame = CGRectMake(0, 20, 43, 43);
+    [button_back setBackgroundImage:[UIImage imageNamed:@"back_v2.png"] forState:UIControlStateNormal];
+    button_back.tag = 0;
+    [button_back addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    [topbar addSubview:button_back];
     
 //    CGFloat height = self.view.frame.size.height - 44 - 64;
 //    self.mTableView.frame = CGRectMake(0, 64, self.view.frame.size.width, height);
 }
-
+- (void)buttonClicked:(id)sender{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
 - (void)setBackButton:(UIButton *)button {
     [button addTarget:self action:@selector(backToPrevious) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *backButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];

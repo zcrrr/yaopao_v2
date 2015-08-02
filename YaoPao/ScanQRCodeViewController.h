@@ -8,7 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "MBProgressHUD.h"
-@interface ScanQRCodeViewController : UIViewController
+#import "CNNetworkHandler.h"
+@interface ScanQRCodeViewController : UIViewController<searchFriendDelegate>
 - (IBAction)button_clicked:(id)sender;
 
 @end

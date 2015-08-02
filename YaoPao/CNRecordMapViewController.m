@@ -18,6 +18,8 @@
 #import "OneKMInfo.h"
 #import "CNCustomButton.h"
 #import "ColorValue.h"
+#import <ShareSDK/ShareSDK.h>
+#import "Toast+UIView.h"
 #define kPopInterval 1000
 
 @interface CNRecordMapViewController ()
@@ -29,6 +31,7 @@
 @synthesize mapView;
 @synthesize polyline_back;
 @synthesize polyline_forward;
+@synthesize shareText;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -45,7 +48,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     [self.button_back fillColor:kClear :kClear :kWhite :kWhiteHalfAlpha];
-    self.mapView=[[MAMapView alloc] initWithFrame:CGRectMake(0, 0, 320, 468)];
+    self.mapView=[[MAMapView alloc] initWithFrame:CGRectMake(0, 0, self.view_map_container.bounds.size.width, self.view_map_container.bounds.size.height)];
+    NSLog(@"width is %f,height is %f",self.view_map_container.bounds.size.width,self.view_map_container.bounds.size.height);
     self.mapView.delegate = self;
     self.mapView.showsCompass = NO;
     self.mapView.showsScale = NO;
@@ -76,7 +80,73 @@
     // Dispose of any resources that can be recreated.
 }
 - (IBAction)button_back_clicked:(id)sender {
-    [self.navigationController popViewControllerAnimated:YES];
+    switch ([sender tag]) {
+        case 0:
+        {
+            [self.navigationController popViewControllerAnimated:YES];
+            break;
+        }
+        case 1:
+        {
+            [self sharetest];
+            break;
+        }
+        default:
+            break;
+    }
+}
+- (void)sharetest{
+    id<ISSContent> publishContent = [ShareSDK content:shareText
+                                       defaultContent:shareText
+                                                image:[ShareSDK pngImageWithImage:[self getWeiboImage]]
+                                                title:@"要跑"
+                                                  url:@"http://image.yaopao.net/html/redirect.html"
+                                          description:shareText
+                                            mediaType:SSPublishContentMediaTypeImage];
+    [ShareSDK showShareActionSheet:nil
+                         shareList:nil
+                           content:publishContent
+                     statusBarTips:YES
+                       authOptions:nil
+                      shareOptions: nil
+                            result:^(ShareType type, SSResponseState state, id<ISSPlatformShareInfo> statusInfo, id<ICMErrorInfo> error, BOOL end) {
+                                if (state == SSResponseStateSuccess)
+                                {
+                                    NSLog(@"分享成功");
+                                    [kApp.window makeToast:@"分享成功"];
+                                }
+                                else if (state == SSResponseStateFail)
+                                {
+                                    NSLog(@"分享失败,错误码:%d,错误描述:%@", [error errorCode], [error errorDescription]);
+                                }
+                            }];
+}
+- (UIImage *)getWeiboImage{
+    UIImage *image_map = [self.mapView takeSnapshotInRect:CGRectMake(0, 0, 320, 412)];
+    UIImage* image_logo = [UIImage imageNamed:@"yaopao_cn_logo_black.png"];
+    UIImage* image_data = [self screenshot:self.view_data];
+    UIGraphicsBeginImageContextWithOptions(image_map.size,NO,0.0);
+    
+    //背景
+    [image_map drawInRect:CGRectMake(0, 0, image_map.size.width, image_map.size.height)];
+    NSLog(@"image_map.size.width is %f,height is %f",image_map.size.width,image_map.size.height);
+    
+    //地图
+    [image_logo drawInRect:CGRectMake(141, 5, 38, 17)];
+    [image_data drawInRect:CGRectMake(0, image_map.size.height-42, self.view_data.frame.size.width, self.view_data.frame.size.height)];
+    NSLog(@"self.view_data.width is %f,height is %f",self.view_data.frame.size.width,self.view_data.frame.size.height);
+    UIImage *resultImage=UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    //保存到本地看看图片分辨率
+    //    [CNUtil saveImageToIphone4Test:@"resultImage" :resultImage];
+    return resultImage;
+}
+- (UIImage*)screenshot:(UIView*)view{
+    UIGraphicsBeginImageContextWithOptions(view.frame.size, NO, 0.0);
+    [view.layer renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return image;
 }
 - (void)initUI{
     NSDate *date = [NSDate dateWithTimeIntervalSince1970:[self.oneRun.startTime longLongValue]/1000];
@@ -98,40 +168,22 @@
         case 1:
         {
             typeDes = @"跑步";
-            self.image_type.image = [UIImage imageNamed:@"howToMove1.png"];
             break;
         }
         case 2:
         {
             typeDes = @"步行";
-            self.image_type.image = [UIImage imageNamed:@"howToMove2.png"];
-            break;
-        }
-        case 3:
-        {
-            typeDes = @"自行车骑行";
-            self.image_type.image = [UIImage imageNamed:@"howToMove3.png"];
             break;
         }
         default:
             break;
     }
+    self.shareText = [NSString stringWithFormat:@"我刚刚%@了%0.2f公里",typeDes, [oneRun.distance doubleValue]/1000.0];
     self.label_title.text = [NSString stringWithFormat:@"%@的%@",strDate2,typeDes];
     self.label_dis.text = [NSString stringWithFormat:@"%0.2fKM",[oneRun.distance floatValue]/1000];
     self.label_during.text = [CNUtil duringTimeStringFromSecond:[oneRun.duration intValue]/1000];
     self.label_pspeed.text = [CNUtil pspeedStringFromSecond:[oneRun.secondPerKm intValue]];
     self.label_aver_speed.text = [NSString stringWithFormat:@"+%i",[oneRun.score intValue]];
-    int mood = [self.oneRun.feeling intValue];
-    NSString* img_name_mood = [NSString stringWithFormat:@"mood%i_hd.png",mood];
-    self.imageview_mood.image = [UIImage imageNamed:img_name_mood];
-    
-    int way = [self.oneRun.runway intValue];
-    NSString* img_name_way = [NSString stringWithFormat:@"way%i_hd.png",way];
-    self.imageview_way.image = [UIImage imageNamed:img_name_way];
-    
-    if(self.oneRun.runway == 0){//没选道路
-        self.imageview_mood.frame = self.imageview_way.frame;
-    }
     
 //    [self testDrawOneByOne];
 }
@@ -247,7 +299,7 @@
     }
     
     CLLocationCoordinate2D center = CLLocationCoordinate2DMake((min_lat+max_lat)/2, (min_lon+max_lon)/2);
-    MACoordinateSpan span = MACoordinateSpanMake(max_lat-min_lat+0.005, max_lon-min_lon+0.005);
+    MACoordinateSpan span = MACoordinateSpanMake(max_lat-min_lat+0.001, max_lon-min_lon+0.001);
     MACoordinateRegion region = MACoordinateRegionMake(center, span);
     [self.mapView setRegion:region animated:NO];
     

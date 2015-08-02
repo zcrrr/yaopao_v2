@@ -8,7 +8,7 @@
 
 #import "BGImageView.h"
 
-#define FONTNAME @"Verdana-Bold"
+//#define FONTNAME @"Verdana-Bold"
 
 @implementation BGImageView
 

@@ -66,7 +66,8 @@
         NSString* nickname = [dic objectForKey:@"rename"];
         NSString* avatar = [dic objectForKey:@"imgpath"];
         NSString* sex = [dic objectForKey:@"gender"];
-        FriendInfo* oneFriend = [[FriendInfo alloc]initWithUid:friendUid phoneNO:phoneNO nameInPhone:@"" nameInYaoPao:nickname avatarInPhone:nil avatarUrlInYaoPao:avatar status:1 verifyMessage:@"" sex:sex];
+        NSString* remark = [[dic allKeys] containsObject:@"beizhu"]?[dic objectForKey:@"beizhu"]:@"";
+        FriendInfo* oneFriend = [[FriendInfo alloc]initWithUid:friendUid phoneNO:phoneNO nameInPhone:@"" nameInYaoPao:nickname avatarInPhone:nil avatarUrlInYaoPao:avatar status:1 verifyMessage:@"" sex:sex remark:remark];
         [self.friends addObject:oneFriend];
         [self.friendsDicByPhone setObject:oneFriend forKey:phoneNO];
         //还得加上我自己
@@ -75,7 +76,7 @@
         NSString* mynickname = [kApp.userInfoDic objectForKey:@"nickname"];
         NSString* myavatar = [kApp.userInfoDic objectForKey:@"imgpath"];
         NSString* mysex = [kApp.userInfoDic objectForKey:@"gender"];
-        FriendInfo* meInstance = [[FriendInfo alloc]initWithUid:myuid phoneNO:myphone nameInPhone:@"" nameInYaoPao:mynickname avatarInPhone:nil avatarUrlInYaoPao:myavatar status:1 verifyMessage:@"" sex:mysex];
+        FriendInfo* meInstance = [[FriendInfo alloc]initWithUid:myuid phoneNO:myphone nameInPhone:@"" nameInYaoPao:mynickname avatarInPhone:nil avatarUrlInYaoPao:myavatar status:1 verifyMessage:@"" sex:mysex remark:@""];
         [self.friendsDicByPhone setObject:meInstance forKey:myphone];
     }
     NSLog(@"kApp.userInfoDic is %@",kApp.userInfoDic);
@@ -87,7 +88,7 @@
         NSString* avatar = [dic objectForKey:@"imgpath"];
         NSString* sex = [dic objectForKey:@"gender"];
         NSString* verifyMes = [dic objectForKey:@"desc"];
-        FriendInfo* oneFriend = [[FriendInfo alloc]initWithUid:friendUid phoneNO:phoneNO nameInPhone:@"" nameInYaoPao:nickname avatarInPhone:nil avatarUrlInYaoPao:avatar status:4 verifyMessage:verifyMes sex:sex];
+        FriendInfo* oneFriend = [[FriendInfo alloc]initWithUid:friendUid phoneNO:phoneNO nameInPhone:@"" nameInYaoPao:nickname avatarInPhone:nil avatarUrlInYaoPao:avatar status:4 verifyMessage:verifyMes sex:sex remark:@""];
         [self.friendsIWant addObject:oneFriend];
     }
     NSArray* freqlist = [resultDic objectForKey:@"freqlist"];
@@ -98,7 +99,7 @@
         NSString* avatar = [dic objectForKey:@"imgpath"];
         NSString* sex = [dic objectForKey:@"gender"];
         NSString* verifyMes = [dic objectForKey:@"desc"];
-        FriendInfo* oneFriend = [[FriendInfo alloc]initWithUid:friendUid phoneNO:phoneNO nameInPhone:@"" nameInYaoPao:nickname avatarInPhone:nil avatarUrlInYaoPao:avatar status:3 verifyMessage:verifyMes sex:sex];
+        FriendInfo* oneFriend = [[FriendInfo alloc]initWithUid:friendUid phoneNO:phoneNO nameInPhone:@"" nameInYaoPao:nickname avatarInPhone:nil avatarUrlInYaoPao:avatar status:3 verifyMessage:verifyMes sex:sex remark:@""];
         [self.frinedsWantMe addObject:oneFriend];
     }
     NSLog(@"self.friends is:");
@@ -274,7 +275,7 @@
         NSString* nameInYaoPao = [oneContact objectForKey:@"nickname"];
         NSString* avatarUrlInYaoPao = [oneContact objectForKey:@"imgpath"] == nil?@"":[oneContact objectForKey:@"imgpath"];
         NSString* uid = [NSString stringWithFormat:@"%@",[oneContact objectForKey:@"id"]];
-        FriendInfo* friend = [[FriendInfo alloc]initWithUid:uid phoneNO:phoneNO nameInPhone:@"" nameInYaoPao:nameInYaoPao avatarInPhone:nil avatarUrlInYaoPao:avatarUrlInYaoPao status:2 verifyMessage:@"" sex:@""];
+        FriendInfo* friend = [[FriendInfo alloc]initWithUid:uid phoneNO:phoneNO nameInPhone:@"" nameInYaoPao:nameInYaoPao avatarInPhone:nil avatarUrlInYaoPao:avatarUrlInYaoPao status:2 verifyMessage:@"" sex:@"" remark:@""];
         [kApp.myContactUseApp addObject:friend];
     }
     NSLog(@"kApp.myContactUseApp is:");

@@ -586,7 +586,8 @@
     }
     EMConversation *conversation = [self.dataSource objectAtIndex:indexPath.row];
     FriendInfo* friend = [kApp.friendHandler.friendsDicByPhone objectForKey:conversation.chatter];
-    cell.name = friend.nameInYaoPao;
+    
+    cell.name = [friend.remark isEqualToString:@""]?friend.nameInYaoPao:friend.remark;
 //    cell.name = @"dkkd";
 //    NSArray *groupArray = [[EaseMob sharedInstance].chatManager groupList];
 //    for (EMGroup *group in groupArray) {

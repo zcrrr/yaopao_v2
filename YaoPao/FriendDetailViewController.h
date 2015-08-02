@@ -8,9 +8,10 @@
 
 #import <UIKit/UIKit.h>
 @class FriendInfo;
+#import "CNViewControllerChangeRemark.h"
 #import "CNNetworkHandler.h"
 
-@interface FriendDetailViewController : UIViewController<UIAlertViewDelegate,deleteFriendDelegate>
+@interface FriendDetailViewController : UIViewController<UIAlertViewDelegate,deleteFriendDelegate,remarkDelegate>
 
 @property (strong, nonatomic) NSString* from;
 @property (weak, nonatomic) IBOutlet UIButton *button_deletefriend;
@@ -24,5 +25,8 @@
 @property (strong, nonatomic) IBOutlet UIImageView *loadingImage;
 @property (weak, nonatomic) IBOutlet UIButton *button_chat;
 @property (weak, nonatomic) IBOutlet UIButton *button_clearHistory;
+@property (strong, nonatomic) IBOutlet UIView *view_pop;
+@property (weak, nonatomic) IBOutlet UIButton *button_threedot;
+@property (weak, nonatomic) IBOutlet UIButton *button_threedotbutton;
 
 @end

@@ -10,18 +10,26 @@
 #import "WaterMarkDownloadViewController.h"
 #import "ToolClass.h"
 #import "SBJson.h"
+#import "CNRunManager.h"
+#import "CNGPSPoint.h"
+#import "CNEncryption.h"
+#import "RunClass.h"
+#import "CNUtil.h"
 
-#define FONTNAME @"Verdana-Bold"
+//#define FONTNAME @"Verdana-Bold"
 #define FONTHEIGHT 30
 @interface AddWaterMarkToImageViewController ()
 
 @end
 
 @implementation AddWaterMarkToImageViewController
+@synthesize oneRun;
 @synthesize imageArray;
 @synthesize ImageView;
 @synthesize scrollView;
-
+@synthesize mapView;
+extern NSString* weatherCode;
+extern NSString* dayOrNight;
 - (void)viewDidLoad {
     [super viewDidLoad];
 
@@ -29,28 +37,74 @@
     self.imageArray = [[NSMutableArray alloc]init];
     self.ImageView.image = self.workImage;
     self.currentGroup = 0;
-    
     self.white = YES;
+    self.weatherImage_w = [UIImage imageNamed:[NSString stringWithFormat:@"weather_marker_%@_%@_%@.png",@"w",dayOrNight,weatherCode]];
+    self.weatherImage_b = [UIImage imageNamed:[NSString stringWithFormat:@"weather_marker_%@_%@_%@.png",@"b",dayOrNight,weatherCode]];
     
     //TODO:测试值,正式使用时请在其他类中进行赋值。
-    self.distanceText = @"21.48KM";
-    self.duringText = @"00:00:05";
-    self.secondPerKMText = @"00‘17“";
-    self.weatherImage_w = nil;
-    self.weatherImage_b = nil;
-    self.date = [NSDate date];
-    self.pointArray = [[NSMutableArray alloc]init];
-    for (NSInteger i = 0; i< 20; i++) {
-        [self.pointArray addObject:[NSValue valueWithCGPoint:CGPointMake(i+i*6, i*5)]];
+    if(self.oneRun != nil){
+        self.distanceText = [NSString stringWithFormat:@"%0.2fKM",[self.oneRun.distance doubleValue]/1000.0];
+        self.duringText = [CNUtil duringTimeStringFromSecond:[self.oneRun.duration intValue]/1000];
+        self.secondPerKMText = [CNUtil pspeedStringFromSecond:[self.oneRun.secondPerKm intValue]];
     }
-    //TODOEND
     
-  
     
+    self.date = [NSDate date];
+    [self trackWater];
+//    self.pointArray = [[NSMutableArray alloc]init];
+//    for (NSInteger i = 0; i< 20; i++) {
+//        [self.pointArray addObject:[NSValue valueWithCGPoint:CGPointMake(i+i*6, i*5)]];
+//    }
     self.saveBtn.layer.cornerRadius = 3.f;
     
 }
-
+- (void)trackWater{
+    self.mapView=[[MAMapView alloc] initWithFrame:CGRectMake(0, 0, self.view_hidemap.bounds.size.width, self.view_hidemap.bounds.size.height)];
+    NSLog(@"map width is %f,map height is %f",self.view_hidemap.bounds.size.width,self.view_hidemap.bounds.size.height);
+    [self.view_hidemap addSubview:self.mapView];
+    int pointCount = (int)[kApp.runManager.GPSList count];
+    CNGPSPoint* firstPoint = [kApp.runManager.GPSList objectAtIndex:0];
+    CLLocationCoordinate2D wgs84Point_first = CLLocationCoordinate2DMake(firstPoint.lat, firstPoint.lon);
+    CLLocationCoordinate2D encryptionPoint_first = [CNEncryption encrypt:wgs84Point_first];
+    double min_lon = encryptionPoint_first.longitude;
+    double min_lat = encryptionPoint_first.latitude;
+    double max_lon = encryptionPoint_first.longitude;
+    double max_lat = encryptionPoint_first.latitude;
+    int i;
+    for(i = 0;i<pointCount;i++){
+        CNGPSPoint* gpsPoint = [kApp.runManager.GPSList objectAtIndex:i];
+        
+        CLLocationCoordinate2D wgs84Point = CLLocationCoordinate2DMake(gpsPoint.lat, gpsPoint.lon);
+        CLLocationCoordinate2D encryptionPoint = [CNEncryption encrypt:wgs84Point];
+        if(encryptionPoint.longitude < min_lon){
+            min_lon = encryptionPoint.longitude;
+        }
+        if(encryptionPoint.latitude < min_lat){
+            min_lat = encryptionPoint.latitude;
+        }
+        if(encryptionPoint.longitude > max_lon){
+            max_lon = encryptionPoint.longitude;
+        }
+        if(encryptionPoint.latitude > max_lat){
+            max_lat = encryptionPoint.latitude;
+        }
+    }
+    CLLocationCoordinate2D center = CLLocationCoordinate2DMake((min_lat+max_lat)/2, (min_lon+max_lon)/2);
+    MACoordinateSpan span = MACoordinateSpanMake(max_lat-min_lat, max_lon-min_lon);
+    MACoordinateRegion region = MACoordinateRegionMake(center, span);
+    [self.mapView setRegion:region animated:NO];
+    //水印
+    NSMutableArray* trackpoints = [[NSMutableArray alloc]init];
+    for(i=0;i<pointCount;i++){
+        CNGPSPoint* gpsPoint = [kApp.runManager.GPSList objectAtIndex:i];
+        CLLocationCoordinate2D wgs84Point = CLLocationCoordinate2DMake(gpsPoint.lat, gpsPoint.lon);
+        CLLocationCoordinate2D encryptionPoint = [CNEncryption encrypt:wgs84Point];
+        //计算经纬度转屏幕坐标后的坐标
+        [trackpoints addObject:[NSValue valueWithCGPoint:[self.mapView convertCoordinate:encryptionPoint toPointToView:self.view_hidemap]]];
+        NSLog(@"x:%f,y:%f",[self.mapView convertCoordinate:encryptionPoint toPointToView:self.view_hidemap].x,[self.mapView convertCoordinate:encryptionPoint toPointToView:self.view_hidemap].y);
+    }
+    self.pointArray = trackpoints;
+}
 - (void)viewWillAppear:(BOOL)animated{
   
     
@@ -130,9 +184,9 @@
         NSString *filepath = [self getWMBaseFilePath:group.name];
         NSString *imageName = [NSString stringWithFormat:@"%@/group_icon.png",filepath];
         
-        //group.image = [UIImage imageWithContentsOfFile:imageName];
+        group.image = [UIImage imageWithContentsOfFile:imageName];
         //TODO:测试用图片，正式使用时请删除下面一行代码，使用上一行代码.
-        group.image = [UIImage imageNamed:@"bg.jpg"];
+//        group.image = [UIImage imageNamed:@"bg.jpg"];
         
         
         NSString *desc = [NSString stringWithFormat:@"%@/desc.txt",filepath];
@@ -149,27 +203,43 @@
         [self.wmGroupArray addObject:group];
     }
 }
-
+- (UIImage *)addImageWaterMark:(UIImage *)bgImage addMaskImage:(UIImage *)maskImage
+{
+    
+    CGSize BGsize = self.workImage.size;
+    //支持retina高分的关键
+    if(&UIGraphicsBeginImageContextWithOptions != NULL)
+    {
+        UIGraphicsBeginImageContextWithOptions(BGsize, NO, 0.0);
+    } else {
+        UIGraphicsBeginImageContext(BGsize);
+    }
+    [bgImage drawInRect:CGRectMake(0, 0, BGsize.width, BGsize.height)];
+    
+    //四个参数为水印图片的位置
+    [maskImage drawInRect:CGRectMake(0, 0, BGsize.width, BGsize.height)];
+    UIImage *resultingImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return resultingImage;
+}
 - (IBAction)saveBtnClick:(id)sender {
     
     UIImageView *curImageView = [self.scrollView.imageViews objectAtIndex:self.pageControl.currentPage];
     
     if (curImageView.image) {
-        [self.AddWMDelegate addWaterDidSuccess:curImageView.image];
+        [self.AddWMDelegate addWaterDidSuccess:[self addImageWaterMark:self.workImage addMaskImage:curImageView.image]];
     }
     else{
         [self.AddWMDelegate addWaterDidFailed:@"图片为nil"];
     }
     
-    [self dismissViewControllerAnimated:YES completion:^{
-        
-    }];
+    [self.navigationController popViewControllerAnimated:YES];
     
 }
 
 - (IBAction)backBtnClick:(id)sender {
     
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma -mark WMDataSource And Delegate
@@ -240,7 +310,8 @@
 - (void)AddNewWaterMarkBtnClick{
     
     WaterMarkDownloadViewController *WaterMarkDownloadVC = [[WaterMarkDownloadViewController alloc]init];
-    [self presentViewController:WaterMarkDownloadVC animated:YES completion:nil];
+//    [self presentViewController:WaterMarkDownloadVC animated:YES completion:nil];
+    [self.navigationController pushViewController:WaterMarkDownloadVC animated:YES];
 }
 /*
 - (void)testCode{
@@ -355,6 +426,8 @@
     if (item.track){
         
         CGRect rect = CGRectMake(item.track.x/scale_W, item.track.y/scale_H, item.track.width/scale_W, item.track.height/scale_H);
+        NSLog(@"width is %f,height is %f",rect.size.width,rect.size.height);
+        NSLog(@"x is %f,y is %f",rect.origin.x,rect.origin.y);
         
         UIImage *wmImage = [self addTrackWaterMark:nil withTrackArray:self.pointArray maskRect:rect];
         
@@ -414,7 +487,8 @@
     UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, text.length*fontSize, fontSize)];
     label.text = text;
     label.textAlignment = NSTextAlignmentCenter;
-    label.font = [UIFont fontWithName:FONTNAME size:Finalfontsize];
+    label.font = [UIFont systemFontOfSize:Finalfontsize];
+//    label.font = [UIFont fontWithName:FONTNAME size:Finalfontsize];
     label.numberOfLines = 1;
     label.adjustsFontSizeToFitWidth = YES;
 
@@ -562,14 +636,15 @@
     NSInteger finalSize = (fontSize/96.f)*72.f;
     if (self.white) {
         dic = @{
-                NSFontAttributeName:[UIFont fontWithName:FONTNAME size:finalSize],
+                NSFontAttributeName:[UIFont systemFontOfSize:finalSize],
+//                NSFontAttributeName:[UIFont fontWithName:FONTNAME size:finalSize],
                 NSParagraphStyleAttributeName:style,
                 NSForegroundColorAttributeName:[UIColor whiteColor]
                 };
     }
     else{
         dic = @{
-                NSFontAttributeName:[UIFont fontWithName:FONTNAME size:finalSize],
+                NSFontAttributeName:[UIFont systemFontOfSize:finalSize],
                 NSParagraphStyleAttributeName:style,
                 NSForegroundColorAttributeName:[UIColor blackColor]
                 };
@@ -586,14 +661,12 @@
 
 - (UIImage *)addTrackWaterMark:(UIImage *)bgImage withTrackArray:(NSArray *) points maskRect:(CGRect)rect{
     
-    // Drawing code
-    CGSize SVsize = self.scrollView.frame.size;
     //支持retina高分的关键
     if(&UIGraphicsBeginImageContextWithOptions != NULL)
     {
-        UIGraphicsBeginImageContextWithOptions(SVsize, NO, 0.0);
+        UIGraphicsBeginImageContextWithOptions(rect.size, NO, 0.0);
     } else {
-        UIGraphicsBeginImageContext(SVsize);
+        UIGraphicsBeginImageContext(rect.size);
     }
     
     CGContextRef context = UIGraphicsGetCurrentContext();
@@ -603,7 +676,7 @@
     else{
         CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), 0.0, 0.0, 0.0, 1.0);  //黑色
     }
-    CGContextSetLineWidth(context, 6.0);
+    CGContextSetLineWidth(context, 3.0);
     CGPoint firstPoint = [[points objectAtIndex:0]CGPointValue];
     CGContextMoveToPoint(context, firstPoint.x, firstPoint.y);
     for(NSValue* pointvalue in points){

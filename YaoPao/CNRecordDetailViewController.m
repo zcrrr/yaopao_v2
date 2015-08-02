@@ -23,6 +23,7 @@
 #import "CNCustomButton.h"
 #import "ColorValue.h"
 #import "CNImageEditerViewController.h"
+#import "CNShareNewViewController.h"
 
 @interface CNRecordDetailViewController ()
 
@@ -139,8 +140,7 @@ extern NSMutableArray* imageArray;
     if(![self.textfield_remark.text isEqualToString:self.oneRun.remark]){
         self.oneRun.remark = self.textfield_remark.text;
     }
-    CNShareViewController* shareVC = [[CNShareViewController alloc]init];
-    shareVC.dataSource = @"list";
+    CNShareNewViewController* shareVC = [[CNShareNewViewController alloc]init];
     shareVC.oneRun = self.oneRun;
     [self.navigationController pushViewController:shareVC animated:YES];
 }

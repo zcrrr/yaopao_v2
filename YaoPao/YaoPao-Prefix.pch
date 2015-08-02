@@ -42,9 +42,9 @@
 #define kDuringMinute 24*60
 #define kBoundary1 10
 #define kBoundary2 60
-//#define SIMULATORTEST
+#define SIMULATORTEST
 //#define kInhouse
-#define kTestFlight
+//#define kTestFlight
 
 
 #define TAG_VERIFY_CODE 1
@@ -101,5 +101,6 @@
 #define TAG_DEBUG 46
 #define TAG_WATER_TIME 47
 #define TAG_WATER_DOWNLOAD 48
+#define TAG_CHANGE_REMARK 49
 
 

@@ -26,11 +26,9 @@
 @property (strong, nonatomic) IBOutlet UILabel *label_date2;
 @property (strong, nonatomic) IBOutlet UILabel *label_date3;
 @property (strong, nonatomic) IBOutlet UILabel *label_date4;
-
-@property (strong, nonatomic) IBOutlet UIImageView *image_type;
-@property (weak, nonatomic) IBOutlet UIImageView *imageview_mood;
-@property (weak, nonatomic) IBOutlet UIImageView *imageview_way;
 @property (strong, nonatomic) IBOutlet UIView *view_map_container;
 @property (strong, nonatomic) IBOutlet CNCustomButton *button_back;
+@property (strong, nonatomic) NSString* shareText;
+@property (weak, nonatomic) IBOutlet UIView *view_data;
 
 @end

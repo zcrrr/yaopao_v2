@@ -76,7 +76,7 @@
     self.keysJustFriend = [[NSMutableArray alloc]init];
     for (FriendInfo* friend in kApp.friendHandler.friends)
     {
-        NSString* name = friend.nameInYaoPao;
+        NSString* name = [friend.remark isEqualToString:@""]?friend.nameInYaoPao:friend.remark;
 //        char c = [name characterAtIndex:0];
 //        if((c>'a'&&c<'z')||(c>'A'&&c<'Z')){
 //            
@@ -351,7 +351,7 @@
         FriendInfo* friend = [[groupedMap objectForKey:key]objectAtIndex:row];
         NewFriendsTableViewCell *cell = (NewFriendsTableViewCell*)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         
-        cell.label_username.text = friend.nameInYaoPao;
+        cell.label_username.text = [friend.remark isEqualToString:@""]?friend.nameInYaoPao:friend.remark;
         if(friend.avatarUrlInYaoPao != nil && ![friend.avatarUrlInYaoPao isEqualToString:@""]){//有头像url
 //            NSString* fullurl = [NSString stringWithFormat:@"%@%@",kApp.imageurl,friend.avatarUrlInYaoPao];
 //            __block UIImage* image = [kApp.avatarDic objectForKey:fullurl];

@@ -75,7 +75,7 @@
             NSString* phoneNO = (__bridge NSString*)value;
             phoneNO = [phoneNO stringByReplacingOccurrencesOfString:@" " withString:@""];
             phoneNO = [phoneNO stringByReplacingOccurrencesOfString:@"-" withString:@""];
-            FriendInfo* friend2Invite = [[FriendInfo alloc]initWithUid:@"" phoneNO:phoneNO nameInPhone:nameString nameInYaoPao:@"" avatarInPhone:[UIImage imageWithData:image] avatarUrlInYaoPao:@"" status:0 verifyMessage:@"" sex:@""];
+            FriendInfo* friend2Invite = [[FriendInfo alloc]initWithUid:@"" phoneNO:phoneNO nameInPhone:nameString nameInYaoPao:@"" avatarInPhone:[UIImage imageWithData:image] avatarUrlInYaoPao:@"" status:0 verifyMessage:@"" sex:@"" remark:@""];
             if(![self isFriendAlreadyJoin:friend2Invite]){//不在已经加入app列表
                 [self.friendsToInvite addObject:friend2Invite];
 //                NSLog(@"%@:%@",friend2Invite.nameInPhone,friend2Invite.phoneNO);
@@ -316,14 +316,16 @@
         {
             NSLog(@"扫码加好友");
             ScanQRCodeViewController *ScanVC = [[ScanQRCodeViewController alloc]init];
-            [self presentViewController:ScanVC animated:YES completion:nil];
+//            [self presentViewController:ScanVC animated:YES completion:nil];
+            [self.navigationController pushViewController:ScanVC animated:YES];
             break;
         }
         case 4:
         {
             NSLog(@"我的二维码");
             CreateQRCodeViewController *CreateVC = [[CreateQRCodeViewController alloc]init];
-            [self presentViewController:CreateVC animated:YES completion:nil];
+//            [self presentViewController:CreateVC animated:YES completion:nil];
+            [self.navigationController pushViewController:CreateVC animated:YES];
             break;
         }
         

@@ -23,6 +23,7 @@
 #import "CNChooseModelViewController.h"
 #import "Toast+UIView.h"
 #import <MobileCoreServices/MobileCoreServices.h>
+#import "CNShareNewViewController.h"
 
 @interface FeelingViewController ()
 
@@ -168,8 +169,9 @@ extern NSMutableArray* imageArray;
             [CNUtil appendUserOperation:@"点击保存记录按钮"];
             //先保存，然后跳转
             [self updateRun];
-            CNShareViewController* shareVC = [[CNShareViewController alloc]init];
-            shareVC.dataSource = @"this";
+            CNShareNewViewController* shareVC = [[CNShareNewViewController alloc]init];
+            shareVC.oneRun = self.runClass;
+            shareVC.from = @"running";
             [self.navigationController pushViewController:shareVC animated:YES];
             if(kApp.isLogin == 1){
                 [CNAppDelegate popupWarningCloud:NO];

@@ -964,12 +964,16 @@ withFilterContext:(id)filterContext
     friendHandler.friendList2NeedRefresh = YES;
 }
 
-//- (void)didAcceptBuddySucceed:(NSString *)username
-//{
-//    NSLog(@"您接受了%@的好友请求",username);
-//    friendHandler.friendList1NeedRefresh = YES;
-//}
-
+- (void)didAcceptBuddySucceed:(NSString *)username
+{
+    NSLog(@"您接受了%@的好友请求",username);
+    friendHandler.friendList1NeedRefresh = YES;
+    [self performSelector:@selector(postNoti) withObject:nil afterDelay:2];
+    
+}
+- (void)postNoti{
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"addfriend" object:nil];
+}
 void UncaughtExceptionHandler(NSException *exception) {
     /**
      *  获取异常崩溃信息

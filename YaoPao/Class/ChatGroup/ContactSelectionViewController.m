@@ -297,7 +297,7 @@
         }else{
             cell.imageView.image = [UIImage imageNamed:@"avatar_default.png"];
         }
-        cell.textLabel.text = friend.nameInYaoPao;
+        cell.textLabel.text = [friend.remark isEqualToString:@""]?friend.nameInYaoPao:friend.remark;
     }else{
         cell.imageView.image = [UIImage imageNamed:@"avatar_default.png"];
         cell.textLabel.text = buddy.username;
@@ -442,7 +442,7 @@
             }else{
                 remarkView.image = [UIImage imageNamed:@"avatar_default.png"];
             }
-            remarkView.remark = friend.nameInYaoPao;
+            remarkView.remark = [friend.remark isEqualToString:@""]?friend.nameInYaoPao:friend.remark;
         }else{
             remarkView.image = [UIImage imageNamed:@"avatar_default.png"];
             remarkView.remark = buddy.username;

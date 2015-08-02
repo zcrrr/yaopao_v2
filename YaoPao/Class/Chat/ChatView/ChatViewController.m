@@ -71,10 +71,12 @@
 @property (nonatomic) BOOL isScrollToBottom;
 @property (nonatomic) BOOL isPlayingAudio;
 
+
 @end
 
 @implementation ChatViewController
 @synthesize isFromRunning;
+@synthesize from;
 
 - (instancetype)initWithChatter:(NSString *)chatter isGroup:(BOOL)isGroup
 {
@@ -108,7 +110,7 @@
     UILabel* label_title = [[UILabel alloc]initWithFrame:CGRectMake(87, 23, 146, 35)];
     [label_title setTextAlignment:NSTextAlignmentCenter];
     FriendInfo* friend = [kApp.friendHandler.friendsDicByPhone objectForKey:self.chatter];
-    label_title.text = friend.nameInYaoPao;
+    label_title.text = [friend.remark isEqualToString:@""]?friend.nameInYaoPao:friend.remark;
     label_title.font = [UIFont systemFontOfSize:16];
     label_title.textColor = [UIColor whiteColor];
     [topbar addSubview:label_title];
@@ -166,7 +168,12 @@
         case 0:
         {
             NSLog(@"返回");
-            [self.navigationController popViewControllerAnimated:YES];
+            if([self.from isEqualToString:@"qrcode"]){
+                [self.navigationController popToRootViewControllerAnimated:YES];
+            }else{
+                [self.navigationController popViewControllerAnimated:YES];
+            }
+            
             break;
         }
         case 1:

@@ -11,6 +11,8 @@
 #import "BGImageView.h"
 #import "WMGroupScrollView.h"
 #import "WMGroupInfo.h"
+#import <MAMapKit/MAMapKit.h>
+#import "RunClass.h"
 
 @protocol addWaterDelegate <NSObject>
 - (void)addWaterDidSuccess:(UIImage*)image;
@@ -20,6 +22,7 @@
 @interface AddWaterMarkToImageViewController : UIViewController<WMScrollViewDataSource,WMScrollViewDelegate,WMGroupScrollViewDataSource,WMGroupScrollViewDelegate>
 
 /*------需要传入的参数-------*/
+@property (strong ,nonatomic) RunClass* oneRun;
 @property (strong, nonatomic) NSString *distanceText;        //距离信息
 @property (strong, nonatomic) NSString *secondPerKMText;     //每千米耗时信息
 @property (strong, nonatomic) NSString *duringText;          //全程耗时信息
@@ -29,7 +32,8 @@
 @property (strong, nonatomic) UIImage  *weatherImage_b;    //天气图片（黑）
 /*-------------------------*/
 
-
+@property (strong, nonatomic) MAMapView* mapView;
+@property (weak, nonatomic) IBOutlet UIView *view_hidemap;
 @property (strong, nonatomic) UIImage *workImage;               //工作区图片，用来添加水印
 @property (strong, nonatomic) NSMutableArray *imageArray;
 @property (strong, nonatomic) NSMutableArray *wmGroupArray;     //存储水印组信息

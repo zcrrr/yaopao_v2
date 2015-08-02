@@ -16,6 +16,7 @@
 #import "CNRecordDetailViewController.h"
 #import "CNRecordDetailGoogleViewController.h"
 #import "CNCloudRecord.h"
+#import "CNShareNewViewController.h"
 
 @interface RecordViewController ()
 
@@ -235,8 +236,9 @@
     BOOL isInChina = [CNUtil isInChina:startPoint.lon :startPoint.lat];
 //    isInChina = NO;
     if(isInChina){
-        CNRecordDetailViewController* recordDetailVC = [[CNRecordDetailViewController alloc]init];
+        CNShareNewViewController* recordDetailVC = [[CNShareNewViewController alloc]init];
         recordDetailVC.oneRun = oneRun;
+        recordDetailVC.from = @"record";
         [self.navigationController pushViewController:recordDetailVC animated:YES];
     }else{
         CNRecordDetailGoogleViewController* recordDetailVC = [[CNRecordDetailGoogleViewController alloc]init];

@@ -267,7 +267,7 @@
         </view>
     </objects>
     <resources>
-        <image name="back_v2.png" width="48" height="68"/>
+        <image name="back_v2.png" width="90" height="90"/>
         <image name="bg_home.png" width="750" height="628"/>
         <image name="black_white.png" width="36" height="36"/>
         <image name="shaoxing_water_white.png" width="308" height="66"/>

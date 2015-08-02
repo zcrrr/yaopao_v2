@@ -13,6 +13,7 @@
 #import <UIKit/UIKit.h>
 
 @interface ChatViewController : UIViewController
+@property (nonatomic) NSString* from;
 
 
 @property (assign, nonatomic) BOOL isFromRunning;

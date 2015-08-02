@@ -218,6 +218,12 @@
 - (void)WaterMarkInfoDidFailed:(NSString* ) mes;
 @end
 
+//修改好友备注
+@protocol changeRemarkDelegate <NSObject>
+- (void)changeRemarkDidSuccess:(NSDictionary* ) resultDic;
+- (void)changeRemarkDidFailed:(NSString* ) mes;
+@end
+
 
 
 
@@ -271,6 +277,7 @@
 @property (nonatomic, strong) id<testTimeOutDelegate> delegate_testTimeOut;
 @property (nonatomic, strong) id<WaterMarkTimeStampDelegate> delegate_WaterMarkTimeStamp;
 @property (nonatomic, strong) id<WaterMarkInfoDelegate> delegate_WaterMarkInfo;
+@property (nonatomic, strong) id<changeRemarkDelegate> delegate_changeRemark;
 
 //定义每个请求的request
 @property (nonatomic, strong) ASIFormDataRequest* verifyCodeRequest;
@@ -311,6 +318,7 @@
 @property (nonatomic, strong) ASIFormDataRequest* debugRequest;
 @property (nonatomic, strong) ASIFormDataRequest* WaterMarkTimeStampRequest;
 @property (nonatomic, strong) ASIFormDataRequest* WaterMarkInfoRequest;
+@property (nonatomic, strong) ASIFormDataRequest* changeRemarkRequest;
 
 //每个请求的实现
 - (void)doRequest_verifyCode:(NSMutableDictionary*)params;
@@ -351,4 +359,5 @@
 - (void)dorequest_debug:(NSString*)fileName :(NSData*)data;
 - (void)doRequest_WaterMarkTimeStamp;
 - (void)doRequest_WaterMarkInfo;
+- (void)doRequest_changeRemark:(NSMutableDictionary*)params;
 @end

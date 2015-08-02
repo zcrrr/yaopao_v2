@@ -19,7 +19,8 @@
 @synthesize status;
 @synthesize verifyMessage;
 @synthesize sex;
-- (id)initWithUid:(NSString*)uid1 phoneNO:(NSString*)phoneNO1 nameInPhone:(NSString*)nameInPhone1 nameInYaoPao:(NSString*)nameInYaoPao1 avatarInPhone:(UIImage*)avatarInPhone1 avatarUrlInYaoPao:(NSString*)avatarUrlInYaoPao1 status:(int)status1 verifyMessage:(NSString*)verifyMessage1 sex:(NSString*)sex1{
+@synthesize remark;
+- (id)initWithUid:(NSString*)uid1 phoneNO:(NSString*)phoneNO1 nameInPhone:(NSString*)nameInPhone1 nameInYaoPao:(NSString*)nameInYaoPao1 avatarInPhone:(UIImage*)avatarInPhone1 avatarUrlInYaoPao:(NSString*)avatarUrlInYaoPao1 status:(int)status1 verifyMessage:(NSString*)verifyMessage1 sex:(NSString*)sex1 remark:(NSString *)remark1{
     if(self)
     {
         self.uid = uid1;
@@ -31,6 +32,7 @@
         self.status = status1;
         self.verifyMessage = verifyMessage1;
         self.sex = sex1;
+        self.remark = remark1;
     }
     
     return self;
